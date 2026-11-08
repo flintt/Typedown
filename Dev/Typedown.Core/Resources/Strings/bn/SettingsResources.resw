@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>কোড ব্লকের লম্বা লাইন মোড়ানোর বদলে পাশে স্ক্রল হয়। নম্বরগুলো সেভ, কপি বা প্রিন্ট হয় না</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>শেষের পরেও স্ক্রল করুন</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>শেষ লাইনটি উইন্ডোর মাঝখানে না আসা পর্যন্ত পৃষ্ঠা স্ক্রল হতে থাকে</value>
+  </data>
 </root>

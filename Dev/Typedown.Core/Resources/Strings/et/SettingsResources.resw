@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Koodiplokkide pikad read keritakse murdmise asemel külgsuunas. Numbreid ei salvestata, kopeerita ega prindita</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Keri lõpust kaugemale</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Lehte saab edasi kerida, kuni viimane rida on akna keskel</value>
+  </data>
 </root>

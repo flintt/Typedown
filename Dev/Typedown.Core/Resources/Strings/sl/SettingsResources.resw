@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Dolge vrstice v blokih kode se namesto prelamljanja pomikajo vodoravno. Številke se ne shranijo, ne kopirajo in ne natisnejo</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Pomikanje čez konec</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Stran se pomika naprej, dokler zadnja vrstica ni na sredini okna</value>
+  </data>
 </root>

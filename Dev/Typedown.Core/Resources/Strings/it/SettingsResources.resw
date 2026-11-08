@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Le righe lunghe nei blocchi di codice scorrono in orizzontale invece di andare a capo. I numeri non vengono salvati, copiati né stampati</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Scorri oltre la fine</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>La pagina continua a scorrere finché l'ultima riga non si trova al centro della finestra</value>
+  </data>
 </root>

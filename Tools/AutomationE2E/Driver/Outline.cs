@@ -170,4 +170,29 @@ internal static partial class Program
         var j = s.LastIndexOf(" (load ");
         return j < 0 ? s : s.Substring(0, j);
     }
+
+    /// <summary>
+    /// OL04 (measured, not a pass or fail of the app): switching to a document of 3000 headings, what the host takes
+    /// to build its outline's tree, hand it to the pane and have the pane laid out - the UI thread's time, in which keys
+    /// typed did not reach the page (todo: "切到标题极多的文档"). Three switches each way; the host's lines in the notes.
+    /// </summary>
+    private static async Task OL04(List<string> notes)
+    {
+        using var c = await Session("e2e OL04");
+        var small = await Open(c, Fixture("ol04-small.md", "# OL04\n\nA short document.\n"));
+        var text = "# OL04 headings\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => $"## Heading {i}\n\nParagraph {i} under it.\n\n"));
+        var big = await Open(c, Fixture("ol04-3000.md", text));
+        await Task.Delay(3000);
+        var before = LogLines("outline: tree of ").Count;
+        for (var i = 0; i < 3; i++)
+        {
+            await c.Call("document.focus", new { documentId = small });
+            await Task.Delay(1500);
+            await c.Call("document.focus", new { documentId = big });
+            await Task.Delay(3000);
+        }
+        var lines = LogLines("outline: tree of ").Skip(before).ToList();
+        foreach (var line in lines) notes.Add(line.Substring(line.IndexOf("outline: ", StringComparison.Ordinal)));
+        Check(lines.Count >= 3, $"the host measured the outline's tree at each switch to the long document ({lines.Count})");
+    }
 }

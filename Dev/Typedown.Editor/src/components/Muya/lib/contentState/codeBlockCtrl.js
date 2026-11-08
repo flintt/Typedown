@@ -204,8 +204,10 @@ const codeBlockCtrl = ContentState => {
    *   column alignment.
    * The host writes the clipboard (CopyBlock). Nothing in the document, its history or the selection changes. True once
    * the clipboard holds the copy; the button, when there is one, shows the check mark.
+   * Not named copyBlock: that is ContentState's own deep copy of a block (contentState/index.js), which Paragraph >
+   * Duplicate uses - a prototype method of that name put over it, and Duplicate failed (from 7f4469dc, in 1.4.1).
    */
-  ContentState.prototype.copyBlock = async function (figure, button = null) {
+  ContentState.prototype.copyBlockToClipboard = async function (figure, button = null) {
     const block = figure && this.getBlock(figure.id)
     if (!block || block.type !== 'figure') return false
     const { listIndentation, isGitlabCompatibilityEnabled } = this
@@ -276,7 +278,7 @@ const codeBlockCtrl = ContentState => {
       figure = block ? document.getElementById(block.key) : null
     }
     if (!figure) return Promise.resolve(false)
-    return this.copyBlock(figure, figure.querySelector(':scope > .ag-diagram-copy'))
+    return this.copyBlockToClipboard(figure, figure.querySelector(':scope > .ag-diagram-copy'))
   }
 
   // After every drawing. A block drawn whole has its line numbers drawn with it; a key typed in a code block draws only

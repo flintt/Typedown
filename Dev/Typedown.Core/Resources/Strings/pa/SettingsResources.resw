@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>ਕੋਡ ਬਲਾਕਾਂ ਦੀਆਂ ਲੰਬੀਆਂ ਲਾਈਨਾਂ ਰੈਪ ਹੋਣ ਦੀ ਬਜਾਏ ਪਾਸੇ ਵੱਲ ਸਕ੍ਰੌਲ ਹੁੰਦੀਆਂ ਹਨ। ਨੰਬਰ ਸੇਵ, ਕਾਪੀ ਜਾਂ ਪ੍ਰਿੰਟ ਨਹੀਂ ਹੁੰਦੇ</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>ਅੰਤ ਤੋਂ ਅੱਗੇ ਸਕ੍ਰੌਲ ਕਰੋ</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>ਪੰਨਾ ਉਦੋਂ ਤੱਕ ਸਕ੍ਰੌਲ ਹੁੰਦਾ ਰਹਿੰਦਾ ਹੈ ਜਦੋਂ ਤੱਕ ਆਖਰੀ ਲਾਈਨ ਵਿੰਡੋ ਦੇ ਵਿਚਕਾਰ ਨਹੀਂ ਆ ਜਾਂਦੀ</value>
+  </data>
 </root>

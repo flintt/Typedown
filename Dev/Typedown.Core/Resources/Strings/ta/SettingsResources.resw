@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>குறியீட்டுத் தொகுதிகளின் நீண்ட வரிகள் மடிவதற்குப் பதிலாகப் பக்கவாட்டில் உருளும். எண்கள் சேமிக்கப்படுவதில்லை, நகலெடுக்கப்படுவதில்லை, அச்சிடப்படுவதில்லை</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>முடிவைத் தாண்டியும் உருட்டு</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>கடைசி வரி சாளரத்தின் நடுவுக்கு வரும் வரை பக்கம் தொடர்ந்து உருளும்</value>
+  </data>
 </root>

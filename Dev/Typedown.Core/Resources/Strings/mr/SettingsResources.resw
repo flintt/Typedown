@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>कोड ब्लॉकमधील लांब ओळी गुंडाळण्याऐवजी आडव्या स्क्रोल होतात. क्रमांक सेव्ह, कॉपी किंवा प्रिंट होत नाहीत</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>शेवटाच्या पलीकडे स्क्रोल करा</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>शेवटची ओळ विंडोच्या मध्यभागी येईपर्यंत पेज स्क्रोल होत राहते</value>
+  </data>
 </root>

@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>कोड ब्लॉक की लंबी पंक्तियाँ रैप होने के बजाय बगल में स्क्रॉल होती हैं। संख्याएँ सहेजी, कॉपी या प्रिंट नहीं होतीं</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>अंत के आगे स्क्रॉल करें</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>पेज तब तक स्क्रॉल होता रहता है जब तक अंतिम पंक्ति विंडो के बीच में न आ जाए</value>
+  </data>
 </root>

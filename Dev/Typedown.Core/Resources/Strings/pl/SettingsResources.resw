@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Długie wiersze w blokach kodu przewijają się w poziomie zamiast zawijać. Numery nie są zapisywane, kopiowane ani drukowane</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Przewijaj poza koniec</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Strona przewija się dalej, aż ostatni wiersz znajdzie się na środku okna</value>
+  </data>
 </root>

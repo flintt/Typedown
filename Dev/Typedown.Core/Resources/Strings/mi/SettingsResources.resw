@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Ka panuku whakatahā ngā rārangi roa i ngā paraka waehere, kaua e takai. Kāore ngā tau e tiakina, e tāruatia, e tāngia rānei</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Panuku i tua atu o te mutunga</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Ka panuku tonu te whārangi kia tae rā anō te rārangi whakamutunga ki waenga o te matapihi</value>
+  </data>
 </root>

@@ -1,5 +1,9 @@
 import selection from '../selection'
 import { isOsx } from '../config'
+import { tokenizer } from '../parser'
+
+// Formats closed by the same mark they open with ("**", "~~", "`", "$", "=="), as the tokenizer names them.
+const CLOSED_BY_MARKER = /^(?:strong|em|del|mark|inline_code|inline_math|emoji)$/
 
 /* eslint-disable no-useless-escape */
 const FOOTNOTE_REG = /^\[\^([^\^\[\]\s]+?)(?<!\\)\]:$/
@@ -94,6 +98,35 @@ const enterCtrl = ContentState => {
     this.appendChild(listItem, checkboxInListItem)
     this.appendChild(listItem, paragraphInListItem)
     return listItem
+  }
+
+  // Where Enter splits a line whose caret stands just before the closing marks of a format: after them, so the marks
+  // stay with their text. A click past the end of "item **bold**" puts the caret before the hidden `**` (the browser
+  // lands on the last letter shown), and the split took the `**` to the next line as text - both lines lost the format.
+  // Nested formats are left one by one, the innermost first; a link or image whose text the caret ends is left whole
+  // (its "](address)" too).
+  ContentState.prototype.offsetPastClosingMarks = function (text, offset) {
+    const { labels } = this.stateRender
+    const options = this.muya.options
+    const leave = tokens => {
+      for (const token of tokens) {
+        const { type, range: { start, end }, marker, children, srcAndTitle, hrefAndTitle, backlash } = token
+        if (offset <= start || offset >= end) continue
+        const inner = children && leave(children)
+        if (inner != null) return inner
+        if (CLOSED_BY_MARKER.test(type) && marker && offset === end - marker.length) return end
+        if (type === 'link' || type === 'image') {
+          const second = backlash && backlash.second ? backlash.second.length : 0
+          if (offset === end - 3 - ((srcAndTitle || hrefAndTitle || '').length + second) || offset === end - 1) return end
+        }
+        return null
+      }
+      return null
+    }
+    for (let next; (next = leave(tokenizer(text, { hasBeginRules: false, labels, options }))) != null && next !== offset;) {
+      offset = next
+    }
+    return offset
   }
 
   ContentState.prototype.enterInEmptyParagraph = function (block) {
@@ -247,6 +280,18 @@ const enterCtrl = ContentState => {
       }
       this.partialRender()
       return this.enterHandler(event)
+    }
+
+    // The caret just before a format's closing marks: the line is split after them (offsetPastClosingMarks).
+    if (block.type === 'span' && /^(?:paragraphContent|atxLine)$/.test(block.functionType) && start.offset < text.length) {
+      const past = this.offsetPastClosingMarks(text, start.offset)
+      if (past !== start.offset) {
+        start.offset = end.offset = past
+        this.cursor = {
+          start: { key: start.key, offset: past },
+          end: { key: start.key, offset: past }
+        }
+      }
     }
 
     if (

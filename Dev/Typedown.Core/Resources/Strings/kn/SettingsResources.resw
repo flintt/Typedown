@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>ಕೋಡ್ ಬ್ಲಾಕ್‌ಗಳ ಉದ್ದದ ಸಾಲುಗಳು ಸುತ್ತುವ ಬದಲು ಅಡ್ಡಲಾಗಿ ಸ್ಕ್ರೋಲ್ ಆಗುತ್ತವೆ. ಸಂಖ್ಯೆಗಳನ್ನು ಉಳಿಸಲಾಗುವುದಿಲ್ಲ, ನಕಲಿಸಲಾಗುವುದಿಲ್ಲ ಅಥವಾ ಮುದ್ರಿಸಲಾಗುವುದಿಲ್ಲ</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>ಕೊನೆಯ ನಂತರವೂ ಸ್ಕ್ರೋಲ್ ಮಾಡಿ</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>ಕೊನೆಯ ಸಾಲು ವಿಂಡೋದ ಮಧ್ಯಕ್ಕೆ ಬರುವವರೆಗೆ ಪುಟ ಸ್ಕ್ರೋಲ್ ಆಗುತ್ತಲೇ ಇರುತ್ತದೆ</value>
+  </data>
 </root>

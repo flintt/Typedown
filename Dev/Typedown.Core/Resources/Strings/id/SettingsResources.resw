@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Baris panjang di blok kode bergulir ke samping alih-alih dibungkus. Nomor tidak disimpan, disalin, atau dicetak</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Gulir melewati akhir</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Halaman terus bergulir hingga baris terakhir berada di tengah jendela</value>
+  </data>
 </root>

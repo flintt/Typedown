@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>कोड ब्लकका लामा पङ्क्तिहरू र्‍याप हुनुको सट्टा तेर्सो स्क्रोल हुन्छन्। नम्बरहरू सेभ, कपी वा प्रिन्ट हुँदैनन्</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>अन्त्यभन्दा पर स्क्रोल गर्नुहोस्</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>अन्तिम पङ्क्ति सञ्झ्यालको बीचमा नआएसम्म पेज स्क्रोल भइरहन्छ</value>
+  </data>
 </root>

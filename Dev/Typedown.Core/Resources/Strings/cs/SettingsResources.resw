@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Dlouhé řádky v blocích kódu se místo zalamování posouvají vodorovně. Čísla se neukládají, nekopírují ani netisknou</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Posouvat za konec dokumentu</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Stránka se posouvá dál, dokud není poslední řádek uprostřed okna</value>
+  </data>
 </root>

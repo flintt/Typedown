@@ -1019,4 +1019,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>代码块里的长行改为横向滚动，不再折行。行号不保存、不复制、不打印</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>允许滚动超过文末</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>页面可以继续往下滚，直到最后一行到窗口中间</value>
+  </data>
 </root>

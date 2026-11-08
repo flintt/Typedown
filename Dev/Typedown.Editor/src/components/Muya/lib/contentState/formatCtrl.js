@@ -234,16 +234,30 @@ const formatCtrl = ContentState => {
   }
 
   ContentState.prototype.format = function (type) {
-    const { start, end } = selection.getCursorRange()
+    let { start, end } = selection.getCursorRange()
     if (!start || !end) {
       return
+    }
+
+    // A selection that ends at the very start of a later block - a triple click takes the block's line break, up to
+    // the next one - ends where the block before it does: only what is selected is formatted. The next block's start
+    // got an empty pair of marks ("****Second").
+    if (start.key !== end.key && end.offset === 0) {
+      const before = this.findPreBlockInLocation(this.getBlock(end.key))
+      if (before) end = { key: before.key, offset: before.text.length }
+    }
+    // In a heading the format starts after the # marks, which are part of its text ("**# Title**" is no heading).
+    const startHeading = this.getBlock(start.key)
+    if (startHeading && startHeading.functionType === 'atxLine') {
+      const marks = (/^ {0,3}#{1,6}(?:[ \t]+|$)/.exec(startHeading.text) || [''])[0].length
+      if (start.offset < marks) start = { key: start.key, offset: marks }
     }
 
     const startBlock = this.getBlock(start.key)
     const endBlock = this.getBlock(end.key)
     start.delata = end.delata = 0
     if (start.key === end.key) {
-      const { formats, tokens, neighbors } = this.selectionFormats()
+      const { formats, tokens, neighbors } = this.selectionFormats({ start, end })
       const currentFormats = formats.filter(format => {
         return format.type === type ||
           format.type === 'html_tag' && format.tag === type

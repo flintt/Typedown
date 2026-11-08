@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Nag-i-scroll patagilid ang mahahabang linya sa mga code block sa halip na mag-wrap. Hindi sine-save, kinokopya o ipiniprint ang mga numero</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Mag-scroll lampas sa dulo</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Patuloy na nag-i-scroll ang page hanggang nasa gitna ng window ang huling linya</value>
+  </data>
 </root>

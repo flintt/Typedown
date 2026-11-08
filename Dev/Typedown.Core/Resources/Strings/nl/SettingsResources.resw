@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Lange regels in codeblokken scrollen horizontaal in plaats van terug te lopen. De nummers worden niet opgeslagen, gekopieerd of afgedrukt</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Voorbij het einde scrollen</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>De pagina scrolt door totdat de laatste regel in het midden van het venster staat</value>
+  </data>
 </root>

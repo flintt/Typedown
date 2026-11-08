@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>コードブロック内の長い行は折り返さず横にスクロールします。行番号は保存・コピー・印刷されません</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>末尾を越えてスクロール</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>最後の行がウィンドウの中央に来るまでページをスクロールできます</value>
+  </data>
 </root>

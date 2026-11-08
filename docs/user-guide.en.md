@@ -62,6 +62,7 @@ Under **Settings → Editor**, a few settings change what you see:
 - **Show extra blank lines**: empty lines between paragraphs take up space in Reading Mode and in HTML and PDF exports too, as they do while editing; the file itself is not changed
 - **Join the lines of a paragraph in reading mode**: in Reading Mode a single line break inside a paragraph shows as a space, as Markdown specifies and as the exports write it; no space is put between Chinese or Japanese characters. To keep a break, end the line with two spaces or a backslash. While editing, the lines show as they are in the file
 - **Line numbers in code blocks**: numbers beside a code block's lines. With them on, a long line in a code block no longer wraps; it scrolls sideways. The numbers are not written to the file, copied or printed
+- **Scroll past the end**: the page scrolls on until the last line is in the middle of the window, so it no longer sits at the bottom while you write (typewriter mode already does this)
 - **Vim keys**: Vim in Source Code Mode (`:w` saves, `:q` closes the tab); j/k, gg/G, ]] and / to move around in Reading Mode. Not in visual editing
 
 In Reading Mode the right-click menu only has copying and Select All:

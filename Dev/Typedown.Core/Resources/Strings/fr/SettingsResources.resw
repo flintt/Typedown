@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Les longues lignes des blocs de code défilent horizontalement au lieu de revenir à la ligne. Les numéros ne sont ni enregistrés, ni copiés, ni imprimés</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Défiler au-delà de la fin</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>La page continue de défiler jusqu'à ce que la dernière ligne soit au milieu de la fenêtre</value>
+  </data>
 </root>

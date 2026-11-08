@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>കോഡ് ബ്ലോക്കുകളിലെ നീണ്ട വരികൾ പൊതിയുന്നതിനു പകരം വശത്തേക്ക് സ്ക്രോൾ ചെയ്യും. നമ്പറുകൾ സേവ് ചെയ്യുകയോ പകർത്തുകയോ പ്രിന്റ് ചെയ്യുകയോ ഇല്ല</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>അവസാനത്തിനപ്പുറവും സ്ക്രോൾ ചെയ്യുക</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>അവസാന വരി വിൻഡോയുടെ മധ്യത്തിൽ എത്തുന്നതുവരെ പേജ് സ്ക്രോൾ ചെയ്യാം</value>
+  </data>
 </root>

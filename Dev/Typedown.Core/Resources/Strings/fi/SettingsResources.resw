@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Koodilohkojen pitkät rivit vierivät vaakasuunnassa rivittämisen sijaan. Numeroita ei tallenneta, kopioida eikä tulosteta</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Vieritä lopun yli</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Sivu vierii edelleen, kunnes viimeinen rivi on ikkunan keskellä</value>
+  </data>
 </root>

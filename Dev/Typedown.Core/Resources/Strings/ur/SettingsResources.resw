@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>کوڈ بلاکس کی لمبی لائنیں لپٹنے کے بجائے افقی اسکرول ہوتی ہیں۔ نمبر محفوظ، کاپی یا پرنٹ نہیں ہوتے</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>آخر سے آگے اسکرول کریں</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>صفحہ تب تک اسکرول ہوتا رہتا ہے جب تک آخری لائن ونڈو کے درمیان میں نہ آ جائے</value>
+  </data>
 </root>

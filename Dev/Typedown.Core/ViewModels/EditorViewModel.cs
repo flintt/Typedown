@@ -252,6 +252,7 @@ namespace Typedown.Core.ViewModels
                 Settings.ShowBlankLines,
                 Settings.JoinSoftBreaks,
                 Settings.CodeBlockLineNumbers,
+                Settings.ScrollPastEnd,
                 Settings.ShowMarkdownMarks,
                 Settings.ProgressiveRendering,
                 Settings.PredictHeights,
@@ -838,10 +839,22 @@ namespace Typedown.Core.ViewModels
                 else
                 {
                     // Another document: build its tree away from the control, then hand it over in one step.
+                    var clock = ContentState.Toc.Count >= 500 ? System.Diagnostics.Stopwatch.StartNew() : null;
                     var fresh = new TocTreeItem();
                     fresh.UpdateChildren(ContentState.Toc);
+                    var built = clock?.ElapsedMilliseconds;
                     tocLoadId = LoadId;
                     Toc = fresh;
+                    // A long outline (todo: 3000 headings took half a second on the UI thread, keys typed then lost):
+                    // what building the tree, handing it to the pane and the pane's layout after it each take. The last
+                    // is when a low-priority callback runs, after the work the handover queued.
+                    if (clock != null)
+                    {
+                        var handed = clock.ElapsedMilliseconds;
+                        var count = ContentState.Toc.Count;
+                        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
+                            () => Log.Debug($"outline: tree of {count} entries built in {built} ms, handed to the pane by {handed} ms, laid out by {clock.ElapsedMilliseconds} ms"));
+                    }
                 }
                 if (Settings.TocAutoExpand)
                     Toc.ExpandToSelected();

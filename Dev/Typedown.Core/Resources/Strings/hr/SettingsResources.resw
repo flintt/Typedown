@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Dugi retci u blokovima koda pomiču se vodoravno umjesto prelamanja. Brojevi se ne spremaju, ne kopiraju i ne ispisuju</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Pomicanje iza kraja</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Stranica se nastavlja pomicati dok posljednji redak ne dođe na sredinu prozora</value>
+  </data>
 </root>

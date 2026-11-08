@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Код блоктарындағы ұзын жолдар тасымалданбай, көлденең айналады. Нөмірлер сақталмайды, көшірілмейді және басып шығарылмайды</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Соңынан әрі айналдыру</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Соңғы жол терезенің ортасына келгенше бет айнала береді</value>
+  </data>
 </root>

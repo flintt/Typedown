@@ -70,6 +70,11 @@ namespace Typedown.Core.ViewModels
         /// (a long one scrolls across). Display only: not in the file, not copied, not printed. Asked for in Store reviews.
         /// </summary>
         public bool CodeBlockLineNumbers { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// The page scrolls on past the last line, until it is in the middle of the window, as typewriter mode does - the
+        /// last line no longer sits at the window's bottom while it is written (the Shazao forum, #52). Display only.
+        /// </summary>
+        public bool ScrollPastEnd { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The visual editor shows the Markdown marks (**, #, a link's address) everywhere, not only where the caret is.</summary>
         public bool ShowMarkdownMarks { get => GetSettingValue(false); set => SetSettingValue(value); }
 
@@ -311,6 +316,7 @@ namespace Typedown.Core.ViewModels
             "ShowBlankLines",
             "JoinSoftBreaks",
             "CodeBlockLineNumbers",
+            "ScrollPastEnd",
             "ShowMarkdownMarks",
             "ProgressiveRendering",
             "PredictHeights",

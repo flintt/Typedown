@@ -174,7 +174,7 @@ class ClickEvent {
         event.stopPropagation()
         event.preventDefault()
         if (codeCopy.classList.contains('ag-diagram-copy')) {
-          if (event.type === 'click') contentState.copyBlock(codeCopy.closest('figure'), codeCopy)
+          if (event.type === 'click') contentState.copyBlockToClipboard(codeCopy.closest('figure'), codeCopy)
           return
         }
         return this.muya.contentState.copyCodeBlock(event)
@@ -303,7 +303,7 @@ class ClickEvent {
     // follows a link while editing; in reading mode a plain click does, there being nothing else a click
     // on a link could mean there.
     const linkMousedownHandler = event => {
-      // A press on a figure's copy button (ContentState.copyBlock) is not a press in the document: it places no caret
+      // A press on a figure's copy button (ContentState.copyBlockToClipboard) is not a press in the document: it places no caret
       // and moves no focus - a caret in a diagram or a formula would open its source for editing, in a table a cell.
       if (event.target.closest && event.target.closest('.ag-diagram-copy')) {
         event.preventDefault()
@@ -328,7 +328,7 @@ class ClickEvent {
     }
     eventCenter.attachDOMEvent(container, 'mousedown', linkMousedownHandler)
     eventCenter.attachDOMEvent(window, 'mouseup', mouseupHandler)
-    // A table's copy button (ContentState.copyBlock) goes above the table's right edge, which a figure as wide as the page
+    // A table's copy button (ContentState.copyBlockToClipboard) goes above the table's right edge, which a figure as wide as the page
     // does not know: put there as the pointer comes over the table, before it shows. Within the figure for a table wider
     // than it.
     const tableCopyHandler = event => {

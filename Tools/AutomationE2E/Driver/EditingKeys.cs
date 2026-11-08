@@ -111,10 +111,10 @@ internal static partial class Program
     /// only ASCII marks, on an input event, and what the IME commits comes as a composition); and what the host holds
     /// afterwards is what the editor holds. What the IME gives for `, Shift+8 and Shift+4 goes into the notes.
     /// </summary>
-    private static async Task IM01(List<string> notes)
+    private static async Task PY01(List<string> notes)
     {
-        using var c = await Session("e2e IM01");
-        var id = await Open(c, Fixture("im01.md", "# IM01\n\nstart\n"));
+        using var c = await Session("e2e PY01");
+        var id = await Open(c, Fixture("py01.md", "# PY01\n\nstart\n"));
         var windowId = await WindowIdOf(c, id);
         var window = await WindowOf(windowId, c);
         await WaitUntilDrawn(c, windowId, id, "start");

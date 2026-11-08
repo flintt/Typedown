@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>કોડ બ્લૉકની લાંબી લીટીઓ વીંટાવાને બદલે આડી સ્ક્રોલ થાય છે. નંબર સેવ, કૉપિ કે પ્રિન્ટ થતા નથી</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>અંત પછી પણ સ્ક્રોલ કરો</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>છેલ્લી લીટી વિન્ડોની વચ્ચે આવે ત્યાં સુધી પેજ સ્ક્રોલ થતું રહે છે</value>
+  </data>
 </root>

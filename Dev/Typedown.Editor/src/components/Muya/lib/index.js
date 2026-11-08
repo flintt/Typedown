@@ -685,6 +685,9 @@ class Muya {
 
   format(type) {
     this.contentState.format(type)
+    // Told as an edit typed is: a format comes from the host (a menu, a shortcut) with no input event, and the host
+    // kept the text from before it - a save at once lost the bold.
+    this.dispatchChange()
   }
 
   insertImage(imageInfo) {

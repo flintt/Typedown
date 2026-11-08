@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Scrollaíonn línte fada i mbloic chóid go cliathánach in ionad timfhilleadh. Ní shábháiltear, ní chóipeáiltear ná ní phriontáiltear na huimhreacha</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Scrollaigh thar an deireadh</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Leanann an leathanach ag scrolláil go dtí go mbíonn an líne dheireanach i lár na fuinneoige</value>
+  </data>
 </root>

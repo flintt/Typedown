@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Las líneas largas de los bloques de código se desplazan en horizontal en lugar de ajustarse. Los números no se guardan, copian ni imprimen</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Desplazar más allá del final</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>La página sigue desplazándose hasta que la última línea queda en el centro de la ventana</value>
+  </data>
 </root>

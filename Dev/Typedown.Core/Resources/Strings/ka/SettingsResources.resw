@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>კოდის ბლოკებში გრძელი ხაზები გადატანის ნაცვლად ჰორიზონტალურად გადაიხვევა. ნომრები არ ინახება, არ კოპირდება და არ იბეჭდება</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>გადახვევა ბოლოს მიღმა</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>გვერდი გადაიხვევა მანამ, სანამ ბოლო ხაზი ფანჯრის შუაში არ აღმოჩნდება</value>
+  </data>
 </root>

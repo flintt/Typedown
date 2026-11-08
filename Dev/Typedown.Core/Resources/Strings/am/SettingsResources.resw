@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>በኮድ ብሎኮች ውስጥ ረጅም መስመሮች ከመጠቅለል ይልቅ ወደ ጎን ይሸበለላሉ። ቁጥሮቹ አይቀመጡም፣ አይቀዱም ወይም አይታተሙም</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>ከመጨረሻው አልፎ ሸብልል</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>የመጨረሻው መስመር በመስኮቱ መሃል እስኪደርስ ድረስ ገጹ መሸብለሉን ይቀጥላል</value>
+  </data>
 </root>

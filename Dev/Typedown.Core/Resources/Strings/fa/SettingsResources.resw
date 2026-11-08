@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>خط‌های طولانی در بلوک‌های کد به‌جای شکسته شدن، افقی پیمایش می‌شوند. شماره‌ها ذخیره، کپی یا چاپ نمی‌شوند</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>پیمایش فراتر از انتها</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>صفحه تا زمانی که خط آخر به وسط پنجره برسد پیمایش می‌شود</value>
+  </data>
 </root>

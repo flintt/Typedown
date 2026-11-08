@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>A kódblokkok hosszú sorai tördelés helyett vízszintesen görgethetők. A számok nem kerülnek mentésre, másolásra vagy nyomtatásra</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Görgetés a végén túl</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Az oldal tovább görgethető, amíg az utolsó sor az ablak közepére nem kerül</value>
+  </data>
 </root>

@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Lange linjer i kodeblokke ruller vandret i stedet for at blive ombrudt. Numrene bliver ikke gemt, kopieret eller udskrevet</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Rul forbi slutningen</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Siden ruller videre, indtil den sidste linje er midt i vinduet</value>
+  </data>
 </root>

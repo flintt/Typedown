@@ -988,4 +988,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>تُمرَّر الأسطر الطويلة في كتل الكود أفقيًا بدلًا من التفافها. لا تُحفظ الأرقام ولا تُنسخ ولا تُطبع</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>التمرير إلى ما بعد النهاية</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>تستمر الصفحة في التمرير حتى يصبح السطر الأخير في منتصف النافذة</value>
+  </data>
 </root>

@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>បន្ទាត់វែងក្នុងប្លុកកូដរំកិលទៅចំហៀងជំនួសឱ្យការរុំ។ លេខមិនត្រូវបានរក្សាទុក ចម្លង ឬបោះពុម្ពទេ</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>រំកិលហួសចុងបញ្ចប់</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>ទំព័ររំកិលបន្ត រហូតដល់បន្ទាត់ចុងក្រោយនៅកណ្ដាលបង្អួច</value>
+  </data>
 </root>

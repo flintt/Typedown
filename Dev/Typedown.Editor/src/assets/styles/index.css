@@ -1317,7 +1317,7 @@ pre:not(.ag-active):hover .ag-code-copy {
   opacity: 1;
 }
 
-/* A figure's copy button (ContentState.copyBlock) - a diagram's, a display formula's, a table's: shown on hover, as the
+/* A figure's copy button (ContentState.copyBlockToClipboard) - a diagram's, a display formula's, a table's: shown on hover, as the
    code block's, and not while the block is being edited (ag-active): a diagram's or a formula's source has its own code
    button then, a table its tool bar. */
 figure>.ag-diagram-copy {

@@ -8,7 +8,7 @@ import { EXPORT_DOMPURIFY_CONFIG } from '../components/Muya/lib/config'
 import { absoluteImageUrls } from './localPaths'
 
 // What the copy buttons of a display formula and of a table put on the clipboard besides their Markdown
-// (ContentState.copyBlock): a formula's picture, a table's HTML.
+// (ContentState.copyBlockToClipboard): a formula's picture, a table's HTML.
 
 const blobDataUrl = blob => new Promise((resolve, reject) => {
   const reader = new FileReader()

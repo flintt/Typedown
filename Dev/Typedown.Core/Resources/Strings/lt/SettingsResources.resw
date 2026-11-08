@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Ilgos kodo blokų eilutės slenkamos horizontaliai, o ne laužomos. Numeriai neišsaugomi, nekopijuojami ir nespausdinami</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Slinkti už pabaigos</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Puslapis slenkamas toliau, kol paskutinė eilutė atsiduria lango viduryje</value>
+  </data>
 </root>

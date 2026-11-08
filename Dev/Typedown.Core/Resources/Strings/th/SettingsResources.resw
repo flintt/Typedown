@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>บรรทัดยาวในบล็อกโค้ดจะเลื่อนในแนวนอนแทนการตัดขึ้นบรรทัดใหม่ เลขบรรทัดจะไม่ถูกบันทึก คัดลอก หรือพิมพ์</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>เลื่อนเลยท้ายเอกสาร</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>หน้าจะเลื่อนต่อไปจนบรรทัดสุดท้ายอยู่กลางหน้าต่าง</value>
+  </data>
 </root>

@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Lange Zeilen in Code-Blöcken werden horizontal gescrollt statt umbrochen. Die Nummern werden nicht gespeichert, kopiert oder gedruckt</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Über das Ende hinaus scrollen</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Die Seite lässt sich weiter scrollen, bis die letzte Zeile in der Mitte des Fensters steht</value>
+  </data>
 </root>

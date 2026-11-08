@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Langar línur í kóðablokkum skrunast til hliðar í stað þess að brotna. Númerin eru ekki vistuð, afrituð eða prentuð</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Skruna fram yfir endann</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Síðan heldur áfram að skrunast þar til síðasta línan er í miðjum glugganum</value>
+  </data>
 </root>

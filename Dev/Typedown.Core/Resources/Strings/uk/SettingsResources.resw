@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Довгі рядки в блоках коду прокручуються по горизонталі замість перенесення. Номери не зберігаються, не копіюються і не друкуються</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Прокручування за кінець документа</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Сторінка прокручується далі, доки останній рядок не опиниться посередині вікна</value>
+  </data>
 </root>

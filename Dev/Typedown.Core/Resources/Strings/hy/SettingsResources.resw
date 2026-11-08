@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Կոդի բլոկների երկար տողերը չեն փաթաթվում, այլ ոլորվում են հորիզոնական։ Համարները չեն պահպանվում, պատճենվում կամ տպվում</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Ոլորել վերջից այն կողմ</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Էջը շարունակում է ոլորվել, մինչև վերջին տողը հայտնվի պատուհանի մեջտեղում</value>
+  </data>
 </root>

@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Rreshtat e gjatë në blloqet e kodit rrëshqasin anash në vend që të mbështillen. Numrat nuk ruhen, nuk kopjohen dhe nuk printohen</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Rrëshqit përtej fundit</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Faqja vazhdon të rrëshqasë derisa rreshti i fundit të jetë në mes të dritares</value>
+  </data>
 </root>

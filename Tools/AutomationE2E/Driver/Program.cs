@@ -252,7 +252,8 @@ internal static partial class Program
             await Case("KY01 Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode", KY01);
             await Case("ED01 in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page", ED01);
             await Case("ED02 Shift+Enter and Alt+Enter in a table cell put a line break in that cell", ED02);
-            await Case("IM01 the Chinese IME (Microsoft Pinyin) typing through the keyboard into the visual editor: pinyin committed once, full-width brackets one each with none put in by the editor, the host's text the editor's", IM01);
+            await Case("OL04 measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have it laid out", OL04);
+            await Case("PY01 the Chinese IME (Microsoft Pinyin) typing through the keyboard into the visual editor: pinyin committed once, full-width brackets one each with none put in by the editor, the host's text the editor's", PY01);
             await Case("BL01 blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end", BL01);
             await Case("BL02 Settings > Editor > \"Show extra blank lines\": on, empty lines keep their height in reading mode and an HTML export; off (the default), both collapse them as before", BL02);
             await Case("MN03 minimized, written to, restored without activation: the editor's web view gets its size back", MN03);

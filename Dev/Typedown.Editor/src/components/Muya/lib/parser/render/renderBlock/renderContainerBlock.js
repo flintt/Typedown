@@ -189,7 +189,7 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
       Object.assign(data.attrs, { spellcheck: 'false' })
     }
     // A diagram or a display formula copies as its picture and its Markdown, a table as HTML and its Markdown
-    // (ContentState.copyBlock). Inline formulas have none.
+    // (ContentState.copyBlockToClipboard). Inline formulas have none.
     if (/^(?:flowchart|mermaid|sequence|plantuml|vega-lite|multiplemath|table)$/.test(functionType)) {
       children.push(renderCopyButton(true))
     }

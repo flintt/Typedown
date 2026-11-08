@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Långa rader i kodblock rullar i sidled i stället för att radbrytas. Numren sparas inte, kopieras inte och skrivs inte ut</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Rulla förbi slutet</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Sidan rullar vidare tills den sista raden är mitt i fönstret</value>
+  </data>
 </root>

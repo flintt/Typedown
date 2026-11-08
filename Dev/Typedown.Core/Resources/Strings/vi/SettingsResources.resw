@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Dòng dài trong khối mã cuộn ngang thay vì xuống dòng. Số dòng không được lưu, sao chép hay in</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Cuộn quá cuối văn bản</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Trang tiếp tục cuộn cho đến khi dòng cuối nằm ở giữa cửa sổ</value>
+  </data>
 </root>

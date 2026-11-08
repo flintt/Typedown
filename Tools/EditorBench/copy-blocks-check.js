@@ -1,4 +1,4 @@
-// The copy buttons of a display formula and of a table (ContentState.copyBlock), and the menu's Copy table. In the dark
+// The copy buttons of a display formula and of a table (ContentState.copyBlockToClipboard), and the menu's Copy table. In the dark
 // theme, in visual and reading mode:
 // - each display formula and each table has a copy button, shown when the pointer is over the block; an inline formula
 //   has none; a table's sits just above its top right corner, over no cell;

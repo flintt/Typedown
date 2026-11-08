@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Mistari mirefu katika vizuizi vya msimbo husogea kando badala ya kukunjwa. Namba hazihifadhiwi, hazinakiliwi wala kuchapishwa</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Sogeza kupita mwisho</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Ukurasa huendelea kusogea hadi mstari wa mwisho uwe katikati ya dirisha</value>
+  </data>
 </root>

@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>కోడ్ బ్లాక్‌లలోని పొడవైన పంక్తులు చుట్టబడకుండా పక్కకు స్క్రోల్ అవుతాయి. సంఖ్యలు సేవ్, కాపీ లేదా ప్రింట్ కావు</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>చివరి తర్వాత కూడా స్క్రోల్ చేయి</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>చివరి పంక్తి విండో మధ్యకు వచ్చే వరకు పేజీ స్క్రోల్ అవుతూనే ఉంటుంది</value>
+  </data>
 </root>

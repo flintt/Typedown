@@ -429,7 +429,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         };
         (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
         // The document's text as the host holds it (the reader's own lines kept where unedited, keptSource): a copy
-        // button's Markdown is the block as written there (ContentState.copyBlock).
+        // button's Markdown is the block as written there (ContentState.copyBlockToClipboard).
         (muya as any).documentText = (exported: string) => {
             const imported = importedRef.current
             return !imported ? exported : exported === imported.normalized ? imported.source : markdownRef.current
@@ -1172,10 +1172,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 ele.style.paddingBottom = 'calc(50vh - 54px)'
             } else {
                 ele.style.paddingTop = `${marginTop}px`
-                ele.style.paddingBottom = '0'
+                // Settings > Editor > Scroll past the end: the last line can come up to the middle of the window, as in
+                // typewriter mode, instead of staying at its bottom (the Shazao forum, #52).
+                ele.style.paddingBottom = props.options?.scrollPastEnd ? 'calc(50vh - 54px)' : '0'
             }
         }
-    }, [marginTop, props.options?.typewriter, props.options?.readOnly])
+    }, [marginTop, props.options?.typewriter, props.options?.readOnly, props.options?.scrollPastEnd])
 
     useEffect(() => {
         document.body.style.setProperty('--editorAreaWidth', props.options?.editorAreaWidth)

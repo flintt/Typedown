@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Lang reëls in kodeblokke rol sywaarts in plaas daarvan om te omvou. Die nommers word nie gestoor, gekopieer of gedruk nie</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Rol verby die einde</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Die bladsy rol verder totdat die laaste reël in die middel van die venster is</value>
+  </data>
 </root>

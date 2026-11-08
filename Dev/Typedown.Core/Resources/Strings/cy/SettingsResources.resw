@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Mae llinellau hir mewn blociau cod yn sgrolio i'r ochr yn lle lapio. Nid yw'r rhifau'n cael eu cadw, eu copïo na'u hargraffu</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Sgrolio heibio'r diwedd</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Mae'r dudalen yn dal i sgrolio nes bod y llinell olaf yng nghanol y ffenestr</value>
+  </data>
 </root>

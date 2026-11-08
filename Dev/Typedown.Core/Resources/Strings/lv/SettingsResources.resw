@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Garās rindas koda blokos tiek ritinātas horizontāli, nevis aplauztas. Numuri netiek saglabāti, kopēti vai drukāti</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Ritināt aiz beigām</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Lapa ritinās tālāk, līdz pēdējā rinda ir loga vidū</value>
+  </data>
 </root>

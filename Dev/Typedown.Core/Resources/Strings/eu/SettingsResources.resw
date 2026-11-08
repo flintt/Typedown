@@ -982,4 +982,10 @@
   <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
     <value>Kode-blokeetako lerro luzeak horizontalki korritzen dira, egokitu beharrean. Zenbakiak ez dira gordetzen, kopiatzen edo inprimatzen</value>
   </data>
+  <data name="Editor.ScrollPastEnd.Title" xml:space="preserve">
+    <value>Korritu amaieratik haratago</value>
+  </data>
+  <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
+    <value>Orriak korritzen jarraitzen du azken lerroa leihoaren erdian geratu arte</value>
+  </data>
 </root>
