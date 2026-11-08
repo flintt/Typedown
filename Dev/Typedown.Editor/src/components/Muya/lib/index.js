@@ -4,6 +4,7 @@ import MouseEvent from './eventHandler/mouseEvent'
 import Clipboard from './eventHandler/clipboard'
 import Keyboard from './eventHandler/keyboard'
 import DragDrop from './eventHandler/dragDrop'
+import ListDrag from './eventHandler/listDrag'
 import Resize from './eventHandler/resize'
 import ClickEvent from './eventHandler/clickEvent'
 import { CLASS_OR_ID, MUYA_DEFAULT_OPTION } from './config'
@@ -59,6 +60,7 @@ class Muya {
     this.clickEvent = new ClickEvent(this)
     this.keyboard = new Keyboard(this)
     this.dragdrop = new DragDrop(this)
+    this.listDrag = new ListDrag(this)
     this.resize = new Resize(this)
     this.mouseEvent = new MouseEvent(this)
     this.init()

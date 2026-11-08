@@ -1,0 +1,74 @@
+// A list item dragged by its marker (a reader's request, 2026-11-02): up and down its list, deeper under the item above
+// (dragged right) and out again (left), with the items nested in it; an ordered list renumbered; a click on the marker
+// with no drag changes nothing, and Escape drops a drag. The host gets the new text at once.
+//
+//   node list-drag-check.js
+const { firstDifference, openEditor } = require('./harness');
+
+(async () => {
+  const { page, errors, mode, load, flush, pause, close } = await openEditor();
+  const failures = [];
+  const report = (ok, what, detail) => { console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${what}${ok ? '' : ': ' + detail}`); if (!ok) failures.push(what); };
+  // Where an item's marker and its text line are (by the item's own text), and the list's indent.
+  const geometry = text => page.evaluate(text => {
+    const li = [...document.querySelectorAll('#ag-editor-id li')].find(el => {
+      const own = [...el.children].find(c => !/^(INPUT|UL|OL)$/.test(c.tagName))
+      return own && own.textContent.trim() === text
+    })
+    const own = [...li.children].find(c => !/^(INPUT|UL|OL)$/.test(c.tagName)).getBoundingClientRect()
+    return { markerX: own.left - 8, y: own.top + own.height / 2, top: own.top, bottom: own.bottom }
+  }, text);
+  const visual = async md => { await mode(true, false); await load(md); await mode(false, false); await pause(400); };
+  const drag = async (item, to, { before = true, dx = 0, escape = false } = {}) => {
+    const from = await geometry(item);
+    const target = await geometry(to);
+    const y = before ? target.top + 2 : target.bottom - 2;
+    await page.mouse.move(from.markerX, from.y);
+    await page.mouse.down();
+    await page.mouse.move(from.markerX + 2, from.y + 6, { steps: 2 });
+    await page.mouse.move(from.markerX + dx, y, { steps: 8 });
+    await pause(100);
+    if (escape) await page.keyboard.press('Escape');
+    await page.mouse.up();
+    await pause(400);
+  };
+  const cases = [
+    ['the last item to the top', '- a\n- b\n- c\n', ['c', 'a', {}], '- c\n- a\n- b\n'],
+    ['the first item below the second', '- a\n- b\n- c\n', ['a', 'c', {}], '- b\n- a\n- c\n'],
+    ['an item dragged right goes under the one above', '- a\n- b\n- c\n', ['c', 'c', { before: false, dx: 40 }], '- a\n- b\n  - c\n'],
+    ['a nested item dragged left comes out a level', '- a\n  - b\n- c\n', ['b', 'b', { before: false, dx: -40 }], '- a\n- b\n- c\n'],
+    ['an item goes with what is nested in it', '- a\n  - a1\n- b\n', ['a', 'b', { before: false }], '- b\n- a\n  - a1\n'],
+    ['an ordered list is renumbered', '1. a\n2. b\n3. c\n', ['c', 'a', {}], '1. c\n2. a\n3. b\n'],
+    ['Escape drops the drag', '- a\n- b\n- c\n', ['c', 'a', { escape: true }], '- a\n- b\n- c\n'],
+  ];
+  try {
+    for (const [what, md, [item, to, how], expected] of cases) {
+      await visual(md);
+      await drag(item, to, how);
+      const held = await page.evaluate(() => window.__typedownMuya.getMarkdown());
+      const host = await flush();
+      report(held === expected, `${what}: the document`, firstDifference(expected, held));
+      report(host === held, `${what}: the host has it`, firstDifference(held, host));
+    }
+    // A click on a marker, no drag: nothing moves, the caret at the item's start.
+    await visual('- a\n- b\n- c\n');
+    const b = await geometry('b');
+    await page.mouse.click(b.markerX, b.y);
+    await pause(300);
+    const after = await page.evaluate(() => window.__typedownMuya.getMarkdown());
+    const caret = await page.evaluate(() => { const s = window.__typedownMuya.contentState; const t = s.getBlock(s.cursor.start.key); return `${t.text}@${s.cursor.start.offset}`; });
+    report(after === '- a\n- b\n- c\n', 'a click on a marker moves nothing', after);
+    report(caret === 'b@0', 'a click on a marker puts the caret at the item\'s start', caret);
+    // The text is not a handle: a drag in an item's text selects text, moves nothing.
+    await visual('- alpha\n- beta\n');
+    const t = await page.evaluate(() => { const r = document.querySelector('#ag-editor-id li p').getBoundingClientRect(); return { x: r.left + 4, y: r.top + r.height / 2 }; });
+    await page.mouse.move(t.x, t.y); await page.mouse.down(); await page.mouse.move(t.x + 30, t.y + 40, { steps: 6 }); await page.mouse.up();
+    await pause(300);
+    report(await page.evaluate(() => window.__typedownMuya.getMarkdown()) === '- alpha\n- beta\n', 'a drag in the text moves nothing', '');
+    if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
+  } finally {
+    await close();
+  }
+  console.log(failures.length ? `${failures.length} FAILED` : 'all passed');
+  process.exit(failures.length ? 1 : 0);
+})();

@@ -70,6 +70,28 @@ mark::after {
   background: var(--highlightColor);
 }
 
+/* A list item dragged by its marker (contentState/listDragCtrl): the line where it will land, at its level. Placed by
+   the window's coordinates, so fixed. */
+#mu-list-drag-ghost {
+  height: 3px;
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  border-radius: 2px;
+  background: var(--themeColor);
+}
+
+/* The marker of a list item is a handle to drag it by. */
+li.ag-list-item.ag-marker-hover,
+body.ag-list-dragging,
+body.ag-list-dragging * {
+  cursor: grab !important;
+}
+
+body.ag-list-dragging {
+  user-select: none;
+}
+
 div.ag-show-quick-insert-hint p.ag-paragraph.ag-active>span.ag-paragraph-content:first-of-type:empty::after {
   /* content: 'Type @ to insert'; */
   color: var(--editorColor10);

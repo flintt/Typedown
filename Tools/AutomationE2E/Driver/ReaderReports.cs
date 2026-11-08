@@ -108,6 +108,67 @@ internal static partial class Program
     }
 
     /// <summary>
+    /// LR01: a list item dragged by its marker with the mouse, in the app's web view (a reader's request, 2026-11-02):
+    /// the last item to the top, then the new last one dragged right under the item above; the file saved has both.
+    /// One undo puts the second move back. EditorBench's list-drag-check covers the cases; this is the real pointer.
+    /// </summary>
+    private static async Task LR01(List<string> notes)
+    {
+        using var c = await Session("e2e LR01");
+        var path = Fixture("lr01.md", "# LR01\n\n- alpha\n- beta\n- gamma\n");
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        await WaitUntilDrawn(c, windowId, id, "gamma");
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        // An item's marker (left of its text) and its text's top and bottom, in page coordinates, then on the screen.
+        async Task<(int X, int Y, int Top, int Bottom)> Item(string text)
+        {
+            var r = (await c.Call("test.editor.eval", new { windowId, script = $"(() => {{ const li = [...document.querySelectorAll('#ag-editor-id li')].find(el => {{ const own = [...el.children].find(x => !/^(INPUT|UL|OL)$/.test(x.tagName)); return own && own.textContent.trim() === '{text}' }}); const own = [...li.children].find(x => !/^(INPUT|UL|OL)$/.test(x.tagName)).getBoundingClientRect(); return {{ x: Math.round(own.left - 8), y: Math.round(own.top + own.height / 2), top: Math.round(own.top), bottom: Math.round(own.bottom) }} }})()" }))["result"]!;
+            var p = await c.Call("test.editor.screenPoint", new { windowId, x = (int)r["x"]!, y = (int)r["y"]! });
+            var top = await c.Call("test.editor.screenPoint", new { windowId, x = (int)r["x"]!, y = (int)r["top"]! });
+            var bottom = await c.Call("test.editor.screenPoint", new { windowId, x = (int)r["x"]!, y = (int)r["bottom"]! });
+            return ((int)p["x"]!, (int)p["y"]!, (int)top["y"]!, (int)bottom["y"]!);
+        }
+        async Task<string> Text(string not)
+        {
+            var text = "";
+            for (var i = 0; i < 30; i++) { text = (string?)(await Get(c, id))["text"] ?? ""; if (text != not) break; await Task.Delay(200); }
+            return text;
+        }
+        try
+        {
+            var before = (string?)(await Get(c, id))["text"] ?? "";
+            var gamma = await Item("gamma");
+            var alpha = await Item("alpha");
+            await Drag(window, (gamma.X, gamma.Y), (gamma.X, alpha.Top + 2));
+            var moved = await Text(before);
+            notes.Add("after the first drag: " + moved.Replace("\n", "\\n"));
+            Check(moved == "# LR01\n\n- gamma\n- alpha\n- beta\n", "gamma dragged to the top of the list");
+            var beta = await Item("beta");
+            // Right by a level: under alpha, the item above.
+            var scale = GetDpiForWindow(window) / 96.0;
+            await Drag(window, (beta.X, beta.Y), (beta.X + (int)(40 * scale), beta.Bottom - 2));
+            var nested = await Text(moved);
+            notes.Add("after the second drag: " + nested.Replace("\n", "\\n"));
+            Check(nested == "# LR01\n\n- gamma\n- alpha\n  - beta\n", "beta dragged right goes under alpha");
+            await c.Call("document.save", new { documentId = id });
+            await Task.Delay(500);
+            Check(File.ReadAllText(path).Replace("\r\n", "\n") == nested, "the file saved has both moves");
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            Chord("Ctrl+Z");
+            var undone = await Text(nested);
+            notes.Add("after one undo: " + undone.Replace("\n", "\\n"));
+            Check(undone == moved, "one undo puts the second move back");
+        }
+        finally
+        {
+            try { await c.Call("document.save", new { documentId = id }); await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    /// <summary>
     /// PE01: Settings > Editor > Scroll past the end in the app itself: a long document scrolled all the way down
     /// brings its last line up to about the middle of the editor's area; off, it stays at the bottom (a reader saw no
     /// change with it on, 2026-11-01). EditorBench's check sets the one setting on a bare page; here the host sends

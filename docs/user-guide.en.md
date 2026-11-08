@@ -93,6 +93,8 @@ Right-click the status bar to choose which items it shows; in a window too narro
 
 In visual editing, typing Markdown syntax turns into formatting right away: `## ` at the start of a line makes a level-2 heading, `- ` starts a list, `> ` a quote, three backticks a code block and `$$` a math block.
 
+**Dragging list items**: hold a list item by its bullet or number and drag it up or down its list, with the items nested in it; while dragging, move right to put it under the item above, left to take it out a level. A line shows where it will land and at what level; Esc drops the drag, and one Ctrl+Z undoes a move.
+
 | Action | Shortcut |
 |---|---|
 | Heading 1–6 / Paragraph | Ctrl+1 … Ctrl+6 / Ctrl+0 |
