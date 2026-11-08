@@ -4079,6 +4079,12 @@ internal static partial class Program
     {
         var start = new ProcessStartInfo(file) { UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true };
         foreach (var a in args) start.ArgumentList.Add(a);
+        // Python writes the console's code page (gbk here) unless told: EQ01's transcript holds a "©" and stopped on it.
+        if (file == "python")
+        {
+            start.Environment["PYTHONIOENCODING"] = "utf-8";
+            start.StandardOutputEncoding = start.StandardErrorEncoding = new UTF8Encoding(false);
+        }
         using var process = Process.Start(start)!;
         var stdout = process.StandardOutput.ReadToEndAsync();
         var stderr = process.StandardError.ReadToEndAsync();
