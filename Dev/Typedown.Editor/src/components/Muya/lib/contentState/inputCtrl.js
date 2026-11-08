@@ -208,8 +208,36 @@ const inputCtrl = ContentState => {
         const preInputChar = text.charAt(+offset - 2)
         const prePreInputChar = text.charAt(+offset - 3)
         const postInputChar = text.charAt(+offset)
+        // The closing marks this editor put in after the caret for an opening `*`, `_`, `~` or `$` typed: still there,
+        // right after the caret, when the user has only typed on before them (`at`: the caret after the last key).
+        let paired = this.autoPairedMarks
+        this.autoPairedMarks = null
+        if (
+          paired && (paired.key !== block.key || paired.at !== offset - 1 || event.inputType !== 'insertText' ||
+          text.substr(offset, paired.count) !== paired.mark.repeat(paired.count))
+        ) {
+          paired = null
+        }
+        let pairedDone = false
+        if (paired && inputChar === paired.mark && !(paired.opening && preInputChar === paired.mark)) {
+          // The mark typed again after some text: it closes - over the one put in, not beside it. "*word*" came out
+          // "*word* ok*", "**bold**" as "**bold** ok***".
+          text = text.substring(0, offset) + text.substring(offset + 1)
+          if (paired.count > 1) this.autoPairedMarks = { ...paired, count: paired.count - 1, opening: false, at: offset }
+          needRender = pairedDone = true
+        } else if (paired && paired.opening && (/\s/.test(inputChar) || (paired.mark === '$' && /\d/.test(inputChar)))) {
+          // Right after the opening mark, a space (no emphasis or maths starts with one: "2 * 3") or, after `$`, a digit
+          // (an amount: "$5"): it was no opening mark, and what was put in for it comes out. It stayed: "2 * 3 = 6*".
+          text = text.substring(0, offset) + text.substring(offset + paired.count)
+          needRender = pairedDone = true
+        } else if (paired && inputChar !== paired.mark) {
+          // Text typed between the marks: they stay as they are, and the next one of the mark closes.
+          this.autoPairedMarks = { ...paired, opening: false, at: offset }
+        }
 
-        if (/^delete/.test(event.inputType)) {
+        if (pairedDone) {
+          // Taken care of above.
+        } else if (/^delete/.test(event.inputType)) {
           // handle `deleteContentBackward` or `deleteContentForward`
           const deletedChar = block.text[offset]
           if (event.inputType === 'deleteContentBackward' && postInputChar === BRACKET_HASH[deletedChar]) {
@@ -254,6 +282,12 @@ const inputCtrl = ContentState => {
             text = BRACKET_HASH[event.data]
               ? text.substring(0, offset) + BRACKET_HASH[inputChar] + text.substring(offset)
               : text
+            if (BRACKET_HASH[event.data] && /[*$~_]/.test(inputChar)) {
+              // A second `*` straight after the first ("**" for strong) adds a second closing one to the same run.
+              this.autoPairedMarks = paired && paired.opening && paired.mark === inputChar
+                ? { ...paired, count: paired.count + 1, at: offset }
+                : { key: block.key, mark: BRACKET_HASH[inputChar], count: 1, opening: true, at: offset }
+            }
           }
           /* eslint-enable no-useless-escape */
           // HTML closing-tag completion (upstream #40): typing `</` right after an unclosed `<tag ...>`

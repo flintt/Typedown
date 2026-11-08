@@ -100,7 +100,26 @@ const enterCtrl = ContentState => {
     if (block.type === 'span') block = this.getParent(block)
     const parent = this.getParent(block)
     let newBlock = null
-    if (parent && (/ul|ol|blockquote/.test(parent.type))) {
+    const outerItem = parent && /ul|ol/.test(parent.type) && block.type === 'li' && this.getParent(parent)
+    if (outerItem && outerItem.type === 'li' && this.isLastChild(block)) {
+      // The last, empty item of a nested list: an item of the list around it, after the item holding this list - one
+      // level out, as in a word processor. It became a paragraph in that item first, and only the next Enter made the
+      // item, so a second-level list took three Enters to leave.
+      if (outerItem.listItemType === 'task') {
+        newBlock = this.createTaskItemBlock(null, false)
+      } else {
+        newBlock = this.createBlockLi()
+        newBlock.listItemType = outerItem.listItemType
+        newBlock.bulletMarkerOrDelimiter = outerItem.bulletMarkerOrDelimiter
+      }
+      newBlock.isLooseListItem = outerItem.isLooseListItem
+      this.insertAfter(newBlock, outerItem)
+      // What the holding item had after this list goes with the new item, as Enter in an item's paragraph does.
+      const blocksAfter = outerItem.children.splice(this.findIndex(outerItem.children, parent) + 1)
+      blocksAfter.forEach(b => this.appendChild(newBlock, b))
+      this.removeBlock(this.isOnlyChild(block) ? parent : block)
+      newBlock = newBlock.listItemType === 'task' ? newBlock.children[1] : newBlock.children[0]
+    } else if (parent && (/ul|ol|blockquote/.test(parent.type))) {
       newBlock = this.createBlockP()
       if (this.isOnlyChild(block)) {
         this.insertAfter(newBlock, parent)

@@ -1,6 +1,22 @@
 import selection from '../selection'
 
 const deleteCtrl = ContentState => {
+  // A thematic break taken away by Backspace after it or Delete before it. The block after it kept the blank lines it
+  // had after the break (utils/blankLines.js): it is given the ones before the break instead - the gap where the break
+  // was - so a document that started with a break does not start with a blank line now.
+  ContentState.prototype.removeThematicBreak = function (hr) {
+    const after = this.getNextSibling(hr)
+    if (after) {
+      if (hr.blankLinesBefore != null) {
+        after.blankLinesBefore = hr.blankLinesBefore
+        after.blankLinesParent = hr.blankLinesParent
+      } else {
+        delete after.blankLinesBefore
+      }
+    }
+    this.removeBlock(hr)
+  }
+
   // Handle `delete` keydown event on document.
   ContentState.prototype.docDeleteHandler = function (event) {
     // handle delete selected image
@@ -55,6 +71,16 @@ const deleteCtrl = ContentState => {
       // leave the table short a column. A forward delete at the end of a cell does nothing instead.
       if (startBlock.functionType === 'cellContent' || nextBlock?.functionType === 'cellContent') {
         return
+      }
+      // A thematic break after: Delete takes it away (its text `---` was joined to this block's end).
+      if (nextBlock && nextBlock.functionType === 'thematicBreakLine') {
+        this.removeThematicBreak(this.getParent(nextBlock))
+        const offset = start.offset
+        this.cursor = {
+          start: { key, offset },
+          end: { key, offset }
+        }
+        return this.render()
       }
       if (nextBlock && /h\d|span/.test(nextBlock.type)) {
         // if cursor at the end of code block-language input, do nothing!

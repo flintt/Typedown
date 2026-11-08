@@ -561,6 +561,16 @@ const backspaceCtrl = ContentState => {
       if (inlineDegrade.type !== 'STOP') {
         this.partialRender()
       }
+    } else if (left === 0 && preBlock && preBlock.functionType === 'thematicBreakLine') {
+      // A thematic break before: Backspace takes it away and the caret stays. The paragraph was joined to the break's
+      // text, so the break became the text `---` at the paragraph's start.
+      event.preventDefault()
+      this.removeThematicBreak(this.getParent(preBlock))
+      this.cursor = {
+        start: { key: start.key, offset: 0 },
+        end: { key: start.key, offset: 0 }
+      }
+      this.render()
     } else if (left === 0 && preBlock) {
       event.preventDefault()
       const { text } = block
