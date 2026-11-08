@@ -113,6 +113,11 @@ jobs:
           GENERATE_SOURCEMAP: 'false'
         run: yarn build
 
+      # Chinese and Japanese fonts for the page checks: the runner has none, and code-font-fallback-check needs a CJK
+      # sans-serif and monospace font that differ (v1.4.2's tag build drew the Chinese in nothing).
+      - name: Install CJK fonts
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk
+
       # These exercise the built application in Chrome. They caught source rewriting and parser-boundary bugs
       # that unit tests cannot see because those bugs only appear while loading and switching editor modes.
       - name: Test editor integration
