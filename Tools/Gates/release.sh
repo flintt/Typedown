@@ -13,7 +13,9 @@ Tools/Gates/fast.sh || { echo "release gate: the fast gates failed"; exit 1; }
 echo "== the editor bundle"
 # Mermaid's own file first, as package.json's prebuild does: a bundle built without it draws no diagram (a fresh
 # checkout's Typedown gate, 2026-11-09).
-(cd Dev/Typedown.Editor && node scripts/copy-mermaid.js && GENERATE_SOURCEMAP=false npx react-app-rewired build > /tmp/release-gate-build.$$.log 2>&1) \
+# CI=false as build.yml's "yarn build" has it: under Actions (CI=true) react-scripts takes ESLint's warnings for errors
+# and the bundle does not build (the self-hosted Checks, 2026-11-09).
+(cd Dev/Typedown.Editor && node scripts/copy-mermaid.js && CI=false GENERATE_SOURCEMAP=false npx react-app-rewired build > /tmp/release-gate-build.$$.log 2>&1) \
   || { tail -20 /tmp/release-gate-build.$$.log; echo "release gate: the editor bundle did not build"; exit 1; }
 rm -f /tmp/release-gate-build.$$.log
 # The step's script: the lines of its "run: |" block, up to the next step.
