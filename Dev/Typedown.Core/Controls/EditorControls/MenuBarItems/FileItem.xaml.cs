@@ -116,11 +116,12 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             {
                 var path = paths[i];
                 var item = new MenuFlyoutItem { Text = RecentPaths.Label(path), Command = open, CommandParameter = path, Tag = path };
-                ToolTipService.SetToolTip(item, path + "\n" + Locale.GetString("Recent.RemoveHint"));
+                ToolTipService.SetToolTip(item, path + "\n" + Locale.GetString("Recent.MenuHint"));
                 AutomationProperties.SetAutomationId(item, idPrefix + i);
                 AutomationProperties.SetHelpText(item, path);
-                // A right-click (or Delete) takes the entry out of the list at once; the menu stays open.
-                item.RightTapped += (s, e) => { e.Handled = true; RemoveEntry(menu, item, path, remove); };
+                // A right-click opens the entry's menu, as the home page's recent list does: a right-click took the entry
+                // out at once, where everywhere else it opens a menu (the 2026-11-11 menu report's M08). Delete still does.
+                item.ContextFlyout = EntryMenu(menu, item, path, open, remove);
                 item.KeyDown += (s, e) =>
                 {
                     if (e.Key != Windows.System.VirtualKey.Delete) return;
@@ -131,6 +132,31 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 made.Insert(0, item);
             }
             return made;
+        }
+
+        // A recent entry's own menu: open it, where it is, its path, and out of the list.
+        private MenuFlyout EntryMenu(MenuFlyoutSubItem menu, MenuFlyoutItem item, string path, System.Windows.Input.ICommand open, Action<string> remove)
+        {
+            var flyout = new MenuFlyout();
+            var openItem = new MenuFlyoutItem { Text = Locale.GetString("Open") };
+            openItem.Click += (s, e) => open.Execute(path);
+            var location = new MenuFlyoutItem { Text = Locale.GetString("OpenFileLocation") };
+            location.Click += (s, e) => Common.OpenFileLocation(path);
+            var copy = new MenuFlyoutItem { Text = Locale.GetString("CopyAsPath") };
+            copy.Click += (s, e) =>
+            {
+                try { this.GetService<Interfaces.IClipboard>()?.SetText(path); }
+                catch (Exception ex) { Log.Debug($"recent: copy path: {ex.Message}"); }
+            };
+            var removeItem = new MenuFlyoutItem { Text = Locale.GetString("HomePage.RemoveFromList") };
+            AutomationProperties.SetAutomationId(removeItem, "RecentRemoveItem");
+            removeItem.Click += (s, e) => RemoveEntry(menu, item, path, remove);
+            flyout.Items.Add(openItem);
+            flyout.Items.Add(location);
+            flyout.Items.Add(copy);
+            flyout.Items.Add(new MenuFlyoutSeparator());
+            flyout.Items.Add(removeItem);
+            return flyout;
         }
 
         private void RemoveEntry(MenuFlyoutSubItem menu, MenuFlyoutItem item, string path, Action<string> remove)
