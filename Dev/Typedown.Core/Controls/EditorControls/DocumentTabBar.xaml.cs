@@ -377,9 +377,12 @@ namespace Typedown.Core.Controls
             foreach (var tab in Tabs.Tabs)
             {
                 if (TabView.ContainerFromItem(tab) is not muxc.TabViewItem item) continue;
-                VisualStateManager.GoToState(item, item.IsSelected ? "Selected" : "Normal", false);
+                var common = VisualStateManager.GoToState(item, item.IsSelected ? "Selected" : "Normal", false);
                 VisualStateManager.GoToState(item, "NotDragging", false);
                 VisualStateManager.GoToState(item, "NoReorderHint", false);
+                // Which states it is in, by group, for the log: what keeps a dropped tab's edge.
+                if (VisualTreeHelper.GetChildrenCount(item) > 0 && VisualTreeHelper.GetChild(item, 0) is FrameworkElement root)
+                    Log.Debug($"tabs: {tab.Title} states {string.Join(", ", VisualStateManager.GetVisualStateGroups(root).Select(g => g.Name + "=" + (g.CurrentState?.Name ?? "-")))} (to {(item.IsSelected ? "Selected" : "Normal")}: {common})");
                 // A tab dragged is lifted (a translation off the strip, which casts a shadow) and was left lifted: the edge
                 // it kept was that shadow's, darker than the strip (TD01's pictures on w10). Put back down.
                 if (item.IsSelected) continue;
