@@ -42,7 +42,7 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
             this.InitializeComponent();
         }
 
-        private void OnOpenImageLocationItemLoaded(object sender, RoutedEventArgs e)
+        private void OnImageMenuLoaded(object sender, RoutedEventArgs e)
         {
             ViewModel = (sender as FrameworkElement).GetService<AppViewModel>();
             SelectedImage = ViewModel.EditorViewModel.Selection["selectedImage"];
@@ -53,10 +53,19 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
         private void UpdateMenuItemState()
         {
             var isLocalImage = UriHelper.TryGetLocalPath(ImageSrc, out _);
+            // Reading mode changes nothing: not the document's reference (copy or move and point there, upload), not the
+            // files on disk (move, delete) - only a copy kept elsewhere and where the picture is (the report's M01).
+            var editable = !ReadOnly;
             OpenImageLocationItem.IsEnabled = isLocalImage;
-            MoveImageItem.IsEnabled = isLocalImage;
-            DeleteImageItem.IsEnabled = isLocalImage;
+            CopyImageItem.IsEnabled = editable;
+            MoveImageItem.IsEnabled = isLocalImage && editable;
+            UploadSubMenu.IsEnabled = editable;
+            DeleteImageItem.IsEnabled = isLocalImage && editable;
         }
+
+        // Asked again when an item runs, not only when the menu opened: the mode can change while it is open, and an
+        // item must not act on a document shown read-only.
+        private bool ReadOnly => ViewModel?.SettingsViewModel?.ReadOnly ?? true;
 
         private void UpdateImageUploadConfigItem()
         {
@@ -92,6 +101,7 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
 
         private async void OnCopyImageToClick(object sender, RoutedEventArgs e)
         {
+            if (ReadOnly) return;
             try
             {
                 byte[] bytes = await GetImageBytes();
@@ -112,6 +122,7 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
 
         private async void OnMoveImageToClick(object sender, RoutedEventArgs e)
         {
+            if (ReadOnly) return;
             try
             {
                 byte[] bytes = await GetImageBytes();
@@ -137,6 +148,7 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
 
         private async void OnUploadImageClick(ImageUploadConfig config)
         {
+            if (ReadOnly) return;
             try
             {
                 if (UriHelper.TryGetLocalPath(ImageSrc, out var path))
@@ -177,6 +189,7 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
 
         private void OnDeleteImageFileClick(object sender, RoutedEventArgs e)
         {
+            if (ReadOnly) return;
             try
             {
                 if (UriHelper.TryGetLocalPath(ImageSrc, out var path))

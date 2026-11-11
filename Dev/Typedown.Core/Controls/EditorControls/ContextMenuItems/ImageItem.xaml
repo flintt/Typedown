@@ -9,14 +9,20 @@
     xmlns:u="using:Typedown.Core.Utilities"
     xmlns:viewmodels="using:Typedown.Core.ViewModels" 
     mc:Ignorable="d">
-    <MenuFlyoutItem x:Name="OpenImageLocationItem" Text="{u:LocaleString Key=OpenImageLocation}" Click="OnOpenImageLocationClick" Loaded="OnOpenImageLocationItemLoaded"/>
-    <MenuFlyoutItem Text="{u:LocaleString Key=CopyImageTo}" Click="OnCopyImageToClick"/>
+    <!-- A copy kept elsewhere (the document unchanged) first; then what changes the document's reference (copy or move
+         and point the picture there, upload); where it is; deleting the file on disk last, apart (the context menu
+         report's M03, M07). -->
+    <MenuFlyoutItem x:Name="SaveImageItem" Text="{u:LocaleString Key=SaveImageAs}" Click="OnSaveImageClick" Loaded="OnImageMenuLoaded"/>
+    <MenuFlyoutSeparator/>
+    <MenuFlyoutItem x:Name="CopyImageItem" Text="{u:LocaleString Key=CopyImageTo}" Click="OnCopyImageToClick"/>
     <MenuFlyoutItem x:Name="MoveImageItem" Text="{u:LocaleString Key=MoveImageTo}" Click="OnMoveImageToClick"/>
     <MenuFlyoutSubItem x:Name="UploadSubMenu" Text="{u:LocaleString Key=UploadImage}">
         <MenuFlyoutItem x:Name="NoUploadConfigItem" Text="{u:LocaleString Key=NoImageUploadConfiguration}" IsEnabled="False"/>
         <MenuFlyoutSeparator/>
         <MenuFlyoutItem Text="{u:LocaleString Key=ImageUploadSettings}" Click="OnImageUploadSettingsClick"/>
     </MenuFlyoutSubItem>
-    <MenuFlyoutItem Text="{u:LocaleString Key=SaveImageAs}" Click="OnSaveImageClick"/>
+    <MenuFlyoutSeparator/>
+    <MenuFlyoutItem x:Name="OpenImageLocationItem" Text="{u:LocaleString Key=OpenImageLocation}" Click="OnOpenImageLocationClick"/>
+    <MenuFlyoutSeparator/>
     <MenuFlyoutItem x:Name="DeleteImageItem" Text="{u:LocaleString Key=DeleteImageFile}" Click="OnDeleteImageFileClick"/>
 </controls:MenuItemCollection>
