@@ -210,6 +210,17 @@ namespace Typedown.Core.Controls
                 if (TabView.SelectedItem != Tabs.ActiveTab) TabView.SelectedItem = Tabs.ActiveTab;
                 return;
             }
+            // The tab shown dragged to another place: taken out of the strip and put back, its selection went to a neighbour,
+            // and that neighbour's document was shown - the dropped tab no longer looked the shown one (the user's list,
+            // 2026-11-11, 7; TD01 on w10: td01-3 dragged to the front, td01-1 shown). Not a choice of the reader's: the
+            // tab shown stays.
+            if (TabView.SelectedItem is DocumentTab moved && moved != Tabs.ActiveTab && Tabs.Tabs.Contains(Tabs.ActiveTab)
+                && (dragging || Environment.TickCount64 - shownTabMovedAt < 500))
+            {
+                Log.Debug("tabs: the tab shown was moved in the strip; it stays shown");
+                TabView.SelectedItem = Tabs.ActiveTab;
+                return;
+            }
             if (TabView.SelectedItem is DocumentTab tab && tab != Tabs.ActiveTab)
             {
                 if (!closing) handedOverAt = DateTime.UtcNow;
@@ -270,6 +281,53 @@ namespace Typedown.Core.Controls
         {
             handedOverAt = DateTime.UtcNow;
             ViewModel?.FileViewModel.NewFileCommand.Execute(default);
+        }
+
+        // A tab dragged to another place and let go kept the look it had while dragged - an edge like the shown tab's card
+        // without its fill (the user's list, 2026-11-11, 7; seen on w10 in TD01's pictures): the strip moves the item
+        // and the container it lands in is not put back into its state. Every tab is put back into the state it is in
+        // once the move is done.
+        // When the tab shown was last put back into the strip (a drag moves a tab by taking it out and putting it in again).
+        private long shownTabMovedAt;
+
+        private void OnTabItemsChanged(muxc.TabView sender, Windows.Foundation.Collections.IVectorChangedEventArgs args)
+        {
+            if (args.CollectionChange == Windows.Foundation.Collections.CollectionChange.ItemInserted && Tabs != null
+                && (int)args.Index < Tabs.Tabs.Count && Tabs.Tabs[(int)args.Index] == Tabs.ActiveTab)
+            {
+                shownTabMovedAt = Environment.TickCount64;
+                // Selected again: taken out, it gave its selection to a neighbour.
+                DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () => { if (Tabs != null && TabView.SelectedItem != Tabs.ActiveTab) TabView.SelectedItem = Tabs.ActiveTab; });
+            }
+            ResetTabStatesSoon();
+        }
+
+        // A tab being dragged (the strip raises these for a move within it too): no selection meanwhile is the reader's. Taken
+        // for one for 10 s at most, should the end never be told: the tabs would no longer take a click.
+        private long dragStartedAt = long.MinValue / 2, dragEndedAt;
+        private bool dragging => dragStartedAt > dragEndedAt && Environment.TickCount64 - dragStartedAt < 10000;
+
+        private void OnTabDragStarting(muxc.TabView sender, muxc.TabViewTabDragStartingEventArgs args) => dragStartedAt = Environment.TickCount64;
+
+        private void OnTabDragCompleted(muxc.TabView sender, muxc.TabViewTabDragCompletedEventArgs args)
+        {
+            dragEndedAt = Environment.TickCount64;
+            if (Tabs != null && TabView.SelectedItem != Tabs.ActiveTab) TabView.SelectedItem = Tabs.ActiveTab;
+            ResetTabStatesSoon();
+        }
+
+        private void ResetTabStatesSoon() => DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, ResetTabStates);
+
+        private void ResetTabStates()
+        {
+            if (Tabs == null) return;
+            foreach (var tab in Tabs.Tabs)
+            {
+                if (TabView.ContainerFromItem(tab) is not muxc.TabViewItem item) continue;
+                VisualStateManager.GoToState(item, item.IsSelected ? "Selected" : "Normal", false);
+                VisualStateManager.GoToState(item, "NotDragging", false);
+                VisualStateManager.GoToState(item, "NoReorderHint", false);
+            }
         }
 
         private bool closing;
