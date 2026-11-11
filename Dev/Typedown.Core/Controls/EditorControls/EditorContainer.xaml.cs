@@ -261,13 +261,10 @@ namespace Typedown.Core.Controls
         public static Visibility EditVisibility(bool readOnly, bool onGhost) => readOnly || onGhost ? Visibility.Collapsed : Visibility.Visible;
 
         /// <summary>A link's items: right-clicked on a link in the visual editor; <paramref name="editsOnly"/> (reading mode) hides the ones that change it.</summary>
-        public static Visibility LinkMenuVisibility(string link, bool sourceCode, bool editsOnly) => link != null && !sourceCode && !editsOnly ? Visibility.Visible : Visibility.Collapsed;
+        public static Visibility LinkMenuVisibility(bool onLink, bool sourceCode, bool editsOnly) => onLink && !sourceCode && !editsOnly ? Visibility.Visible : Visibility.Collapsed;
 
-        /// <summary>A formula's or a diagram's copy: right-clicked on that kind of block.</summary>
-        public static Visibility BlockMenuVisibility(string block, string kind, bool sourceCode) => block == kind && !sourceCode ? Visibility.Visible : Visibility.Collapsed;
-
-        /// <summary>The line under the object's items: there when one of them is.</summary>
-        public static Visibility ObjectGroupVisibility(bool inTable, string link, bool inCode, string block, bool onRevision, bool sourceCode) =>
-            !sourceCode && (inTable || link != null || inCode || block != null || onRevision) ? Visibility.Visible : Visibility.Collapsed;
+        /// <summary>The line under the object's items: there when one of them is (flags only: x:Bind calls no function with a null argument).</summary>
+        public static Visibility ObjectGroupVisibility(bool inTable, bool onLink, bool inCode, bool onMath, bool onDiagram, bool onRevision, bool sourceCode) =>
+            !sourceCode && (inTable || onLink || inCode || onMath || onDiagram || onRevision) ? Visibility.Visible : Visibility.Collapsed;
     }
 }
