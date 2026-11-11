@@ -211,12 +211,14 @@ Right-click a picture → **Image**:
 
 | Menu item | What it does |
 |---|---|
-| Open Image Location | Opens the picture's folder in File Explorer (local pictures only) |
-| Copy Image to... | Copies it to a place you choose, **and the document now points at the new location** |
-| Move Image to... | Same as above, and deletes the original file (local pictures only) |
-| Upload Image | Pick an upload configuration; uploads this picture and replaces its address with the web address (local pictures only) |
 | Save Image As... | Saves a copy; the document stays as it is |
-| Delete Image File | Deletes the picture file and removes the picture from the document (local pictures only) |
+| Copy and Update Reference... | Copies it to a place you choose, **and the document now points at the new location** |
+| Move and Update Reference... | Same as above, and deletes the original file (local pictures only) |
+| Upload Image | Pick an upload configuration; uploads this picture and replaces its address with the web address |
+| Open Image Location | Opens the picture's folder in File Explorer (local pictures only) |
+| Delete Image File... | Deletes the picture file and removes the picture from the document (local pictures only) |
+
+In reading mode only **Save Image As** and **Open Image Location** are available; the items that change the document or files are not.
 
 Clicking a picture shows a floating toolbar: Edit, Inline / Align Left / Center / Align Right, Zoom (25%–200%) and Delete. Alignment and zoom write the picture as an `<img>` tag.
 
