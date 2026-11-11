@@ -61,6 +61,27 @@ namespace Typedown.Core.Services
             }
         }
 
+        /// <summary>
+        /// A file's backup taken over as an untitled document's (a new id, the name <see cref="UntitledBackups"/> reads):
+        /// for a file of the last session that is gone, whose unsaved text no restore offered any more (the audit's A06).
+        /// The text comes back as an untitled tab. False when there is none, or it could not be moved.
+        /// </summary>
+        public bool AdoptAsUntitled(string path)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(path)) return false;
+                var named = GetBackupFilePath(path);
+                if (!File.Exists(named)) return false;
+                File.Move(named, GetBackupFilePath(null, System.Guid.NewGuid().ToString("N")));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         /// <summary>Untitled documents' backups left behind (a crash), as document id and file.</summary>
         public System.Collections.Generic.List<(string documentId, string file)> UntitledBackups()
         {

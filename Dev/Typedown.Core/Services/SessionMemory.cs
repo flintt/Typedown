@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Typedown.Core.Utilities;
 
 namespace Typedown.Core.Services
 {
@@ -44,6 +45,11 @@ namespace Typedown.Core.Services
                 if (session?.Files == null) return null;
                 // Files that vanished meanwhile are dropped; the active index follows the surviving list.
                 var active = session.ActiveIndex >= 0 && session.ActiveIndex < session.Files.Count ? session.Files[session.ActiveIndex] : null;
+                // A vanished file's unsaved text (its backup) comes back as an untitled document: dropped with the file, it
+                // stayed on disk with no restore offering it (the audit's A06).
+                var backups = new AutoBackup();
+                foreach (var gone in session.Files.Where(f => !File.Exists(f)))
+                    if (backups.AdoptAsUntitled(gone)) Log.Debug($"session: {Path.GetFileName(gone)} is gone; its unsaved text kept as an untitled document");
                 session.Files = session.Files.Where(File.Exists).ToList();
                 session.ActiveIndex = Math.Max(0, session.Files.IndexOf(active));
                 // Only untitled documents open: still a session, for the one to show among them.
