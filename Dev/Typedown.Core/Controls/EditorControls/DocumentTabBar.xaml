@@ -1,4 +1,4 @@
-<UserControl
+﻿<UserControl
     x:Class="Typedown.Core.Controls.DocumentTabBar"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -33,6 +33,9 @@
         SelectionChanged="OnSelectionChanged"
         AddTabButtonClick="OnAddTabButtonClick"
         TabCloseRequested="OnTabCloseRequested"
+        TabItemsChanged="OnTabItemsChanged"
+        TabDragStarting="OnTabDragStarting"
+        TabDragCompleted="OnTabDragCompleted"
         TabWidthMode="SizeToContent"
         CanReorderTabs="True"
         CanDragTabs="False"
