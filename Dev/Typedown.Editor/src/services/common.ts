@@ -46,8 +46,13 @@ export const getTOC = (markdown: string) => {
         if (opens) { fence = opens[1]; continue }
         if (/^ {0,3}#{1,6}(\s|$)/.test(line))
             candidates.push({ line: index, setext: false, text: line.replace(/^ {0,3}#{1,6}/, '').replace(/\s#+\s*$/, '').trim() })
-        else if (line.trim() && /^ {0,3}(=+|-+)\s*$/.test(lines[index + 1] ?? ''))
-            candidates.push({ line: index, setext: true, text: line.trim() })
+        else if (line.trim() && /^ {0,3}(=+|-+)\s*$/.test(lines[index + 1] ?? '')) {
+            // A setext heading is the paragraph's lines above its underline, as the lexer reads it now ("Three\nlines\n---"
+            // is one heading): its line is the first of them.
+            let first = index
+            while (first > 0 && lines[first - 1].trim() && !/^ {0,3}(#{1,6}(\s|$)|>|[*+-] |\d{1,9}[.)] |(`{3,}|~{3,})|(=+|-+)\s*$)/.test(lines[first - 1])) first--
+            candidates.push({ line: first, setext: true, text: lines.slice(first, index + 1).map(l => l.trim()).join('\n') })
+        }
     }
     const toc = []
     let next = 0
