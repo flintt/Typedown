@@ -388,6 +388,9 @@ namespace Typedown.Core.ViewModels
             return true;
         }
 
+        // Files asked to be read, counted: a read that ends after a later one began into the same tab is not shown.
+        private int openRequests;
+
         private async Task<bool> LoadFile(string path, bool skipSavedCheck = false, bool postMessage = true, bool preview = false)
         {
             DocumentTab startedTab = null;
@@ -415,7 +418,15 @@ namespace Typedown.Core.ViewModels
                 var openedAt = System.Diagnostics.Stopwatch.StartNew();
                 // The tab the file goes into: the one begun for it, or the one shown that it reuses.
                 var openingTab = startedTab ?? TabsViewModel?.ActiveTab;
+                var request = ++openRequests;
                 var (text, format) = await TextFileFormat.ReadAsync(path);
+                // A later file asked into the same tab meanwhile (a preview tab, A then B clicked): the one asked last is
+                // shown - B read first and A after put A back over it (the 2026-11-11 recheck of A08).
+                if (startedTab == null && request != openRequests && TabsViewModel?.ActiveTab == openingTab)
+                {
+                    Log.Debug($"open {System.IO.Path.GetFileName(path)}: another file was asked into this tab while it was read; not opened");
+                    return false;
+                }
                 // Another tab shown while the file was read (a slow disk, a share): the file is not put into it - it took
                 // that tab's path, text and undo history and marked it saved (the audit's A08). The open is dropped, and a
                 // tab begun for it with it.
@@ -926,10 +937,13 @@ namespace Typedown.Core.ViewModels
                     var markdown = EditorViewModel.Markdown;
                     var hash = Common.SimpleHash(markdown);
                     var imagesBefore = ImageBasePath;
+                    var documentId = originalTab?.DocumentId;
                     var result = await WriteAllText(targetPath, markdown);
                     // The tab too, not only the path: two untitled documents both have none, and a switch from one to the
-                    // other during the write gave the other this file's path and hash (the audit's A07).
-                    if (result && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
+                    // other during the write gave the other this file's path and hash (the audit's A07). And the document
+                    // the tab holds: made a new one meanwhile (the last tab closed to the home page), it is not this file
+                    // (the 2026-11-11 recheck).
+                    if (result && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab && originalTab?.DocumentId == documentId)
                     {
                         CopyPicturesAlong(markdown, imagesBefore, Path.GetDirectoryName(targetPath));
                         FilePath = targetPath;
