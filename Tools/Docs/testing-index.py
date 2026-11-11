@@ -35,6 +35,17 @@ def cases():
     if not found:
         errors.append(f"{DRIVER}: no Case(...) lines found")
     rows = ["| Case | What it checks |", "| --- | --- |"]
+    # One id one case: a second SV01 was written, and the driver no longer built - found on the test machine only.
+    seen = set()
+    for _, method in found:
+        if method in seen:
+            errors.append(f"{DRIVER}: case {method} is run twice (two cases with one id)")
+        seen.add(method)
+    catalog = os.path.join(os.path.dirname(DRIVER), "CaseCatalog.cs")
+    if os.path.exists(os.path.join(ROOT, catalog)):
+        keys = re.findall(r'^\s*\["(\w+)"\]\s*=\s*[QF]\(', read(catalog), re.M)
+        for key in sorted({k for k in keys if keys.count(k) > 1}):
+            errors.append(f"{catalog}: {key} is listed twice")
     for text, method in found:
         text = text.replace('\\"', '"').replace("\\\\", "\\")
         case_id, _, what = text.partition(" ")
