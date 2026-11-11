@@ -326,7 +326,7 @@
  },
  "82": {
   "section": "Setext headings",
-  "out": "  Foo *bar\nbaz*\t\n====\n"
+  "out": "Foo *bar\nbaz*\n====\n"
  },
  "83": {
   "section": "Setext headings",
@@ -370,7 +370,7 @@
  },
  "93": {
   "section": "Setext headings",
-  "out": "> foo\n\nbar\n===\n"
+  "out": "> foo\n> bar\n> ===\n"
  },
  "94": {
   "section": "Setext headings",
@@ -378,7 +378,7 @@
  },
  "95": {
   "section": "Setext headings",
-  "out": "Foo\nBar\n\n---\n"
+  "out": "Foo\nBar\n---\n"
  },
  "96": {
   "section": "Setext headings",
@@ -926,7 +926,7 @@
  },
  "232": {
   "section": "Block quotes",
-  "out": "> # Foo\n>\n> bar\n\nbaz\n"
+  "out": "> # Foo\n>\n> bar\n> baz\n"
  },
  "233": {
   "section": "Block quotes",
@@ -950,7 +950,7 @@
  },
  "238": {
   "section": "Block quotes",
-  "out": "> foo\n\n    - bar\n"
+  "out": "> foo\n>     - bar\n"
  },
  "239": {
   "section": "Block quotes",
@@ -986,7 +986,7 @@
  },
  "247": {
   "section": "Block quotes",
-  "out": "> bar\n\nbaz\n"
+  "out": "> bar\n> baz\n"
  },
  "248": {
   "section": "Block quotes",
@@ -998,11 +998,11 @@
  },
  "250": {
   "section": "Block quotes",
-  "out": "> > > foo\n\nbar\n"
+  "out": "> > > foo\n> > > bar\n"
  },
  "251": {
   "section": "Block quotes",
-  "out": "> > > foo\n> >\n> > bar\n> > baz\n"
+  "out": "> > > foo\n> > > bar\n> > > baz\n"
  },
  "252": {
   "section": "Block quotes",
@@ -1166,11 +1166,11 @@
  },
  "292": {
   "section": "List items",
-  "out": "> 1. > Blockquote\n\ncontinued here.\n"
+  "out": "> 1. > Blockquote\n>    > continued here.\n"
  },
  "293": {
   "section": "List items",
-  "out": "> 1. > Blockquote\n>    continued here.\n"
+  "out": "> 1. > Blockquote\n>    > continued here.\n"
  },
  "294": {
   "section": "List items",
