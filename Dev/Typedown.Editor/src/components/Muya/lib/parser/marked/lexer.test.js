@@ -153,6 +153,14 @@ describe('lazy quote lines and setext headings of several lines, as CommonMark r
     expect(read('> a\n> b\nc\n\nd\n')).toEqual(['blockquote_start', 'paragraph:a\nb\nc', 'blockquote_end', 'paragraph:d'])
   })
 
+  test("a quote's code takes no lazy line (spec 236, 237)", () => {
+    expect(read('>     foo\n    bar\n')).toEqual(['blockquote_start', 'code:foo', 'blockquote_end', 'code:bar'])
+    // The fence opened in the quote ends with it; foo is outside (how the lone fence itself is read is another matter).
+    const fenced = read('> ```\nfoo\n```\n')
+    expect(fenced.indexOf('blockquote_end')).toBe(2)
+    expect(fenced[3]).toBe('paragraph:foo')
+  })
+
   test('a list item or a rule under a quote is not taken into it', () => {
     expect(read('> a\n- b\n')[3]).toBe('list_start')
     expect(read('> a\n---\n')).toEqual(['blockquote_start', 'paragraph:a', 'blockquote_end', 'hr'])

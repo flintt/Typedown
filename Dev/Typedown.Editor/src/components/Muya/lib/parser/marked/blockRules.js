@@ -104,9 +104,12 @@ block.paragraph = edit(block._paragraph)
 // Both places: the rule names the paragraph twice, and the second (the last line, which ends the quote) was left as
 // the word itself - a quote's paragraph took no lazy continuation line, and "> a\nb" put b after the quote, where
 // CommonMark keeps it in (the 2026-11-09 audit's 13).
+// Only a paragraph takes a lazy line: a quote's indented or fenced code does not (">     foo\n    bar" is code and then
+// code outside the quote, spec 236; "> ```\nfoo" leaves foo outside, 237).
+const quotedParagraph = '(?! {4}|\\t| {0,3}(?:`{3,}|~{3,}))' + block.paragraph.source.replace(/^\^/, '')
 block.blockquote = edit(block.blockquote)
-  .replace('paragraph', block.paragraph)
-  .replace('paragraph', block.paragraph)
+  .replace('paragraph', quotedParagraph)
+  .replace('paragraph', quotedParagraph)
   .getRegex()
 
 /**
