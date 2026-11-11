@@ -88,6 +88,28 @@ internal static partial class Program
                 $"the tab moved looks as the other tab not shown does ({Show(now.moved)} against {Show(now.other)})");
             Check(Near(now.moved.back, before.moved.back) && Near(now.moved.text, before.moved.text),
                 $"and as it did before the drag ({Show(now.moved)} against {Show(before.moved)})");
+
+            // The tab shown dragged to the start: still drawn as the tab shown, and the others as they were.
+            var shownBefore = Look(TabOf(last));
+            var otherBefore = Look(TabOf(middle));
+            notes.Add($"shown tab before: {Show(shownBefore)}; other {Show(otherBefore)}");
+            var shownFrom = CenterOf(TabOf(last));
+            var startRect = Tabs().First().Current.BoundingRectangle;
+            await Drag(window, shownFrom, ((int)(startRect.Left + 6), shownFrom.Item2), steps: 20);
+            await Task.Delay(400);
+            SetCursorPos(editor.Item1, editor.Item2 + 160);
+            await Task.Delay(800);
+            notes.Add("after the shown tab: " + Screenshot("tabdrag-shown-after"));
+            var order2 = Tabs().Select(t => t.Current.Name).ToList();
+            notes.Add("tabs after: " + string.Join(" | ", order2));
+            Check(order2.Count == 3 && order2[0].Contains(last), $"the tab shown is now the first ({string.Join(" | ", order2)})");
+            var shownAfter = Look(TabOf(last));
+            var otherAfter = Look(TabOf(middle));
+            notes.Add($"shown tab after: {Show(shownAfter)}; other {Show(otherAfter)}");
+            Check(Near(shownAfter.back, shownBefore.back) && Near(shownAfter.text, shownBefore.text),
+                $"the tab shown, dragged, looks as it did ({Show(shownAfter)} against {Show(shownBefore)})");
+            Check(Near(otherAfter.back, otherBefore.back) && Near(otherAfter.text, otherBefore.text),
+                $"and the other tabs as they did ({Show(otherAfter)} against {Show(otherBefore)})");
         }
         finally
         {
