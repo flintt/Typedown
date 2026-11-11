@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -34,13 +34,21 @@ internal static partial class Program
             return menu;
         }
         void Close() { Send(Key(0x1B, false), Key(0x1B, true)); }
+        // An item counts when it is on the screen: the menu before (closed by an item invoked) can still be read for a moment
+        // (the host had the right state - its log - and its items were there, XM01 on w10).
+        bool Shown(Dictionary<string, System.Windows.Automation.AutomationElement> menu, string item)
+        {
+            if (!menu.TryGetValue(item, out var element)) return false;
+            try { return !element.Current.IsOffscreen && !element.Current.BoundingRectangle.IsEmpty; }
+            catch (System.Windows.Automation.ElementNotAvailableException) { return false; }
+        }
         void Has(Dictionary<string, System.Windows.Automation.AutomationElement> menu, string where, params string[] ids)
         {
-            foreach (var item in ids) Check(menu.ContainsKey(item), $"{where}: the menu has {item} ({string.Join(", ", menu.Keys)})");
+            foreach (var item in ids) Check(Shown(menu, item), $"{where}: the menu has {item} ({string.Join(", ", menu.Keys.Where(k => Shown(menu, k)))})");
         }
         void HasNot(Dictionary<string, System.Windows.Automation.AutomationElement> menu, string where, params string[] ids)
         {
-            foreach (var item in ids) Check(!menu.ContainsKey(item), $"{where}: the menu has no {item}");
+            foreach (var item in ids) Check(!Shown(menu, item), $"{where}: the menu has no {item}");
         }
         string[] objects = { "TableSubItem", "OpenLinkItem", "CopyLinkAddressItem", "RemoveLinkItem", "CopyCodeItem", "CopyFormulaItem", "CopyDiagramItem" };
         try
@@ -91,7 +99,7 @@ internal static partial class Program
             await Task.Delay(1500);
             var source = await MenuAt("source mode", ".CodeMirror-line");
             Close(); await Task.Delay(300);
-            HasNot(source, "source mode", "CopyAsSubItem", "PasteAsPlainTextItem");
+            HasNot(source, "source mode", "CopyAsSubItem", "PasteAsPlainTextItem", "MenuFormatItem");
             HasNot(source, "source mode", objects);
             Has(source, "source mode", "CopyItem", "PasteItem");
             await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
