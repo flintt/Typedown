@@ -363,7 +363,13 @@ namespace Typedown.Core.Controls
             ResetTabStatesSoon();
         }
 
-        private void ResetTabStatesSoon() => DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, ResetTabStates);
+        // Once the strip is done with the move, and again once the drop's animation has played.
+        private async void ResetTabStatesSoon()
+        {
+            DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, ResetTabStates);
+            await System.Threading.Tasks.Task.Delay(700);
+            ResetTabStates();
+        }
 
         private void ResetTabStates()
         {
@@ -376,10 +382,27 @@ namespace Typedown.Core.Controls
                 VisualStateManager.GoToState(item, "NoReorderHint", false);
                 // A tab dragged is lifted (a translation off the strip, which casts a shadow) and was left lifted: the edge
                 // it kept was that shadow's, darker than the strip (TD01's pictures on w10). Put back down.
-                if (!item.IsSelected && item.Translation != System.Numerics.Vector3.Zero)
+                if (item.IsSelected) continue;
+                if (item.Translation != System.Numerics.Vector3.Zero)
                 {
                     Log.Debug($"tabs: {tab.Title} was left lifted ({item.Translation}); put down");
                     item.Translation = System.Numerics.Vector3.Zero;
+                }
+                // The lift may be the composition visual's own (the list's drag animates it, not the element's Translation),
+                // or a shadow the element was given: each put back, and said in the log when it was there.
+                if (item.Shadow != null)
+                {
+                    Log.Debug($"tabs: {tab.Title} had a shadow; taken off");
+                    item.Shadow = null;
+                }
+                var visual = Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(item);
+                visual.Properties.TryGetVector3("Translation", out var lifted);
+                if (lifted != System.Numerics.Vector3.Zero || visual.Scale != System.Numerics.Vector3.One || visual.Opacity != 1f)
+                {
+                    Log.Debug($"tabs: {tab.Title} visual left at translation {lifted}, scale {visual.Scale}, opacity {visual.Opacity}; put back");
+                    visual.Properties.InsertVector3("Translation", System.Numerics.Vector3.Zero);
+                    visual.Scale = System.Numerics.Vector3.One;
+                    visual.Opacity = 1f;
                 }
             }
         }
