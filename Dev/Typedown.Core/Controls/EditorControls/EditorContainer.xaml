@@ -102,9 +102,9 @@
                          did not show. -->
                     <!-- The object right-clicked (the page's ContextMenuTarget; the 2026-11-11 menu report): a table's own items, a
                          link's, a code block's, a formula's or a diagram's. Not in source mode, which has none of them. -->
-                    <MenuFlyoutSubItem x:Name="TableSubItem" Text="{u:LocaleString Key=Table}" Visibility="{x:Bind local:EditorContainer.TableMenuVisibility(Editor.ContextMenuInTable, Settings.SourceCode), Mode=OneWay}">
-                        <MenuFlyoutItem x:Name="CopyTableItem" Icon="Copy" Text="{u:LocaleString Key=CopyTable}" Command="{x:Bind Editor.CopyTableCommand}"/>
-                        <MenuFlyoutSeparator Visibility="{x:Bind Settings.ReadOnly, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}"/>
+                    <!-- Copy table at the top, one click as it was (the user, 2026-11-11); the rows and columns in the submenu. -->
+                    <MenuFlyoutItem x:Name="CopyTableItem" Icon="Copy" Text="{u:LocaleString Key=CopyTable}" Command="{x:Bind Editor.CopyTableCommand}" Visibility="{x:Bind local:EditorContainer.TableMenuVisibility(Editor.ContextMenuInTable, Settings.SourceCode), Mode=OneWay}"/>
+                    <MenuFlyoutSubItem x:Name="TableSubItem" Text="{u:LocaleString Key=Table}" Visibility="{x:Bind local:EditorContainer.TableEditVisibility(Editor.ContextMenuInTable, Settings.SourceCode, Settings.ReadOnly), Mode=OneWay}">
                         <MenuFlyoutItem x:Name="TableRowAboveItem" Text="{u:LocaleString Key=InsertRowAbove}" Command="{x:Bind Editor.EditTableCommand}" CommandParameter="insert-previous-row" Visibility="{x:Bind Settings.ReadOnly, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}"/>
                         <MenuFlyoutItem x:Name="TableRowBelowItem" Text="{u:LocaleString Key=InsertRowBelow}" Command="{x:Bind Editor.EditTableCommand}" CommandParameter="insert-next-row" Visibility="{x:Bind Settings.ReadOnly, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}"/>
                         <MenuFlyoutItem x:Name="TableRowRemoveItem" Text="{u:LocaleString Key=RemoveRow}" Command="{x:Bind Editor.EditTableCommand}" CommandParameter="remove-current-row" Visibility="{x:Bind Settings.ReadOnly, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}"/>

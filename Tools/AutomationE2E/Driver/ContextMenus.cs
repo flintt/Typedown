@@ -46,7 +46,7 @@ internal static partial class Program
         {
             foreach (var item in ids) Check(!menu.ContainsKey(item), $"{where}: the menu has no {item}");
         }
-        string[] objects = { "TableSubItem", "OpenLinkItem", "CopyLinkAddressItem", "RemoveLinkItem", "CopyCodeItem", "CopyFormulaItem", "CopyDiagramItem" };
+        string[] objects = { "CopyTableItem", "TableSubItem", "OpenLinkItem", "CopyLinkAddressItem", "RemoveLinkItem", "CopyCodeItem", "CopyFormulaItem", "CopyDiagramItem" };
         try
         {
             // A paragraph.
@@ -80,13 +80,13 @@ internal static partial class Program
             Close(); await Task.Delay(300);
             Has(formula, "a display formula", "CopyFormulaItem");
 
-            var table = await MenuAt("table cell", "#ag-editor-id figure[data-role=TABLE] tbody td", "TableSubItem");
-            Has(table, "a table cell", "TableSubItem");
+            // Copy table at the top (one click, as it was); the rows and columns in the Table submenu.
+            var table = await MenuAt("table cell", "#ag-editor-id figure[data-role=TABLE] tbody td", "CopyTableItem");
+            Has(table, "a table cell", "CopyTableItem", "TableSubItem");
             if (table.ContainsKey("TableSubItem"))
             {
-                var copyTable = await MenuEntry(window, "TableSubItem", "CopyTableItem");
-                var rowAbove = await MenuEntry(window, "TableRowAboveItem");
-                Check(copyTable != null && rowAbove != null, "the Table submenu has Copy table and Insert Row Above");
+                var rowAbove = await MenuEntry(window, "TableSubItem", "TableRowAboveItem");
+                Check(rowAbove != null, "the Table submenu has Insert Row Above");
             }
             Close(); Close(); await Task.Delay(300);
 

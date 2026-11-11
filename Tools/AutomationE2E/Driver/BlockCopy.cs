@@ -366,16 +366,12 @@ internal static partial class Program
         var toldParagraph = await Told();
         Send(Key(0x1B, false), Key(0x1B, true));
         await Task.Delay(400);
-        Check(!paragraph.ContainsKey("TableSubItem"), $"{mode}: the menu on a paragraph has no Table items (the page told the host {toldParagraph}; the menu had {string.Join(", ", paragraph.Keys)})");
+        Check(!paragraph.ContainsKey("CopyTableItem"), $"{mode}: the menu on a paragraph has no Copy table (the page told the host {toldParagraph}; the menu had {string.Join(", ", paragraph.Keys)})");
         EmptyTheClipboard();
-        // Copy table is in the Table submenu (the 2026-11-11 menu report: a table's own items together).
-        var menu = await ContextMenuAt(c, windowId, window, "#ag-editor-id figure[data-role=TABLE] tbody td", "TableSubItem");
+        var menu = await ContextMenuAt(c, windowId, window, "#ag-editor-id figure[data-role=TABLE] tbody td", "CopyTableItem");
         var told = await Told();
         notes.Add($"{mode}: menu in a cell: {string.Join(", ", menu.Keys)}; the page told the host {told}");
-        System.Windows.Automation.AutomationElement? copyTable = null;
-        if (menu.ContainsKey("TableSubItem"))
-            try { copyTable = await MenuEntry(window, "TableSubItem", "CopyTableItem"); } catch (CaseFailed) { }
-        if (copyTable == null || !copyTable.Current.IsEnabled)
+        if (!menu.TryGetValue("CopyTableItem", out var copyTable) || !copyTable.Current.IsEnabled)
         {
             Send(Key(0x1B, false), Key(0x1B, true));
             throw new CaseFailed($"{mode}: the menu in a table cell has no Copy table{(copyTable != null ? " enabled" : "")}: the page told the host {told} (table true = the item should show); the menu had {string.Join(", ", menu.Keys)}; screen: {Screenshot("cb02-menu-" + mode)}");
