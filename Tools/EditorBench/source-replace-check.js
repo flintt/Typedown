@@ -84,6 +84,38 @@ const { openEditor } = require('./harness');
       const found = await marks();
       check(found > 0, `a quick one after it finds its matches (${name} mode)`, found);
     }
+
+    // The same expression through on a short text, then on one where it backtracks (the 2026-11-11 recheck: the
+    // verdict was by expression alone, and the page hung on the second text); and a replace on a text edited into one
+    // since the search.
+    for (const source of [true, false]) {
+      const name = source ? 'source' : 'visual';
+      const slow = `(b+)+$${source ? '' : ' '}`;
+      await mode(source, false);
+      await load('bbb\n');
+      await pause(300);
+      await send('Search', { value: slow, opt: { ...regexp, selection: {} } });
+      await pause(500);
+      await load('b'.repeat(40) + '!\n');
+      await pause(300);
+      await send('Search', { value: slow, opt: { ...regexp, selection: {} } });
+      check(await answers(1000), `an expression through on a short text does not hold the page on a long one (${name} mode)`, 'no answer in 1 s');
+      await pause(2500);
+      check(await answers(1000), `nor after it was given up (${name} mode)`, 'no answer in 1 s');
+
+      const edited = `(c+)+$${source ? '' : ' '}`;
+      await load('ccc\n');
+      await pause(300);
+      await send('Search', { value: edited, opt: { ...regexp, selection: {} } });
+      await pause(500);
+      if (source) await cm(() => { const e = document.querySelector('.CodeMirror').CodeMirror; e.setValue('c'.repeat(40) + '!\n'); });
+      else await page.evaluate(() => { const s = window.__typedownMuya.contentState; const b = s.blocks[0].children[0]; b.text = 'c'.repeat(40) + '!'; s.render(); });
+      await pause(300);
+      await send('Replace', { value: 'X', opt: { ...regexp, isSingle: false } });
+      check(await answers(1000), `a replace on a text edited since the search does not hold the page (${name} mode)`, 'no answer in 1 s');
+      await pause(2500);
+      check(await answers(1000), `nor after it was given up (${name} mode)`, 'no answer in 1 s');
+    }
     await mode(true, false);
 
     await load('document A\n');

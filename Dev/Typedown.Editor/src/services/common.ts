@@ -75,10 +75,25 @@ export const getTOC = (markdown: string) => {
 // on the texts it will be run over, for SLOW_REGEX_MS at most; until it has come through, a search with it finds nothing,
 // and one that took longer finds nothing for good (the worker is stopped). A plain search is not tried: its pattern has
 // no backtracking to speak of.
+// A verdict is for an expression on the texts it was tried on: one that came through on "aaa" took over the thread again
+// once forty a's and a "!" were loaded (the 2026-11-11 recheck of P07). Each search says what it will run over; changed
+// texts (their fingerprint, below) are tried again.
 const SLOW_REGEX_MS = 2000
 type RegexVerdict = 'ok' | 'slow' | 'pending'
 const regexVerdicts = new Map<string, RegexVerdict>()
 const regexKey = (re: RegExp) => `${re.flags}/${re.source}`
+// The texts an expression was last asked to run over, by expression: what searchMayRun holds its verdict to.
+const regexTexts = new Map<string, string>()
+const fingerprint = (texts: string[]) => {
+    let hash = 0x811c9dc5
+    let length = 0
+    for (const text of texts) {
+        length += text.length + 1
+        for (let i = 0; i < text.length; i++) hash = Math.imul(hash ^ text.charCodeAt(i), 16777619)
+        hash = Math.imul(hash ^ 10, 16777619)
+    }
+    return `${length}:${(hash >>> 0).toString(36)}`
+}
 let regexWorker: Worker | null = null
 
 const regexWorkerSource = `onmessage = e => {
@@ -96,17 +111,26 @@ const regexWorkerSource = `onmessage = e => {
 export const searchMayRun = (value: string, options: any) => {
     if (!options?.searchIsRegexp || typeof Worker === 'undefined') return true
     const re = searchRegExp(value, options)
-    return !re || regexVerdicts.get(regexKey(re)) === 'ok'
+    if (!re) return true
+    const pattern = regexKey(re)
+    return regexTexts.has(pattern) && regexVerdicts.get(`${pattern}#${regexTexts.get(pattern)}`) === 'ok'
 }
 
 /**
  * Tries a regular expression search on `texts` (what it will be run over) in the worker; `done` is called when it came
- * through in time, for the search to be done again. Nothing for a search that may already run, or is being tried.
+ * through in time, for the search to be done again. Asked by every search: nothing when these texts were tried already
+ * or are being tried.
  */
 export const trySearch = (value: string, options: any, texts: () => string[], done: () => void) => {
+    if (!options?.searchIsRegexp || typeof Worker === 'undefined') return
     const re = searchRegExp(value, options)
-    if (!re || searchMayRun(value, options)) return
-    const key = regexKey(re)
+    if (!re) return
+    const pattern = regexKey(re)
+    const over = texts()
+    const seen = fingerprint(over)
+    regexTexts.set(pattern, seen)
+    if (regexTexts.size > 200) regexTexts.delete(regexTexts.keys().next().value as string)
+    const key = `${pattern}#${seen}`
     if (regexVerdicts.has(key)) return
     if (regexVerdicts.size >= 200) regexVerdicts.delete(regexVerdicts.keys().next().value as string)
     regexVerdicts.set(key, 'pending')
@@ -128,14 +152,14 @@ export const trySearch = (value: string, options: any, texts: () => string[], do
             done()
             return
         }
-        console.log(`search: the regular expression ${key} took over ${SLOW_REGEX_MS} ms; it finds nothing`)
+        console.log(`search: the regular expression ${pattern} took over ${SLOW_REGEX_MS} ms on these texts; it finds nothing`)
         worker.terminate()
         if (regexWorker === worker) regexWorker = null
     }
     const onMessage = (e: MessageEvent) => { if (e.data === id) finish('ok') }
     const timer = window.setTimeout(() => finish('slow'), SLOW_REGEX_MS)
     worker.addEventListener('message', onMessage)
-    worker.postMessage({ id, source: re.source, flags: re.flags, texts: texts() })
+    worker.postMessage({ id, source: re.source, flags: re.flags, texts: over })
 }
 
 export const matchString = (text: string, value: string, options: any) => {

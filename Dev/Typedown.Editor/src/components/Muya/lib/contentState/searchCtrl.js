@@ -1,5 +1,5 @@
 import { defaultSearchOption } from '../config'
-import { matchString } from '../../../../services/common'
+import { matchString, trySearch } from '../../../../services/common'
 
 const searchCtrl = ContentState => {
   ContentState.prototype.buildRegexValue = function (match, value) {
@@ -100,6 +100,15 @@ const searchCtrl = ContentState => {
     const { selection } = options
     let overCursor = false
     let firstMatchAfterCursor = null
+    // A regular expression on texts not tried yet (edited since the search: a replace, the results list found again)
+    // is tried in the worker first and finds nothing until then; the matches are found again once it came through
+    // (services/common trySearch).
+    trySearch(value, options, () => {
+      const texts = []
+      const gather = blocks => blocks.forEach(b => { if (typeof b.text === 'string' && b.text) texts.push(b.text); if (b.children?.length) gather(b.children) })
+      gather(this.blocks)
+      return texts
+    }, () => { if (this.searchMatches?.value === value) this.muya.refreshSearch() })
 
     const travel = blocks => {
       for (const block of blocks) {
