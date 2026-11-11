@@ -281,30 +281,34 @@ namespace Typedown.Core.Controls
 
         private void WatchStripPresses()
         {
-            // As a tab is dragged the TabView sets the tabs' column to a fixed width a tab wider than the tabs (346 to 586,
-            // job 397), and the + in the next column went right by that much with no tab added (the user, 2026-11-11).
-            // The column is kept fixed - the TabView keeps the strip from shrinking as the tab is moved - but no wider
-            // than the tabs were. No drag event is raised for a move within the strip (neither TabDragStarting nor the
-            // list's DragItemsStarting): the column's width is watched instead.
-            var grid = Descendants(TabView).OfType<Grid>().FirstOrDefault(g => g.Name == "TabContainerGrid");
-            if (grid == null || grid.ColumnDefinitions.Count < 3 || grid == watchedGrid) return;
-            watchedGrid = grid;
-            var column = grid.ColumnDefinitions[1];
-            // Only with as many tabs as when the column was last laid out: a tab coming or going may want the width.
-            var list = Descendants(TabView).OfType<ItemsControl>().FirstOrDefault(l => l.Name == "TabListView");
-            var laidOutWith = list?.ActualWidth > 0 ? list.Items.Count : -1;
-            if (list != null) list.SizeChanged += (s, e) => laidOutWith = list.Items.Count;
-            column.RegisterPropertyChangedCallback(ColumnDefinition.WidthProperty, (s, p) =>
+            // As a tab is pressed or dragged, and after a tab is closed, the TabView sets the tabs' column to a fixed width
+            // a tab wider than the tabs (346 to 586, job 397; until the pointer leaves the strip): the + in the next column
+            // went right by that much with no tab added (the user, 2026-11-11). The column is the TabView's: holding it to
+            // the tabs (1.4.2.4) left no room for a tab made next, which went over the others, and tabs could not be
+            // dragged again (the user, 2026-11-12). The + is drawn after the last tab instead: moved left by the room the
+            // list has past its tabs, none when they fill it or overflow.
+            var list = Descendants(TabView).OfType<FrameworkElement>().FirstOrDefault(l => l.Name == "TabListView");
+            var add = Descendants(TabView).OfType<Button>().FirstOrDefault(b => b.Name == "AddButton");
+            var scroller = list == null ? null : Descendants(list).OfType<ScrollViewer>().FirstOrDefault();
+            if (add == null || scroller == null || add == watchedAdd) return;
+            watchedAdd = add;
+            var shift = new TranslateTransform();
+            add.RenderTransform = shift;
+            void Place()
             {
-                var tabs = column.ActualWidth;
-                if (column.Width.IsAuto || tabs <= 0 || column.Width.Value <= tabs + 1) return;
-                if (list == null || list.Items.Count != laidOutWith) return;
-                Log.Debug($"tabs: the tabs' column set to {column.Width.Value:0} while {tabs:0} wide: kept to the tabs");
-                column.Width = new GridLength(tabs);
-            });
+                var room = scroller.ViewportWidth - scroller.ExtentWidth;
+                var x = room > 1 ? -room : 0;
+                if (Math.Abs(shift.X - x) <= 0.5) return;
+                Log.Debug($"tabs: the + moved {x:0} (list {scroller.ViewportWidth:0} wide, its tabs {scroller.ExtentWidth:0})");
+                shift.X = x;
+            }
+            scroller.SizeChanged += (s, e) => Place();
+            scroller.ViewChanged += (s, e) => Place();
+            scroller.LayoutUpdated += (s, e) => Place();
+            Place();
         }
 
-        private Grid watchedGrid;
+        private Button watchedAdd;
 
         private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
         {
@@ -399,15 +403,26 @@ namespace Typedown.Core.Controls
             ResetTabStates();
         }
 
-        private void ResetTabStates()
+        private async void ResetTabStates()
         {
+            // Not under a drag: a tab pressed again within the 700 ms was set back to "not dragging" as it was moved, and
+            // the strip took no drag any more (the user, 2026-11-12). Done once the button is up (10 s at most).
+            for (var waited = 0; waited < 10000 && PInvoke.GetIsKeyDownNow(Windows.System.VirtualKey.LeftButton); waited += 300)
+                await System.Threading.Tasks.Task.Delay(300);
             if (Tabs == null) return;
-            foreach (var tab in Tabs.Tabs)
+            var tabs = Tabs.Tabs.ToList();
+            var shown = tabs.IndexOf(TabView.SelectedItem as DocumentTab);
+            for (var i = 0; i < tabs.Count; i++)
             {
+                var tab = tabs[i];
                 if (TabView.ContainerFromItem(tab) is not muxc.TabViewItem item) continue;
                 var common = VisualStateManager.GoToState(item, item.IsSelected ? "Selected" : "Normal", false);
                 VisualStateManager.GoToState(item, "NotDragging", false);
                 VisualStateManager.GoToState(item, "NoReorderHint", false);
+                // The line under the strip, as the TabView sets it: none under the tab shown, cut beside it. After moves the
+                // tab shown kept the line of a tab not shown, and one beside it the cut of a tab beside the shown one
+                // (the user, 2026-11-12: three looks of tab, put right by a click on each).
+                VisualStateManager.GoToState(item, i == shown ? "NoBottomBorderLine" : i == shown - 1 ? "LeftOfSelectedTab" : i == shown + 1 ? "RightOfSelectedTab" : "NormalBottomBorderLine", false);
                 // The edge a dropped tab kept: its drag-and-drop look, a group of the tab's own with no state set after the
                 // drop (the log of TD01 on w10: "-" for the tab dropped, DragDropVisualNotVisible for the others).
                 VisualStateManager.GoToState(item, "DragDropVisualNotVisible", false);
