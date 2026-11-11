@@ -357,4 +357,8 @@
     <value>Hierdie lêer is in 'n ander oortjie of venster oop. Maak dit eers daar toe, of stoor onder 'n ander naam.</value>
     <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
   </data>
+  <data name="CloseTabNotShown" xml:space="preserve">
+    <value>“{0}” het ongestoorde veranderinge, maar dit kon nie gewys word om te vra of dit gestoor moet word nie. Die venster is nie toegemaak nie; probeer weer oor 'n oomblik.</value>
+    <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
+  </data>
 </root>

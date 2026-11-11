@@ -357,4 +357,8 @@
     <value>Este ficheiro está aberto noutra lapela ou xanela. Pécheo alí primeiro ou gárdeo con outro nome.</value>
     <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
   </data>
+  <data name="CloseTabNotShown" xml:space="preserve">
+    <value>«{0}» ten cambios sen gardar, pero non se puido amosar para preguntar se se garda. A xanela non se pechou; ténteo de novo nun momento.</value>
+    <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
+  </data>
 </root>

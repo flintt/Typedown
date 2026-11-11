@@ -357,4 +357,8 @@
     <value>Acest fișier este deschis în altă filă sau fereastră. Închideți-l mai întâi acolo sau salvați-l cu alt nume.</value>
     <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
   </data>
+  <data name="CloseTabNotShown" xml:space="preserve">
+    <value>„{0}” are modificări nesalvate, dar nu a putut fi afișat pentru a întreba dacă să fie salvat. Fereastra nu a fost închisă; încercați din nou peste câteva momente.</value>
+    <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
+  </data>
 </root>
