@@ -22,13 +22,17 @@ This guide covers version 1.4. Menu and setting names are given as they appear i
 **Open a folder**: File → Open Folder. The side bar on the left (Ctrl+Shift+L shows/hides it; **Settings → Appearance → Side Bar on the Right** moves it to the right) has two pages:
 
 - **Files**: the documents in the folder. A single click previews a file (the tab is replaced when you open another file); a double click opens it for real. The magnifier at the top of the side bar searches the whole folder (Ctrl+Shift+F): the names of files and folders are listed first, under File names, then the files whose text contains the words, under Contents, as they are found. A file whose name and text both match is listed once, under File names, marked "Content matches too". File names shows five until you choose Show all; a group's heading folds it away. Clicking a folder shows it in the Files tree; clicking a file opens it, and finds the words in it when its text matched. The search looks in the folder of the document in front first, then in the folder the Files tree shows; when the document is not in that folder, the files beside it are listed with their folder's name in front
-- **Outline**: the headings of the current document; click one to jump to it. While you write, the heading you are under is highlighted
+- **Outline**: the headings of the current document; click one to jump to it. While you write (in source mode too), the heading you are under is highlighted
 
 **Save**: Ctrl+S; Save As is Ctrl+Shift+S. Unsaved changes are backed up regularly, and if the app closes unexpectedly they are restored the next time you open it. On the next start, the tabs you had open last time come back automatically. Closing a document with unsaved changes asks whether to save them; with **Settings → General → Keep Unsaved Changes When Closing** on it does not ask, and unsaved documents come back as they were, still marked unsaved.
 
 **A file changed by another program**: it is reloaded (**Auto reload on external change**), after asking first (**Ask before reload**; turned off, it asks only when there are unsaved changes). With unsaved changes of your own, neither version is lost: **Keep mine** is the default (Enter), and the version on disk is saved as a copy; with **Reload**, yours is saved as a copy and Ctrl+Z brings it back. The copies are in the Backup\Kept folder of the app's data; the question shows the full path. A save that finds the file changed by another program without it being noticed (with **Auto reload on external change** off at the time, say) asks first too instead of writing over it, and auto-save writes nothing while you are asked. A document you open again goes back to where you were editing (**Remember cursor position**). All three are under **Settings → General**.
 
+**File encodings**: a file without a BOM is read in the encoding its content shows: UTF-8, GBK / GB18030, Big5, Shift-JIS, EUC-KR, Windows-1251 / 1252, or UTF-16 without a mark. A file that cannot be read back exactly is never overwritten by autosave, and a manual save asks first whether to save it as UTF-8; the status bar's encoding item reopens it in another encoding.
+
 **Settings**: Ctrl+, or the gear in the top-right corner of the window.
+
+**Default app**: the installer lets you choose whether to open `.md` files with this app by default; either way it is listed under "Open with" and in Windows' Default apps. Uninstalling removes it from there.
 
 The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts page of the settings), feedback (see section 8) and **About**.
 
@@ -54,6 +58,8 @@ The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts pag
 | Focus / Typewriter Mode | F8 / F9 | Focus Mode dims the other paragraphs; Typewriter Mode keeps the current line in the middle of the screen |
 
 Plain text files (`.txt`, `.text`, `.log`, and config and data files: `.ini`, `.cfg`, `.conf`, `.json`, `.toml`, `.yaml`, `.yml`, `.xml`, `.csv`, `.tsv`) have no Markdown in them parsed: in visual editing they are laid out as prose (no line numbers), in source code mode as code (line numbers), with no `#` or `*` highlighted in either, and you switch between the two as usual; they are saved exactly as they were apart from what you change. A part fenced as ` ```md ` or ` ```markdown ` is drawn as Markdown in visual editing, its lines shown again when the caret goes into it; for a code block inside it, fence the part with a longer fence (` ````md `) or tildes (`~~~md`).
+
+**The notice at your first visual edit**: some ways of writing are rewritten when edited in the visual editor (raw HTML, some list or table forms). The first time you edit such a document visually, a card at the bottom right says what may be rewritten; to keep it as it is, edit in source mode. **Don't show again for this document** on the card stops it for that document; turning off **Notify when the first edit in visual mode may rewrite content** in the settings stops it for all.
 
 F11 toggles full screen.
 
@@ -94,6 +100,8 @@ Right-click the status bar to choose which items it shows; in a window too narro
 In visual editing, typing Markdown syntax turns into formatting right away: `## ` at the start of a line makes a level-2 heading, `- ` starts a list, `> ` a quote, three backticks a code block and `$$` a math block.
 
 **Dragging list items**: hold a list item by its bullet or number and drag it up or down its list, with the items nested in it; while dragging, move right to put it under the item above, left to take it out a level. A line shows where it will land and at what level; Esc drops the drag, and one Ctrl+Z undoes a move.
+
+**Tables**: select several cells by dragging, then Ctrl+C / Ctrl+X copies or cuts them; pasting onto selected cells (rows and columns copied from Excel, say) fills them cell by cell. Ctrl+A in a cell selects that cell's text first.
 
 | Action | Shortcut |
 |---|---|
