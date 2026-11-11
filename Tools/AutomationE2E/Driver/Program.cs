@@ -427,7 +427,7 @@ internal static partial class Program
             // Pictures in several languages take their time; RD02 opens six windows in two themes and measures each menu
             // (about 110 s on its own, so a busy machine took it past two minutes); any other case that runs past two minutes
             // is stuck.
-            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : name.StartsWith("LT01") ? 300 : name.StartsWith("SV01") || name.StartsWith("SC01") ? 600 : name.StartsWith("SR03") ? 300 : 120;
+            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : name.StartsWith("LT01") ? 300 : name.StartsWith("SV01") || name.StartsWith("SC01") ? 600 : name.StartsWith("SR03") ? 300 : name.StartsWith("MM01") ? 600 : 120;
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             QueuedWorkThatThrew(notes);
