@@ -48,6 +48,29 @@ internal static partial class Program
             var text = counts.Keys.Select(Color.FromArgb).OrderByDescending(col => Distance(col, back)).First();
             return (back, text);
         }
+        // A tab's edge: the colours of a ring 2 px inside its bounds, no text in it - where the edge the dropped tab kept is
+        // drawn (the user, 2026-11-11: an outline like the shown tab's card, without its fill; the colours inside did not
+        // change, and the first TD01 passed).
+        List<Color> Ring(AutomationElement tab)
+        {
+            var r = tab.Current.BoundingRectangle;
+            var area = new Rectangle((int)r.Left, (int)r.Top, (int)r.Width, (int)r.Height);
+            using var bitmap = new Bitmap(area.Width, area.Height);
+            using (var g = Graphics.FromImage(bitmap)) g.CopyFromScreen(area.Location, Point.Empty, area.Size);
+            var ring = new List<Color>();
+            for (var x = 6; x < area.Width - 6; x += 2) { ring.Add(bitmap.GetPixel(x, 2)); ring.Add(bitmap.GetPixel(x, area.Height - 3)); }
+            for (var y = 6; y < area.Height - 6; y += 2) { ring.Add(bitmap.GetPixel(2, y)); ring.Add(bitmap.GetPixel(area.Width - 3, y)); }
+            return ring;
+        }
+        // How far two rings are apart: the mean colour distance, point by point (as many points: same-sized tabs).
+        double Apart(List<Color> a, List<Color> b)
+        {
+            var n = Math.Min(a.Count, b.Count);
+            if (n == 0) return 0;
+            double sum = 0;
+            for (var i = 0; i < n; i++) sum += Math.Abs(a[i].R - b[i].R) + Math.Abs(a[i].G - b[i].G) + Math.Abs(a[i].B - b[i].B);
+            return sum / n;
+        }
         string Show((Color back, Color text) l) => $"back #{l.back.R:X2}{l.back.G:X2}{l.back.B:X2} text #{l.text.R:X2}{l.text.G:X2}{l.text.B:X2}";
         bool Near(Color a, Color b) => Math.Abs(a.R - b.R) + Math.Abs(a.G - b.G) + Math.Abs(a.B - b.B) <= 24;
         try
@@ -67,6 +90,9 @@ internal static partial class Program
             await Task.Delay(600);
             var before = (moved: Look(TabOf(first)), other: Look(TabOf(middle)));
             notes.Add($"before: {first} {Show(before.moved)}; {middle} {Show(before.other)}");
+            var ringBefore = Ring(TabOf(first));
+            var ringOtherBefore = Ring(TabOf(middle));
+            notes.Add($"edges before: {first} against {middle} {Apart(ringBefore, ringOtherBefore):F1}");
 
             // Dragged past the last, with a picture while it is held.
             var from = CenterOf(TabOf(first));
@@ -88,6 +114,13 @@ internal static partial class Program
                 $"the tab moved looks as the other tab not shown does ({Show(now.moved)} against {Show(now.other)})");
             Check(Near(now.moved.back, before.moved.back) && Near(now.moved.text, before.moved.text),
                 $"and as it did before the drag ({Show(now.moved)} against {Show(before.moved)})");
+            // Its edge too: as before the drag, and as the other tab not shown has it.
+            var ringAfter = Ring(TabOf(first));
+            var ringOtherAfter = Ring(TabOf(middle));
+            var self = Apart(ringAfter, ringBefore);
+            var other = Apart(ringAfter, ringOtherAfter);
+            notes.Add($"edges after: {first} against itself before {self:F1}, against {middle} {other:F1}");
+            Check(self < 12 && other < 12, $"the tab moved has no edge the others have not (apart {self:F1} from itself before, {other:F1} from {middle})");
 
             // The tab shown dragged to the start: still drawn as the tab shown, and the others as they were.
             var shownBefore = Look(TabOf(last));
