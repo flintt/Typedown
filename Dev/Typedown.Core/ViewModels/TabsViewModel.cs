@@ -430,6 +430,15 @@ namespace Typedown.Core.ViewModels
                 var dirty = tab == ActiveTab ? (!EditorViewModel.Saved || !flushed) : !tab.Saved;
                 if (!dirty) continue;
                 await SwitchTo(tab);
+                // Not shown (the page never handed over the text of the one before): it cannot be asked about, and what
+                // would be asked about is the tab still shown - B's unsaved changes went with the window unasked (the
+                // 2026-11-11 recheck of A01). The window stays.
+                if (tab != ActiveTab)
+                {
+                    Log.Debug($"close: {tab.Title} could not be shown to be asked about; the window stays");
+                    await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), string.Format(Locale.GetDialogString("CloseTabNotShown"), tab.Title), Locale.GetDialogString("Ok")).ShowAsync(FileViewModel.AppViewModel.XamlRoot);
+                    return false;
+                }
                 await FileViewModel.AutoSaveFile();
                 // The page did not answer: Saved is the state before the last edits, so it is asked about whatever it says
                 // (AskToSave brings the text in again and asks if it still cannot) - it closed without asking (the audit's A01).

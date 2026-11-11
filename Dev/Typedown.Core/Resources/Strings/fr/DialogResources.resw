@@ -357,4 +357,8 @@
     <value>Ce fichier est ouvert dans un autre onglet ou une autre fenêtre. Fermez-le d'abord, ou enregistrez-le sous un autre nom.</value>
     <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
   </data>
+  <data name="CloseTabNotShown" xml:space="preserve">
+    <value>« {0} » contient des modifications non enregistrées, mais il n'a pas pu être affiché pour demander s'il faut l'enregistrer. La fenêtre n'a pas été fermée ; réessayez dans un instant.</value>
+    <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
+  </data>
 </root>
