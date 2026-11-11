@@ -291,7 +291,33 @@ namespace Typedown.Core.Controls
                 watchedList = list;
                 list.DragItemsStarting += (s, e) => DispatcherQueue.TryEnqueueSafe(() => KeepTabColumnToTabs("drag starting"));
                 list.DragItemsCompleted += (s, e) => DispatcherQueue.TryEnqueueSafe(() => KeepTabColumnToTabs("drag completed"));
+                list.AddHandler(PointerPressedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((s, e) => TraceStripLayout()), true);
             }
+        }
+
+        // Diagnostic: the strip's layout for a moment after a press on a tab, each change once.
+        private long traceUntil;
+        private string lastTrace;
+
+        private void TraceStripLayout()
+        {
+            var start = traceUntil < Environment.TickCount64;
+            traceUntil = Environment.TickCount64 + 1500;
+            if (start) TabView.LayoutUpdated += OnTraceLayout;
+        }
+
+        private void OnTraceLayout(object sender, object e)
+        {
+            if (Environment.TickCount64 > traceUntil) { TabView.LayoutUpdated -= OnTraceLayout; return; }
+            var grid = Descendants(TabView).OfType<Grid>().FirstOrDefault(g => g.Name == "TabContainerGrid");
+            var list = Descendants(TabView).OfType<FrameworkElement>().FirstOrDefault(x => x.Name == "TabListView");
+            var add = Descendants(TabView).OfType<FrameworkElement>().FirstOrDefault(x => x.Name == "AddButton");
+            if (grid == null || list == null || add == null) return;
+            var columns = string.Join(" ", grid.ColumnDefinitions.Select(c => $"{c.Width}/{c.ActualWidth:0}/max {c.MaxWidth:0}"));
+            var trace = $"columns [{columns}] list {list.ActualWidth:0} (max {list.MaxWidth:0}, margin {list.Margin}) + at {add.TransformToVisual(TabView).TransformPoint(default).X:0}";
+            if (trace == lastTrace) return;
+            lastTrace = trace;
+            Log.Debug("tabs: layout " + trace);
         }
 
         private ListViewBase watchedList;
