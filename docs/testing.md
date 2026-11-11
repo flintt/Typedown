@@ -222,7 +222,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TC02 | a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents |
 | TC03 | a long document's tab closed and another file opened right after: the file opened is the one shown |
 | TM01 | a tab's menu: Close Tabs to the Right on the second of four leaves the first two, the second shown; Close Others on the first leaves it alone, shown; a file's tab offers Copy as Path, Open File Location and Show in Side Bar |
-| TD01 | a tab dragged past the last with a real mouse and let go looks as the other tab not shown does, and as it did before the drag |
+| TD01 | a tab dragged past the last with a real mouse and let go looks as the other tab not shown does, and as it did before the drag; the tab shown dragged to the start still looks as the tab shown, the others as they did |
 | SE01 | the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it |
 | RC01 | two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root |
 | RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
