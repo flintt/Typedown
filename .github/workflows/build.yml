@@ -138,6 +138,7 @@ jobs:
           node source-replace-check.js
           node code-entities-check.js
           node memory-lifecycle-check.js
+          node plain-typography-check.js
           node export-mermaid-error-check.js
           node renderer-failure-check.js
           node spec-check.js
