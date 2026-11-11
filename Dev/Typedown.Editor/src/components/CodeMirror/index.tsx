@@ -243,6 +243,9 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         const last = lastSearchRef.current
         if (!editor || !last?.value) return
         const text = editor.getValue()
+        // The text edited since the search: a regular expression is tried on it again first, and this replace does
+        // nothing until it came through (services/common trySearch).
+        trySearch(last.value, last.opt, () => [text], () => searchAgainRef.current(last))
         const matchs = matchString(text, last.value, last.opt)
         if (!matchs.length) return
         let chosen = matchs
@@ -644,7 +647,10 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             const at = chosen?.marker?.find()?.from
             const was = at ? editor.indexFromPos(at) : -1
             const caret = editor.indexFromPos(editor.getCursor('from'))
-            const found = matchString(editor.getValue(), last.value, last.opt)
+            const now = editor.getValue()
+            // The edited text tried again first (a regular expression; services/common trySearch).
+            trySearch(last.value, last.opt, () => [now], refresh)
+            const found = matchString(now, last.value, last.opt)
             let index = found.findIndex(({ index, match }) => index === was && match === chosen?.match)
             if (index < 0) index = found.findIndex(({ index }) => index >= caret)
             if (index < 0) index = 0
