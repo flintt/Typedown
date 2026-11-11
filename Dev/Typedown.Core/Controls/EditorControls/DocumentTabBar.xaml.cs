@@ -44,6 +44,7 @@ namespace Typedown.Core.Controls
             // The + button too leaves the keyboard in the document (see the tabs' AllowFocusOnInteraction). It is made with
             // the strip's template, which may come after this: looked for again as the strip lays itself out, until found.
             if (!KeepAddButtonOffFocus()) TabView.LayoutUpdated += OnStripLayoutUpdated;
+            else WatchStripPresses();
             var settings = ViewModel?.SettingsViewModel;
             if (settings != null)
                 disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
@@ -275,10 +276,17 @@ namespace Typedown.Core.Controls
         {
             if (!KeepAddButtonOffFocus()) return;
             TabView.LayoutUpdated -= OnStripLayoutUpdated;
+            WatchStripPresses();
+        }
+
+        private void WatchStripPresses()
+        {
             // A tab moved within the strip raises no drag event (neither TabDragStarting nor the list's DragItemsStarting -
             // jobs 392, 393: it is moved in the list as the pointer goes), so the width is held from the press on a tab
             // to its release. A press holds it to no harm: no tab comes or goes until the button is let go.
-            if (Descendants(TabView).OfType<ListView>().FirstOrDefault(l => l.Name == "TabListView") is ListView list && list != heldList)
+            var list = Descendants(TabView).OfType<FrameworkElement>().FirstOrDefault(l => l.Name == "TabListView");
+            Log.Debug($"tabs: the strip's list {list?.GetType().Name ?? "not found"}");
+            if (list != null && list != heldList)
             {
                 heldList = list;
                 list.AddHandler(PointerPressedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((s, e) => HoldStripWidth(true)), true);
@@ -288,7 +296,7 @@ namespace Typedown.Core.Controls
             }
         }
 
-        private ListView heldList;
+        private FrameworkElement heldList;
 
         private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
         {
