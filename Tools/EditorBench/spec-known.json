@@ -122,7 +122,7 @@
  },
  "31": {
   "section": "Entity and numeric character references",
-  "out": "<a href=\"öö.html\">\n"
+  "out": "<a href=\"&ouml;&ouml;.html\">\n"
  },
  "32": {
   "section": "Entity and numeric character references",
@@ -142,7 +142,7 @@
  },
  "36": {
   "section": "Entity and numeric character references",
-  "out": "    föfö\n"
+  "out": "    f&ouml;f&ouml;\n"
  },
  "37": {
   "section": "Entity and numeric character references",
