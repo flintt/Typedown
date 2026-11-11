@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Plik na dysku został zmieniony, a masz niezapisane zmiany. Żadna wersja nie przepadnie: ta, której nie zachowasz, zostanie zapisana jako kopia w {0}, a po ponownym wczytaniu Ctrl+Z przywróci Twoją.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Ten plik jest otwarty na innej karcie lub w innym oknie. Najpierw zamknij go tam lub zapisz pod inną nazwą.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

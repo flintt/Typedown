@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>ડિસ્ક પરની ફાઇલ બદલાઈ ગઈ છે, અને તમારા ફેરફારો સાચવેલા નથી. કોઈ પણ આવૃત્તિ ખોવાશે નહીં: જે તમે નહીં રાખો તે {0}માં નકલ તરીકે સચવાશે, અને ફરી લોડ કર્યા પછી Ctrl+Z તમારા ફેરફારો પાછા લાવશે.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>આ ફાઇલ બીજા ટૅબ અથવા વિંડોમાં ખુલ્લી છે. પહેલા ત્યાં બંધ કરો, અથવા બીજા નામે સાચવો.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

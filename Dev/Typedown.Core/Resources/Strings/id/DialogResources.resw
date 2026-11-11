@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>File di disk telah berubah, dan Anda punya perubahan yang belum disimpan. Tidak ada yang hilang: versi yang tidak Anda pertahankan disimpan sebagai salinan di {0}, dan setelah Muat ulang, Ctrl+Z mengembalikan milik Anda.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>File ini terbuka di tab atau jendela lain. Tutup di sana dulu, atau simpan dengan nama lain.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

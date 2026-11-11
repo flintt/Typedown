@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Athraíodh an comhad ar an diosca, agus tá athruithe gan sábháil agat. Ní chailltear leagan ar bith: sábháiltear an leagan nach gcoinníonn tú mar chóip in {0}, agus tar éis Athlódáil, tugann Ctrl+Z do cheann féin ar ais.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Tá an comhad seo oscailte i gcluaisín nó i bhfuinneog eile. Dún ansin é ar dtús, nó sábháil faoi ainm eile.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

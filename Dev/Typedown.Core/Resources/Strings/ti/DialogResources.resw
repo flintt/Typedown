@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>እቲ ፋይል ኣብ ዲስክ ተቐይሩ ኣሎ፣ ንስኻ ድማ ዘይተዓቀቡ ለውጥታት ኣለዉኻ። ዝኾነ ስሪት ኣይጠፍእን፦ ዘየቐመጥካዮ ኣብ {0} ከም ቅዳሕ ይዕቀብ፣ ዳግማይ ምስ ጸዓንካ ድማ Ctrl+Z ናትካ ይመልሶ።</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>እዚ ፋይል ኣብ ካልእ ታብ ወይ መስኮት ክፉት እዩ። ቅድም ኣብኡ ዕጸዎ፣ ወይ ብካልእ ስም ዓቅቦ።</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

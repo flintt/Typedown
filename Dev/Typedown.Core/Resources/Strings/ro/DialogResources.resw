@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Fișierul a fost modificat pe disc, iar dvs. aveți modificări nesalvate. Nicio versiune nu se pierde: cea pe care nu o păstrați este salvată ca o copie în {0}, iar după reîncărcare, Ctrl+Z o aduce înapoi pe a dvs.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Acest fișier este deschis în altă filă sau fereastră. Închideți-l mai întâi acolo sau salvați-l cu alt nume.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Filen har ändrats på disken och du har osparade ändringar. Ingen version går förlorad: den du inte behåller sparas som en kopia i {0}, och efter omläsning tar Ctrl+Z tillbaka din.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Filen är öppen i en annan flik eller ett annat fönster. Stäng den där först, eller spara under ett annat namn.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

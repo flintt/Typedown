@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Dosya diskte değiştirildi ve kaydedilmemiş değişiklikleriniz var. Hiçbiri kaybolmaz: tutmadığınız sürüm {0} içine kopya olarak kaydedilir; yeniden yükledikten sonra Ctrl+Z sizinkini geri getirir.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Bu dosya başka bir sekmede veya pencerede açık. Önce orada kapatın ya da başka bir adla kaydedin.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

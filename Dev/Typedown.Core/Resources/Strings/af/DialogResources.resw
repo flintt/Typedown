@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Die lêer is op die skyf verander, en jy het ongestoorde veranderinge. Geen weergawe gaan verlore nie: die een wat jy nie hou nie, word as 'n kopie in {0} gestoor, en ná Herlaai bring Ctrl+Z joune terug.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Hierdie lêer is in 'n ander oortjie of venster oop. Maak dit eers daar toe, of stoor onder 'n ander naam.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

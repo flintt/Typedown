@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Tệp trên đĩa đã bị thay đổi, và bạn có thay đổi chưa lưu. Không bản nào bị mất: bản bạn không giữ được lưu thành bản sao trong {0}, và sau khi tải lại, Ctrl+Z sẽ đưa bản của bạn trở lại.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Tệp này đang mở trong một tab hoặc cửa sổ khác. Hãy đóng nó ở đó trước, hoặc lưu với tên khác.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

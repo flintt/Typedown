@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Fail pada cakera telah berubah, dan anda mempunyai perubahan yang belum disimpan. Tiada versi yang hilang: versi yang tidak anda kekalkan disimpan sebagai salinan dalam {0}, dan selepas Muat semula, Ctrl+Z mengembalikan milik anda.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Fail ini dibuka dalam tab atau tetingkap lain. Tutupnya di sana dahulu, atau simpan dengan nama lain.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>
