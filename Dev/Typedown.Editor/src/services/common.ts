@@ -70,12 +70,89 @@ export const getTOC = (markdown: string) => {
     return { toc }
 }
 
+// A regular expression the reader types can take minutes on one line ("(a+)+$" on a long run of a's), and a search runs
+// on the page's thread, which nothing can stop then: the window hung (the audit's P07). So one is first tried in a worker,
+// on the texts it will be run over, for SLOW_REGEX_MS at most; until it has come through, a search with it finds nothing,
+// and one that took longer finds nothing for good (the worker is stopped). A plain search is not tried: its pattern has
+// no backtracking to speak of.
+const SLOW_REGEX_MS = 2000
+type RegexVerdict = 'ok' | 'slow' | 'pending'
+const regexVerdicts = new Map<string, RegexVerdict>()
+const regexKey = (re: RegExp) => `${re.flags}/${re.source}`
+let regexWorker: Worker | null = null
+
+const regexWorkerSource = `onmessage = e => {
+    const { id, source, flags, texts } = e.data
+    const re = new RegExp(source, flags)
+    for (const text of texts) {
+        re.lastIndex = 0
+        let m
+        while ((m = re.exec(text))) if (m[0] === '') re.lastIndex++
+    }
+    postMessage(id)
+}`
+
+/** Whether a search with these options may run now: a plain one always, a regular expression once tried (see above). */
+export const searchMayRun = (value: string, options: any) => {
+    if (!options?.searchIsRegexp || typeof Worker === 'undefined') return true
+    const re = searchRegExp(value, options)
+    return !re || regexVerdicts.get(regexKey(re)) === 'ok'
+}
+
+/**
+ * Tries a regular expression search on `texts` (what it will be run over) in the worker; `done` is called when it came
+ * through in time, for the search to be done again. Nothing for a search that may already run, or is being tried.
+ */
+export const trySearch = (value: string, options: any, texts: () => string[], done: () => void) => {
+    const re = searchRegExp(value, options)
+    if (!re || searchMayRun(value, options)) return
+    const key = regexKey(re)
+    if (regexVerdicts.has(key)) return
+    if (regexVerdicts.size >= 200) regexVerdicts.delete(regexVerdicts.keys().next().value as string)
+    regexVerdicts.set(key, 'pending')
+    try {
+        regexWorker ||= new Worker(URL.createObjectURL(new Blob([regexWorkerSource], { type: 'text/javascript' })))
+    } catch (err) {
+        // No worker to try it in: run as before.
+        regexVerdicts.set(key, 'ok')
+        done()
+        return
+    }
+    const worker = regexWorker
+    const id = Math.random()
+    const finish = (verdict: RegexVerdict) => {
+        window.clearTimeout(timer)
+        worker.removeEventListener('message', onMessage)
+        regexVerdicts.set(key, verdict)
+        if (verdict === 'ok') {
+            done()
+            return
+        }
+        console.log(`search: the regular expression ${key} took over ${SLOW_REGEX_MS} ms; it finds nothing`)
+        worker.terminate()
+        if (regexWorker === worker) regexWorker = null
+    }
+    const onMessage = (e: MessageEvent) => { if (e.data === id) finish('ok') }
+    const timer = window.setTimeout(() => finish('slow'), SLOW_REGEX_MS)
+    worker.addEventListener('message', onMessage)
+    worker.postMessage({ id, source: re.source, flags: re.flags, texts: texts() })
+}
+
 export const matchString = (text: string, value: string, options: any) => {
+    // A regular expression not tried yet, or too slow: nothing (see trySearch).
+    if (!searchMayRun(value, options)) return []
+    const SEARCH_REG = searchRegExp(value, options)
+    // Not all strings make a valid RegExp, for example `\`.
+    return SEARCH_REG ? execAll(SEARCH_REG, text) : []
+}
+
+// The search as a regular expression: the bar's text as written for a regular expression search, escaped otherwise.
+// Null when it is not one (an unfinished "(" or "\" as it is typed).
+function searchRegExp(value: string, options: any): RegExp | null {
     const { searchIsCaseSensitive, searchIsWholeWord, searchIsRegexp } = options
     /* eslint-disable no-useless-escape */
     const SPECIAL_CHAR_REG = /[\[\]\\^$.\|\?\*\+\(\)\/]{1}/g
     /* eslint-enable no-useless-escape */
-    let SEARCH_REG = null
     let regStr = value
     let flag = 'g'
 
@@ -94,11 +171,9 @@ export const matchString = (text: string, value: string, options: any) => {
     }
 
     try {
-        // Add try catch expression because not all string can generate a valid RegExp. for example `\`.
-        SEARCH_REG = new RegExp(regStr, flag)
-        return execAll(SEARCH_REG, text)
+        return new RegExp(regStr, flag)
     } catch (err) {
-        return []
+        return null
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿import React, { useCallback, useEffect, useRef, useState } from "react";
 import transport from "services/transport";
 import { setScroller } from "services/scrollbar";
-import { matchString } from 'services/common'
+import { matchString, trySearch } from 'services/common'
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import { getTOC, sourceHeadingLine } from "services/common";
@@ -169,6 +169,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
 
     // The last search: its matches are found again with it after an edit while the results list is open.
     const lastSearchRef = useRef<{ value: string, opt: any } | null>(null)
+    const searchAgainRef = useRef<(arg: { value: string, opt: any }) => void>(() => { })
 
     const search = useCallback(({ value, opt }) => {
         const lastMatch = matchsRef.current[matchIndexRef.current];
@@ -184,7 +185,14 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             noteFindChange()
             return;
         }
-        lastSearchRef.current = { value, opt }
+        const asked = lastSearchRef.current = { value, opt }
+        // A regular expression is tried in a worker first (services/common trySearch): this search finds nothing, and is
+        // done again once it came through, if it is still the last one.
+        trySearch(value, opt, () => [editor.getValue()], () => {
+            if (lastSearchRef.current !== asked) return
+            searchAgainRef.current(asked)
+            setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
+        })
         let startIndex = 0
         if (opt.selection) {
             const { anchor, head } = opt.selection;
@@ -207,7 +215,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             subMatches
         }))
         noteFindChange()
-    }, [editor, setMatchSelection])
+    }, [editor, setMatchSelection, scrollToElementIfInvisible])
+    searchAgainRef.current = search
 
     const find = useCallback(({ action }) => {
         if (action == 'next') {
