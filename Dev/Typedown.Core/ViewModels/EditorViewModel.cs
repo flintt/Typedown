@@ -1657,9 +1657,17 @@ namespace Typedown.Core.ViewModels
         public async Task InsertLocalImagesAsync(IReadOnlyList<string> files)
         {
             if (files == null || files.Count == 0) return;
+            // The document they were dropped or pasted into: a copy or an upload takes time, and another document shown
+            // meanwhile got them at its cursor (the audit's A05). The files copied stay where they went.
+            var load = LoadId;
             var images = new List<HtmlImgTag>();
             foreach (var file in files)
                 images.Add(await LocalImageAsync(file));
+            if (LoadId != load)
+            {
+                Log.Debug($"insert images: another document was shown while {images.Count} were made ready; not inserted");
+                return;
+            }
             if (images.Count == 1)
                 MarkdownEditor?.PostMessage("InsertImage", images[0]);
             else

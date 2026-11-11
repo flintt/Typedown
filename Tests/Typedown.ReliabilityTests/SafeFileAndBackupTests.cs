@@ -98,6 +98,22 @@ namespace Typedown.ReliabilityTests
         }
 
         [TestMethod]
+        public async Task AGoneFilesBackupComesBackAsAnUntitledDocument()
+        {
+            using var directory = new TestDirectory();
+            var backup = new AutoBackup(directory.Path);
+            const string document = @"C:\docs\gone.md";
+            Assert.IsTrue(await backup.Backup(document, "unsaved words"));
+
+            Assert.IsTrue(backup.AdoptAsUntitled(document));
+            Assert.IsNull(await backup.GetBackup(document), "the file's own backup is moved, not copied");
+            var untitled = backup.UntitledBackups();
+            Assert.AreEqual(1, untitled.Count);
+            Assert.AreEqual("unsaved words", await File.ReadAllTextAsync(untitled[0].file));
+            Assert.IsFalse(backup.AdoptAsUntitled(document), "nothing left to take over");
+        }
+
+        [TestMethod]
         public void BackupFileNameRemainsCompatibleWithStableBuild()
         {
             using var directory = new TestDirectory();
