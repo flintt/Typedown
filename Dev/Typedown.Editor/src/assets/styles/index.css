@@ -70,6 +70,15 @@ mark::after {
   background: var(--highlightColor);
 }
 
+/* A plain text file laid out as prose is in the body text's font, as the visual editor's paragraphs are (the setting,
+   or the preset's), not the source theme's code font (cm-s-one-dark): the font set was never seen there (the user's
+   list, 2026-11-11, 6). The preset's paragraph rules reach its lines too (TypographyDesign.FieldsCss). */
+.plain-prose .CodeMirror.cm-s-one-dark {
+  font-family: var(--editorFontFamily, "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif);
+  font-weight: normal;
+}
+.plain-prose .plain-md-block { text-indent: 0; letter-spacing: normal; }
+
 /* A Markdown block in a plain text file laid out as prose (components/CodeMirror/markdownBlocks): drawn as Markdown,
    in the theme's colours; a click shows its lines. */
 .plain-prose .plain-md-block {
