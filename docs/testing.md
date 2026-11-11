@@ -227,7 +227,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | XM01 | the editor's context menu after a real right-click on a paragraph, a link (its address copied), a code block, a display formula and a table cell, in source mode and in reading mode, and on an Open Recent entry: the items each place has and the ones it must not |
 | SA02 | Save As onto a file open in another tab is refused with a dialog: that file keeps its text, the document saved keeps its path, the file is open once |
 | TD01 | a tab dragged past the last with a real mouse and let go looks as the other tab not shown does, and as it did before the drag; the tab shown dragged to the start still looks as the tab shown, the others as they did |
-| MM01 | a long document with formulas and footnotes switched between visual and source mode 70 times, then two documents swapped 20 times: after the first 10 switches the private memory of the host and its WebView2 grows by less than 80 MB |
+| MM01 | a long document with formulas and footnotes switched between visual and source mode 70 times, then two documents swapped 40 times: after the first 10 switches, and after the first 10 swaps, the private memory of the host and its WebView2 grows by less than 80 MB |
 | SE01 | the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it |
 | RC01 | two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root |
 | RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
