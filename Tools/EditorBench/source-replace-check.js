@@ -3,7 +3,9 @@
 //   the first search's positions, "X X");
 // - a word typed before the matches after the search, then Replace: the match is replaced, not the text where it was;
 // - Replace (the current one) twice: each time the next match;
-// - document A loaded, then B: B's undo history is empty (Vim's u turned B into A).
+// - document A loaded, then B: B's undo history is empty (Vim's u turned B into A);
+// - a regular expression's groups in a replace, and one that backtracks for minutes not holding the page (P07), in both
+//   editors.
 //
 //   node source-replace-check.js
 const { openEditor } = require('./harness');
@@ -61,6 +63,26 @@ const { openEditor } = require('./harness');
       await pause(300);
       t = await text();
       check(t === '1a 2b 3c\n', `regular expression groups (${source ? 'source' : 'visual'} mode)`, JSON.stringify(t));
+    }
+
+    // A regular expression that backtracks for minutes on a line (the audit's P07): the page goes on (the search was
+    // tried in a worker and given up), and finds nothing; a quick one after it finds its matches.
+    const marks = () => page.evaluate(() => document.querySelectorAll('.ag-highlight, .ag-selection').length);
+    const answers = async ms => Promise.race([page.evaluate(() => new Promise(r => setTimeout(() => r(true), 0))), new Promise(r => setTimeout(() => r(false), ms))]);
+    for (const source of [true, false]) {
+      const name = source ? 'source' : 'visual';
+      await mode(source, false);
+      await load('a'.repeat(40) + '!\n\nbaaa\n');
+      await pause(300);
+      await send('Search', { value: `(a+)+$${source ? '' : ' '}`, opt: { ...regexp, selection: {} } });
+      check(await answers(1000), `a slow regular expression does not hold the page (${name} mode)`, 'no answer in 1 s');
+      await pause(2500);
+      check(await answers(1000), `nor after it was given up (${name} mode)`, 'no answer in 1 s');
+      check((await marks()) === 0, `a slow regular expression finds nothing (${name} mode)`, await marks());
+      await send('Search', { value: `b?a{3}${source ? '' : '(?:)'}`, opt: regexp });
+      await pause(400);
+      const found = await marks();
+      check(found > 0, `a quick one after it finds its matches (${name} mode)`, found);
     }
     await mode(true, false);
 

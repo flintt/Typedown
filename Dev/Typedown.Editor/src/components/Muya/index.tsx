@@ -78,6 +78,7 @@ import { registerReviewView, reviewActive, reviewLabels } from 'services/reviewS
 import { ghostsOf, leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
 import { ghostLayer, tagLayer } from 'services/reviewGhosts'
 import { wordingOf } from 'services/review'
+import { trySearch } from 'services/common'
 
 interface IMuyaEditor {
     markdown: string
@@ -450,9 +451,22 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const fromMessageRef = useRef(new WeakSet<object>())
     // The last search a Search message asked for: a Find steps through its matches, whatever else was searched since.
     const lastSearchRef = useRef<any>()
+    const searchAgainRef = useRef<(arg: any) => void>(() => { })
     const search = useCallback(arg => {
         if (arg?.value != "" && arg?.opt?.selection && editor) {
             const { value, opt } = arg
+            // A regular expression is tried in a worker first (services/common trySearch): this search finds nothing, and
+            // is done again once it came through, if it is still the one asked for.
+            trySearch(value, opt, () => {
+                const texts: string[] = []
+                const travel = (blocks: any[]) => blocks.forEach(b => { if (typeof b.text === 'string' && b.text) texts.push(b.text); if (b.children?.length) travel(b.children) })
+                travel((editor as any).contentState.blocks)
+                return texts
+            }, () => {
+                if (lastSearchRef.current?.value !== value && searchArgRef.current?.value !== value) return
+                searchAgainRef.current(arg)
+                setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
+            })
             const selection = opt.selection.start ? opt.selection : undefined
             // A match not drawn yet is drawn a moment after the typing stops (Muya.search): then put in the window.
             editor.search(value, { ...opt, selection }, () => scrollToElementIfInvisible('.ag-highlight'))
@@ -460,6 +474,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             noteFindChange()
         }
     }, [editor, scrollToElementIfInvisible])
+    searchAgainRef.current = search
 
     useEffect(() => {
         searchArgRef.current = props.searchArg
