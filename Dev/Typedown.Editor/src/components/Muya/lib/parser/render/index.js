@@ -178,8 +178,24 @@ class StateRender {
     }
   }
 
-  getClassName(outerClass, block, token, cursor) {
-    return outerClass || (this.checkConflicted(block, token, cursor) ? CLASS_OR_ID.AG_GRAY : CLASS_OR_ID.AG_HIDE)
+  // edgesOnly (bold, italic, strikethrough, highlight): with the caret alone in the token (no selection), its markers
+  // show only when the caret is at one of them - at the token's edge or between its marker and its first or last
+  // letter - not anywhere in its text. A click in the middle of a bold word showed the ** on either side, the text
+  // moved under the pointer, and its width changed with every click in and out (the user's list, 2026-11-11, 9).
+  // A selection still shows them wherever it touches the token: what it takes in is seen.
+  getClassName(outerClass, block, token, cursor, edgesOnly = false) {
+    const shown = edgesOnly && token.marker ? this.checkAtEdges(block, token, cursor) : this.checkConflicted(block, token, cursor)
+    return outerClass || (shown ? CLASS_OR_ID.AG_GRAY : CLASS_OR_ID.AG_HIDE)
+  }
+
+  checkAtEdges(block, token, cursor) {
+    const { start, end } = cursor
+    if (!start || !end || start.key !== end.key || start.offset !== end.offset) return this.checkConflicted(block, token, cursor)
+    if (this.muya.options.readOnly || start.key !== block.key) return false
+    const { start: tokenStart, end: tokenEnd } = token.range
+    const length = token.marker.length
+    const at = start.offset
+    return conflict([tokenStart, tokenStart + length], [at, at]) || conflict([tokenEnd - length, tokenEnd], [at, at])
   }
 
   getHighlightClassName(active, review) {
