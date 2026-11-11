@@ -119,7 +119,19 @@ internal static partial class Program
             var from = CenterOf(TabOf(first));
             var lastRect = TabOf(last).Current.BoundingRectangle;
             var to = ((int)(lastRect.Right - 6), from.Item2);
-            await Drag(window, from, to, steps: 20);
+            // The + after the tabs stays where it is while a tab is held: it went right by a tab's width as the drag began,
+            // with no tab added (the user, 2026-11-11).
+            var addBefore = FindIn(window, "AddButton")?.Current.BoundingRectangle;
+            System.Windows.Rect? addHeld = null;
+            await Drag(window, from, to, steps: 20, whileHeld: async () =>
+            {
+                await Task.Delay(300);
+                addHeld = FindIn(window, "AddButton")?.Current.BoundingRectangle;
+                notes.Add("held: " + Screenshot("tabdrag-held"));
+            });
+            notes.Add($"+ before {addBefore}, while held {addHeld}");
+            Check(addBefore != null && addHeld != null && Math.Abs(addHeld.Value.Left - addBefore.Value.Left) < 4,
+                $"the + stays where it was while a tab is dragged ({addBefore?.Left:0} before, {addHeld?.Left:0} held)");
             await Task.Delay(400);
             notes.Add("released: " + Screenshot("tabdrag-released"));
             // The mouse moved away, as a reader does after a drag.

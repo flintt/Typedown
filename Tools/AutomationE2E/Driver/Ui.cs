@@ -160,7 +160,8 @@ internal static partial class Program
     /// A press at one point, a move to another in steps, and the release there - moved as a mouse moves (SendInput):
     /// a cursor only placed (SetCursorPos) sends no pointer moves, and a splitter dragged that way did not move.
     /// </summary>
-    private static async Task Drag(IntPtr window, (int X, int Y) from, (int X, int Y) to, int steps = 12)
+    /// <param name="whileHeld">Run at the end of the move, before the button is let go.</param>
+    private static async Task Drag(IntPtr window, (int X, int Y) from, (int X, int Y) to, int steps = 12, Func<Task>? whileHeld = null)
     {
         await Activate(window);
         int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
@@ -178,6 +179,7 @@ internal static partial class Program
             await Task.Delay(25);
         }
         await Task.Delay(100);
+        if (whileHeld != null) await whileHeld();
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
     }
 

@@ -70,6 +70,13 @@ mark::after {
   background: var(--highlightColor);
 }
 
+/* Source mode (and a plain text file shown as its lines) in the code font, monospaced: the source theme put a Chinese font
+   first, whose Latin letters are not, and a certificate's or a table's columns did not line up as they do in a text editor
+   (the user, 2026-11-11). The Chinese letters come from the text's font, after the monospaced ones (--codeFontFamily). */
+.CodeMirror.cm-s-one-dark {
+  font-family: var(--codeFontFamily, Consolas, "Courier New", monospace);
+}
+
 /* A plain text file laid out as prose is in the body text's font, as the visual editor's paragraphs are (the setting,
    or the preset's), not the source theme's code font (cm-s-one-dark): the font set was never seen there (the user's
    list, 2026-11-11, 6). The preset's paragraph rules reach its lines too (TypographyDesign.FieldsCss). */

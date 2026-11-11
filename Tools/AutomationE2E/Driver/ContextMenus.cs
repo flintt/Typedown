@@ -119,6 +119,16 @@ internal static partial class Program
             System.Windows.Automation.AutomationElement? remove = null;
             try { remove = await MenuEntry(window, "RecentRemoveItem"); } catch (CaseFailed) { }
             Check(remove != null, "a recent entry's right-click opens its menu with Remove from list");
+            // The menus stay open under the entry's menu, and go once one of its items is chosen (they went as it opened).
+            var still = FindAnywhereInHost(window, "RecentFile-0");
+            Check(still != null && !still.Current.IsOffscreen, "the Open Recent menu stays open under the entry's menu");
+            if (remove != null)
+            {
+                await Click(window, remove, Mouse.Left);
+                await Task.Delay(800);
+                var left = FindAnywhereInHost(window, "OpenRecentSubMenu");
+                Check(left == null || left.Current.IsOffscreen, "a choice in the entry's menu closes the menus");
+            }
             await CloseMenus();
         }
         finally

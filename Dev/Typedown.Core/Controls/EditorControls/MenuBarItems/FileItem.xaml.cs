@@ -10,6 +10,8 @@ using Typedown.Core.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Media;
 
 namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 {
@@ -121,7 +123,12 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 AutomationProperties.SetHelpText(item, path);
                 // A right-click opens the entry's menu, as the home page's recent list does: a right-click took the entry
                 // out at once, where everywhere else it opens a menu (the 2026-11-11 menu report's M08). Delete still does.
-                item.ContextFlyout = EntryMenu(menu, item, path, open, remove);
+                item.ContextRequested += (s, e) =>
+                {
+                    e.Handled = true;
+                    ShowEntryMenu(item, e.TryGetPosition(item, out var at) ? at : new Windows.Foundation.Point(item.ActualWidth / 2, item.ActualHeight / 2),
+                        EntryMenu(menu, item, path, open, remove));
+                };
                 item.KeyDown += (s, e) =>
                 {
                     if (e.Key != Windows.System.VirtualKey.Delete) return;
@@ -135,9 +142,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         }
 
         // A recent entry's own menu: open it, where it is, its path, and out of the list.
-        private MenuFlyout EntryMenu(MenuFlyoutSubItem menu, MenuFlyoutItem item, string path, System.Windows.Input.ICommand open, Action<string> remove)
+        private List<MenuFlyoutItemBase> EntryMenu(MenuFlyoutSubItem menu, MenuFlyoutItem item, string path, System.Windows.Input.ICommand open, Action<string> remove)
         {
-            var flyout = new MenuFlyout();
             var openItem = new MenuFlyoutItem { Text = Locale.GetString("Open") };
             openItem.Click += (s, e) => open.Execute(path);
             var location = new MenuFlyoutItem { Text = Locale.GetString("OpenFileLocation") };
@@ -151,12 +157,42 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             var removeItem = new MenuFlyoutItem { Text = Locale.GetString("HomePage.RemoveFromList") };
             AutomationProperties.SetAutomationId(removeItem, "RecentRemoveItem");
             removeItem.Click += (s, e) => RemoveEntry(menu, item, path, remove);
-            flyout.Items.Add(openItem);
-            flyout.Items.Add(location);
-            flyout.Items.Add(copy);
-            flyout.Items.Add(new MenuFlyoutSeparator());
-            flyout.Items.Add(removeItem);
-            return flyout;
+            return new List<MenuFlyoutItemBase> { openItem, location, copy, new MenuFlyoutSeparator(), removeItem };
+        }
+
+        // The entry's menu over the menus, which stay open until one of its items is chosen (the user, 2026-11-11: the
+        // menus went as it opened). A flyout opened from a submenu is not taken for that menu's child, and closes every
+        // menu open: a popup of its own instead, with the menu's look. A choice closes it and the menus; Esc, or a click
+        // anywhere else, closes it alone.
+        private void ShowEntryMenu(MenuFlyoutItem item, Windows.Foundation.Point at, List<MenuFlyoutItemBase> items)
+        {
+            var root = item.XamlRoot;
+            if (root == null) return;
+            var presenter = new MenuFlyoutPresenter();
+            UiLanguage.Set(presenter);
+            var popup = new Popup { XamlRoot = root, Child = presenter, IsLightDismissEnabled = true, ShouldConstrainToRootBounds = false };
+            foreach (var x in items)
+            {
+                presenter.Items.Add(x);
+                if (x is MenuFlyoutItem choice) choice.Click += (s, e) =>
+                {
+                    popup.IsOpen = false;
+                    foreach (var open in VisualTreeHelper.GetOpenPopupsForXamlRoot(root)) open.IsOpen = false;
+                };
+            }
+            presenter.KeyDown += (s, e) =>
+            {
+                if (e.Key != Windows.System.VirtualKey.Escape) return;
+                e.Handled = true;
+                popup.IsOpen = false;
+                item.Focus(FocusState.Keyboard);
+            };
+            var point = item.TransformToVisual(null).TransformPoint(at);
+            popup.HorizontalOffset = point.X;
+            popup.VerticalOffset = point.Y;
+            popup.Opened += (s, e) => (items[0] as Control)?.Focus(FocusState.Programmatic);
+            popup.IsOpen = true;
+            Log.Debug($"recent: the entry's menu at {point.X:0},{point.Y:0}");
         }
 
         private void RemoveEntry(MenuFlyoutSubItem menu, MenuFlyoutItem item, string path, Action<string> remove)
