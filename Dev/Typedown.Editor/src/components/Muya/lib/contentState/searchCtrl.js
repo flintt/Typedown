@@ -37,21 +37,22 @@ const searchCtrl = ContentState => {
   }
 
   ContentState.prototype.replace = function (replaceValue, opt = { isSingle: true }) {
-    const { isSingle, isRegexp } = opt
+    // The host and Muya's own options call it searchIsRegexp: read as isRegexp it was never set, and $1, $2 went in as
+    // they are (the audit's E06). Each match takes its own groups - Replace All gave every match the current one's.
+    const { isSingle } = opt
+    const isRegexp = opt.searchIsRegexp ?? opt.isRegexp
     delete opt.isSingle
     const searchOptions = Object.assign({}, defaultSearchOption, opt)
     const { matches, value, index } = this.searchMatches
     if (matches.length) {
-      if (isRegexp) {
-        replaceValue = this.buildRegexValue(matches[index], replaceValue)
-      }
+      const valueFor = match => isRegexp ? this.buildRegexValue(match, replaceValue) : replaceValue
       if (isSingle) {
         // replace single
-        this.replaceOne(matches, index, replaceValue)
+        this.replaceOne(matches, index, valueFor(matches[index]))
       } else {
         // replace all
         for (let i = 0; i < matches.length; i++) {
-          this.replaceOne(matches, i, replaceValue)
+          this.replaceOne(matches, i, valueFor(matches[i]))
         }
       }
       const highlightIndex = index < matches.length - 1 ? index : index - 1

@@ -49,6 +49,21 @@ const { openEditor } = require('./harness');
     t = await text();
     check(t === 'NEW one dog two dog\n', 'Replace again takes the next match', JSON.stringify(t));
 
+    // A regular expression's groups, each match its own, in both editors (the audit's E06: $2$1 went in as it was).
+    const regexp = { ...opt, searchIsRegexp: true };
+    for (const source of [true, false]) {
+      await mode(source, false);
+      await load('a1 b2 c3\n');
+      await pause(300);
+      await send('Search', { value: '([a-z])(\\d)', opt: regexp });
+      await pause(150);
+      await send('Replace', { value: '$2$1', opt: { ...regexp, isSingle: false } });
+      await pause(300);
+      t = await text();
+      check(t === '1a 2b 3c\n', `regular expression groups (${source ? 'source' : 'visual'} mode)`, JSON.stringify(t));
+    }
+    await mode(true, false);
+
     await load('document A\n');
     await pause(300);
     await load('document B\n');
