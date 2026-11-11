@@ -14,10 +14,11 @@ describe('getTOC', () => {
         ])
     })
 
-    // The visual editor's lexer takes one line of text above an underline: two are not a heading there, nor here; the
-    // underlined line that looks like one does not take the next heading's line.
-    it('as the visual editor: an underline under two lines is no heading', () => {
-        expect(outline('Three\nlines\n---\n\nSix\n===\n')).toEqual([[1, 'Six', 4]])
+    // A setext heading spans the paragraph's lines above its underline (CommonMark; the visual editor's lexer since
+    // afd0b95f): its line is the first of them. A line above a blank one is its own paragraph.
+    it('as the visual editor: an underline under two lines is one heading, at its first line', () => {
+        expect(outline('Three\nlines\n---\n\nSix\n===\n')).toEqual([[2, 'Three lines', 0], [1, 'Six', 4]])
+        expect(outline('Alone\n\nTwo\nlines\n===\n')).toEqual([[1, 'Two lines', 2]])
     })
 
     it('not a "#" line in fenced code, nor a heading in a list or a quote', () => {

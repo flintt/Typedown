@@ -153,6 +153,11 @@ describe('lazy quote lines and setext headings of several lines, as CommonMark r
     expect(read('> a\n> b\nc\n\nd\n')).toEqual(['blockquote_start', 'paragraph:a\nb\nc', 'blockquote_end', 'paragraph:d'])
   })
 
+  test('indented code after a blank line is code; right under a paragraph it goes on the paragraph', () => {
+    expect(read('Before\n\n    code\n\nAfter\n')).toEqual(['paragraph:Before', 'code:code', 'paragraph:After'])
+    expect(read('Before\n    code\n')).toEqual(['paragraph:Before\n    code'])
+  })
+
   test("a quote's code takes no lazy line (spec 236, 237)", () => {
     expect(read('>     foo\n    bar\n')).toEqual(['blockquote_start', 'code:foo', 'blockquote_end', 'code:bar'])
     // The fence opened in the quote ends with it; foo is outside (how the lone fence itself is read is another matter).

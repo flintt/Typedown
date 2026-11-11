@@ -266,7 +266,9 @@ Lexer.prototype.token = function (src, top, container) {
     if (cap) {
       const lastToken = this.tokens[this.tokens.length - 1]
       src = src.substring(cap[0].length)
-      if (lastToken && lastToken.type === 'paragraph') {
+      // Only a paragraph right above: after a blank line it is code ("Before\n\n    code" was joined to Before, and
+      // the blank line went on the next save - the 2026-11-09 audit's 13, found again by the 2026-11-11 recheck).
+      if (lastToken && lastToken.type === 'paragraph' && !lastToken.followedByBlankLine) {
         lastToken.text += `\n${cap[0].trimRight()}`
       } else {
         cap = cap[0].replace(/^ {4}/gm, '')
