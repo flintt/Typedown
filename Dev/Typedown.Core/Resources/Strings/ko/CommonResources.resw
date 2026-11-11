@@ -1276,4 +1276,8 @@
     <value>사이드바에 표시</value>
     <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
   </data>
+  <data name="UploadImage.LocalOnly" xml:space="preserve">
+    <value>이 컴퓨터에 있는 이미지만 업로드할 수 있습니다</value>
+    <comment>图片右键菜单“上传图片”子菜单里的说明（不可点）：网络图片等不是本机文件的图片不能上传</comment>
+  </data>
 </root>

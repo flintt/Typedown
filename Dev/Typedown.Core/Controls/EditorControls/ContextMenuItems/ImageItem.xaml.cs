@@ -74,14 +74,18 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
             if (!ImageUpload.Ready.IsCompleted)
                 _ = ImageUpload.Ready.ContinueWith(_ => UpdateImageUploadConfigItem(), System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext());
             var configs = ImageUpload.ImageUploadConfigs.Where(x => x.IsEnable).ToList();
-            while (UploadSubMenu.Items[1] is not MenuFlyoutSeparator)
-                UploadSubMenu.Items.RemoveAt(1);
+            foreach (var old in UploadSubMenu.Items.Where(x => x.Tag is ImageUploadConfig).ToList())
+                UploadSubMenu.Items.Remove(old);
+            // Only a file can be uploaded: for any other picture the services are listed, not offered, under the reason.
+            var isLocalImage = UriHelper.TryGetLocalPath(ImageSrc, out _);
+            var at = UploadSubMenu.Items.IndexOf(NoUploadConfigItem) + 1;
             foreach (var config in configs.Reverse<ImageUploadConfig>())
             {
-                var item = new MenuFlyoutItem() { Text = config.Name, Tag = config };
+                var item = new MenuFlyoutItem() { Text = config.Name, Tag = config, IsEnabled = isLocalImage };
                 item.Click += (s, e) => OnUploadImageClick(config);
-                UploadSubMenu.Items.Insert(1, item);
+                UploadSubMenu.Items.Insert(at, item);
             }
+            UploadLocalOnlyItem.Visibility = isLocalImage ? Visibility.Collapsed : Visibility.Visible;
             NoUploadConfigItem.Visibility = configs.Any() ? Visibility.Collapsed : Visibility.Visible;
         }
 
