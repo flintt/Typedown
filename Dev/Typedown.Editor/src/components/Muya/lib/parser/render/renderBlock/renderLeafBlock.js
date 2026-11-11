@@ -92,7 +92,6 @@ const hasReferenceToken = tokens => {
 }
 
 export default function renderLeafBlock (parent, block, activeBlocks, matches, useCache = false) {
-  const { loadMathMap } = this
   const { cursor } = this.muya.contentState
   let selector = this.getSelector(block, activeBlocks)
   // highlight search key in block
@@ -195,16 +194,11 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
         if (code === '') {
           children = '< Empty Mathematical Formula >'
           selector += `.${CLASS_OR_ID.AG_EMPTY}`
-        } else if (loadMathMap.has(key)) {
-          children = loadMathMap.get(key)
         } else {
           try {
-            const html = katex.renderToString(texColors(code), {
+            children = this.mathFor(key, () => htmlToVNode(katex.renderToString(texColors(code), {
               displayMode: true
-            })
-
-            children = htmlToVNode(html)
-            loadMathMap.set(key, children)
+            })))
           } catch (err) {
             children = '< Invalid Mathematical Formula >'
             selector += `.${CLASS_OR_ID.AG_MATH_ERROR}`

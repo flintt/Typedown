@@ -2,7 +2,6 @@
  "note": "Inputs whose meaning a save changes today (read by markdown-it, CommonMark + GFM tables/strikethrough/tasks + footnotes). Written by meaning-check.js --update.",
  "failing": {
   "spec-7": "first save",
-  "spec-36": "first save",
   "spec-93": "first save",
   "spec-95": "first save",
   "spec-112": "first save",
@@ -78,6 +77,7 @@
   "spec-33",
   "spec-34",
   "spec-35",
+  "spec-36",
   "spec-37",
   "spec-38",
   "spec-39",

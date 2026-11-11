@@ -76,6 +76,8 @@ function edgeOf(blocks, center, step, maxBlocks, maxChars, minBlocks = FIRST_MIN
   return step > 0 ? i : i + 1
 }
 
+const MATH_CACHE_MAX = 1000
+
 class StateRender {
   constructor(muya) {
     this.muya = muya
@@ -101,6 +103,24 @@ class StateRender {
     this.progressive = null
     // The heights of a long document's blocks not drawn yet, predicted from their text (predictHeights.js).
     this.heights = new HeightPredictor(this)
+  }
+
+  // A formula drawn (KaTeX's vnodes), by its text and kind: `make` draws it the first time. The cache kept every formula
+  // of every document opened since the start, about 22 KB each (25 documents of 20 formulas: 10.9 MB of a 22.6 MB heap
+  // after a GC, the audit's 28 and the store's memory failures). It is emptied for a whole new document
+  // (ContentState.render) and holds the MATH_CACHE_MAX used last.
+  mathFor(key, make) {
+    const map = this.loadMathMap
+    if (map.has(key)) {
+      const vnode = map.get(key)
+      map.delete(key)
+      map.set(key, vnode)
+      return vnode
+    }
+    const vnode = make()
+    map.set(key, vnode)
+    if (map.size > MATH_CACHE_MAX) map.delete(map.keys().next().value)
+    return vnode
   }
 
   setContainer(container) {

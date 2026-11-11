@@ -202,6 +202,8 @@ class ContentState {
     if (clearCache) {
       this.stateRender.tokenCache.clear()
     }
+    // A whole new document: the formulas of the one before are not kept (StateRender.mathFor).
+    if (fresh) this.stateRender.loadMathMap.clear()
     matches.forEach((m, i) => {
       m.active = i === index
     })

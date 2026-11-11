@@ -23,25 +23,17 @@ export default function displayMath (h, cursor, block, token, outerClass) {
 
   const { content: math, type } = token
 
-  const { loadMathMap } = this
-
   const displayMode = false
   const key = `${math}_${type}`
   let mathVnode = null
   let previewSelector = `span.${CLASS_OR_ID.AG_MATH_RENDER}`
-  if (loadMathMap.has(key)) {
-    mathVnode = loadMathMap.get(key)
-  } else {
-    try {
-      const html = katex.renderToString(texColors(math), {
-        displayMode
-      })
-      mathVnode = htmlToVNode(html)
-      loadMathMap.set(key, mathVnode)
-    } catch (err) {
-      mathVnode = '< Invalid Mathematical Formula >'
-      previewSelector += `.${CLASS_OR_ID.AG_MATH_ERROR}`
-    }
+  try {
+    mathVnode = this.mathFor(key, () => htmlToVNode(katex.renderToString(texColors(math), {
+      displayMode
+    })))
+  } catch (err) {
+    mathVnode = '< Invalid Mathematical Formula >'
+    previewSelector += `.${CLASS_OR_ID.AG_MATH_ERROR}`
   }
 
   return [
