@@ -177,6 +177,33 @@ namespace Typedown.ReliabilityTests
             Assert.AreEqual("# T\n\n", h.Undo()?.Text);
         }
 
+        // A line added or taken away at the end by the reader is a step (it was no change: only the newlines at the end
+        // differed), and a redo brings it back; a report that does not say what made it still leaves them aside.
+        [TestMethod]
+        public void ALineAddedOrRemovedAtTheEndIsAStep()
+        {
+            var h = Fresh();
+            var text = TypeLetters(h, "", "hello!");
+            h.Pause();
+            h.ContentChange("# T\n\nhello!\n\n\n", Other);
+            h.CursorChange(Caret(3, 0));
+            h.Pause();
+            Assert.AreEqual("# T\n\n" + text + "\n", h.Undo()?.Text, "Enter at the end is undone alone");
+            Assert.AreEqual("# T\n\nhello!\n\n\n", h.Redo()?.Text, "and the redo brings the line back");
+
+            h.ContentChange("# T\n\nhello!\n", Delete);
+            h.CursorChange(Caret(2, 6));
+            h.Pause();
+            Assert.AreEqual("# T\n\nhello!\n\n\n", h.Undo()?.Text, "Backspace on the last line is undone");
+
+            var unknown = Fresh();
+            TypeLetters(unknown, "", "hi");
+            unknown.Pause();
+            unknown.ContentChange("# T\n\nhi\n\n");
+            unknown.CursorChange(Caret(2, 2));
+            Assert.AreEqual("# T\n\n", unknown.Undo()?.Text, "a report that does not say: the newlines at the end are no step");
+        }
+
         [TestMethod]
         public void ASentencesEndEndsATypingStep()
         {
