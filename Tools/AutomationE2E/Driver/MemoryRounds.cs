@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /// <summary>
 /// MM01: memory over many mode and document switches on Windows (the store's two Memory failures on 1.3.9.0; todo
 /// "2026-11-10 Partner Center Memory failures"). A long document with formulas and footnotes switched between visual
-/// and source mode 70 times, then two documents swapped 20 times; the private memory of the host and everything it
+/// and source mode 70 times, then two documents swapped 40 times; the private memory of the host and everything it
 /// started (WebView2) and the page's JS heap read every 10 rounds. After the first 10 (the warm-up: caches filling,
 /// code compiled) the private memory may not grow by more than 80 MB: each switch left a footnote tool and about
 /// 4.7 MB of heap behind before 34a8341e, 280 MB over 60 rounds. The numbers go into the notes either way.
@@ -70,21 +70,29 @@ internal static partial class Program
                 await SetMode(false);
                 if (round % 10 == 0) await Sample(round);
             }
+            // The second document opened (its own page state, measured on its own), then the two swapped 40 times: after the
+            // first 10 swaps no more growth either. 20 swaps measured once came to +295 MB against round 70 with the
+            // opening in it (w10 job 400): not told apart from a leak.
             idB = await Open(c, b);
             await Eventually(async () => await PageShows(c, windowId, "Section 199"), 60000, 200);
-            for (var round = 1; round <= 20; round++)
+            await Sample(71);
+            for (var swap = 1; swap <= 40; swap++)
             {
-                await c.Call("document.focus", new { documentId = round % 2 == 1 ? idA : idB });
+                await c.Call("document.focus", new { documentId = swap % 2 == 1 ? idA : idB });
                 await Task.Delay(700);
+                if (swap % 10 == 0) await Sample(70 + swap);
             }
-            await Sample(90);
             var warm = samples.First(s => s.round == 10);
             var last = samples.First(s => s.round == 70);
             var growth = last.priv - warm.priv;
             notes.Add($"mode switches 10 -> 70: private +{growth:F0} MB, JS heap {warm.js:F1} -> {last.js:F1} MB");
             Check(growth < 80, $"60 mode switches after the warm-up add less than 80 MB of private memory (+{growth:F0} MB)");
-            var swapped = samples.Last();
-            notes.Add($"after 20 document swaps: private {swapped.priv - last.priv:+0;-0} MB against round 70");
+            var opened = samples.First(s => s.round == 71);
+            var swapWarm = samples.First(s => s.round == 80);
+            var swapLast = samples.First(s => s.round == 110);
+            var swapGrowth = swapLast.priv - swapWarm.priv;
+            notes.Add($"second document opened: private {opened.priv - last.priv:+0;-0} MB; swaps 10 -> 40: {swapGrowth:+0;-0} MB, JS heap {swapWarm.js:F1} -> {swapLast.js:F1} MB");
+            Check(swapGrowth < 80, $"30 document swaps after the first 10 add less than 80 MB of private memory ({swapGrowth:+0;-0} MB)");
         }
         finally
         {
