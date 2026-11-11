@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -62,6 +62,27 @@ internal static partial class Program
             for (var y = 6; y < area.Height - 6; y += 2) { ring.Add(bitmap.GetPixel(2, y)); ring.Add(bitmap.GetPixel(area.Width - 3, y)); }
             return ring;
         }
+        // The shadow a tab left lifted keeps: pixels of its outer band (0-2 px in) darker than its own background - a ring two
+        // or three steps darker than the strip, which the colours inside and a ring further in did not catch.
+        int DarkEdge(AutomationElement tab)
+        {
+            var r = tab.Current.BoundingRectangle;
+            var area = new Rectangle((int)r.Left - 1, (int)r.Top - 1, (int)r.Width + 2, (int)r.Height + 2);
+            using var bitmap = new Bitmap(area.Width, area.Height);
+            using (var g = Graphics.FromImage(bitmap)) g.CopyFromScreen(area.Location, Point.Empty, area.Size);
+            var back = bitmap.GetPixel(area.Width / 2, area.Height / 2 + area.Height / 4);
+            var dark = 0;
+            for (var d = 0; d <= 3; d++)
+            {
+                for (var x = 8; x < area.Width - 8; x++)
+                    foreach (var y in new[] { d, area.Height - 1 - d })
+                        if (bitmap.GetPixel(x, y).R + 2 < back.R) dark++;
+                for (var y = 8; y < area.Height - 8; y++)
+                    foreach (var x in new[] { d, area.Width - 1 - d })
+                        if (bitmap.GetPixel(x, y).R + 2 < back.R) dark++;
+            }
+            return dark;
+        }
         // How far two rings are apart: the mean colour distance, point by point (as many points: same-sized tabs).
         double Apart(List<Color> a, List<Color> b)
         {
@@ -120,6 +141,10 @@ internal static partial class Program
             var self = Apart(ringAfter, ringBefore);
             var other = Apart(ringAfter, ringOtherAfter);
             notes.Add($"edges after: {first} against itself before {self:F1}, against {middle} {other:F1}");
+            var darkMoved = DarkEdge(TabOf(first));
+            var darkOther = DarkEdge(TabOf(middle));
+            notes.Add($"dark edge pixels: {first} {darkMoved}, {middle} {darkOther}");
+            Check(darkMoved <= darkOther + 10, $"the tab moved has no darker edge (a shadow) the other tab not shown has not ({darkMoved} against {darkOther} pixels)");
             Check(self < 12 && other < 12, $"the tab moved has no edge the others have not (apart {self:F1} from itself before, {other:F1} from {middle})");
 
             // The tab shown dragged to the start: still drawn as the tab shown, and the others as they were.
