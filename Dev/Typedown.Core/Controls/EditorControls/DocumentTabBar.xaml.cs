@@ -281,56 +281,30 @@ namespace Typedown.Core.Controls
 
         private void WatchStripPresses()
         {
-            // As a tab is dragged the TabView lets the tabs' column take all the room there is (to drop a tab past the
-            // last): the + in the next column went right by a long way with no tab added (the user, 2026-11-11). The list
-            // itself stayed as wide (job 395). The column goes back to the tabs' width once the TabView has set it; a tab
-            // is still dropped past the last within the list. TabDragStarting is raised only for a tab that may leave
-            // the window: the list's own event is the one for a move within the strip.
-            if (Descendants(TabView).OfType<ListViewBase>().FirstOrDefault(l => l.Name == "TabListView") is ListViewBase list && list != watchedList)
-            {
-                watchedList = list;
-                list.DragItemsStarting += (s, e) => DispatcherQueue.TryEnqueueSafe(() => KeepTabColumnToTabs("drag starting"));
-                list.DragItemsCompleted += (s, e) => DispatcherQueue.TryEnqueueSafe(() => KeepTabColumnToTabs("drag completed"));
-                list.AddHandler(PointerPressedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((s, e) => TraceStripLayout()), true);
-            }
-        }
-
-        // Diagnostic: the strip's layout for a moment after a press on a tab, each change once.
-        private long traceUntil;
-        private string lastTrace;
-
-        private void TraceStripLayout()
-        {
-            var start = traceUntil < Environment.TickCount64;
-            traceUntil = Environment.TickCount64 + 1500;
-            if (start) TabView.LayoutUpdated += OnTraceLayout;
-        }
-
-        private void OnTraceLayout(object sender, object e)
-        {
-            if (Environment.TickCount64 > traceUntil) { TabView.LayoutUpdated -= OnTraceLayout; return; }
+            // As a tab is dragged the TabView sets the tabs' column to a fixed width a tab wider than the tabs (346 to 586,
+            // job 397), and the + in the next column went right by that much with no tab added (the user, 2026-11-11).
+            // The column is kept fixed - the TabView keeps the strip from shrinking as the tab is moved - but no wider
+            // than the tabs were. No drag event is raised for a move within the strip (neither TabDragStarting nor the
+            // list's DragItemsStarting): the column's width is watched instead.
             var grid = Descendants(TabView).OfType<Grid>().FirstOrDefault(g => g.Name == "TabContainerGrid");
-            var list = Descendants(TabView).OfType<FrameworkElement>().FirstOrDefault(x => x.Name == "TabListView");
-            var add = Descendants(TabView).OfType<FrameworkElement>().FirstOrDefault(x => x.Name == "AddButton");
-            if (grid == null || list == null || add == null) return;
-            var columns = string.Join(" ", grid.ColumnDefinitions.Select(c => $"{c.Width}/{c.ActualWidth:0}/max {c.MaxWidth:0}"));
-            var trace = $"columns [{columns}] list {list.ActualWidth:0} (max {list.MaxWidth:0}, margin {list.Margin}) + at {add.TransformToVisual(TabView).TransformPoint(default).X:0}";
-            if (trace == lastTrace) return;
-            lastTrace = trace;
-            Log.Debug("tabs: layout " + trace);
-        }
-
-        private ListViewBase watchedList;
-
-        private void KeepTabColumnToTabs(string when)
-        {
-            var grid = Descendants(TabView).OfType<Grid>().FirstOrDefault(g => g.Name == "TabContainerGrid");
-            if (grid == null || grid.ColumnDefinitions.Count < 3) return;
+            if (grid == null || grid.ColumnDefinitions.Count < 3 || grid == watchedGrid) return;
+            watchedGrid = grid;
             var column = grid.ColumnDefinitions[1];
-            var was = column.Width;
-            if (!column.Width.IsAuto) column.Width = GridLength.Auto;
-            Log.Debug($"tabs: {when}: the tabs' column was {was}, now {column.Width} ({column.ActualWidth:0} wide)");
+            // Only with as many tabs as when the column was last laid out: a tab coming or going may want the width.
+            var list = Descendants(TabView).OfType<ItemsControl>().FirstOrDefault(l => l.Name == "TabListView");
+            var laidOutWith = list?.ActualWidth > 0 ? list.Items.Count : -1;
+            if (list != null) list.SizeChanged += (s, e) => laidOutWith = list.Items.Count;
+            column.RegisterPropertyChangedCallback(ColumnDefinition.WidthProperty, (s, p) =>
+            {
+                var tabs = column.ActualWidth;
+                if (column.Width.IsAuto || tabs <= 0 || column.Width.Value <= tabs + 1) return;
+                if (list == null || list.Items.Count != laidOutWith) return;
+                Log.Debug($"tabs: the tabs' column set to {column.Width.Value:0} while {tabs:0} wide: kept to the tabs");
+                column.Width = new GridLength(tabs);
+            });
         }
+
+        private Grid watchedGrid;
 
         private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
         {
