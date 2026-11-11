@@ -190,6 +190,7 @@ internal static partial class Program
             await Case("TC01 a tab closed with its x button: the outline shows the headings of the tab shown next", TC01);
             await Case("TC02 a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents", TC02);
             await Case("TC03 a long document's tab closed and another file opened right after: the file opened is the one shown", TC03);
+            await Case("TM01 a tab's menu: Close Tabs to the Right on the second of four leaves the first two, the second shown; Close Others on the first leaves it alone, shown; a file's tab offers Copy as Path, Open File Location and Show in Side Bar", TM01);
             await Case("SE01 the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it", SE01);
             await Case("RC01 two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root", RC01);
             await Case("RC02 a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders", RC02);
