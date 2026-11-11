@@ -55,7 +55,10 @@
                 <!-- A tab clicked leaves the keyboard in the document (AllowFocusOnInteraction): taken by the tab, it came back
                      only once the window's thread was free, and with a long document coming in the keys typed meanwhile were
                      lost (E2E TL01). The keyboard still reaches the tabs with Tab. -->
-                <muxc:TabViewItem Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True" ContextFlyout="{StaticResource TabContextFlyout}" AllowFocusOnInteraction="False"/>
+                <!-- Square at the bottom: a tab being dragged is drawn with the tab's corner radius (its drag look,
+                     TabDragVisualContainer), and its bottom came out rounded, unlike a tab in the strip (the user, 2026-11-11).
+                     The shown tab's card has a shape of its own. -->
+                <muxc:TabViewItem CornerRadius="8,8,0,0" Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True" ContextFlyout="{StaticResource TabContextFlyout}" AllowFocusOnInteraction="False"/>
             </DataTemplate>
         </muxc:TabView.TabItemTemplate>
     </muxc:TabView>
