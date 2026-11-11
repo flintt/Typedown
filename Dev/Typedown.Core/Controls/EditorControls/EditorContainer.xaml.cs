@@ -245,7 +245,8 @@ namespace Typedown.Core.Controls
         }
 
         /// <summary>The bold/italic/... row: not in reading mode, where the page refuses every format.</summary>
-        public static bool IsLoadFormatMenu(bool formatIsEnable, bool readOnly) => formatIsEnable && !readOnly;
+        // Not in source mode: its buttons did nothing there (the menu report's M02, seen in the page).
+        public static bool IsLoadFormatMenu(bool formatIsEnable, bool readOnly, bool sourceCode) => formatIsEnable && !readOnly && !sourceCode;
 
         /// <summary>
         /// Copy table: when the last right-click was in a table (the page says so as the button goes down), in the
