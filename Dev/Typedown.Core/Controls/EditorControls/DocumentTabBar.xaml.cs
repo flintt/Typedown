@@ -49,7 +49,11 @@ namespace Typedown.Core.Controls
                 disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
             if (Tabs is { } tabs)
             {
-                System.Collections.Specialized.NotifyCollectionChangedEventHandler changed = (_, _) => NoteShownIndexSoon();
+                System.Collections.Specialized.NotifyCollectionChangedEventHandler changed = (_, e) =>
+                {
+                    Log.Debug($"tabs: collection {e.Action} old {e.OldStartingIndex} new {e.NewStartingIndex}; shown at {tabs.Tabs.IndexOf(tabs.ActiveTab)}");
+                    NoteShownIndexSoon();
+                };
                 tabs.Tabs.CollectionChanged += changed;
                 disposables.Add(System.Reactive.Disposables.Disposable.Create(() => tabs.Tabs.CollectionChanged -= changed));
                 disposables.Add(tabs.WhenPropertyChanged(nameof(tabs.ActiveTab)).StartWith(tabs.ActiveTab).Subscribe(_ => shownIndex = tabs.Tabs.IndexOf(tabs.ActiveTab)));
@@ -209,6 +213,7 @@ namespace Typedown.Core.Controls
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Tabs == null) return;
+            Log.Debug($"tabs: selection {Names(e.RemovedItems)} -> {Names(e.AddedItems)}; shown {Tabs.ActiveTab?.Title} at {Tabs.Tabs.IndexOf(Tabs.ActiveTab)} (was {shownIndex}), dragging {dragging}, order {string.Join("|", Tabs.Tabs.Select(t => t.Title))}");
             // The selection moved because the selected tab went (closed): which tab is shown then is the close's to decide
             // (TabsViewModel.CloseTab shows the neighbour itself). Asked for here as well, the switch could come after a
             // file opened at once had been shown, and put the neighbour back over it (TC03; HJ02/HJ03 on w10).
@@ -315,6 +320,7 @@ namespace Typedown.Core.Controls
 
         private void OnTabItemsChanged(muxc.TabView sender, Windows.Foundation.Collections.IVectorChangedEventArgs args)
         {
+            Log.Debug($"tabs: strip items {args.CollectionChange} at {args.Index}");
             if (args.CollectionChange == Windows.Foundation.Collections.CollectionChange.ItemInserted && Tabs != null
                 && (int)args.Index < Tabs.Tabs.Count && Tabs.Tabs[(int)args.Index] == Tabs.ActiveTab)
             {
@@ -330,11 +336,19 @@ namespace Typedown.Core.Controls
         private long dragStartedAt = long.MinValue / 2, dragEndedAt;
         private bool dragging => dragStartedAt > dragEndedAt && Environment.TickCount64 - dragStartedAt < 10000;
 
-        private void OnTabDragStarting(muxc.TabView sender, muxc.TabViewTabDragStartingEventArgs args) => dragStartedAt = Environment.TickCount64;
+        private void OnTabDragStarting(muxc.TabView sender, muxc.TabViewTabDragStartingEventArgs args)
+        {
+            dragStartedAt = Environment.TickCount64;
+            Log.Debug($"tabs: drag starting ({(args.Item as DocumentTab)?.Title})");
+        }
+
+        // For the log: the tabs a selection change names.
+        private static string Names(System.Collections.Generic.IList<object> items) => "[" + string.Join(",", items.Select(x => (x as DocumentTab)?.Title ?? "?")) + "]";
 
         private void OnTabDragCompleted(muxc.TabView sender, muxc.TabViewTabDragCompletedEventArgs args)
         {
             dragEndedAt = Environment.TickCount64;
+            Log.Debug($"tabs: drag completed ({(args.Item as DocumentTab)?.Title})");
             if (Tabs != null && TabView.SelectedItem != Tabs.ActiveTab) TabView.SelectedItem = Tabs.ActiveTab;
             ResetTabStatesSoon();
         }
