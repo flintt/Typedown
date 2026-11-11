@@ -374,6 +374,13 @@ namespace Typedown.Core.Controls
                 VisualStateManager.GoToState(item, item.IsSelected ? "Selected" : "Normal", false);
                 VisualStateManager.GoToState(item, "NotDragging", false);
                 VisualStateManager.GoToState(item, "NoReorderHint", false);
+                // A tab dragged is lifted (a translation off the strip, which casts a shadow) and was left lifted: the edge
+                // it kept was that shadow's, darker than the strip (TD01's pictures on w10). Put back down.
+                if (!item.IsSelected && item.Translation != System.Numerics.Vector3.Zero)
+                {
+                    Log.Debug($"tabs: {tab.Title} was left lifted ({item.Translation}); put down");
+                    item.Translation = System.Numerics.Vector3.Zero;
+                }
             }
         }
 
