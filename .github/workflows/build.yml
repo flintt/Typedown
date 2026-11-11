@@ -136,6 +136,7 @@ jobs:
           node reading-copy-check.js
           node paste-web-check.js
           node source-replace-check.js
+          node code-entities-check.js
           node export-mermaid-error-check.js
           node renderer-failure-check.js
           node spec-check.js
