@@ -273,8 +273,22 @@ namespace Typedown.Core.Controls
 
         private void OnStripLayoutUpdated(object sender, object e)
         {
-            if (KeepAddButtonOffFocus()) TabView.LayoutUpdated -= OnStripLayoutUpdated;
+            if (!KeepAddButtonOffFocus()) return;
+            TabView.LayoutUpdated -= OnStripLayoutUpdated;
+            // A tab moved within the strip is the list's own drag: the TabView raises TabDragStarting only for a tab that
+            // may leave the window, and the width was not held (job 392, no "drag starting" in the log).
+            if (Descendants(TabView).OfType<ListView>().FirstOrDefault(l => l.Name == "TabListView") is ListView list)
+            {
+                list.DragItemsStarting -= OnListDragItemsStarting;
+                list.DragItemsStarting += OnListDragItemsStarting;
+                list.DragItemsCompleted -= OnListDragItemsCompleted;
+                list.DragItemsCompleted += OnListDragItemsCompleted;
+            }
         }
+
+        private void OnListDragItemsStarting(object sender, DragItemsStartingEventArgs e) => HoldStripWidth(true);
+
+        private void OnListDragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs e) => HoldStripWidth(false);
 
         private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
         {
