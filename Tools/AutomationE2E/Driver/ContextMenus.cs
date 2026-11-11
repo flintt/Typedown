@@ -29,26 +29,22 @@ internal static partial class Program
         await Task.Delay(1500);
         async Task<Dictionary<string, System.Windows.Automation.AutomationElement>> MenuAt(string where, string selector, string? awaiting = null)
         {
+            // The menu before gone first: closed, its items could still be read for a moment, and were taken for this
+            // menu's (a code block's menu "had" the link's items, XM01 on w10; the host's log had it right).
+            var gone = await Eventually(() => Task.FromResult(FindAnywhereInHost(window, "SelectAllItem") == null), 3000, 100);
+            if (!gone) notes.Add($"{where}: the menu before was still readable after 3 s");
             var menu = await ContextMenuAt(c, windowId, window, selector, awaiting);
             notes.Add($"{where}: {string.Join(", ", menu.Keys.OrderBy(k => k))}");
             return menu;
         }
         void Close() { Send(Key(0x1B, false), Key(0x1B, true)); }
-        // An item counts when it is on the screen: the menu before (closed by an item invoked) can still be read for a moment
-        // (the host had the right state - its log - and its items were there, XM01 on w10).
-        bool Shown(Dictionary<string, System.Windows.Automation.AutomationElement> menu, string item)
-        {
-            if (!menu.TryGetValue(item, out var element)) return false;
-            try { return !element.Current.IsOffscreen && !element.Current.BoundingRectangle.IsEmpty; }
-            catch (System.Windows.Automation.ElementNotAvailableException) { return false; }
-        }
         void Has(Dictionary<string, System.Windows.Automation.AutomationElement> menu, string where, params string[] ids)
         {
-            foreach (var item in ids) Check(Shown(menu, item), $"{where}: the menu has {item} ({string.Join(", ", menu.Keys.Where(k => Shown(menu, k)))})");
+            foreach (var item in ids) Check(menu.ContainsKey(item), $"{where}: the menu has {item} ({string.Join(", ", menu.Keys)})");
         }
         void HasNot(Dictionary<string, System.Windows.Automation.AutomationElement> menu, string where, params string[] ids)
         {
-            foreach (var item in ids) Check(!Shown(menu, item), $"{where}: the menu has no {item}");
+            foreach (var item in ids) Check(!menu.ContainsKey(item), $"{where}: the menu has no {item}");
         }
         string[] objects = { "TableSubItem", "OpenLinkItem", "CopyLinkAddressItem", "RemoveLinkItem", "CopyCodeItem", "CopyFormulaItem", "CopyDiagramItem" };
         try
