@@ -168,6 +168,18 @@ namespace Typedown.Core.ViewModels
             return tab;
         }
 
+        /// <summary>
+        /// A tab <see cref="BeginNewTab"/> made for a file whose reading ended after another tab was shown: never filled,
+        /// it goes from the strip (the tab shown stays as it is).
+        /// </summary>
+        public void DropNewTab(DocumentTab tab)
+        {
+            if (tab == null || tab == ActiveTab || !Tabs.Contains(tab)) return;
+            Tabs.Remove(tab);
+            recentTabs.Remove(tab);
+            if (tabBeforeNew == tab) tabBeforeNew = null;
+        }
+
         /// <summary>Undo <see cref="BeginNewTab"/> when loading the new document failed.</summary>
         public void AbortNewTab(DocumentTab tab)
         {
@@ -228,7 +240,14 @@ namespace Typedown.Core.ViewModels
                 // snapshot it and load the next one. Without this a throttled MarkdownChange for the tab being left
                 // can arrive after the switch and land on the tab now shown — one document's text crossing into
                 // another. Flushing captures the accurate text and drains those reports first.
-                await EditorViewModel.FlushBeforeTabChangeAsync();
+                // Not brought in (the page did not answer): asked once more, and if it still does not, the switch does not
+                // happen - the tab left would have kept the text before the last edits, which it would then hold as its own
+                // (the audit's A10). A second click on the tab tries again.
+                if (!await EditorViewModel.FlushBeforeTabChangeAsync() && !await EditorViewModel.FlushContentAsync(8000, evenIfNotLoaded: true))
+                {
+                    Log.Debug("tab switch: the page did not hand over the document's text; staying on it");
+                    return;
+                }
                 // Looked at again after the wait: the tab may have been shown in the meantime. Closing a tab removes it from
                 // the strip, the strip selects the neighbour and asks for it here, and the close then shows that very tab
                 // itself - loaded twice, the first load's reports were dropped as stale and the page, given the same text
@@ -326,6 +345,9 @@ namespace Typedown.Core.ViewModels
                 return true;
             }
             if (tab != ActiveTab) await SwitchTo(tab);
+            // Not shown after all (another switch won meanwhile, or it went): what is asked about and closed below is the
+            // tab shown, which would be another one - it asked about C and removed an unsaved B (the audit's A02).
+            if (tab != ActiveTab || !Tabs.Contains(tab)) return false;
             // Covered only when nothing is to be asked (a question about saving is about what is on the page).
             var shown = EditorViewModel.Saved ? EditorViewModel.CoverIfLong() : EditorViewModel.LoadId;
             if (!await FileViewModel.AskToSave())
@@ -337,6 +359,10 @@ namespace Typedown.Core.ViewModels
             if (string.IsNullOrEmpty(FileViewModel.FilePath)) FileViewModel.AutoBackup.DeleteBackup(null, tab.DocumentId);
             // Saved or explicitly discarded: nothing in the editor needs to survive.
             EditorViewModel.Saved = true;
+            // Closed meanwhile by another close, or the last tab now (two closes of the last two tabs at once): the last
+            // one goes the last tab's way - removing it left no tab and the next pick read Tabs[-1] (the audit's A03).
+            if (!Tabs.Contains(tab)) return true;
+            if (Tabs.Count == 1) return await CloseTab(tab);
             var index = Tabs.IndexOf(tab);
             Tabs.Remove(tab);
             recentTabs.Remove(tab);
@@ -371,11 +397,14 @@ namespace Typedown.Core.ViewModels
                 return true;
             foreach (var tab in Tabs.ToList())
             {
+                var unknown = tab == ActiveTab && !flushed;
                 var dirty = tab == ActiveTab ? (!EditorViewModel.Saved || !flushed) : !tab.Saved;
                 if (!dirty) continue;
                 await SwitchTo(tab);
                 await FileViewModel.AutoSaveFile();
-                if (!EditorViewModel.Saved && !await FileViewModel.AskToSave())
+                // The page did not answer: Saved is the state before the last edits, so it is asked about whatever it says
+                // (AskToSave brings the text in again and asks if it still cannot) - it closed without asking (the audit's A01).
+                if ((!EditorViewModel.Saved || unknown) && !await FileViewModel.AskToSave())
                     return false;
             }
             return true;
