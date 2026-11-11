@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 /// <summary>
-/// SV01: Save As onto a file open in another tab is refused (the 2026-11-09 audit's 12): two documents with one path
+/// SA02: Save As onto a file open in another tab is refused (the 2026-11-09 audit's 12): two documents with one path
 /// wrote over each other and shared one crash backup. A and B open; from B, Save As with A's path: a dialog says so, A's
 /// file on disk keeps its text, B keeps its own path and text, and the window still holds the two documents.
 /// </summary>
 internal static partial class Program
 {
-    private static async Task SV01(List<string> notes)
+    private static async Task SA02(List<string> notes)
     {
-        var folder = FixtureFolder("sv01");
-        var a = Path.Combine(folder, "sv01-a.md");
-        var b = Path.Combine(folder, "sv01-b.md");
-        File.WriteAllText(a, "# sv01 A\n\nA's own text.\n");
-        File.WriteAllText(b, "# sv01 B\n\nB's own text.\n");
-        using var c = await Session("e2e SV01");
+        var folder = FixtureFolder("sa02");
+        var a = Path.Combine(folder, "sa02-a.md");
+        var b = Path.Combine(folder, "sa02-b.md");
+        File.WriteAllText(a, "# sa02 A\n\nA's own text.\n");
+        File.WriteAllText(b, "# sa02 B\n\nB's own text.\n");
+        using var c = await Session("e2e SA02");
         var idA = await Open(c, a);
         var idB = await Open(c, b);
         var windowId = await WindowIdOf(c, idB);
@@ -34,7 +34,7 @@ internal static partial class Program
             var result = await saving;
             Check(result["path"] == null || result["path"]!.Type == JTokenType.Null, $"nothing saved ({result["path"]})");
             Check(!string.IsNullOrEmpty(content), "a dialog says why");
-            Check(File.ReadAllText(a) == "# sv01 A\n\nA's own text.\n", "A's file keeps its text");
+            Check(File.ReadAllText(a) == "# sa02 A\n\nA's own text.\n", "A's file keeps its text");
             var docs = (JArray)(await c.Call("document.list", new { windowId }))["documents"]!;
             var paths = docs.Select(d => (string?)d["path"]).ToList();
             notes.Add("documents: " + string.Join(" | ", paths));
