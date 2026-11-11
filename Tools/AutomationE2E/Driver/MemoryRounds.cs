@@ -1,0 +1,95 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+/// <summary>
+/// MM01: memory over many mode and document switches on Windows (the store's two Memory failures on 1.3.9.0; todo
+/// "2026-11-10 Partner Center Memory failures"). A long document with formulas and footnotes switched between visual
+/// and source mode 70 times, then two documents swapped 20 times; the private memory of the host and everything it
+/// started (WebView2) and the page's JS heap read every 10 rounds. After the first 10 (the warm-up: caches filling,
+/// code compiled) the private memory may not grow by more than 80 MB: each switch left a footnote tool and about
+/// 4.7 MB of heap behind before 34a8341e, 280 MB over 60 rounds. The numbers go into the notes either way.
+/// </summary>
+internal static partial class Program
+{
+    private static async Task MM01(List<string> notes)
+    {
+        var folder = FixtureFolder("mm01");
+        string Document(string name, int sections)
+        {
+            var sb = new StringBuilder($"# {name}\n\n");
+            for (var i = 0; i < sections; i++)
+                sb.Append($"## Section {i}\n\nA paragraph with **bold**, *emphasis*, a [link](https://example.com/{i}) and a formula $x_{i}^2 + \\frac{{{i}}}{{2}}$, and a note[^n{i}].\n\n")
+                  .Append($"$$\n\\sum_{{k=0}}^{{{i}}} k^2\n$$\n\n- one item {i}\n- another item {i}\n\n[^n{i}]: Footnote {i}.\n\n");
+            return sb.ToString();
+        }
+        var a = Path.Combine(folder, "mm01-a.md");
+        var b = Path.Combine(folder, "mm01-b.md");
+        File.WriteAllText(a, Document("mm01 A", 500));
+        File.WriteAllText(b, Document("mm01 B", 200));
+        using var c = await Session("e2e MM01");
+        var idA = await Open(c, a);
+        var windowId = await WindowIdOf(c, idA);
+        string? idB = null;
+        async Task<string> PageMode()
+        {
+            var r = (string?)(await c.Call("test.editor.eval", new { windowId, script = "document.querySelector('.CodeMirror') ? 'source' : (document.querySelector('#ag-editor-id') ? 'visual' : 'none')" }))["result"];
+            return r ?? "none";
+        }
+        async Task SetMode(bool source)
+        {
+            await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = source });
+            var want = source ? "source" : "visual";
+            await Eventually(async () => await PageMode() == want, 20000, 50);
+            await Task.Delay(300);
+        }
+        async Task<double> JsHeapMb()
+        {
+            try { return Convert.ToDouble((await c.Call("test.editor.eval", new { windowId, script = "performance.memory ? performance.memory.usedJSHeapSize : 0" }))["result"]) / 1048576; }
+            catch { return -1; }
+        }
+        var samples = new List<(int round, double priv, double js)>();
+        async Task Sample(int round)
+        {
+            await Task.Delay(1500);
+            var tree = TreeMemory(hostPid);
+            var js = await JsHeapMb();
+            samples.Add((round, tree.privateMb, js));
+            notes.Add($"round {round}: private {tree.privateMb:F0} MB in {tree.processes} processes, JS heap {js:F1} MB");
+        }
+        try
+        {
+            await Eventually(async () => await PageShows(c, windowId, "Section 499"), 60000, 200);
+            await Sample(0);
+            for (var round = 1; round <= 70; round++)
+            {
+                await SetMode(true);
+                await SetMode(false);
+                if (round % 10 == 0) await Sample(round);
+            }
+            idB = await Open(c, b);
+            await Eventually(async () => await PageShows(c, windowId, "Section 199"), 60000, 200);
+            for (var round = 1; round <= 20; round++)
+            {
+                await c.Call("document.focus", new { documentId = round % 2 == 1 ? idA : idB });
+                await Task.Delay(700);
+            }
+            await Sample(90);
+            var warm = samples.First(s => s.round == 10);
+            var last = samples.First(s => s.round == 70);
+            var growth = last.priv - warm.priv;
+            notes.Add($"mode switches 10 -> 70: private +{growth:F0} MB, JS heap {warm.js:F1} -> {last.js:F1} MB");
+            Check(growth < 80, $"60 mode switches after the warm-up add less than 80 MB of private memory (+{growth:F0} MB)");
+            var swapped = samples.Last();
+            notes.Add($"after 20 document swaps: private {swapped.priv - last.priv:+0;-0} MB against round 70");
+        }
+        finally
+        {
+            try { await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false }); } catch { }
+            foreach (var d in new[] { idA, idB }) if (d != null) try { await c.Call("document.close", new { documentId = d }); } catch { }
+        }
+    }
+}
