@@ -93,6 +93,9 @@ namespace Typedown.Core.Models
 
         public string DisplayTitle => IsDirty ? $"{Title} •" : Title;
 
+        /// <summary>The widest the tab's title is drawn: with the unsaved mark (and bold, as the tab shown is) - the width a tab keeps.</summary>
+        public string WidestTitle => $"{Title} •";
+
         public string ToolTip => string.IsNullOrEmpty(FilePath) ? Title : FilePath;
 
         public event PropertyChangedEventHandler PropertyChanged;

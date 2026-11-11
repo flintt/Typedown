@@ -58,7 +58,17 @@
                 <!-- Square at the bottom: a tab being dragged is drawn with the tab's corner radius (its drag look,
                      TabDragVisualContainer), and its bottom came out rounded, unlike a tab in the strip (the user, 2026-11-11).
                      The shown tab's card has a shape of its own. -->
-                <muxc:TabViewItem CornerRadius="8,8,0,0" Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True" ContextFlyout="{StaticResource TabContextFlyout}" AllowFocusOnInteraction="False"/>
+                <!-- Each tab as wide as its title at its widest - bold, as the tab shown is drawn, and with the unsaved mark: a
+                     tab sized to its title changed width as it became the one shown, or unsaved, and the + after the tabs
+                     moved with it (the user, 2026-11-11). An unseen copy at that width holds the place. -->
+                <muxc:TabViewItem CornerRadius="8,8,0,0" AutomationProperties.Name="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True" ContextFlyout="{StaticResource TabContextFlyout}" AllowFocusOnInteraction="False">
+                    <muxc:TabViewItem.Header>
+                        <Grid>
+                            <TextBlock Text="{x:Bind WidestTitle, Mode=OneWay}" FontWeight="SemiBold" Opacity="0" AutomationProperties.AccessibilityView="Raw"/>
+                            <TextBlock Text="{x:Bind DisplayTitle, Mode=OneWay}"/>
+                        </Grid>
+                    </muxc:TabViewItem.Header>
+                </muxc:TabViewItem>
             </DataTemplate>
         </muxc:TabView.TabItemTemplate>
     </muxc:TabView>
