@@ -1264,4 +1264,16 @@
   <data name="FirstEditNeverShow" xml:space="preserve">
     <value>এই নথিৰ বাবে পুনৰ নেদেখুৱাব</value>
   </data>
+  <data name="Tab.CloseOthers" xml:space="preserve">
+    <value>অন্যবোৰ বন্ধ কৰক</value>
+    <comment>标签页右键菜单：关闭这个以外的所有标签页</comment>
+  </data>
+  <data name="Tab.CloseToTheRight" xml:space="preserve">
+    <value>সোঁফালৰ টেববোৰ বন্ধ কৰক</value>
+    <comment>标签页右键菜单：关闭这个右边的所有标签页</comment>
+  </data>
+  <data name="Tab.ShowInSideBar" xml:space="preserve">
+    <value>কাষৰ বাৰত দেখুৱাওক</value>
+    <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
+  </data>
 </root>

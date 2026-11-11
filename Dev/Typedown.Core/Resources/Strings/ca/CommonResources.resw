@@ -1264,4 +1264,16 @@
   <data name="FirstEditNeverShow" xml:space="preserve">
     <value>No ho tornis a mostrar per a aquest document</value>
   </data>
+  <data name="Tab.CloseOthers" xml:space="preserve">
+    <value>Tanca les altres</value>
+    <comment>标签页右键菜单：关闭这个以外的所有标签页</comment>
+  </data>
+  <data name="Tab.CloseToTheRight" xml:space="preserve">
+    <value>Tanca les pestanyes de la dreta</value>
+    <comment>标签页右键菜单：关闭这个右边的所有标签页</comment>
+  </data>
+  <data name="Tab.ShowInSideBar" xml:space="preserve">
+    <value>Mostra a la barra lateral</value>
+    <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
+  </data>
 </root>

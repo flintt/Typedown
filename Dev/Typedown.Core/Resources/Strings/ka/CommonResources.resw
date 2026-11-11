@@ -1264,4 +1264,16 @@
   <data name="FirstEditNeverShow" xml:space="preserve">
     <value>ამ დოკუმენტისთვის აღარ აჩვენო</value>
   </data>
+  <data name="Tab.CloseOthers" xml:space="preserve">
+    <value>სხვების დახურვა</value>
+    <comment>标签页右键菜单：关闭这个以外的所有标签页</comment>
+  </data>
+  <data name="Tab.CloseToTheRight" xml:space="preserve">
+    <value>მარჯვნივ მყოფი ჩანართების დახურვა</value>
+    <comment>标签页右键菜单：关闭这个右边的所有标签页</comment>
+  </data>
+  <data name="Tab.ShowInSideBar" xml:space="preserve">
+    <value>გვერდით ზოლში ჩვენება</value>
+    <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
+  </data>
 </root>

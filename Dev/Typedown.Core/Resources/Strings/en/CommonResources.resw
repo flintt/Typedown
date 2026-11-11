@@ -1367,4 +1367,16 @@
     <value>Don't show again for this document</value>
     <comment>首次编辑提示卡片上的"这个文档不再提示"（只对当前文档）</comment>
   </data>
+  <data name="Tab.CloseOthers" xml:space="preserve">
+    <value>Close Others</value>
+    <comment>标签页右键菜单：关闭这个以外的所有标签页</comment>
+  </data>
+  <data name="Tab.CloseToTheRight" xml:space="preserve">
+    <value>Close Tabs to the Right</value>
+    <comment>标签页右键菜单：关闭这个右边的所有标签页</comment>
+  </data>
+  <data name="Tab.ShowInSideBar" xml:space="preserve">
+    <value>Show in Side Bar</value>
+    <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
+  </data>
 </root>

@@ -384,6 +384,35 @@ namespace Typedown.Core.ViewModels
             return true;
         }
 
+        /// <summary>The tab menu's Close Others: every tab but <paramref name="keep"/>. False when a question about saving was cancelled.</summary>
+        public Task<bool> CloseOthers(DocumentTab keep) => CloseMany(Tabs.Where(t => t != keep).ToList(), keep);
+
+        /// <summary>The tab menu's Close Tabs to the Right: those after <paramref name="tab"/> in the strip.</summary>
+        public Task<bool> CloseToTheRight(DocumentTab tab) => Tabs.Contains(tab) ? CloseMany(Tabs.Skip(Tabs.IndexOf(tab) + 1).ToList(), tab) : Task.FromResult(false);
+
+        // Tabs in the background with nothing unsaved go at once, not shown one by one to be asked about nothing; the others
+        // each the way the × closes one (CloseTab: shown, asked about), and a question cancelled stops the rest. The tab the
+        // menu was opened on is shown after.
+        private async Task<bool> CloseMany(List<DocumentTab> tabs, DocumentTab keep)
+        {
+            if (keep == null || !Tabs.Contains(keep)) return false;
+            foreach (var tab in tabs.Where(t => t != ActiveTab && (t.Pending || t.Saved)).ToList())
+            {
+                if (!Tabs.Contains(tab) || tab == ActiveTab) continue;
+                if (string.IsNullOrEmpty(tab.FilePath)) FileViewModel.AutoBackup.DeleteBackup(null, tab.DocumentId);
+                Tabs.Remove(tab);
+                recentTabs.Remove(tab);
+                if (tabBeforeNew == tab) tabBeforeNew = null;
+            }
+            foreach (var tab in tabs)
+            {
+                if (!Tabs.Contains(tab) || tab == keep) continue;
+                if (!await CloseTab(tab)) return false;
+            }
+            if (Tabs.Contains(keep) && keep != ActiveTab) await SwitchTo(keep);
+            return true;
+        }
+
         /// <summary>Asks to save every dirty tab (window close). Returns false if the user cancels.</summary>
         public async Task<bool> AskToSaveAll()
         {
