@@ -106,9 +106,7 @@ namespace Typedown.Core.Controls
             SetBrush("TabViewItemIconForegroundPressed", foreground);
             SetBrush("TabViewItemSeparator", border);
             SetBrush("TabViewBorderBrush", border);
-            // The tabs not shown have no edge: a tab dragged and let go stayed in a state that draws its edge, the shown
-            // tab's card's without its fill (the user's list, 2026-11-11, 7; TD01 on w10). Only the shown tab's card is edged.
-            SetBrush("TabViewItemBorderBrush", new SolidColorBrush(Colors.Transparent));
+            SetBrush("TabViewItemBorderBrush", border);
             SetBrush("TabViewSelectedItemBorderBrush", border);
             SetResource("TabViewSelectedItemBorderThickness", null);
 
