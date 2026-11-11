@@ -244,8 +244,12 @@ namespace Typedown.Core.Models
             try
             {
                 if (content == null) return;
-                if ((pending.Text != null && EqualsIgnoringTrailingNewlines(pending.Text, content)) ||
-                    (pending.Text == null && index > -1 && EqualsIgnoringTrailingNewlines(histories[index].Text, content)))
+                // A report that does not say what made it is no change when only the newlines at the end differ (the page's
+                // export settles them); an edit of the reader's is compared as it is: a line added or taken away at the end
+                // (Enter, Backspace) was never a step, and an undo then a redo lost it (the audit's 25, 2026-11-09).
+                bool Same(string text) => kind == EditKind.Unknown ? EqualsIgnoringTrailingNewlines(text, content) : string.Equals(text, content, StringComparison.Ordinal);
+                if ((pending.Text != null && Same(pending.Text)) ||
+                    (pending.Text == null && index > -1 && Same(histories[index].Text)))
                 {
                     return;
                 }
