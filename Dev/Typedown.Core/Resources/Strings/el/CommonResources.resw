@@ -1280,4 +1280,52 @@
     <value>Μπορούν να μεταφορτωθούν μόνο εικόνες από αυτόν τον υπολογιστή</value>
     <comment>图片右键菜单“上传图片”子菜单里的说明（不可点）：网络图片等不是本机文件的图片不能上传</comment>
   </data>
+  <data name="CopyAsMenu" xml:space="preserve">
+    <value>Αντιγραφή ως</value>
+    <comment>编辑区右键菜单的子菜单名：复制为（纯文本 / Markdown / HTML）</comment>
+  </data>
+  <data name="PlainTextFormat" xml:space="preserve">
+    <value>Απλό κείμενο</value>
+    <comment>“复制为”子菜单里的一项：纯文本</comment>
+  </data>
+  <data name="OpenLinkItem" xml:space="preserve">
+    <value>Άνοιγμα σύνδεσης</value>
+    <comment>右键点在链接上：打开链接</comment>
+  </data>
+  <data name="CopyLinkAddress" xml:space="preserve">
+    <value>Αντιγραφή διεύθυνσης σύνδεσης</value>
+    <comment>右键点在链接上：复制链接地址</comment>
+  </data>
+  <data name="RemoveLink" xml:space="preserve">
+    <value>Κατάργηση σύνδεσης</value>
+    <comment>右键点在链接上：去掉链接，保留文字</comment>
+  </data>
+  <data name="CopyCodeItem" xml:space="preserve">
+    <value>Αντιγραφή κώδικα</value>
+    <comment>右键点在代码块上：复制代码</comment>
+  </data>
+  <data name="CopyFormulaItem" xml:space="preserve">
+    <value>Αντιγραφή τύπου</value>
+    <comment>右键点在公式块上：复制公式（Markdown 和图片）</comment>
+  </data>
+  <data name="CopyDiagramItem" xml:space="preserve">
+    <value>Αντιγραφή διαγράμματος</value>
+    <comment>右键点在图表上：复制图表（Markdown 和图片）</comment>
+  </data>
+  <data name="ReviewAcceptHere" xml:space="preserve">
+    <value>Αποδοχή αυτής της αλλαγής</value>
+    <comment>审阅模式右键点在修订上：接受这处修订</comment>
+  </data>
+  <data name="ReviewRejectHere" xml:space="preserve">
+    <value>Απόρριψη αυτής της αλλαγής</value>
+    <comment>审阅模式右键点在修订上：拒绝这处修订</comment>
+  </data>
+  <data name="ReviewAcceptSource" xml:space="preserve">
+    <value>Αποδοχή όλων των αλλαγών από την ίδια πηγή</value>
+    <comment>审阅模式右键点在修订上：接受同一来源（程序、人）的全部修订</comment>
+  </data>
+  <data name="Recent.MenuHint" xml:space="preserve">
+    <value>Δεξί κλικ για περισσότερα· πατήστε Delete για να το αφαιρέσετε από τη λίστα</value>
+    <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
+  </data>
 </root>

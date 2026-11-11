@@ -254,6 +254,19 @@ namespace Typedown.Core.Controls
         public static Visibility TableMenuVisibility(bool inTable, bool sourceCode) => inTable && !sourceCode ? Visibility.Visible : Visibility.Collapsed;
 
         /// <summary>Paste as plain text: in the visual editor only (source mode has no paste-as, reading mode no paste).</summary>
-        public static Visibility IsPasteAsVisible(bool sourceCode, bool readOnly) => sourceCode || readOnly ? Visibility.Collapsed : Visibility.Visible;
+        public static Visibility IsPasteAsVisible(bool sourceCode, bool readOnly, bool onGhost) => sourceCode || readOnly || onGhost ? Visibility.Collapsed : Visibility.Visible;
+
+        /// <summary>Cut, paste and delete: not in reading mode, nor on a deleted block review mode draws (not the document's text).</summary>
+        public static Visibility EditVisibility(bool readOnly, bool onGhost) => readOnly || onGhost ? Visibility.Collapsed : Visibility.Visible;
+
+        /// <summary>A link's items: right-clicked on a link in the visual editor; <paramref name="editsOnly"/> (reading mode) hides the ones that change it.</summary>
+        public static Visibility LinkMenuVisibility(string link, bool sourceCode, bool editsOnly) => link != null && !sourceCode && !editsOnly ? Visibility.Visible : Visibility.Collapsed;
+
+        /// <summary>A formula's or a diagram's copy: right-clicked on that kind of block.</summary>
+        public static Visibility BlockMenuVisibility(string block, string kind, bool sourceCode) => block == kind && !sourceCode ? Visibility.Visible : Visibility.Collapsed;
+
+        /// <summary>The line under the object's items: there when one of them is.</summary>
+        public static Visibility ObjectGroupVisibility(bool inTable, string link, bool inCode, string block, bool onRevision, bool sourceCode) =>
+            !sourceCode && (inTable || link != null || inCode || block != null || onRevision) ? Visibility.Visible : Visibility.Collapsed;
     }
 }

@@ -49,6 +49,7 @@ function findAnchorBlock(blocks: any[], anchor: ScrollAnchor): { index: number, 
     return null
 }
 import transport, { beforeHostMessage } from "services/transport";
+import remote from "services/remote/common";
 import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
@@ -74,7 +75,7 @@ import { noteScroll, recentScrolls } from 'services/scrollWriters'
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults'
 import { previewOf } from 'services/findPreview'
 import { markStartup } from 'services/startupMarks'
-import { registerReviewView, reviewActive, reviewLabels } from 'services/reviewSession'
+import { actOnRevision, registerReviewView, reviewActive, reviewAtTarget, reviewLabels } from 'services/reviewSession'
 import { ghostsOf, leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
 import { ghostLayer, tagLayer } from 'services/reviewGhosts'
 import { wordingOf } from 'services/review'
@@ -799,6 +800,45 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         (editor as any)?.contentState.copyTableAtMenu()
     }), [editor]);
 
+    // The menu's items for the object right-clicked (ContextMenuTarget below): done on that element, as its own button or
+    // Ctrl+click does it.
+    useEffect(() => transport.addListener<{ action: string }>('ContextMenuAction', ({ action }) => {
+        const contentState = (editor as any)?.contentState
+        const kept = contentState?.contextMenuObject
+        if (!editor || !kept) return
+        if (action === 'reviewAccept' || action === 'reviewReject' || action === 'reviewAcceptSource') {
+            if (kept.review) actOnRevision(kept.review, action === 'reviewAccept' ? 'accept' : action === 'reviewReject' ? 'reject' : 'acceptSource')
+        } else if (action === 'copyCode') {
+            const pre = kept.pre && document.getElementById(kept.pre)
+            if (pre) contentState.copyCodeBlock({ target: pre })
+        } else if (action === 'copyBlock') {
+            const figure = kept.figure && document.getElementById(kept.figure)
+            if (figure) contentState.copyBlockToClipboard(figure, figure.querySelector(':scope > .ag-diagram-copy'))
+        } else if (action === 'openLink' || action === 'removeLink') {
+            const link = kept.link
+            if (!link) return
+            const block = contentState.getBlock(link.key)
+            const from = link.start, to = link.end, raw = link.raw
+            if (!block || !raw || !(to > from) || block.text.slice(from, to) !== raw) return
+            if (action === 'openLink') {
+                const href = link.href
+                if (!href) return
+                if (href.startsWith('#')) (editor as any).clickEvent.scrollToAnchor(href)
+                else remote.openNewWindow(href)
+                return
+            }
+            // The link's text kept, its address gone: "[text](url)" becomes "text" in the block's text.
+            const close = raw.lastIndexOf('](')
+            if (!raw.startsWith('[') || close < 1) return
+            const text = raw.slice(1, close)
+            block.text = block.text.slice(0, from) + text + block.text.slice(to)
+            const caret = { key: block.key, offset: from + text.length }
+            contentState.cursor = { start: caret, end: caret, anchor: caret, focus: caret }
+            contentState.render()
+            ;(editor as any).dispatchChange()
+        }
+    }), [editor]);
+
     // What a right-click is on, told the host as the button goes down: the host opens its context menu as the button
     // comes up, before the caret the click moved has been reported (SelectionChange), and its Copy table shows by this
     // (EditorViewModel.ContextMenuInTable). The page keeps the element for Copy table (ContentState.copyTableAtMenu).
@@ -809,7 +849,31 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             const target = event.target as Element | null
             const contentState = (editor as any).contentState
             if (contentState) contentState.contextMenuTarget = target
-            const report = { table: !!target?.closest?.('#ag-editor-id figure[data-role="TABLE"]') };
+            // What the menu's items act on, kept by what stays: the right-click moves the caret and the block it is in is
+            // drawn again, the element under the pointer with it - kept as an element, the item found it gone and did nothing.
+            if (contentState) {
+                const a = target?.closest?.('#ag-editor-id a[href]') as HTMLElement | null
+                const span = a?.closest('span[id].ag-paragraph')
+                contentState.contextMenuObject = {
+                    link: a && span ? { key: span.id, start: Number(a.dataset.start), end: Number(a.dataset.end), raw: a.dataset.raw || '', href: a.getAttribute('href') || '' } : null,
+                    pre: (target?.closest?.('#ag-editor-id pre[data-role]') as HTMLElement | null)?.id || null,
+                    figure: (target?.closest?.('#ag-editor-id figure[data-role]') as HTMLElement | null)?.id || null,
+                    review: reviewAtTarget(target)?.revision || null,
+                }
+            }
+            // The object under the pointer, for the menu's own items (the 2026-11-11 menu report): a link's address, a code
+            // block (not a diagram's or a formula's source), a display formula or a diagram (their copy button's copy).
+            const link = target?.closest?.('#ag-editor-id a[href]') as HTMLAnchorElement | null
+            const figure = target?.closest?.('#ag-editor-id figure[data-role]') as HTMLElement | null
+            const role = figure?.dataset?.role || ''
+            const report = {
+                table: !!target?.closest?.('#ag-editor-id figure[data-role="TABLE"]'),
+                link: link ? link.getAttribute('href') : null,
+                code: !figure && !!target?.closest?.('#ag-editor-id pre[data-role="fencecode"], #ag-editor-id pre[data-role="indentcode"]'),
+                block: role === 'MULTIPLEMATH' ? 'math' : /^(MERMAID|FLOWCHART|SEQUENCE|PLANTUML|VEGA-LITE)$/.test(role) ? 'diagram' : null,
+                // Review mode: the revision under the pointer, and whether it is a deleted block drawn where it was.
+                review: reviewAtTarget(target),
+            };
             (window as any).__typedownContextMenuTarget = report
             transport.postMessage('ContextMenuTarget', report)
         }
