@@ -24,6 +24,11 @@ namespace Typedown.Core.Utilities
         /// </summary>
         public static async Task<T> ShowAsync<T>(Func<Windows.Foundation.IAsyncOperation<T>> pick) where T : class
         {
+            // Every picker shown, with what asked for it, in the log: an open dialog came up now and then while a tab was
+            // dragged, and File > Open's own line never came with it (the user, 2026-11-11 and 12).
+            Log.Debug("picker: shown, asked by " + string.Join(" < ", new System.Diagnostics.StackTrace(1).GetFrames()
+                .Select(f => f.GetMethod()).Where(m => m?.DeclaringType?.Namespace?.StartsWith(typeof(FilePickersExtensions).Namespace.Split('.')[0]) == true)
+                .Select(m => m.DeclaringType.Name + "." + m.Name).Take(8)));
             try
             {
                 return await pick();

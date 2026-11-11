@@ -370,12 +370,7 @@ namespace Typedown.Core.ViewModels
         /// <param name="preview">Single-click open from the file tree: reuse the current preview tab instead of adding one.</param>
         public async Task<bool> OpenFile(string filePath = null, bool preview = false)
         {
-            // The open dialog with what asked for it, in the log: it came up now and then while a tab was dragged, with no
-            // way seen to it (the user, 2026-11-11).
-            if (filePath == null)
-                Log.Debug("open: the file dialog, asked by " + string.Join(" < ", new System.Diagnostics.StackTrace(1).GetFrames()
-                    .Select(f => f.GetMethod()).Where(m => m?.DeclaringType?.Namespace?.StartsWith(typeof(FileViewModel).Namespace.Split('.')[0]) == true)
-                    .Select(m => m.DeclaringType.Name + "." + m.Name).Take(8)));
+            // The picker says in the log what asked for it (FilePickersExtensions.ShowAsync).
             filePath ??= await AppViewModel.MainWindow.PickMarkdownFileAsync();
             if (filePath == null)
                 return false;

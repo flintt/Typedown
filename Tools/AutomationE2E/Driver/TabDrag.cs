@@ -14,6 +14,74 @@ using System.Windows.Automation;
 /// </summary>
 internal static partial class Program
 {
+    /// <summary>
+    /// TD02: a tab dragged out of the strip and let go over the document, lower in it, over the status bar and over the
+    /// title bar opens no dialog and adds or loses no tab (the user, 2026-11-11 and 12: an open dialog came up now and
+    /// then as a tab was dragged). Each place dragged to twice, slowly and quickly.
+    /// </summary>
+    private static async Task TD02(List<string> notes)
+    {
+        var folder = FixtureFolder("td02");
+        var paths = Enumerable.Range(1, 2).Select(i => Path.Combine(folder, $"td02-{i}.md")).ToList();
+        for (var i = 0; i < paths.Count; i++) File.WriteAllText(paths[i], $"# td02 document {i + 1}\n\nSome text.\n");
+        using var c = await Session("e2e TD02");
+        var ids = new List<string>();
+        foreach (var path in paths) ids.Add(await Open(c, path));
+        var windowId = await WindowIdOf(c, ids[0]);
+        var window = await WindowOf(windowId, c);
+        await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = true });
+        List<AutomationElement> Tabs() => Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>()
+            .Where(t => t.Current.Name.Contains("td02-")).ToList();
+        // The host's windows other than its main one: a dialog (#32770, the file pickers' class) or any window come up.
+        List<string> Others() => AutomationElement.RootElement.FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.ProcessIdProperty, hostPid)).Cast<AutomationElement>()
+            .Where(w => new IntPtr(w.Current.NativeWindowHandle) != window && !w.Current.IsOffscreen && w.Current.BoundingRectangle.Width > 50)
+            .Select(w => $"{w.Current.ClassName} '{w.Current.Name}'").ToList();
+        try
+        {
+            await Eventually(() => Task.FromResult(Tabs().Count == 2), 8000);
+            var before = Others();
+            notes.Add("other windows before: " + (before.Count == 0 ? "none" : string.Join(", ", before)));
+            var bounds = AutomationElement.FromHandle(window).Current.BoundingRectangle;
+            var places = new (string name, int x, int y)[]
+            {
+                ("the document", (int)(bounds.Left + bounds.Width / 2), (int)(bounds.Top + bounds.Height / 3)),
+                ("low in the document", (int)(bounds.Left + bounds.Width / 2), (int)(bounds.Bottom - 80)),
+                ("the status bar", (int)(bounds.Left + bounds.Width / 2), (int)(bounds.Bottom - 12)),
+                ("the left of the document", (int)(bounds.Left + 60), (int)(bounds.Top + bounds.Height / 2)),
+                ("the title bar", (int)(bounds.Left + bounds.Width / 2), (int)(bounds.Top + 14)),
+            };
+            var found = new List<string>();
+            foreach (var place in places)
+                foreach (var steps in new[] { 20, 5 })
+                {
+                    var tab = Tabs().First();
+                    await Drag(window, CenterOf(tab), (place.x, place.y), steps: steps);
+                    await Task.Delay(1200);
+                    var others = Others().Except(before).ToList();
+                    var count = Tabs().Count;
+                    if (others.Count > 0 || count != 2)
+                    {
+                        found.Add($"{place.name} ({steps} steps): {string.Join(", ", others)}; {count} tabs");
+                        notes.Add($"let go over {place.name} ({steps} steps): " + Screenshot($"td02-{found.Count}"));
+                        for (var i = 0; i < 2; i++) { Send(Key(0x1B, false), Key(0x1B, true)); await Task.Delay(400); }
+                    }
+                }
+            notes.Add(found.Count == 0 ? "nothing came up" : "came up: " + string.Join("; ", found));
+            Check(found.Count == 0, $"a tab let go outside the strip opens nothing and keeps the tabs ({string.Join("; ", found)})");
+        }
+        finally
+        {
+            try
+            {
+                foreach (var d in ((Newtonsoft.Json.Linq.JArray)(await c.Call("document.list", new { windowId }))["documents"]!).Select(d => (string)d["documentId"]!))
+                    if (!ids.Contains(d)) ids.Add(d);
+            }
+            catch { }
+            foreach (var id in ids) try { await c.Call("document.close", new { documentId = id }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
+        }
+    }
+
     private static async Task TD01(List<string> notes)
     {
         var folder = FixtureFolder("td01");
@@ -180,9 +248,51 @@ internal static partial class Program
                 $"the tab shown, dragged, looks as it did ({Show(shownAfter)} against {Show(shownBefore)})");
             Check(Near(otherAfter.back, otherBefore.back) && Near(otherAfter.text, otherBefore.text),
                 $"and the other tabs as they did ({Show(otherAfter)} against {Show(otherBefore)})");
+
+            // Dragged again at once, twice (within the 700 ms after a move in which the tabs' states are put back): each
+            // move taken (the user, 2026-11-12: after a drop no tab could be dragged any more).
+            for (var round = 1; round <= 2; round++)
+            {
+                var was = Tabs().Select(t => t.Current.Name).ToList();
+                var head = Tabs().First();
+                var end = Tabs().Last().Current.BoundingRectangle;
+                var at = CenterOf(head);
+                await Drag(window, at, ((int)(end.Right - 6), at.Item2), steps: 12);
+                await Task.Delay(round == 1 ? 150 : 600);
+                var now2 = Tabs().Select(t => t.Current.Name).ToList();
+                notes.Add($"drag again {round}: {string.Join(" | ", now2)}");
+                Check(now2.Count == 3 && now2[2] == was[0], $"a tab dragged again right after a drop moves ({round}: {string.Join(" | ", was)} -> {string.Join(" | ", now2)})");
+            }
+
+            // A new tab after the drags: beside the others, not over them, and the + after it (the user, 2026-11-12: a
+            // new tab went over others once the strip was held to the tabs' width).
+            SetCursorPos(editor.Item1, editor.Item2 + 160);
+            await Task.Delay(400);
+            var addButton = FindIn(window, "AddButton");
+            Check(addButton != null, "the + is there");
+            if (addButton != null)
+            {
+                Invoke(addButton);
+                await Task.Delay(1500);
+                var all = Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>()
+                    .Select(t => (name: t.Current.Name, r: t.Current.BoundingRectangle)).Where(t => !t.r.IsEmpty && t.r.Width > 0).OrderBy(t => t.r.Left).ToList();
+                notes.Add("after +: " + string.Join(" | ", all.Select(t => $"{t.name} {t.r.Left:0}-{t.r.Right:0}")));
+                var overlaps = all.Zip(all.Skip(1), (a, b) => (a, b)).Where(p => p.b.r.Left < p.a.r.Right - 2).Select(p => $"{p.a.name} / {p.b.name}").ToList();
+                Check(all.Count == 4 && overlaps.Count == 0, $"four tabs side by side, none over another ({all.Count} tabs; over: {string.Join(", ", overlaps)})");
+                var plus = FindIn(window, "AddButton")?.Current.BoundingRectangle;
+                notes.Add($"+ at {plus?.Left:0}, the last tab ends at {all.LastOrDefault().r.Right:0}");
+                Check(plus != null && all.Count > 0 && plus.Value.Left >= all.Last().r.Right - 2 && plus.Value.Left <= all.Last().r.Right + 40,
+                    $"the + right after the last tab ({plus?.Left:0} against {all.LastOrDefault().r.Right:0})");
+            }
         }
         finally
         {
+            try
+            {
+                foreach (var d in ((Newtonsoft.Json.Linq.JArray)(await c.Call("document.list", new { windowId }))["documents"]!).Select(d => (string)d["documentId"]!))
+                    if (!ids.Contains(d)) ids.Add(d);
+            }
+            catch { }
             foreach (var id in ids) try { await c.Call("document.close", new { documentId = id }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
         }
