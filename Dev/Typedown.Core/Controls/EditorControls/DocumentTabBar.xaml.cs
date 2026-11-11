@@ -106,7 +106,9 @@ namespace Typedown.Core.Controls
             SetBrush("TabViewItemIconForegroundPressed", foreground);
             SetBrush("TabViewItemSeparator", border);
             SetBrush("TabViewBorderBrush", border);
-            SetBrush("TabViewItemBorderBrush", border);
+            // The tabs not shown have no edge: a tab dragged and let go stayed in a state that draws its edge, the shown
+            // tab's card's without its fill (the user's list, 2026-11-11, 7; TD01 on w10). Only the shown tab's card is edged.
+            SetBrush("TabViewItemBorderBrush", new SolidColorBrush(Colors.Transparent));
             SetBrush("TabViewSelectedItemBorderBrush", border);
             SetResource("TabViewSelectedItemBorderThickness", null);
 
@@ -220,6 +222,14 @@ namespace Typedown.Core.Controls
             if (e.RemovedItems.Any(x => x is DocumentTab gone && !Tabs.Tabs.Contains(gone)))
             {
                 if (TabView.SelectedItem != Tabs.ActiveTab) TabView.SelectedItem = Tabs.ActiveTab;
+                return;
+            }
+            // The tab shown taken out of the strip for a moment - a drag takes it out and puts it in again - and the selection gone
+            // to a neighbour meanwhile: not a choice of the reader's, nothing is shown for it (the log of TD01 on w10: the
+            // switch to the neighbour went out while the tab shown was out, and it was shown). Put back once it is in.
+            if (!Tabs.Tabs.Contains(Tabs.ActiveTab))
+            {
+                Log.Debug("tabs: the tab shown is out of the strip for a moment; the selection is not a switch");
                 return;
             }
             // The tab shown dragged to another place: taken out of the strip and put back, its selection went to a neighbour,
