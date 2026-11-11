@@ -374,7 +374,7 @@ namespace Typedown.Core.ViewModels
             // way seen to it (the user, 2026-11-11).
             if (filePath == null)
                 Log.Debug("open: the file dialog, asked by " + string.Join(" < ", new System.Diagnostics.StackTrace(1).GetFrames()
-                    .Select(f => f.GetMethod()).Where(m => m?.DeclaringType?.Namespace?.StartsWith("Typedown") == true || m?.DeclaringType?.Namespace?.StartsWith("Typeleaf") == true)
+                    .Select(f => f.GetMethod()).Where(m => m?.DeclaringType?.Namespace?.StartsWith(typeof(FileViewModel).Namespace.Split('.')[0]) == true)
                     .Select(m => m.DeclaringType.Name + "." + m.Name).Take(8)));
             filePath ??= await AppViewModel.MainWindow.PickMarkdownFileAsync();
             if (filePath == null)
