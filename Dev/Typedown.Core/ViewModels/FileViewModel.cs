@@ -227,7 +227,7 @@ namespace Typedown.Core.ViewModels
             var tabs = TabsViewModel;
             if (tabs != null)
                 foreach (var tab in tabs.Tabs)
-                    if (tab != tabs.ActiveTab && !tab.Saved && !string.IsNullOrWhiteSpace(tab.Markdown) && tab.BackupHash != tab.CurrentHash)
+                    if (tab != tabs.ActiveTab && !tab.Saved && WorthBackup(tab.FilePath, tab.Markdown) && tab.BackupHash != tab.CurrentHash)
                         ok = false;
             Log.Debug($"keep unsaved on close: {(ok ? "every unsaved document backed up" : "one could not be backed up; asking")}");
             return ok;
@@ -236,10 +236,17 @@ namespace Typedown.Core.ViewModels
         /// <summary>Whether the save timer is in a tick (a tick that never finishes stops all later backups).</summary>
         public bool SaveTimerBusy => saveTimerRunning;
 
+        /// <summary>
+        /// Whether unsaved text is backed up: a file's always, emptied or blank too - that is a change from the disk, and
+        /// skipped it was lost (the backup deleted, or an older one kept) and the file came back as it was (the audit's
+        /// A04); an untitled document's only when it holds something (an emptied new document is nothing to bring back).
+        /// </summary>
+        private static bool WorthBackup(string path, string text) => !string.IsNullOrEmpty(path) || !string.IsNullOrWhiteSpace(text);
+
         private async Task<bool> AutoBackupFile()
         {
             var active = TabsViewModel?.ActiveTab;
-            if (EditorViewModel.FileHash != EditorViewModel.CurrentHash && !string.IsNullOrWhiteSpace(EditorViewModel.Markdown))
+            if (EditorViewModel.FileHash != EditorViewModel.CurrentHash && WorthBackup(FilePath, EditorViewModel.Markdown))
             {
                 var backedHash = EditorViewModel.CurrentHash;
                 var ok = await AutoBackup.Backup(FilePath, EditorViewModel.Markdown, active?.DocumentId);
@@ -266,7 +273,7 @@ namespace Typedown.Core.ViewModels
             {
                 if (tab == tabs.ActiveTab)
                     continue;
-                if (!tab.Saved && !string.IsNullOrWhiteSpace(tab.Markdown))
+                if (!tab.Saved && WorthBackup(tab.FilePath, tab.Markdown))
                 {
                     // Capture text and its hash together before the await; switching into this tab, editing and
                     // switching away could otherwise update the snapshot to a hash that never reached disk.
@@ -406,7 +413,18 @@ namespace Typedown.Core.ViewModels
                 if (TabsViewModel != null && !(preview ? TabsViewModel.CanReuseActiveTabForPreview : TabsViewModel.IsActiveTabBlank))
                     startedTab = TabsViewModel.BeginNewTab();
                 var openedAt = System.Diagnostics.Stopwatch.StartNew();
+                // The tab the file goes into: the one begun for it, or the one shown that it reuses.
+                var openingTab = startedTab ?? TabsViewModel?.ActiveTab;
                 var (text, format) = await TextFileFormat.ReadAsync(path);
+                // Another tab shown while the file was read (a slow disk, a share): the file is not put into it - it took
+                // that tab's path, text and undo history and marked it saved (the audit's A08). The open is dropped, and a
+                // tab begun for it with it.
+                if (TabsViewModel != null && TabsViewModel.ActiveTab != openingTab)
+                {
+                    Log.Debug($"open {System.IO.Path.GetFileName(path)}: another tab was shown while it was read; not opened");
+                    TabsViewModel.DropNewTab(startedTab);
+                    return false;
+                }
                 EditionHooks.ReportDocumentOnDisk(path, text, written: false);
                 // Read: the reused tab now holds another document.
                 if (startedTab == null) TabsViewModel?.ActiveTab?.BecomeNewDocument();
@@ -881,14 +899,27 @@ namespace Typedown.Core.ViewModels
             {
                 if (!disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
                 {
-                    await EditorViewModel.FlushContentAsync(keepSource: true);
+                    // As a save by hand: the page given longer once more, and nothing written if it still did not hand over
+                    // its text - the host's copy may be older than the screen, and was written and marked saved (the audit's A09).
+                    var flushed = await EditorViewModel.FlushContentAsync(keepSource: true);
+                    if (!flushed && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
+                        flushed = await EditorViewModel.FlushContentAsync(timeoutMs: 8000, keepSource: true);
                     if (disposables.IsDisposed || FilePath != originalPath || TabsViewModel?.ActiveTab != originalTab)
                         return null;
+                    if (!flushed)
+                    {
+                        Log.Debug($"save as: the editor did not hand over its text (load {EditorViewModel.LoadId}); {targetPath} not written");
+                        var reason = new TimeoutException("the editor did not hand over its latest text in time; nothing was written").Message;
+                        await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), reason, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                        return null;
+                    }
                     var markdown = EditorViewModel.Markdown;
                     var hash = Common.SimpleHash(markdown);
                     var imagesBefore = ImageBasePath;
                     var result = await WriteAllText(targetPath, markdown);
-                    if (result && !disposables.IsDisposed && FilePath == originalPath)
+                    // The tab too, not only the path: two untitled documents both have none, and a switch from one to the
+                    // other during the write gave the other this file's path and hash (the audit's A07).
+                    if (result && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
                     {
                         CopyPicturesAlong(markdown, imagesBefore, Path.GetDirectoryName(targetPath));
                         FilePath = targetPath;
