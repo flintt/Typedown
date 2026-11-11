@@ -48,6 +48,11 @@ namespace Typedown.Core.ViewModels
         public string ContextMenuLink { get; set; }
         public bool ContextMenuInCode { get; set; }
         public string ContextMenuBlock { get; set; }
+        // The same as flags, for the menu's bindings: x:Bind does not call a function whose argument is null, and the link's
+        // items stayed on the menu of the next right-click elsewhere (XM01 on w10: a code block's menu had them).
+        public bool ContextMenuOnLink { get; set; }
+        public bool ContextMenuOnMath { get; set; }
+        public bool ContextMenuOnDiagram { get; set; }
         /// <summary>
         /// Review mode (the same report): the right-click was on a revision (the menu's Accept this, Reject this, Accept all
         /// from its source), or on a deleted block drawn where it was - not the document's text, nothing there to edit.
@@ -173,6 +178,9 @@ namespace Typedown.Core.ViewModels
                 ContextMenuLink = x.Args?["link"]?.Type == JTokenType.String ? x.Args["link"].ToString() : null;
                 ContextMenuInCode = x.Args?["code"]?.Value<bool>() ?? false;
                 ContextMenuBlock = x.Args?["block"]?.Type == JTokenType.String ? x.Args["block"].ToString() : null;
+                ContextMenuOnLink = ContextMenuLink != null;
+                ContextMenuOnMath = ContextMenuBlock == "math";
+                ContextMenuOnDiagram = ContextMenuBlock == "diagram";
                 var review = x.Args?["review"] as JObject;
                 ContextMenuOnRevision = review?["revision"]?.Type == JTokenType.String;
                 ContextMenuOnGhost = review?["ghost"]?.Value<bool>() ?? false;
