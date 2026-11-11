@@ -19,7 +19,7 @@
     <MenuFlyoutSubItem x:Name="UploadSubMenu" Text="{u:LocaleString Key=UploadImage}">
         <!-- A picture from the web, or not a file: nothing to upload, and the menu says so (the report's M04: the entries
              were there and did nothing). -->
-        <MenuFlyoutItem x:Name="UploadLocalOnlyItem" AutomationProperties.AutomationId="UploadLocalOnlyItem" Text="{u:LocaleString Key=UploadImage.LocalOnly}" IsEnabled="False"/>
+        <MenuFlyoutItem x:Name="UploadLocalOnlyItem" AutomationProperties.AutomationId="UploadLocalOnlyItem" Text="{u:LocaleString Key=UploadImageLocalOnly}" IsEnabled="False"/>
         <MenuFlyoutItem x:Name="NoUploadConfigItem" Text="{u:LocaleString Key=NoImageUploadConfiguration}" IsEnabled="False"/>
         <MenuFlyoutSeparator/>
         <MenuFlyoutItem Text="{u:LocaleString Key=ImageUploadSettings}" Click="OnImageUploadSettingsClick"/>

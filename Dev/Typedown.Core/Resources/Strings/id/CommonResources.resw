@@ -1276,7 +1276,7 @@
     <value>Tampilkan di bilah samping</value>
     <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
   </data>
-  <data name="UploadImage.LocalOnly" xml:space="preserve">
+  <data name="UploadImageLocalOnly" xml:space="preserve">
     <value>Hanya gambar di komputer ini yang dapat diunggah</value>
     <comment>图片右键菜单“上传图片”子菜单里的说明（不可点）：网络图片等不是本机文件的图片不能上传</comment>
   </data>
