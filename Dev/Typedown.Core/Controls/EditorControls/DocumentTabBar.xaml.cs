@@ -380,6 +380,9 @@ namespace Typedown.Core.Controls
                 var common = VisualStateManager.GoToState(item, item.IsSelected ? "Selected" : "Normal", false);
                 VisualStateManager.GoToState(item, "NotDragging", false);
                 VisualStateManager.GoToState(item, "NoReorderHint", false);
+                // The edge a dropped tab kept: its drag-and-drop look, a group of the tab's own with no state set after the
+                // drop (the log of TD01 on w10: "-" for the tab dropped, DragDropVisualNotVisible for the others).
+                VisualStateManager.GoToState(item, "DragDropVisualNotVisible", false);
                 // Which states it is in, by group, for the log: what keeps a dropped tab's edge.
                 if (VisualTreeHelper.GetChildrenCount(item) > 0 && VisualTreeHelper.GetChild(item, 0) is FrameworkElement root)
                     Log.Debug($"tabs: {tab.Title} states {string.Join(", ", VisualStateManager.GetVisualStateGroups(root).Select(g => g.Name + "=" + (g.CurrentState?.Name ?? "-")))} (to {(item.IsSelected ? "Selected" : "Normal")}: {common})");
