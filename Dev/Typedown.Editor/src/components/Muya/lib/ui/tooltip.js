@@ -17,23 +17,23 @@ class Tooltip {
     if (toolTipTarget && !this.cache.has(toolTipTarget)) {
       const { eventCenter } = this.muya
       const eventId = eventCenter.attachDOMEvent(toolTipTarget, 'mouseleave', this.mouseLeave.bind(this))
-      this.cache.set(toolTipTarget, eventId)
       const tooltip = toolTipTarget.getAttribute('data-tooltip')
       const boundingClientRect = toolTipTarget.getBoundingClientRect()
       transport.postMessage('OpenToolTip', { open: true, tooltip, boundingClientRect })
+      // Watching for the target taken out of the page while the pointer is on it; cleared when the pointer leaves too -
+      // it was cleared only when the target went, one more 300 ms timer at every hover (the audit's P06).
       const timer = setInterval(() => {
-        if (!document.body.contains(toolTipTarget)) {
-          this.mouseLeave({ target: toolTipTarget })
-          clearInterval(timer)
-        }
+        if (!document.body.contains(toolTipTarget)) this.mouseLeave({ target: toolTipTarget })
       }, 300)
+      this.cache.set(toolTipTarget, { eventId, timer })
     }
   }
 
   mouseLeave({ target }) {
     if (this.cache.has(target)) {
       const { eventCenter } = this.muya
-      const eventId = this.cache.get(target);
+      const { eventId, timer } = this.cache.get(target)
+      clearInterval(timer)
       eventCenter.detachDOMEvent(eventId)
       transport.postMessage('OpenToolTip', { open: false });
       this.cache.delete(target)

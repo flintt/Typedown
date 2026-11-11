@@ -1028,6 +1028,19 @@ class Muya {
     this.imageSelector.destroy()
     this.imageToolbar.destroy()
     this.tableBarTools.destroy()
+    // Every other floating tool a plugin made: the footnote tool was left, one more each switch to source mode and back
+    // with the editor's state held by it (160,000 characters, five switches: 16.6 MB to 35.5 MB - the audit's P04).
+    // quickInsert and tablePicker stay as they were (their destroy is not called above either).
+    const done = new Set(['codePicker', 'emojiPicker', 'listDrag', 'frontMenu', 'imageSelector', 'imageToolbar', 'tableBarTools', 'quickInsert', 'tablePicker'])
+    for (const { plugin } of Muya.plugins) {
+      const name = plugin.pluginName
+      if (done.has(name) || typeof this[name]?.destroy !== 'function') continue
+      try {
+        this[name].destroy()
+      } catch (e) {
+        console.warn(`muya: destroying ${name}`, e)
+      }
+    }
     this.isDestroyed = true
   }
 }

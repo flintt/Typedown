@@ -243,9 +243,16 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             const at = matchs.find(m => m.index >= from) ?? matchs[0]
             chosen = [at]
         }
+        // A regular expression's groups put in, each match its own ($0 the match, $1.. its groups; \$ a dollar), as the
+        // visual editor does - they went in as they were (the audit's E06).
+        const regexp = !!last.opt?.searchIsRegexp
+        const expand = (m: any) => !regexp ? value : value.replace(/(?<!\\)\$(\d)/g, (whole: string, d: string) => {
+            const n = parseInt(d)
+            return n === 0 ? m.match : (n <= (m.subMatches?.length ?? 0) ? (m.subMatches[n - 1] ?? '') : whole)
+        })
         let out = '', pos = 0, lastEnd = 0
         for (const m of chosen) {
-            out += text.substring(pos, m.index) + value
+            out += text.substring(pos, m.index) + expand(m)
             lastEnd = out.length
             pos = m.index + m.match.length
         }

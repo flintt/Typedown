@@ -99,7 +99,7 @@ interface IMuyaEditor {
     scrollToChangeRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** The shell puts a function here that reports the current text at once, for saves and exports. */
-    flushRef?: React.MutableRefObject<((opts?: { ifPending?: boolean, keepSource?: boolean }) => void) | null>
+    flushRef?: React.MutableRefObject<((opts?: { ifPending?: boolean, keepSource?: boolean, modeSwitch?: boolean }) => void) | null>
     /** Set to what finishes a load whose caret is still to come, now (Muya.finishLoadNow). */
     finishLoadRef?: React.MutableRefObject<(() => void) | null>
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
@@ -171,23 +171,33 @@ function keptSource(muya: any, imported: { source: string, normalized: string },
         sourceLines.set(imported, lines)
     }
     let merged: string | null
+    // Whether a text reads back as the export: the same merged text was asked about three times on the way that keeps the
+    // source, a whole parse each (8 keys in a 149,000-character document: 24 parses, ~62 ms a key - the audit's P02).
+    let askedText: string | null = null, askedAnswer = false
+    const readsBack = (text: string) => {
+        if (text !== askedText) {
+            askedText = text
+            askedAnswer = muya.normalizeMarkdown(text) === markdown
+        }
+        return askedAnswer
+    }
     try {
         const current = splitLines(markdown)
         merged = mergeSource(lines.source, lines.base, current, lines.toSource)
         // A list numbered the document's way that does not read back the same (its first number changed): as Muya
         // numbers it, the rest of the source still kept.
-        if (merged != null && muya.normalizeMarkdown(merged) !== markdown) {
+        if (merged != null && !readsBack(merged)) {
             const plain = mergeSource(lines.source, lines.base, current, lines.toSource, false)
-            if (plain != null && muya.normalizeMarkdown(plain) === markdown) merged = plain
+            if (plain != null && readsBack(plain)) merged = plain
         }
         // Footnote definitions where the source has them: Muya writes them all at the end, and the merge could not keep
         // one an edit was next to (or of) - it came out moved, the paragraph after it before it.
-        if (merged == null || muya.normalizeMarkdown(merged) !== markdown) {
+        if (merged == null || !readsBack(merged)) {
             const kept = mergeKeepingNotes(lines.source, lines.base, current)
-            if (kept != null && muya.normalizeMarkdown(kept) === markdown) merged = kept
+            if (kept != null && readsBack(kept)) merged = kept
         }
         if (merged == null) return withSourceEnd(muya, imported.source, markdown, markdown)
-        if (muya.normalizeMarkdown(merged) !== markdown) {
+        if (!readsBack(merged)) {
             sourceKept.fellBack++
             sourceKept.last = 'fell back: the merge did not read back as the export'
             return markdown
@@ -1261,9 +1271,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // ifPending: only a report still due (the host's FlushContent once the load is reported). keepSource: a document
         // past KEEP_SOURCE_UP_TO and edited is reported again with the reader's own text kept (a save they asked for, a
         // close); any other flush as with ifPending.
-        const flush = (opts?: { ifPending?: boolean, keepSource?: boolean }) => {
+        // modeSwitch: the visual editor about to give way to source mode - a long edited document's own text kept too, as a
+        // save keeps it: handed over as Muya writes it, source mode took that and the compact tables and the blank lines
+        // after headings it had not edited were gone for good (the audit's E04); a full flush otherwise, as before.
+        const flush = (opts?: { ifPending?: boolean, keepSource?: boolean, modeSwitch?: boolean }) => {
             const imported = importedRef.current
-            if (opts?.keepSource && imported && imported.source.length > KEEP_SOURCE_UP_TO && markdownRef.current !== imported.source) {
+            if ((opts?.keepSource || opts?.modeSwitch) && imported && imported.source.length > KEEP_SOURCE_UP_TO && markdownRef.current !== imported.source) {
                 keepSourceAnyLength = true
                 try {
                     editor.flushContentChange()

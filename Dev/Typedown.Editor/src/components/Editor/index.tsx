@@ -85,7 +85,7 @@ const Editor: React.FC = () => {
     // replacements (LoadFile/SetMarkdown/ImportFile) bump `contentVersion` to push new text into the editor.
     const markdownRef = useRef<string>();
     // Reporting the text is throttled while typing; this runs it now (see Muya's flushContentChange).
-    const flushRef = useRef<((opts?: { ifPending?: boolean, keepSource?: boolean }) => void) | null>(null);
+    const flushRef = useRef<((opts?: { ifPending?: boolean, keepSource?: boolean, modeSwitch?: boolean }) => void) | null>(null);
     // Finishes a load whose caret is placed in the next frame (Muya, finishLoadNow) at once.
     const finishLoadRef = useRef<(() => void) | null>(null);
     const cursorRef = useRef<any>();
@@ -626,7 +626,7 @@ const Editor: React.FC = () => {
             caretTopRef.current = top === null ? null : { top, source: !!newOptions.sourceCode, loadId: loadIdRef.current }
         }
         // Finish any throttled edit before changing mode or unmounting its editor.
-        if ('sourceCode' in newOptions || 'readOnly' in newOptions) flushRef.current?.()
+        if ('sourceCode' in newOptions || 'readOnly' in newOptions) flushRef.current?.({ modeSwitch: !!newOptions.sourceCode && !was?.sourceCode })
         for (const name in newOptions) {
             const value = newOptions[name];
             if (name.startsWith('search'))
