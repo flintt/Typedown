@@ -30,6 +30,15 @@ describe('mergeSource', () => {
     const source = '# T\n\n|a|b|\n|-|-|\n|1|22|\n\nSome text.\n'
     const base = '# T\n\n| a   | b   |\n| --- | --- |\n| 1   | 22  |\n\nSome text.\n'
 
+    // A quotation's lazy line (no "> "): the quotation edited, the lazy line not - it keeps no "> " (review-matrix, lazy
+    // quote: review mode showed the "> " as the reader's change).
+    it("keeps a quotation's lazy line as the source writes it when the quotation is edited", () => {
+        const lazySource = '# Q\n\n> quoted line\nlazy continuation\n\nAfter.\n'
+        const lazyBase = '# Q\n\n> quoted line\n> lazy continuation\n\nAfter.\n'
+        const current = lazyBase.replace('quoted line', 'quoted line now')
+        expect(merge(lazySource, lazyBase, current)).toBe(lazySource.replace('quoted line', 'quoted line now'))
+    })
+
     it('keeps the source where the export did not change', () => {
         const current = base.replace('Some text.', 'Some more text.')
         expect(merge(source, base, current)).toBe('# T\n\n|a|b|\n|-|-|\n|1|22|\n\nSome more text.\n')

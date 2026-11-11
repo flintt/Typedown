@@ -196,6 +196,15 @@ function asSourceRow(row: string, sourceRows: string[]): string {
  * taken from the source where the source has it written its own way (fenceKey); a blank line Muya added where the source
  * has none dropped. `kept`: something of the source's own writing is in it.
  */
+// A source line the base writes as it is, or a quotation's lazy line: the source leaves its "> " out, Muya writes it
+// ("> a\nb" is one paragraph in the quotation since afd0b95f; editing it put "> " before b, a change review mode showed
+// as the reader's - review-matrix, lazy quote). Whatever is kept so is read back before it is used (keptSource).
+const sameLine = (sourceLine: string, baseLine: string) => {
+    const key = fenceKey(sourceLine)
+    if (key === fenceKey(baseLine)) return true
+    return !/^ {0,3}>/.test(sourceLine) && sourceLine.trim() !== '' && /^( {0,3}> ?)+/.test(baseLine) && key === fenceKey(baseLine.replace(/^( {0,3}> ?)+/, ''))
+}
+
 export function editedRegion(source: string[], base: string[], current: string[]): { lines: string[], kept: boolean, origins: number[] } {
     const toCurrent = alignment(base, current)
     // The base lines' own source lines, in order, by fenceKey; blank lines only to blank lines.
@@ -203,9 +212,9 @@ export function editedRegion(source: string[], base: string[], current: string[]
     let from = 0
     for (let b = 0; b < base.length; b++) {
         for (let x = from; x < source.length; x++) {
-            if (fenceKey(source[x]) === fenceKey(base[b])) { toSource[b] = x; from = x + 1; break }
+            if (sameLine(source[x], base[b])) { toSource[b] = x; from = x + 1; break }
             // Only past lines the source has that the base does not (a line of the source's own): no further.
-            if (source[x].trim() && base.slice(b).some(l => fenceKey(l) === fenceKey(source[x]))) break
+            if (source[x].trim() && base.slice(b).some(l => sameLine(source[x], l))) break
         }
     }
     // A blank line is Muya's own only against a source with writing in it and no blank line (a lazy line after a
