@@ -56,6 +56,8 @@ interface ICodeMirrorEditor {
     cursor: any
     /** Incremented by the container whenever the host replaces the content; forces the effect below to re-check. */
     contentVersion?: number
+    /** The host's load of the document shown: a new one is another document (its own undo history). */
+    loadId?: number
     options: any
     searchOpen: number
     searchArg: { value: string, opt: any } | undefined
@@ -81,6 +83,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     const [editor, setEditor] = useState<any>();
     const [marginTop, setMarginTop] = useState(0);
     const matchsRef = useRef<any[]>([]);
+    // The load whose text the undo history belongs to.
+    const historyLoadIdRef = useRef<number | undefined>(undefined);
     const matchIndexRef = useRef(0);
     const markdownRef = useRef('');
     const searchArgRef = useRef<any>();
@@ -222,36 +226,36 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         noteFindChange()
     }, [setMatchSelection, remark])
 
-    const replaceOne = useCallback((match, replaceValue, offset = 0) => {
-        const text = editor.getValue();
-        const start = match.index + offset;
-        const end = start + match.match.length;
-        const value = text.substring(0, start) + replaceValue + text.substring(end);
-        editor.setValue(value);
-        return replaceValue.length - match.match.length;
-    }, [editor])
-
+    // Replace works on the matches of the text as it is now, found again from the last search: positions kept from
+    // that search went stale at any edit - a second Replace All cut "X X END" to "X X", typing before a match replaced
+    // the wrong place (the audit's E02). All of them in one change, not the whole text set once per match (P01: a
+    // thousand matches took 20 s).
     const replace = useCallback(({ value, opt }) => {
+        const last = lastSearchRef.current
+        if (!editor || !last?.value) return
+        const text = editor.getValue()
+        const matchs = matchString(text, last.value, last.opt)
+        if (!matchs.length) return
+        let chosen = matchs
         if (opt.isSingle) {
-            if (!matchsRef.current[matchIndexRef.current])
-                return;
-            const offset = replaceOne(matchsRef.current[matchIndexRef.current], value)
-            matchsRef.current = matchsRef.current.map((e, i) => {
-                if (i < matchIndexRef.current) return e;
-                e.index += offset;
-                return e;
-            }).filter((e, i) => i != matchIndexRef.current)
-            matchIndexRef.current--;
-            find({ action: 'next' })
-        } else {
-            if (!matchsRef.current)
-                return;
-            let offset = 0;
-            for (const match of matchsRef.current) {
-                offset += replaceOne(match, value, offset)
-            }
+            // The current match: the one at the selection (where the last find put it), else the next after the caret.
+            const from = editor.indexFromPos(editor.getCursor('from'))
+            const at = matchs.find(m => m.index >= from) ?? matchs[0]
+            chosen = [at]
         }
-    }, [find, replaceOne])
+        let out = '', pos = 0, lastEnd = 0
+        for (const m of chosen) {
+            out += text.substring(pos, m.index) + value
+            lastEnd = out.length
+            pos = m.index + m.match.length
+        }
+        out += text.substring(pos)
+        editor.replaceRange(out, editor.posFromIndex(0), editor.posFromIndex(text.length))
+        // On from just after the (last) replaced text, the marks and the count found again.
+        const caret = editor.posFromIndex(lastEnd)
+        editor.setSelection(caret, caret)
+        search({ value: last.value, opt: { ...last.opt, selection: { anchor: caret, head: caret } } })
+    }, [editor, search])
 
     useEffect(() => transport.addListener<{ text: string }>('Paste', ({ text }) => {
         editor?.replaceSelection(text)
@@ -423,6 +427,12 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             const head = given?.focus ?? given?.head
             cursorRef.current = anchor && head ? { anchor, head } : undefined
             editor.setValue(markdownRef.current)
+            // Another document: an undo history of its own. setValue is itself an undoable change, and Vim's u (the
+            // editor's own history, not the host's) turned the document shown into the one before (the audit's E01).
+            if (props.loadId !== historyLoadIdRef.current) {
+                editor.clearHistory()
+                historyLoadIdRef.current = props.loadId
+            }
             if (anchor && head)
                 editor.setSelection(anchor, head, { scroll: !props.scrollFromHostRef?.current })
             editor.scrollTo(null, props.scrollTopRef.current)

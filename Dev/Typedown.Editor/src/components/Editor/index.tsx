@@ -711,6 +711,7 @@ const Editor: React.FC = () => {
                 cursor={cursorRef.current}
                 markdown={markdownRef.current ?? ''}
                 contentVersion={contentVersion}
+                loadId={loadIdRef.current}
                 searchOpen={searchOpen}
                 searchArg={searchArg}
                 scrollTopRef={codeMirrorScrollRef}
