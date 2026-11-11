@@ -7,13 +7,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:models="using:Typedown.Core.Models"
+    xmlns:u="using:Typedown.Core.Utilities"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <!-- A tab's right-click menu: its file into or out of the favourites (not for an untitled document). -->
+        <!-- A tab's right-click menu: closing it or others, its file (none for an untitled document) and the favourites. The
+             entries are told apart by Tag as it opens (OnTabContextFlyoutOpening). -->
         <MenuFlyout x:Key="TabContextFlyout" Opening="OnTabContextFlyoutOpening">
-            <MenuFlyoutItem AutomationProperties.AutomationId="TabFavoriteItem" Text="Favorite" Click="OnTabFavoriteClick"/>
+            <MenuFlyoutItem Tag="Close" AutomationProperties.AutomationId="TabCloseItem" Text="{u:LocaleString Key=Close}" Click="OnTabCloseClick"/>
+            <MenuFlyoutItem Tag="CloseOthers" AutomationProperties.AutomationId="TabCloseOthersItem" Text="{u:LocaleString Key=Tab.CloseOthers}" Click="OnTabCloseOthersClick"/>
+            <MenuFlyoutItem Tag="CloseToTheRight" AutomationProperties.AutomationId="TabCloseToTheRightItem" Text="{u:LocaleString Key=Tab.CloseToTheRight}" Click="OnTabCloseToTheRightClick"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabCopyPathItem" Text="{u:LocaleString Key=CopyAsPath}" Click="OnTabCopyPathClick"/>
+            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabOpenLocationItem" Text="{u:LocaleString Key=OpenFileLocation}" Click="OnTabOpenLocationClick"/>
+            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabShowInSideBarItem" Text="{u:LocaleString Key=Tab.ShowInSideBar}" Click="OnTabShowInSideBarClick"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TabFavoriteItem" Text="Favorite" Click="OnTabFavoriteClick"/>
         </MenuFlyout>
     </UserControl.Resources>
     <muxc:TabView

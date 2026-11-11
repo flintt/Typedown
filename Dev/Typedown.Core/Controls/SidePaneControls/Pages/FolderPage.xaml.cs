@@ -78,6 +78,13 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     var path = ui.TakeFolderRevealPath();
                     if (!string.IsNullOrEmpty(path)) RevealFolder(path);
                 }));
+            // The document shown, asked for by its tab's Show in Side Bar (UIViewModel.RevealActiveFileInFolderTree).
+            disposables.Add(ui.WhenPropertyChanged(nameof(UIViewModel.FolderRevealActiveFile))
+                .StartWith(ui.FolderRevealActiveFile)
+                .Subscribe(_ =>
+                {
+                    if (ui.TakeFolderRevealActiveFile()) RevealCurrentFile();
+                }));
         }
 
         // The folder the tree is currently rooted at. It is sticky: switching tabs or previewing files elsewhere must
@@ -117,7 +124,10 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             RevealActiveFile();
         }
 
-        private async void OnRevealCurrentFileClick(object sender, RoutedEventArgs e)
+        private void OnRevealCurrentFileClick(object sender, RoutedEventArgs e) => RevealCurrentFile();
+
+        // The tree moved to the current file's folder, and the file found in it (the button, and a tab's Show in Side Bar).
+        private async void RevealCurrentFile()
         {
             if (string.IsNullOrEmpty(FileViewModel?.FilePath)) return;
             var folder = Path.GetDirectoryName(FileViewModel.FilePath);

@@ -139,6 +139,12 @@ namespace Typedown.Core.ViewModels
         public string FolderRevealPath { get; private set; }
 
         /// <summary>
+        /// The document shown to be shown in the folder pane's tree (a tab's Show in Side Bar), as the pane's "show the current
+        /// file's folder" button does, until the folder page takes it.
+        /// </summary>
+        public bool FolderRevealActiveFile { get; private set; }
+
+        /// <summary>
         /// The find bar's results list ("Search in document") is shown in the side pane, over the page it was on (Files,
         /// Outline, the folder search). Opened by the bar's "Show all results"; closed by its own close button, Esc, or the
         /// bar closing (the list is the bar's search: without the bar there is nothing to step through or follow).
@@ -206,6 +212,24 @@ namespace Typedown.Core.ViewModels
             SettingsViewModel.SidePaneOpen = true;
             SettingsViewModel.SidePaneIndex = 0;
             FolderRevealPath = path;
+        }
+
+        /// <summary>The side bar opened on the Files page, and the document shown found in its tree (see <see cref="FolderRevealActiveFile"/>).</summary>
+        public void RevealActiveFileInFolderTree()
+        {
+            DropFindResults();
+            FolderSearchOpen = false;
+            SettingsViewModel.SidePaneOpen = true;
+            SettingsViewModel.SidePaneIndex = 0;
+            FolderRevealActiveFile = true;
+        }
+
+        /// <summary>Whether the document shown was asked for, once (the folder page shows it).</summary>
+        public bool TakeFolderRevealActiveFile()
+        {
+            var asked = FolderRevealActiveFile;
+            if (asked) FolderRevealActiveFile = false;
+            return asked;
         }
 
         /// <summary>The folder asked for, once: the folder page shows it and it is forgotten.</summary>

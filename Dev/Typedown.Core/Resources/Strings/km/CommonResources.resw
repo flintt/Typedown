@@ -1264,4 +1264,16 @@
   <data name="FirstEditNeverShow" xml:space="preserve">
     <value>កុំបង្ហាញម្ដងទៀតសម្រាប់ឯកសារនេះ</value>
   </data>
+  <data name="Tab.CloseOthers" xml:space="preserve">
+    <value>បិទផ្ទាំងផ្សេងទៀត</value>
+    <comment>标签页右键菜单：关闭这个以外的所有标签页</comment>
+  </data>
+  <data name="Tab.CloseToTheRight" xml:space="preserve">
+    <value>បិទផ្ទាំងនៅខាងស្ដាំ</value>
+    <comment>标签页右键菜单：关闭这个右边的所有标签页</comment>
+  </data>
+  <data name="Tab.ShowInSideBar" xml:space="preserve">
+    <value>បង្ហាញក្នុងរបារចំហៀង</value>
+    <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
+  </data>
 </root>

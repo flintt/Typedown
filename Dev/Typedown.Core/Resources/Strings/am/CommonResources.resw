@@ -1263,4 +1263,16 @@
   <data name="FirstEditNeverShow" xml:space="preserve">
     <value>ለዚህ ሰነድ ዳግም አታሳይ</value>
   </data>
+  <data name="Tab.CloseOthers" xml:space="preserve">
+    <value>ሌሎችን ዝጋ</value>
+    <comment>标签页右键菜单：关闭这个以外的所有标签页</comment>
+  </data>
+  <data name="Tab.CloseToTheRight" xml:space="preserve">
+    <value>በቀኝ ያሉ ትሮችን ዝጋ</value>
+    <comment>标签页右键菜单：关闭这个右边的所有标签页</comment>
+  </data>
+  <data name="Tab.ShowInSideBar" xml:space="preserve">
+    <value>በጎን አሞሌ ውስጥ አሳይ</value>
+    <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
+  </data>
 </root>

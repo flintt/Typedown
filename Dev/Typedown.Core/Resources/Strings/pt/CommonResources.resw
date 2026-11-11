@@ -1206,4 +1206,16 @@
   <data name="FirstEditNeverShow" xml:space="preserve">
     <value>Não mostrar novamente para este documento</value>
   </data>
+  <data name="Tab.CloseOthers" xml:space="preserve">
+    <value>Fechar as outras</value>
+    <comment>标签页右键菜单：关闭这个以外的所有标签页</comment>
+  </data>
+  <data name="Tab.CloseToTheRight" xml:space="preserve">
+    <value>Fechar guias à direita</value>
+    <comment>标签页右键菜单：关闭这个右边的所有标签页</comment>
+  </data>
+  <data name="Tab.ShowInSideBar" xml:space="preserve">
+    <value>Mostrar na barra lateral</value>
+    <comment>标签页右键菜单：在侧栏文件树中显示这个文件</comment>
+  </data>
 </root>
