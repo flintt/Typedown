@@ -348,7 +348,30 @@ namespace Typedown.Core.Controls
         {
             dragStartedAt = Environment.TickCount64;
             Log.Debug($"tabs: drag starting ({(args.Item as DocumentTab)?.Title})");
+            HoldStripWidth(true);
         }
+
+        // The strip as wide as it was while a tab is dragged: the list makes room for the drop, a tab wider, and the +
+        // after it moved right with no tab added (the user, 2026-11-11). The room is made inside the width it had.
+        // The TabView sets the list's MaxWidth itself, when the tabs overflow: that is put back after.
+        private void HoldStripWidth(bool hold)
+        {
+            var list = Descendants(TabView).OfType<FrameworkElement>().FirstOrDefault(e => e.Name == "TabListView");
+            if (list == null) return;
+            if (hold && list.ActualWidth > 0)
+            {
+                stripMaxWidthBefore ??= list.MaxWidth;
+                list.MaxWidth = Math.Min(list.MaxWidth, list.ActualWidth);
+            }
+            else if (!hold && stripMaxWidthBefore is double before)
+            {
+                list.MaxWidth = before;
+                stripMaxWidthBefore = null;
+            }
+            Log.Debug($"tabs: the strip's width {(hold ? $"held at {list.ActualWidth:0}" : "let go")}");
+        }
+
+        private double? stripMaxWidthBefore;
 
         // For the log: the tabs a selection change names.
         private static string Names(System.Collections.Generic.IList<object> items) => "[" + string.Join(",", items.Select(x => (x as DocumentTab)?.Title ?? "?")) + "]";
@@ -357,6 +380,7 @@ namespace Typedown.Core.Controls
         {
             dragEndedAt = Environment.TickCount64;
             Log.Debug($"tabs: drag completed ({(args.Item as DocumentTab)?.Title})");
+            HoldStripWidth(false);
             if (Tabs != null && TabView.SelectedItem != Tabs.ActiveTab) TabView.SelectedItem = Tabs.ActiveTab;
             ResetTabStatesSoon();
         }
