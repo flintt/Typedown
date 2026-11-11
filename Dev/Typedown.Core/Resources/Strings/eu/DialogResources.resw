@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Fitxategia diskoan aldatu da, eta gorde gabeko aldaketak dituzu. Ez da bertsiorik galtzen: gordetzen ez duzuna kopia gisa gordetzen da {0} karpetan, eta berriro kargatu ondoren Ctrl+Z-k zurea itzultzen du.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Fitxategi hau beste fitxa edo leiho batean irekita dago. Itxi han lehenik, edo gorde beste izen batekin.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Faili kwenye diski imebadilishwa, na una mabadiliko ambayo hayajahifadhiwa. Hakuna toleo linalopotea: lile usilolihifadhi linahifadhiwa kama nakala katika {0}, na baada ya Kupakia upya, Ctrl+Z inarudisha yako.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Faili hii imefunguliwa katika kichupo au dirisha jingine. Ifunge hapo kwanza, au uhifadhi kwa jina jingine.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

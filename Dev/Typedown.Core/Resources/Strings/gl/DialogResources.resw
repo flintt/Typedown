@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>O ficheiro cambiou no disco e tes cambios sen gardar. Ningunha versión se perde: a que non manteñas gárdase como copia en {0} e, despois de recargar, Ctrl+Z recupera a túa.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Este ficheiro está aberto noutra lapela ou xanela. Pécheo alí primeiro ou gárdeo con outro nome.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

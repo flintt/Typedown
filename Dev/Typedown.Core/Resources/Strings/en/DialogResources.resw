@@ -366,4 +366,8 @@
     <value>Save as UTF-8</value>
     <comment>同上，按钮：按 UTF-8 保存</comment>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>This file is open in another tab or window. Close it there first, or save under another name.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

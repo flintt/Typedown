@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>డిస్క్‌లోని ఫైల్ మారింది, మీకు సేవ్ చేయని మార్పులు ఉన్నాయి. ఏ వెర్షనూ పోదు: మీరు ఉంచనిది {0}లో కాపీగా సేవ్ అవుతుంది, మళ్లీ లోడ్ చేశాక Ctrl+Z మీ మార్పులను తిరిగి తెస్తుంది.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>ఈ ఫైల్ మరో ట్యాబ్ లేదా విండోలో తెరిచి ఉంది. ముందుగా అక్కడ మూసివేయండి, లేదా వేరే పేరుతో సేవ్ చేయండి.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

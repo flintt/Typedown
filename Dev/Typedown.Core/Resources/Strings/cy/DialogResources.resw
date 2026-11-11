@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Mae'r ffeil wedi newid ar y ddisg, ac mae gennych newidiadau heb eu cadw. Ni chollir yr un fersiwn: caiff yr un nad ydych yn ei chadw ei chadw fel copi yn {0}, ac ar ôl Ail-lwytho, mae Ctrl+Z yn dod â'ch un chi yn ôl.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Mae'r ffeil hon ar agor mewn tab neu ffenestr arall. Caewch hi yno yn gyntaf, neu cadwch dan enw arall.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

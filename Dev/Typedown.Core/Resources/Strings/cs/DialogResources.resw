@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Soubor na disku se změnil a máte neuložené změny. Žádná verze se neztratí: ta, kterou neponecháte, se uloží jako kopie do {0}, a po opětovném načtení vrátí Ctrl+Z tu vaši.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Tento soubor je otevřený na jiné kartě nebo v jiném okně. Nejdřív ho tam zavřete, nebo uložte pod jiným názvem.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

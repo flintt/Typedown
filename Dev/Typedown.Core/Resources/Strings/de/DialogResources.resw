@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Die Datei wurde auf dem Datenträger geändert, und Sie haben ungespeicherte Änderungen. Keine Fassung geht verloren: Die nicht behaltene wird als Kopie in {0} gespeichert, und nach dem Neuladen holt Strg+Z Ihre zurück.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Diese Datei ist in einem anderen Tab oder Fenster geöffnet. Schließen Sie sie dort zuerst oder speichern Sie unter einem anderen Namen.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

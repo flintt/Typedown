@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Fails diskā ir mainīts, un jums ir nesaglabātas izmaiņas. Neviena versija nepazūd: tā, kuru nepaturat, tiek saglabāta kā kopija mapē {0}, un pēc atkārtotas ielādes Ctrl+Z atjauno jūsējo.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Šis fails ir atvērts citā cilnē vai logā. Vispirms aizveriet to tur vai saglabājiet ar citu nosaukumu.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Файлът на диска е променен, а имате незапазени промени. Нито една версия не се губи: тази, която не запазите, се записва като копие в {0}, а след презареждане Ctrl+Z връща вашата.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Този файл е отворен в друг раздел или прозорец. Първо го затворете там или запишете с друго име.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

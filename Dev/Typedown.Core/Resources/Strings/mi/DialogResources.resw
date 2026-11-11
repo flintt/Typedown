@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Kua hurihia te kōnae i te kōpae, ā, he panonitanga kāore anō kia tiakina e koe. Kāore he putanga e ngaro: ko te mea kāore koe e pupuri ka tiakina hei kape ki {0}, ā, i muri i te Uta anō, ka whakahokia mai e Ctrl+Z ōu.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Kei te tuwhera tēnei kōnae ki tētahi atu ripa, matapihi rānei. Katia ki reira tuatahi, tiaki rānei ki tētahi atu ingoa.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

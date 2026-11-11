@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>הקובץ השתנה בדיסק, ויש לך שינויים שלא נשמרו. אף גרסה לא הולכת לאיבוד: הגרסה שלא תשמור נשמרת כעותק ב-{0}, ואחרי טעינה מחדש Ctrl+Z מחזיר את שלך.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>הקובץ פתוח בכרטיסייה או בחלון אחרים. סגרו אותו שם קודם, או שמרו בשם אחר.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

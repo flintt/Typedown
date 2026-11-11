@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Datoteka na disku je promijenjena, a imate nespremljene promjene. Nijedna inačica se ne gubi: ona koju ne zadržite sprema se kao kopija u {0}, a nakon ponovnog učitavanja Ctrl+Z vraća vašu.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Ova je datoteka otvorena u drugoj kartici ili prozoru. Najprije je ondje zatvorite ili spremite pod drugim imenom.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

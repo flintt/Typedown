@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>ディスク上のファイルが変更されましたが、ここには未保存の変更があります。どちらも失われません。残さなかった方は {0} にコピーとして保存され、再読み込みした後は Ctrl+Z で自分の変更を戻せます。</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>このファイルは別のタブまたはウィンドウで開かれています。先にそちらで閉じるか、別の名前で保存してください。</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

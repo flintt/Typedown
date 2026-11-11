@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>A fájl megváltozott a lemezen, és Önnek nem mentett módosításai vannak. Egyik változat sem vész el: amelyiket nem tartja meg, másolatként a(z) {0} mappába kerül, újratöltés után pedig a Ctrl+Z visszahozza az Önét.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Ez a fájl meg van nyitva egy másik lapon vagy ablakban. Előbb zárja be ott, vagy mentse más néven.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

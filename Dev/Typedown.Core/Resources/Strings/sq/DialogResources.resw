@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Skedari në disk ka ndryshuar dhe ju keni ndryshime të paruajtura. Asnjë version nuk humbet: ai që nuk e mbani ruhet si kopje në {0}, dhe pas ringarkimit Ctrl+Z ju kthen tuajin.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Ky skedar është i hapur në një skedë ose dritare tjetër. Mbylleni atje fillimisht ose ruajeni me një emër tjetër.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

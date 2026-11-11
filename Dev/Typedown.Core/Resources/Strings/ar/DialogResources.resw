@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>تغيّر الملف على القرص، ولديك تغييرات غير محفوظة. لن تضيع أي نسخة: النسخة التي لا تحتفظ بها تُحفظ نسخةً في {0}، وبعد إعادة التحميل يعيد Ctrl+Z تغييراتك.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>هذا الملف مفتوح في علامة تبويب أو نافذة أخرى. أغلقه هناك أولاً، أو احفظ باسم آخر.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

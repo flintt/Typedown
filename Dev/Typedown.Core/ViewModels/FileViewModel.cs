@@ -897,6 +897,16 @@ namespace Typedown.Core.ViewModels
         {
             try
             {
+                // A file open in another tab or window is not written over: two documents would then have one path, write
+                // over each other and share one crash backup (named by the path) - opening it twice is stopped, saving as
+                // it was not (the audit's 12).
+                var other = TabsViewModel?.FindByPath(targetPath);
+                if ((other != null && other != originalTab) || (TryGetOpenedWindow(targetPath, out var window) && window != AppViewModel.MainWindow))
+                {
+                    Log.Debug($"save as: {Path.GetFileName(targetPath)} is open elsewhere; not written");
+                    await AppContentDialog.Create(Locale.GetString("Error"), Locale.GetDialogString("SaveAsTargetOpen"), Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                    return null;
+                }
                 if (!disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
                 {
                     // As a save by hand: the page given longer once more, and nothing written if it still did not hand over

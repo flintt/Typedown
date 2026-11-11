@@ -358,4 +358,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>磁碟上的檔案已被修改，而你這裡有未儲存的變更。兩份都不會遺失：沒保留的那份會存為副本，放在 {0}；重新載入後按 Ctrl+Z 可找回你的變更。</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>這個檔案已在另一個索引標籤或視窗中開啟。請先在那裡關閉它，或換個名稱儲存。</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

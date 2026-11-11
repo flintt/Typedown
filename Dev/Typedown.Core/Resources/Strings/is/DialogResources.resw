@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Skránni hefur verið breytt á diskinum og þú ert með óvistaðar breytingar. Engin útgáfa tapast: sú sem þú heldur ekki er vistuð sem afrit í {0}, og eftir endurhleðslu sækir Ctrl+Z þína aftur.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Þessi skrá er opin í öðrum flipa eða glugga. Lokaðu henni þar fyrst eða vistaðu undir öðru nafni.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>

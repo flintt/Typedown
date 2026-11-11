@@ -353,4 +353,8 @@
   <data name="ReloadFromDiskConflict" xml:space="preserve">
     <value>Tiedosto on muuttunut levyllä, ja sinulla on tallentamattomia muutoksia. Kumpikaan ei katoa: versio, jota et säilytä, tallennetaan kopiona kansioon {0}, ja uudelleenlatauksen jälkeen Ctrl+Z palauttaa omasi.</value>
   </data>
+  <data name="SaveAsTargetOpen" xml:space="preserve">
+    <value>Tämä tiedosto on auki toisessa välilehdessä tai ikkunassa. Sulje se ensin siellä tai tallenna toisella nimellä.</value>
+    <comment>另存为选中的文件已在另一个标签或窗口里打开时的提示：没有写入</comment>
+  </data>
 </root>
