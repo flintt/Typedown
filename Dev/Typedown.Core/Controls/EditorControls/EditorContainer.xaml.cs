@@ -255,6 +255,9 @@ namespace Typedown.Core.Controls
         public static Visibility TableMenuVisibility(bool inTable, bool sourceCode) => inTable && !sourceCode ? Visibility.Visible : Visibility.Collapsed;
 
         /// <summary>Paste as plain text: in the visual editor only (source mode has no paste-as, reading mode no paste).</summary>
+        /// <summary>The table's rows and columns: in a table, in the visual editor, not in reading mode.</summary>
+        public static Visibility TableEditVisibility(bool inTable, bool sourceCode, bool readOnly) => inTable && !sourceCode && !readOnly ? Visibility.Visible : Visibility.Collapsed;
+
         public static Visibility IsPasteAsVisible(bool sourceCode, bool readOnly, bool onGhost) => sourceCode || readOnly || onGhost ? Visibility.Collapsed : Visibility.Visible;
 
         /// <summary>Cut, paste and delete: not in reading mode, nor on a deleted block review mode draws (not the document's text).</summary>
