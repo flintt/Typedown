@@ -275,20 +275,20 @@ namespace Typedown.Core.Controls
         {
             if (!KeepAddButtonOffFocus()) return;
             TabView.LayoutUpdated -= OnStripLayoutUpdated;
-            // A tab moved within the strip is the list's own drag: the TabView raises TabDragStarting only for a tab that
-            // may leave the window, and the width was not held (job 392, no "drag starting" in the log).
-            if (Descendants(TabView).OfType<ListView>().FirstOrDefault(l => l.Name == "TabListView") is ListView list)
+            // A tab moved within the strip raises no drag event (neither TabDragStarting nor the list's DragItemsStarting -
+            // jobs 392, 393: it is moved in the list as the pointer goes), so the width is held from the press on a tab
+            // to its release. A press holds it to no harm: no tab comes or goes until the button is let go.
+            if (Descendants(TabView).OfType<ListView>().FirstOrDefault(l => l.Name == "TabListView") is ListView list && list != heldList)
             {
-                list.DragItemsStarting -= OnListDragItemsStarting;
-                list.DragItemsStarting += OnListDragItemsStarting;
-                list.DragItemsCompleted -= OnListDragItemsCompleted;
-                list.DragItemsCompleted += OnListDragItemsCompleted;
+                heldList = list;
+                list.AddHandler(PointerPressedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((s, e) => HoldStripWidth(true)), true);
+                list.AddHandler(PointerReleasedEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((s, e) => HoldStripWidth(false)), true);
+                list.AddHandler(PointerCaptureLostEvent, new Microsoft.UI.Xaml.Input.PointerEventHandler((s, e) => HoldStripWidth(false)), true);
+                list.SizeChanged += (s, e) => Log.Debug($"tabs: the strip {e.PreviousSize.Width:0} -> {e.NewSize.Width:0} wide ({Tabs?.Tabs.Count} tabs)");
             }
         }
 
-        private void OnListDragItemsStarting(object sender, DragItemsStartingEventArgs e) => HoldStripWidth(true);
-
-        private void OnListDragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs e) => HoldStripWidth(false);
+        private ListView heldList;
 
         private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
         {
