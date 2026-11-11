@@ -466,7 +466,7 @@
  },
  "117": {
   "section": "Indented code blocks",
-  "out": "\n    foo\n"
+  "out": "\n\n    foo\n\n\n"
  },
  "118": {
   "section": "Indented code blocks",
@@ -1010,7 +1010,7 @@
  },
  "253": {
   "section": "List items",
-  "out": "A paragraph\nwith two lines.\n    indented code\n\n> A block quote.\n"
+  "out": "A paragraph\nwith two lines.\n\n    indented code\n\n> A block quote.\n"
  },
  "254": {
   "section": "List items",
@@ -1086,7 +1086,7 @@
  },
  "272": {
   "section": "List items",
-  "out": "    indented code\n\nparagraph\n    more code\n"
+  "out": "    indented code\n\nparagraph\n\n    more code\n"
  },
  "273": {
   "section": "List items",
