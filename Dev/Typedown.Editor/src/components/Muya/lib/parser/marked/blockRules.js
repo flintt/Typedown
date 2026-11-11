@@ -101,7 +101,11 @@ block.paragraph = edit(block._paragraph)
   .replace('tag', block._tag) // pars can be interrupted by type (6) html blocks
   .getRegex()
 
+// Both places: the rule names the paragraph twice, and the second (the last line, which ends the quote) was left as
+// the word itself - a quote's paragraph took no lazy continuation line, and "> a\nb" put b after the quote, where
+// CommonMark keeps it in (the 2026-11-09 audit's 13).
 block.blockquote = edit(block.blockquote)
+  .replace('paragraph', block.paragraph)
   .replace('paragraph', block.paragraph)
   .getRegex()
 

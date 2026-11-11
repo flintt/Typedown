@@ -436,6 +436,22 @@ Lexer.prototype.token = function (src, top, container) {
     if (cap) {
       const marker = cap[0].replace(/\n*$/, '')
       src = src.substring(cap[0].length)
+      // A line of dashes right under a paragraph of more than one line underlines it (a setext heading spans its
+      // lines): "Foo\nBar\n---" is one heading, not a paragraph and a rule (the 2026-11-09 audit's 13). One line above
+      // is the lheading rule's; a line of dashes with spaces in it (- - -) is a rule whatever is above it.
+      const above = this.tokens[this.tokens.length - 1]
+      if (above && above.type === 'paragraph' && !above.followedByBlankLine && /^ {0,3}-+ *$/.test(marker)) {
+        this.tokens.pop()
+        this.tokens.push({
+          type: 'heading',
+          headingStyle: 'setext',
+          depth: 2,
+          text: above.text,
+          marker: marker.trim(),
+          blankLinesBefore: above.blankLinesBefore
+        })
+        continue
+      }
       this.tokens.push({
         type: 'hr',
         marker
@@ -826,9 +842,25 @@ Lexer.prototype.token = function (src, top, container) {
         continue
       }
 
-      const text = cap[1].charAt(cap[1].length - 1) === '\n'
+      let text = cap[1].charAt(cap[1].length - 1) === '\n'
         ? cap[1].slice(0, -1)
         : cap[1]
+      // A line of = under lines of the paragraph underlines them (the = line does not end a paragraph, so the
+      // paragraph took it): "Foo\nBar\n===" is one heading, and what follows the line goes on as its own blocks.
+      const lines = text.split('\n')
+      const underline = lines.findIndex((line, i) => i > 0 && /^ {0,3}=+ *$/.test(line))
+      if (underline > 0) {
+        this.tokens.push({
+          type: 'heading',
+          headingStyle: 'setext',
+          depth: 1,
+          text: lines.slice(0, underline).join('\n'),
+          marker: lines[underline].trim()
+        })
+        const rest = lines.slice(underline + 1).join('\n')
+        if (rest) src = rest + '\n' + src
+        continue
+      }
       const previous = this.tokens[this.tokens.length - 1]
       // A rejected GFM table candidate clipped the paragraph before its header.
       // Join only that candidate back; merging every adjacent paragraph would

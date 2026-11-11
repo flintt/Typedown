@@ -141,3 +141,33 @@ describe('blank lines between blocks are counted exactly', () => {
       .toEqual([['b', 2, undefined]])
   })
 })
+
+// Two places the lexer read Markdown otherwise than CommonMark (the 2026-11-09 audit's 13): a quote's lazy line, and
+// a setext heading over more than one line. Written back, both changed the document's structure.
+describe('lazy quote lines and setext headings of several lines, as CommonMark reads them', () => {
+  const read = markdown => new Lexer({ gfm: true }).lex(markdown)
+    .map(t => t.type + (t.text != null ? ':' + t.text : '') + (t.depth ? '#' + t.depth : ''))
+
+  test('a line under a quote with no > is the quote paragraph going on', () => {
+    expect(read('> a\nb\n')).toEqual(['blockquote_start', 'paragraph:a\nb', 'blockquote_end'])
+    expect(read('> a\n> b\nc\n\nd\n')).toEqual(['blockquote_start', 'paragraph:a\nb\nc', 'blockquote_end', 'paragraph:d'])
+  })
+
+  test('a list item or a rule under a quote is not taken into it', () => {
+    expect(read('> a\n- b\n')[3]).toBe('list_start')
+    expect(read('> a\n---\n')).toEqual(['blockquote_start', 'paragraph:a', 'blockquote_end', 'hr'])
+  })
+
+  test('dashes or equals under lines of a paragraph make it one heading', () => {
+    expect(read('Foo\nBar\n---\n')).toEqual(['heading:Foo\nBar#2'])
+    expect(read('Foo\nBar\n===\n')).toEqual(['heading:Foo\nBar#1'])
+    expect(read('Foo\nBar\n===\nBaz\n')).toEqual(['heading:Foo\nBar#1', 'paragraph:Baz'])
+    expect(read('Foo\n---\n')).toEqual(['heading:Foo#2'])
+  })
+
+  test('a rule after a blank line, a rule with spaces, and one under a list item stay rules', () => {
+    expect(read('Foo\n\n---\n')).toEqual(['paragraph:Foo', 'hr'])
+    expect(read('Foo\nBar\n- - -\n')).toEqual(['paragraph:Foo\nBar', 'hr'])
+    expect(read('- a\nb\n---\n').slice(-1)).toEqual(['hr'])
+  })
+})
