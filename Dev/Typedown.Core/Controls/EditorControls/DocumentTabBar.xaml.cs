@@ -47,6 +47,13 @@ namespace Typedown.Core.Controls
             var settings = ViewModel?.SettingsViewModel;
             if (settings != null)
                 disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
+            if (Tabs is { } tabs)
+            {
+                System.Collections.Specialized.NotifyCollectionChangedEventHandler changed = (_, _) => NoteShownIndexSoon();
+                tabs.Tabs.CollectionChanged += changed;
+                disposables.Add(System.Reactive.Disposables.Disposable.Create(() => tabs.Tabs.CollectionChanged -= changed));
+                disposables.Add(tabs.WhenPropertyChanged(nameof(tabs.ActiveTab)).StartWith(tabs.ActiveTab).Subscribe(_ => shownIndex = tabs.Tabs.IndexOf(tabs.ActiveTab)));
+            }
         }
 
         /// <summary>
@@ -215,7 +222,7 @@ namespace Typedown.Core.Controls
             // 2026-11-11, 7; TD01 on w10: td01-3 dragged to the front, td01-1 shown). Not a choice of the reader's: the
             // tab shown stays.
             if (TabView.SelectedItem is DocumentTab moved && moved != Tabs.ActiveTab && Tabs.Tabs.Contains(Tabs.ActiveTab)
-                && (dragging || Environment.TickCount64 - shownTabMovedAt < 500))
+                && (dragging || Environment.TickCount64 - shownTabMovedAt < 500 || MovedAway(moved)))
             {
                 Log.Debug("tabs: the tab shown was moved in the strip; it stays shown");
                 TabView.SelectedItem = Tabs.ActiveTab;
@@ -287,6 +294,22 @@ namespace Typedown.Core.Controls
         // without its fill (the user's list, 2026-11-11, 7; seen on w10 in TD01's pictures): the strip moves the item
         // and the container it lands in is not put back into its state. Every tab is put back into the state it is in
         // once the move is done.
+        // Where the tab shown was in the strip, as the strip last showed it: a drag moves it, and the selection stays at that
+        // place and so goes to the tab there now (TD01 on w10, with neither the strip's drag events nor its item events
+        // told). Known again after any change of the tabs, once the strip has done with it (Low).
+        private int shownIndex = -1;
+
+        private bool MovedAway(DocumentTab selected)
+        {
+            var now = Tabs.Tabs.IndexOf(Tabs.ActiveTab);
+            return shownIndex >= 0 && now >= 0 && now != shownIndex && Tabs.Tabs.IndexOf(selected) == shownIndex;
+        }
+
+        private void NoteShownIndexSoon() => DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+        {
+            if (Tabs != null) shownIndex = Tabs.Tabs.IndexOf(Tabs.ActiveTab);
+        });
+
         // When the tab shown was last put back into the strip (a drag moves a tab by taking it out and putting it in again).
         private long shownTabMovedAt;
 
