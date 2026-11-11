@@ -286,6 +286,27 @@ function reject(revisions: Revision[]) {
 
 const byId = (id: string | null) => (id && state.revisions.find(r => r.id === id)) || null
 
+/**
+ * The context menu's review items (the 2026-11-11 menu report): the revision under the pointer as the right button went
+ * down - its id and its source - and whether the pointer was on a deleted block drawn where it was (a ghost: not the
+ * document's text, nothing to edit). Null when review is off.
+ */
+export function reviewAtTarget(target: Element | null): { revision: string | null, source: string | null, ghost: boolean } | null {
+    if (!state.on || !target) return null
+    const id = view?.revisionOf(target) ?? null
+    const r = byId(id)
+    return { revision: r ? r.id : null, source: r?.source ?? null, ghost: !!target.closest('.ag-review-ghost') }
+}
+
+/** The menu's Accept this, Reject this, Accept all from this source: on the revision right-clicked. */
+export function actOnRevision(id: string, how: 'accept' | 'reject' | 'acceptSource') {
+    const r = byId(id)
+    if (!state.on || !r) return
+    if (how === 'accept') accept([r])
+    else if (how === 'reject') reject([r])
+    else accept(shown().filter(x => x.source === r.source))
+}
+
 function atCaret(): Revision | null {
     const offset = view?.caretOffset()
     return offset == null ? null : revisionAt(shown(), offset)

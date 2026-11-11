@@ -42,6 +42,19 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public bool ContextMenuInTable { get; set; }
         /// <summary>
+        /// What else the last right-click was on (the same report): a link's address (null: none), a code block, a display
+        /// formula or a diagram ("math", "diagram", null) - the menu's items for that object (the 2026-11-11 menu report).
+        /// </summary>
+        public string ContextMenuLink { get; set; }
+        public bool ContextMenuInCode { get; set; }
+        public string ContextMenuBlock { get; set; }
+        /// <summary>
+        /// Review mode (the same report): the right-click was on a revision (the menu's Accept this, Reject this, Accept all
+        /// from its source), or on a deleted block drawn where it was - not the document's text, nothing there to edit.
+        /// </summary>
+        public bool ContextMenuOnRevision { get; set; }
+        public bool ContextMenuOnGhost { get; set; }
+        /// <summary>
         /// The outline tree. Replaced whole when a different document arrives, updated in place when the
         /// same document changes: the tree control is bound to it, and taking a document's outline apart
         /// row by row under that control while a second document's arrived is what crashed the process —
@@ -94,6 +107,15 @@ namespace Typedown.Core.ViewModels
         public Command<string> PasteCommand { get; } = new();
         public Command<string> CopyCommand { get; } = new();
         public Command<Unit> CopyTableCommand { get; } = new();
+
+        /// <summary>The menu's items for the object right-clicked, done by the page on it: copyCode, copyBlock, openLink, removeLink.</summary>
+        public Command<string> ContextMenuActionCommand { get; } = new();
+
+        /// <summary>The menu's Copy Link Address: the address the right-click was on, as the document has it.</summary>
+        public Command<Unit> CopyLinkAddressCommand { get; } = new();
+
+        /// <summary>The menu's table items, on the cell with the caret (the right-click put it there): the table tools' messages.</summary>
+        public Command<string> EditTableCommand { get; } = new();
         public Command<Unit> DeleteSelectionCommand { get; } = new();
         public Command<Unit> SelectAllCommand { get; } = new();
         public Command<string> FindCommand { get; } = new();
@@ -148,7 +170,13 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("ContextMenuTarget").Subscribe(x =>
             {
                 ContextMenuInTable = x.Args?["table"]?.Value<bool>() ?? false;
-                Log.Debug($"context menu: right-click {(ContextMenuInTable ? "in" : "not in")} a table");
+                ContextMenuLink = x.Args?["link"]?.Type == JTokenType.String ? x.Args["link"].ToString() : null;
+                ContextMenuInCode = x.Args?["code"]?.Value<bool>() ?? false;
+                ContextMenuBlock = x.Args?["block"]?.Type == JTokenType.String ? x.Args["block"].ToString() : null;
+                var review = x.Args?["review"] as JObject;
+                ContextMenuOnRevision = review?["revision"]?.Type == JTokenType.String;
+                ContextMenuOnGhost = review?["ghost"]?.Value<bool>() ?? false;
+                Log.Debug($"context menu: right-click {(ContextMenuInTable ? "in" : "not in")} a table{(ContextMenuLink != null ? ", on a link" : "")}{(ContextMenuInCode ? ", in code" : "")}{(ContextMenuBlock != null ? ", on a " + ContextMenuBlock : "")}");
             });
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ReadingSelectionChange").Subscribe(x => OnReadingSelectionChange(x.Args));
@@ -220,6 +248,20 @@ namespace Typedown.Core.ViewModels
             CutCommand.OnExecute.Subscribe(x => Cut(x));
             CopyCommand.OnExecute.Subscribe(x => Copy(x));
             CopyTableCommand.OnExecute.Subscribe(_ => CopyTable());
+            ContextMenuActionCommand.OnExecute.Subscribe(action => MarkdownEditor?.PostMessage("ContextMenuAction", new { action }));
+            CopyLinkAddressCommand.OnExecute.Subscribe(_ =>
+            {
+                if (string.IsNullOrEmpty(ContextMenuLink)) return;
+                try { ServiceProvider.GetService<Interfaces.IClipboard>()?.SetText(ContextMenuLink); }
+                catch (Exception ex) { Log.Debug($"context menu: copy link address: {ex.Message}"); }
+            });
+            // "insert-previous-row" and the like: the table tools' actions, as TableTools sends them.
+            EditTableCommand.OnExecute.Subscribe(what =>
+            {
+                var parts = what?.Split('-');
+                if (parts?.Length != 3) return;
+                MarkdownEditor?.PostMessage("EditTable", new { action = parts[0], location = parts[1], target = parts[2] });
+            });
             DeleteSelectionCommand.OnExecute.Subscribe(_ => DeleteSelection());
             SelectAllCommand.OnExecute.Subscribe(_ => SelectAll());
         }
