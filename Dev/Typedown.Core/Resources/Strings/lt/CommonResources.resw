@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Įterpti į dokumentą (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Greitas atidarymas</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Įveskite dalį failo pavadinimo</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Failas nerastas</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Tikrinti dokumentą</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Problemų nerasta.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Rastos problemos: {0}. Spustelėkite, kad nueitumėte į vietą.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemos, dėl kurių eksportas nebus teisingas: {0}. Spustelėkite, kad nueitumėte į vietą, arba vis tiek eksportuokite.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Vis tiek eksportuoti</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>{0} eilutė</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Paveikslėlis nerastas</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Susietas failas nerastas</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Nėra antraštės su šiuo inkaru</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formulė ar diagrama, kurios negalima nupiešti</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML diagrama nenupiešta (išjungta parametruose)</value>
+  </data>
 </root>

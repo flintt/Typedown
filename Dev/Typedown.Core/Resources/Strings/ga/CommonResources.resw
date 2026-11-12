@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Leabaigh sa doiciméad (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Oscail go tapa</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Clóscríobh cuid d’ainm comhaid</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Níor aimsíodh comhad</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Seiceáil an doiciméad</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Níor aimsíodh fadhb ar bith.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Fadhbanna aimsithe: {0}. Cliceáil ar cheann le dul ann.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Fadhbanna nach dtiocfaidh amach i gceart san easpórtáil: {0}. Cliceáil ar cheann le dul ann, nó easpórtáil mar sin féin.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Easpórtáil mar sin féin</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Líne {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Níor aimsíodh an pictiúr</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Níor aimsíodh an comhad nasctha</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Níl ceannteideal leis an ancaire seo</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Foirmle nó léaráid nach féidir a tharraingt</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Léaráid PlantUML gan tarraingt (casta as i Socruithe)</value>
+  </data>
 </root>

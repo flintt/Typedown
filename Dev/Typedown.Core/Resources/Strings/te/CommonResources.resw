@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>పత్రంలో పొందుపరచు (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>త్వరగా తెరువు</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ఫైల్ పేరులో కొంత భాగాన్ని టైప్ చేయండి</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>ఏ ఫైల్ కనబడలేదు</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>పత్రాన్ని తనిఖీ చేయి</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>ఏ సమస్యలూ కనబడలేదు.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>కనుగొన్న సమస్యలు: {0}. అక్కడికి వెళ్లడానికి ఒకదాన్ని క్లిక్ చేయండి.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>ఎగుమతిలో సరిగ్గా రాని సమస్యలు: {0}. అక్కడికి వెళ్లడానికి ఒకదాన్ని క్లిక్ చేయండి, లేదా అయినా ఎగుమతి చేయండి.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>అయినా ఎగుమతి చేయి</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>పంక్తి {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>చిత్రం కనబడలేదు</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>లింక్ చేసిన ఫైల్ కనబడలేదు</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>ఈ యాంకర్‌తో శీర్షిక లేదు</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>గీయలేని సూత్రం లేదా రేఖాచిత్రం</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML రేఖాచిత్రం గీయబడలేదు (సెట్టింగ్‌లలో ఆఫ్)</value>
+  </data>
 </root>

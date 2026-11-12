@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>ଡକ୍ୟୁମେଣ୍ଟରେ ଏମ୍ବେଡ୍ କରନ୍ତୁ (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>ଶୀଘ୍ର ଖୋଲନ୍ତୁ</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ଫାଇଲ ନାମର ଅଂଶ ଟାଇପ୍ କରନ୍ତୁ</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>କୌଣସି ଫାଇଲ ମିଳିଲା ନାହିଁ</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>ଡକ୍ୟୁମେଣ୍ଟ ଯାଞ୍ଚ କରନ୍ତୁ</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>କୌଣସି ସମସ୍ୟା ମିଳିଲା ନାହିଁ।</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>ମିଳିଥିବା ସମସ୍ୟା: {0}। ସେଠାକୁ ଯିବାକୁ ଗୋଟିଏରେ କ୍ଲିକ୍ କରନ୍ତୁ।</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>ରପ୍ତାନିରେ ଠିକ୍ ବାହାରିବ ନାହିଁ ଏପରି ସମସ୍ୟା: {0}। ସେଠାକୁ ଯିବାକୁ ଗୋଟିଏରେ କ୍ଲିକ୍ କରନ୍ତୁ, କିମ୍ବା ତଥାପି ରପ୍ତାନି କରନ୍ତୁ।</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>ତଥାପି ରପ୍ତାନି କରନ୍ତୁ</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>ଧାଡ଼ି {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>ଛବି ମିଳିଲା ନାହିଁ</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>ଲିଙ୍କ ହୋଇଥିବା ଫାଇଲ ମିଳିଲା ନାହିଁ</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>ଏହି ଆଙ୍କର ସହ କୌଣସି ଶୀର୍ଷକ ନାହିଁ</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>ଆଙ୍କି ହେଉନଥିବା ସୂତ୍ର ବା ଚିତ୍ର</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML ଚିତ୍ର ଅଙ୍କା ହୋଇନାହିଁ (ସେଟିଂସରେ ବନ୍ଦ)</value>
+  </data>
 </root>

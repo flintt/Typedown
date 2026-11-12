@@ -353,6 +353,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | LS01 | the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About |
 | KU01 | Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question |
 | PS01 | the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again |
+| DC01 | File > Check Document lists a picture and a linked file not there, a link to a heading the document lacks and a formula that cannot be drawn, nothing for what is fine; a row clicked finds its place; mended, nothing listed |
+| QO01 | File > Quick Open by Ctrl+P in the editor: letters of a name in order find files in the side pane folder's subfolders (not a hidden folder's), Down then Enter opens the second, Esc opens nothing |
 | PS02 | with View > Show files and outline together on, the side pane shows the files above and the outline below: the bar between them dragged moves the line, a title clicked folds its block and opens it, both kept with the pane closed and opened; a plain text without headings folds the outline by itself |
 | PF01 | measured: a 300 KB document opened, typed into and saved; the memory with two windows |
 | PF03 | profiled: where the host's CPU goes while it opens 300 KB documents |

@@ -1503,10 +1503,43 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// What in the shown document will not come out right (File > Check Document): pictures and linked files not
+        /// there, links to headings it does not have, formulas and diagrams the editor could not draw. Its text brought
+        /// up to date first.
+        /// </summary>
+        public async Task<List<DocumentProblem>> CheckDocumentAsync()
+        {
+            var editor = AppViewModel.EditorViewModel;
+            await editor.FlushContentAsync(2000);
+            var text = editor.Markdown ?? "";
+            var folder = string.IsNullOrEmpty(FilePath) ? null : Path.GetDirectoryName(FilePath);
+            var slugs = editor.ContentState?.Toc?.Select(t => t.Slug).Where(s => !string.IsNullOrEmpty(s)).ToList() ?? new List<string>();
+            var imageFolder = string.IsNullOrEmpty(FilePath) ? null : ImageBasePath;
+            var problems = await Task.Run(() => DocumentCheck.Run(text, folder, imageFolder, slugs));
+            foreach (var (kind, source) in await editor.QueryNotDrawnAsync())
+                problems.Add(new DocumentProblem(DocumentProblemKind.NotDrawn, 0, kind, source));
+            Log.Debug($"check document: {problems.Count} problem(s): {string.Join(", ", problems.GroupBy(p => p.Kind).Select(g => $"{g.Key} {g.Count()}"))}");
+            return problems;
+        }
+
+        /// <summary>
+        /// Before an export: the document checked, and when something will not come out right the reader told and asked
+        /// whether to export anyway. True to go on. An edition's export (Word) asks the same.
+        /// </summary>
+        public async Task<bool> ConfirmExportAsync()
+        {
+            if (FileTypeHelper.IsPlainTextDocument(FilePath)) return true;
+            var problems = await CheckDocumentAsync();
+            if (problems.Count == 0) return true;
+            return await Controls.DocumentCheckDialog.ShowAsync(AppViewModel, problems, beforeExport: true);
+        }
+
         private async void Export(ExportConfig config)
         {
             try
             {
+                if (!await ConfirmExportAsync()) return;
                 await ExportAsync(config);
             }
             catch (Exception ex)

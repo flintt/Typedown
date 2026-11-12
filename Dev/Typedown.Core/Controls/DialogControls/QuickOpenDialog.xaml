@@ -1,0 +1,32 @@
+﻿<UserControl
+    x:Class="Typedown.Core.Controls.QuickOpenDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utilities="using:Typedown.Core.Utilities"
+    xmlns:u="using:Typedown.Core.Utilities"
+    mc:Ignorable="d">
+    <Grid Width="520" RowSpacing="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="QueryBox" AutomationProperties.AutomationId="QuickOpenBox"
+                 PlaceholderText="{u:LocaleString Key=QuickOpenBox.Placeholder}"
+                 TextChanged="OnQueryChanged" PreviewKeyDown="OnQueryKeyDown"/>
+        <ListView x:Name="Results" Grid.Row="1" AutomationProperties.AutomationId="QuickOpenList" Height="360"
+                  SelectionMode="Single" IsItemClickEnabled="True" ItemClick="OnItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="utilities:QuickOpenCandidate">
+                    <StackPanel Padding="0,4" AutomationProperties.Name="{x:Bind Name}">
+                        <TextBlock Text="{x:Bind Name}" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{x:Bind Relative}" FontSize="12" Opacity="0.65" TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBlock x:Name="StatusText" Grid.Row="2" FontSize="12" Opacity="0.65"/>
+    </Grid>
+</UserControl>

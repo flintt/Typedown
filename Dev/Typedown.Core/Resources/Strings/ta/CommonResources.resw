@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>ஆவணத்தில் உட்பொதி (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>விரைவாகத் திற</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>கோப்புப் பெயரின் ஒரு பகுதியைத் தட்டச்சிடுக</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>கோப்பு எதுவும் இல்லை</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>ஆவணத்தைச் சரிபார்</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>சிக்கல் எதுவும் இல்லை.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>கண்டறிந்த சிக்கல்கள்: {0}. அங்கு செல்ல ஒன்றைக் கிளிக் செய்யவும்.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>ஏற்றுமதியில் சரியாக வராத சிக்கல்கள்: {0}. அங்கு செல்ல ஒன்றைக் கிளிக் செய்யவும், அல்லது எப்படியும் ஏற்றுமதி செய்யவும்.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>எப்படியும் ஏற்றுமதி செய்</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>வரி {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>படம் கிடைக்கவில்லை</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>இணைக்கப்பட்ட கோப்பு கிடைக்கவில்லை</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>இந்த நங்கூரத்துடன் தலைப்பு இல்லை</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>வரைய முடியாத சூத்திரம் அல்லது வரைபடம்</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML வரைபடம் வரையப்படவில்லை (அமைப்புகளில் முடக்கப்பட்டது)</value>
+  </data>
 </root>

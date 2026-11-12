@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Bed in die dokument in (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Vinnig oopmaak</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Tik ’n deel van ’n lêernaam</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Geen lêer gevind nie</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Gaan dokument na</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Geen probleme gevind nie.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Probleme gevind: {0}. Klik op een om daarheen te gaan.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Probleme wat nie reg in die uitvoer sal uitkom nie: {0}. Klik op een om daarheen te gaan, of voer in elk geval uit.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Voer in elk geval uit</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Reël {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Prent nie gevind nie</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Gekoppelde lêer nie gevind nie</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Geen opskrif met hierdie anker nie</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formule of diagram wat nie geteken kan word nie</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagram nie geteken nie (afgeskakel in Instellings)</value>
+  </data>
 </root>

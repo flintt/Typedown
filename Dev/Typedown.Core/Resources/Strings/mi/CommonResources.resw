@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Tāmau ki te tuhinga (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Huakina tere</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Patohia tētahi wāhanga o te ingoa kōnae</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Kāore he kōnae i kitea</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Tirohia te tuhinga</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Kāore he raruraru i kitea.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Ngā raruraru i kitea: {0}. Pāwhiritia tētahi kia haere ki reira.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Ngā raruraru e kore e puta tika i te kaweake: {0}. Pāwhiritia tētahi kia haere ki reira, kaweake rānei ahakoa.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Kaweake ahakoa</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Rārangi {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Kāore te pikitia i kitea</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Kāore te kōnae hono i kitea</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Kāore he upoko me tēnei punga</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>He tātai, he hoahoa rānei e kore e taea te tuhi</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Kāore te hoahoa PlantUML i tuhia (kua whakawetohia i ngā Tautuhinga)</value>
+  </data>
 </root>

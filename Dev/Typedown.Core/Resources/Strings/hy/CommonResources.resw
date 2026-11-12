@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Ներդնել փաստաթղթում (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Արագ բացում</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Մուտքագրեք ֆայլի անվան մի մասը</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Ֆայլ չի գտնվել</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Ստուգել փաստաթուղթը</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Խնդիրներ չեն գտնվել։</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Գտնված խնդիրներ՝ {0}։ Սեղմեք մեկի վրա՝ այնտեղ գնալու համար։</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Խնդիրներ, որոնք արտահանման մեջ ճիշտ չեն ստացվի՝ {0}։ Սեղմեք մեկի վրա՝ այնտեղ գնալու համար, կամ միևնույն է արտահանեք։</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Միևնույն է արտահանել</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Տող {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Պատկերը չի գտնվել</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Կապված ֆայլը չի գտնվել</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Այս խարիսխով վերնագիր չկա</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Բանաձև կամ գծապատկեր, որը հնարավոր չէ նկարել</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML գծապատկերը չի նկարվել (անջատված է կարգավորումներում)</value>
+  </data>
 </root>

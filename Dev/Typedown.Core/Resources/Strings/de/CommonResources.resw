@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Im Dokument einbetten (Base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Schnell öffnen</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Teil eines Dateinamens eingeben</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Keine Datei gefunden</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Dokument prüfen</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Keine Probleme gefunden.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Gefundene Probleme: {0}. Zum Hinspringen eines anklicken.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Probleme, die im Export nicht richtig herauskommen: {0}. Zum Hinspringen eines anklicken oder trotzdem exportieren.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Trotzdem exportieren</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Zeile {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Bild nicht gefunden</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Verlinkte Datei nicht gefunden</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Keine Überschrift mit diesem Anker</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formel oder Diagramm, das nicht gezeichnet werden kann</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-Diagramm nicht gezeichnet (in den Einstellungen aus)</value>
+  </data>
 </root>

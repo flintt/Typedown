@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Ngulit në dokument (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Hapje e shpejtë</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Shkruani një pjesë të emrit të skedarit</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Nuk u gjet asnjë skedar</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Kontrollo dokumentin</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Nuk u gjetën probleme.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Probleme të gjetura: {0}. Klikoni njërin për të shkuar atje.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Probleme që nuk do të dalin mirë në eksportim: {0}. Klikoni njërin për të shkuar atje, ose eksportoni gjithsesi.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Eksporto gjithsesi</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Rreshti {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Figura nuk u gjet</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Skedari i lidhur nuk u gjet</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Nuk ka titull me këtë spirancë</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formulë ose diagram që nuk mund të vizatohet</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagrami PlantUML nuk vizatohet (i çaktivizuar te Cilësimet)</value>
+  </data>
 </root>

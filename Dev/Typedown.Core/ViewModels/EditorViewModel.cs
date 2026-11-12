@@ -168,6 +168,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
             EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
+            EventCenter.GetObservable<EditorEventArgs>("NotDrawn").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("RenderedXhtml").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (xhtmlWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
@@ -1351,6 +1352,31 @@ namespace Typedown.Core.ViewModels
         }
 
         private readonly Dictionary<int, TaskCompletionSource<JToken>> styleWaiters = new();
+
+        /// <summary>
+        /// The formulas and diagrams the page could not draw (or PlantUML switched off): each one's kind and the first line
+        /// of its source. Empty when the page does not answer in time.
+        /// </summary>
+        public async Task<List<(string Kind, string Source)>> QueryNotDrawnAsync(int timeoutMs = 2000)
+        {
+            var found = new List<(string, string)>();
+            if (MarkdownEditor == null) return found;
+            var token = ++normalizationToken;
+            var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
+            styleWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("QueryNotDrawn", new { token });
+                if (await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) != waiter.Task) return found;
+                foreach (var item in waiter.Task.Result?["found"] as JArray ?? new JArray())
+                    found.Add(((string)item["kind"] ?? "", (string)item["source"] ?? ""));
+                return found;
+            }
+            finally
+            {
+                styleWaiters.Remove(token);
+            }
+        }
         private readonly Dictionary<int, TaskCompletionSource<JToken>> xhtmlWaiters = new();
 
         /// <summary>

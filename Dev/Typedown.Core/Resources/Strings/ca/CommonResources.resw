@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Incrusta al document (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Obertura ràpida</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Escriviu part del nom d’un fitxer</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>No s’ha trobat cap fitxer</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Revisa el document</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>No s’ha trobat cap problema.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Problemes trobats: {0}. Feu clic en un per anar-hi.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemes que no sortiran bé a l’exportació: {0}. Feu clic en un per anar-hi, o exporteu igualment.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Exporta igualment</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Línia {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>No s’ha trobat la imatge</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>No s’ha trobat el fitxer enllaçat</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Cap títol amb aquesta àncora</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Fórmula o diagrama que no es pot dibuixar</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagrama PlantUML no dibuixat (desactivat a la configuració)</value>
+  </data>
 </root>

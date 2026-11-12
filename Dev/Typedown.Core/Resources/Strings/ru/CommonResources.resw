@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Встроить в документ (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Быстрое открытие</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Введите часть имени файла</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Файл не найден</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Проверить документ</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Проблем не найдено.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Найдено проблем: {0}. Щёлкните, чтобы перейти к месту.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Проблем, из-за которых экспорт выйдет неправильно: {0}. Щёлкните, чтобы перейти к месту, или всё равно экспортируйте.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Всё равно экспортировать</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Строка {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Изображение не найдено</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Связанный файл не найден</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Нет заголовка с таким якорем</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Формула или диаграмма, которую нельзя нарисовать</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Диаграмма PlantUML не нарисована (отключено в параметрах)</value>
+  </data>
 </root>

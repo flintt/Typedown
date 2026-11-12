@@ -41,6 +41,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutHome, HomeItem);
             RegisterWindowShortcut(Settings.ShortcutOpenFile, OpenFileItem);
             RegisterWindowShortcut(Settings.ShortcutOpenFolder, OpenFolderItem);
+            RegisterWindowShortcut(Settings.ShortcutQuickOpen, QuickOpenItem);
             RegisterWindowShortcut(Settings.ShortcutClearRecentFiles, ClearRecentFilesItem);
             RegisterWindowShortcut(Settings.ShortcutSave, SaveItem);
             RegisterWindowShortcut(Settings.ShortcutSaveAs, SaveAsItem);
@@ -49,6 +50,43 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutSettings, SettingItem, once: true);
             RegisterWindowShortcut(Settings.ShortcutClose, CloseItem);
             AddEditionItems();
+        }
+
+        private bool quickOpenShown;
+
+        // File > Quick Open: the file chosen opened in a tab, as Open opens one. Asked twice quickly, one dialog.
+        private async void OnQuickOpenClick(object sender, RoutedEventArgs e)
+        {
+            if (quickOpenShown || ViewModel == null) return;
+            quickOpenShown = true;
+            try
+            {
+                var path = await QuickOpenDialog.PickAsync(ViewModel);
+                if (path != null) await File.OpenFile(path);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"quick open: {ex.Message}");
+            }
+            finally
+            {
+                quickOpenShown = false;
+            }
+        }
+
+        // File > Check Document: the problems listed (or that there are none), a row clicked finds its place.
+        private async void OnCheckDocumentClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel == null) return;
+            try
+            {
+                var problems = await File.CheckDocumentAsync();
+                await DocumentCheckDialog.ShowAsync(ViewModel, problems, beforeExport: false);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"check document: {ex.Message}");
+            }
         }
 
         private bool editionItemsAdded;

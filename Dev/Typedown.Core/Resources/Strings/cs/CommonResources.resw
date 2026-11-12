@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Vložit do dokumentu (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Rychlé otevření</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Napište část názvu souboru</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Soubor nenalezen</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Zkontrolovat dokument</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Nebyly nalezeny žádné problémy.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Nalezené problémy: {0}. Kliknutím přejdete na místo.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problémy, které při exportu nevyjdou správně: {0}. Kliknutím přejdete na místo, nebo přesto exportujte.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Přesto exportovat</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Řádek {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Obrázek nenalezen</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Odkazovaný soubor nenalezen</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Žádný nadpis s touto kotvou</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Vzorec nebo diagram, který nelze vykreslit</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagram PlantUML se nevykreslí (vypnuto v nastavení)</value>
+  </data>
 </root>

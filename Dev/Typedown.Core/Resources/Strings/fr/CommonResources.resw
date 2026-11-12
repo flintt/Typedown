@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Intégrer au document (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Ouverture rapide</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Tapez une partie du nom de fichier</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Aucun fichier trouvé</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Vérifier le document</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Aucun problème trouvé.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Problèmes trouvés : {0}. Cliquez sur l’un pour y aller.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problèmes qui ne sortiront pas correctement à l’export : {0}. Cliquez sur l’un pour y aller, ou exportez quand même.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Exporter quand même</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Ligne {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Image introuvable</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Fichier lié introuvable</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Aucun titre avec cette ancre</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formule ou diagramme impossible à dessiner</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagramme PlantUML non dessiné (désactivé dans les paramètres)</value>
+  </data>
 </root>

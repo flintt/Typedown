@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>文書に埋め込む（base64）</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>クイック オープン</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ファイル名の一部を入力</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>ファイルが見つかりません</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>ドキュメントをチェック</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>問題は見つかりませんでした。</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>問題が {0} 件見つかりました。クリックするとその場所に移動します。</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>エクスポートで正しく出力されない問題が {0} 件あります。クリックしてその場所に移動するか、このままエクスポートします。</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>このままエクスポート</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>{0} 行目</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>画像が見つかりません</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>リンク先のファイルが見つかりません</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>このアンカーの見出しがありません</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>描画できない数式または図</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML の図は描画されません（設定でオフ）</value>
+  </data>
 </root>

@@ -1356,4 +1356,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>嵌入文档（base64）</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>快速打开</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>输入文件名的一部分</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>没有找到文件</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>检查文档</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>没有发现问题。</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>发现问题：{0} 个。点击可跳到所在位置。</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>有 {0} 个问题会导致导出结果不对。点击可跳到所在位置，或者仍然导出。</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>仍然导出</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>第 {0} 行</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>找不到图片</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>找不到链接的文件</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>没有这个锚点的标题</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>无法绘制的公式或图表</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML 图表未绘制（设置中已关闭）</value>
+  </data>
 </root>

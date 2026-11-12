@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Indlejr i dokumentet (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Hurtig åbning</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Skriv en del af et filnavn</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Ingen fil fundet</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Tjek dokument</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Ingen problemer fundet.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Fundne problemer: {0}. Klik på et for at gå til det.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemer, der ikke kommer rigtigt ud i eksporten: {0}. Klik på et for at gå til det, eller eksportér alligevel.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Eksportér alligevel</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Linje {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Billedet blev ikke fundet</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Den linkede fil blev ikke fundet</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Ingen overskrift med dette anker</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formel eller diagram, der ikke kan tegnes</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagram tegnes ikke (slået fra i Indstillinger)</value>
+  </data>
 </root>

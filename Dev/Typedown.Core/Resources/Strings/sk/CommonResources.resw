@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Vložiť do dokumentu (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Rýchle otvorenie</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Napíšte časť názvu súboru</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Súbor sa nenašiel</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Skontrolovať dokument</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Nenašli sa žiadne problémy.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Nájdené problémy: {0}. Kliknutím prejdete na miesto.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problémy, ktoré pri exporte nevyjdú správne: {0}. Kliknutím prejdete na miesto, alebo aj tak exportujte.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Aj tak exportovať</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Riadok {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Obrázok sa nenašiel</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Prepojený súbor sa nenašiel</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Žiadny nadpis s touto kotvou</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Vzorec alebo diagram, ktorý sa nedá vykresliť</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagram PlantUML sa nevykreslí (vypnuté v nastaveniach)</value>
+  </data>
 </root>

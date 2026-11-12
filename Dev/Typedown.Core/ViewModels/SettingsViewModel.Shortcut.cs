@@ -22,6 +22,10 @@ namespace Typedown.Core.ViewModels
         [Locale("File", "Home")]
         public ShortcutKey ShortcutHome { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.H)); set => SetSettingValue(value); }
 
+        // Ctrl+P: free in the app and the editor page (printing is Alt+Shift+P), as in VS Code and Sublime.
+        [Locale("File", "QuickOpen")]
+        public ShortcutKey ShortcutQuickOpen { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.P)); set => SetSettingValue(value); }
+
         [Locale("File", "OpenFolder")]
         public ShortcutKey ShortcutOpenFolder { get => GetSettingValue<ShortcutKey>(null); set => SetSettingValue(value); }
 

@@ -1339,4 +1339,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>በሰነዱ ውስጥ አካት (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>በፍጥነት ክፈት</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>የፋይል ስም ክፍል ይተይቡ</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>ምንም ፋይል አልተገኘም</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>ሰነዱን ፈትሽ</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>ምንም ችግር አልተገኘም።</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>የተገኙ ችግሮች፦ {0}። ወደ ቦታው ለመሄድ አንዱን ጠቅ ያድርጉ።</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>በመላክ ጊዜ በትክክል የማይወጡ ችግሮች፦ {0}። ወደ ቦታው ለመሄድ አንዱን ጠቅ ያድርጉ፣ ወይም ለማንኛውም ይላኩ።</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>ለማንኛውም ላክ</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>መስመር {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>ምስሉ አልተገኘም</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>የተገናኘው ፋይል አልተገኘም</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>በዚህ መልህቅ ርዕስ የለም</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>ሊሳል የማይችል ቀመር ወይም ስዕላዊ መግለጫ</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>የPlantUML ስዕል አልተሳለም (በቅንብሮች ጠፍቷል)</value>
+  </data>
 </root>

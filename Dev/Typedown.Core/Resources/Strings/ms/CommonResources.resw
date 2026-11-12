@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Benamkan dalam dokumen (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Buka pantas</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Taip sebahagian nama fail</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Tiada fail ditemui</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Semak dokumen</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Tiada masalah ditemui.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Masalah ditemui: {0}. Klik satu untuk pergi ke situ.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Masalah yang tidak akan keluar dengan betul semasa eksport: {0}. Klik satu untuk pergi ke situ, atau eksport juga.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Eksport juga</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Baris {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Gambar tidak ditemui</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Fail yang dipaut tidak ditemui</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Tiada tajuk dengan sauh ini</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formula atau rajah yang tidak dapat dilukis</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Rajah PlantUML tidak dilukis (dimatikan dalam Tetapan)</value>
+  </data>
 </root>

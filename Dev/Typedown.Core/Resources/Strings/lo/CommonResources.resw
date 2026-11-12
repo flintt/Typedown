@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>ຝັງໃນເອກະສານ (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>ເປີດດ່ວນ</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ພິມສ່ວນໜຶ່ງຂອງຊື່ໄຟລ໌</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>ບໍ່ພົບໄຟລ໌</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>ກວດເອກະສານ</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>ບໍ່ພົບບັນຫາ.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>ພົບບັນຫາ: {0}. ຄລິກອັນໜຶ່ງເພື່ອໄປບ່ອນນັ້ນ.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>ບັນຫາທີ່ຈະເຮັດໃຫ້ການສົ່ງອອກບໍ່ຖືກຕ້ອງ: {0}. ຄລິກອັນໜຶ່ງເພື່ອໄປບ່ອນນັ້ນ ຫຼື ສົ່ງອອກຕໍ່ໄປ.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>ສົ່ງອອກຕໍ່ໄປ</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>ແຖວ {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>ບໍ່ພົບຮູບ</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>ບໍ່ພົບໄຟລ໌ທີ່ລິ້ງ</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>ບໍ່ມີຫົວຂໍ້ທີ່ມີຈຸດຍຶດນີ້</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>ສູດ ຫຼື ແຜນພາບທີ່ແຕ້ມບໍ່ໄດ້</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>ບໍ່ໄດ້ແຕ້ມແຜນພາບ PlantUML (ປິດໃນການຕັ້ງຄ່າ)</value>
+  </data>
 </root>

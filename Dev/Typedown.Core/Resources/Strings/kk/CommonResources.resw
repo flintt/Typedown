@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Құжатқа ендіру (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Жылдам ашу</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Файл атауының бір бөлігін теріңіз</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Файл табылмады</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Құжатты тексеру</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Мәселе табылмады.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Табылған мәселелер: {0}. Сол жерге бару үшін біреуін басыңыз.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Экспортта дұрыс шықпайтын мәселелер: {0}. Сол жерге бару үшін біреуін басыңыз немесе бәрібір экспорттаңыз.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Бәрібір экспорттау</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>{0}-жол</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Сурет табылмады</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Байланысты файл табылмады</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Бұл зәкірі бар тақырып жоқ</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Сызу мүмкін емес формула не диаграмма</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML диаграммасы сызылмады (параметрлерде өшірулі)</value>
+  </data>
 </root>

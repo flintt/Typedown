@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>പ്രമാണത്തിൽ ഉൾച്ചേർക്കുക (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>വേഗത്തിൽ തുറക്കുക</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ഫയൽ നാമത്തിന്റെ ഒരു ഭാഗം ടൈപ്പ് ചെയ്യുക</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>ഫയലൊന്നും കണ്ടെത്തിയില്ല</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>പ്രമാണം പരിശോധിക്കുക</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>പ്രശ്നങ്ങളൊന്നും കണ്ടെത്തിയില്ല.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>കണ്ടെത്തിയ പ്രശ്നങ്ങൾ: {0}. അവിടേക്ക് പോകാൻ ഒന്നിൽ ക്ലിക്ക് ചെയ്യുക.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>എക്സ്പോർട്ടിൽ ശരിയായി വരാത്ത പ്രശ്നങ്ങൾ: {0}. അവിടേക്ക് പോകാൻ ഒന്നിൽ ക്ലിക്ക് ചെയ്യുക, അല്ലെങ്കിൽ എന്തായാലും എക്സ്പോർട്ട് ചെയ്യുക.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>എന്തായാലും എക്സ്പോർട്ട് ചെയ്യുക</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>വരി {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>ചിത്രം കണ്ടെത്തിയില്ല</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>ലിങ്ക് ചെയ്ത ഫയൽ കണ്ടെത്തിയില്ല</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>ഈ ആങ്കറുള്ള തലക്കെട്ടില്ല</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>വരയ്ക്കാനാവാത്ത സൂത്രവാക്യമോ ഡയഗ്രമോ</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML ഡയഗ്രം വരച്ചില്ല (ക്രമീകരണങ്ങളിൽ ഓഫ്)</value>
+  </data>
 </root>

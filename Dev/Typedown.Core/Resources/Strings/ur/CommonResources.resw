@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>دستاویز میں شامل کریں (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>فوری کھولیں</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>فائل کے نام کا کچھ حصہ ٹائپ کریں</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>کوئی فائل نہیں ملی</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>دستاویز جانچیں</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>کوئی مسئلہ نہیں ملا۔</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>ملنے والے مسائل: {0}۔ کسی ایک پر کلک کر کے وہاں جائیں۔</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>ایسے مسائل جو برآمد میں درست نہیں آئیں گے: {0}۔ کسی ایک پر کلک کر کے وہاں جائیں، یا پھر بھی برآمد کریں۔</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>پھر بھی برآمد کریں</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>سطر {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>تصویر نہیں ملی</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>منسلک فائل نہیں ملی</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>اس اینکر والی کوئی سرخی نہیں</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>ایسا فارمولا یا خاکہ جو بنایا نہیں جا سکتا</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML خاکہ نہیں بنا (ترتیبات میں بند ہے)</value>
+  </data>
 </root>

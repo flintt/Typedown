@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Ενσωμάτωση στο έγγραφο (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Γρήγορο άνοιγμα</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Πληκτρολογήστε μέρος του ονόματος αρχείου</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Δεν βρέθηκε αρχείο</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Έλεγχος εγγράφου</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Δεν βρέθηκαν προβλήματα.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Βρέθηκαν προβλήματα: {0}. Κάντε κλικ σε ένα για να μεταβείτε σε αυτό.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Προβλήματα που δεν θα βγουν σωστά στην εξαγωγή: {0}. Κάντε κλικ σε ένα για να μεταβείτε σε αυτό ή εξαγάγετε ούτως ή άλλως.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Εξαγωγή ούτως ή άλλως</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Γραμμή {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Η εικόνα δεν βρέθηκε</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Το συνδεδεμένο αρχείο δεν βρέθηκε</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Δεν υπάρχει επικεφαλίδα με αυτή την άγκυρα</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Τύπος ή διάγραμμα που δεν μπορεί να σχεδιαστεί</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Το διάγραμμα PlantUML δεν σχεδιάζεται (απενεργοποιημένο στις ρυθμίσεις)</value>
+  </data>
 </root>

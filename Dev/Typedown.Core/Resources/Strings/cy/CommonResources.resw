@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Mewnosod yn y ddogfen (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Agor yn gyflym</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Teipiwch ran o enw ffeil</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Heb ddod o hyd i ffeil</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Gwirio’r ddogfen</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Heb ddod o hyd i broblemau.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Problemau a ganfuwyd: {0}. Cliciwch un i fynd ato.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemau na fydd yn dod allan yn iawn wrth allforio: {0}. Cliciwch un i fynd ato, neu allforiwch beth bynnag.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Allforio beth bynnag</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Llinell {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Heb ddod o hyd i’r llun</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Heb ddod o hyd i’r ffeil gysylltiedig</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Dim pennawd gyda’r angor hwn</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Fformiwla neu ddiagram na ellir ei luniadu</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagram PlantUML heb ei luniadu (wedi’i ddiffodd yn y Gosodiadau)</value>
+  </data>
 </root>

@@ -1444,4 +1444,46 @@
   <data name="ImageMenu.Replace" xml:space="preserve">
     <value>Replace picture…</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Quick Open</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Type part of a file name</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>No file found</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Check Document</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>No problems found.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Problems found: {0}. Click one to go to it.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problems found that will not come out right in the export: {0}. Click one to go to it, or export anyway.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Export anyway</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Line {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Picture not found</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Linked file not found</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>No heading with this anchor</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formula or diagram that cannot be drawn</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML diagram not drawn (turned off in Settings)</value>
+  </data>
 </root>

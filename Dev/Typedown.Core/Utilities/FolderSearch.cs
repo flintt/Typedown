@@ -169,7 +169,7 @@ namespace Typedown.Core.Utilities
         }
 
         /// <summary>What the search looks at: no hidden or system entry, no dot folder or node_modules; files the editor opens.</summary>
-        private static bool Included(FileSystemInfo entry)
+        internal static bool Included(FileSystemInfo entry)
         {
             if (entry.Attributes.HasFlag(FileAttributes.Hidden) || entry.Attributes.HasFlag(FileAttributes.System)) return false;
             if (entry is DirectoryInfo) return !entry.Name.StartsWith(".") && entry.Name != "node_modules";
