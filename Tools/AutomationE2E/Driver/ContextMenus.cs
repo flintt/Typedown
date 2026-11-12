@@ -18,6 +18,95 @@ using System.Threading.Tasks;
 internal static partial class Program
 {
     /// <summary>
+    /// XM03: Open Recent's entry menu looks as the menus do, in the app's light, dark and black themes, the system's, and
+    /// dark with a custom theme:
+    /// the colour of its background (beside its last item's text) against the Open Recent submenu's (beside the Folders
+    /// entry), read off the screen; and light in the light theme, dark in the dark (the user, 2026-11-12: see-through, then
+    /// not in the theme - its acrylic followed the system's theme, not the app's).
+    /// </summary>
+    private static async Task XM03(List<string> notes)
+    {
+        var folder = FixtureFolder("xm03");
+        var paths = Enumerable.Range(1, 3).Select(i => Path.Combine(folder, $"xm03-{i}.md")).ToList();
+        foreach (var p in paths) File.WriteAllText(p, "# " + Path.GetFileNameWithoutExtension(p) + "\n");
+        using var c = await Session("e2e XM03");
+        var keep = await Open(c, paths[0]);
+        var windowId = await WindowIdOf(c, keep);
+        var window = await WindowOf(windowId, c);
+        var themeBefore = (int?)(await c.Call("test.settings.get", new { windowId, name = "AppTheme" }))["value"];
+        var customBefore = (string?)(await c.Call("test.settings.get", new { windowId, name = "CustomTheme" }))["value"];
+        // The mean colour of a small patch at the left of an element, where its text is not.
+        System.Drawing.Color Patch(System.Windows.Automation.AutomationElement e)
+        {
+            var r = e.Current.BoundingRectangle;
+            var area = new System.Drawing.Rectangle((int)r.Left + 3, (int)(r.Top + r.Height / 2) - 3, 6, 6);
+            using var bitmap = new System.Drawing.Bitmap(area.Width, area.Height);
+            using (var g = System.Drawing.Graphics.FromImage(bitmap)) g.CopyFromScreen(area.Location, System.Drawing.Point.Empty, area.Size);
+            long rs = 0, gs = 0, bs = 0;
+            for (var x = 0; x < area.Width; x++) for (var y = 0; y < area.Height; y++) { var px = bitmap.GetPixel(x, y); rs += px.R; gs += px.G; bs += px.B; }
+            var n = area.Width * area.Height;
+            return System.Drawing.Color.FromArgb((int)(rs / n), (int)(gs / n), (int)(bs / n));
+        }
+        string Hex(System.Drawing.Color k) => $"#{k.R:X2}{k.G:X2}{k.B:X2}";
+        try
+        {
+            foreach (var p in paths.Skip(1))
+            {
+                var id = await Open(c, p);
+                await Task.Delay(300);
+                await c.Call("document.close", new { documentId = id });
+                await Task.Delay(300);
+            }
+            var bad = new List<string>();
+            // The app's themes against Windows' own (dark on w10: the light one is the theme apart from it), and one with a
+            // custom theme over it.
+            foreach (var (theme, custom, name) in new[] { (1, "", "light"), (2, "", "dark"), (3, "", "black"), (0, "", "system"), (2, "dracula", "dark + dracula") })
+            {
+                await c.Call("test.settings.set", new { windowId, name = "AppTheme", value = theme });
+                await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = custom });
+                await Task.Delay(1500);
+                var file = FindIn(window, "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
+                await Click(window, file);
+                await Task.Delay(500);
+                var recent = FindAnywhereInHost(window, "OpenRecentSubMenu") ?? throw new CaseFailed("no Open Recent");
+                var r = CenterOf(recent);
+                SetCursorPos(r.Item1, r.Item2);
+                bool Shown() => FindAnywhereInHost(window, "RecentFile-0") is { } x && !x.Current.IsOffscreen;
+                if (!await Eventually(() => Task.FromResult(Shown()), 3000, 150))
+                {
+                    await Click(window, recent);
+                    await Eventually(() => Task.FromResult(Shown()), 3000, 150);
+                }
+                var entry = FindAnywhereInHost(window, "RecentFile-0") ?? throw new CaseFailed("no recent entry");
+                await Click(window, entry, Mouse.Right);
+                await Task.Delay(900);
+                var remove = FindAnywhereInHost(window, "RecentRemoveItem");
+                var folders = FindAnywhereInHost(window, "OpenRecentFoldersSubMenu");
+                notes.Add($"{name}: " + Screenshot($"xm03-{name}"));
+                if (remove == null || folders == null) { bad.Add($"{name}: menus not found"); await CloseMenus(); continue; }
+                var own = Patch(remove);
+                var menus = Patch(folders);
+                var apart = Math.Abs(own.R - menus.R) + Math.Abs(own.G - menus.G) + Math.Abs(own.B - menus.B);
+                var light = (own.R + own.G + own.B) / 3;
+                notes.Add($"{name}: entry's menu {Hex(own)}, Open Recent {Hex(menus)} ({apart} apart)");
+                if (apart > 45) bad.Add($"{name}: {Hex(own)} against the menus' {Hex(menus)}");
+                if (theme == 1 && light < 150) bad.Add($"{name}: dark ({Hex(own)}) in the light theme");
+                if (theme >= 2 && light > 110) bad.Add($"{name}: light ({Hex(own)}) in a dark theme");
+                await CloseMenus();
+                await Task.Delay(400);
+            }
+            Check(bad.Count == 0, "the entry's menu looks as the menus do in each theme" + (bad.Count == 0 ? "" : ": " + string.Join("; ", bad)));
+        }
+        finally
+        {
+            await CloseMenus();
+            try { await c.Call("test.settings.set", new { windowId, name = "AppTheme", value = themeBefore ?? 0 }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = customBefore ?? "" }); } catch { }
+            try { await c.Call("document.close", new { documentId = keep }); } catch { }
+        }
+    }
+
+    /// <summary>
     /// XM02: File > Open Recent, an entry's menu, Remove from list - with a real right-click and click, twice in a row:
     /// each time the entry right-clicked is the one gone, the others stay, and the menus open again for the next (the
     /// user, 2026-11-12: it took out another entry than the one clicked, and a second could not be taken out).
@@ -110,7 +199,13 @@ internal static partial class Program
                 var recent = FindAnywhereInHost(window, "OpenRecentSubMenu") ?? throw new CaseFailed("no Open Recent");
                 var r = CenterOf(recent);
                 SetCursorPos(r.Item1, r.Item2);
-                await Task.Delay(900);
+                // Open on the mouse resting there; clicked if it has not opened in 3 s.
+                bool Shown() => FindAnywhereInHost(window, "RecentFile-1") is { } x && !x.Current.IsOffscreen;
+                if (!await Eventually(() => Task.FromResult(Shown()), 3000, 150))
+                {
+                    await Click(window, recent);
+                    await Eventually(() => Task.FromResult(Shown()), 3000, 150);
+                }
                 string target;
                 if (how == "mouse")
                 {
