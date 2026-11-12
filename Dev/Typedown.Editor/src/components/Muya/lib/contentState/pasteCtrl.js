@@ -263,6 +263,19 @@ const pasteCtrl = ContentState => {
     // }
   }
 
+  // Tab-separated rows (a spreadsheet's or a database tool's text, with no HTML table beside it) as a Markdown table, its
+  // first row the header; null when the text is not that - two rows at least, each with the same number of cells (two
+  // or more). Pasted into a paragraph they were lines with tabs in them.
+  const tsvTable = text => {
+    const lines = (text || '').replace(/\r\n?/g, '\n').replace(/\n+$/, '').split('\n')
+    if (lines.length < 2 || !lines.every(l => l.includes('\t'))) return null
+    const rows = lines.map(l => l.split('\t').map(c => c.trim().replace(/\|/g, '\\|')))
+    const columns = rows[0].length
+    if (columns < 2 || rows.some(r => r.length !== columns)) return null
+    const line = cells => `| ${cells.join(' | ')} |`
+    return [line(rows[0]), line(rows[0].map(() => '---')), ...rows.slice(1).map(line)].join('\n') + '\n'
+  }
+
   // What was copied as rows of cells: an HTML table (from here, Word, Excel or a web page), a Markdown table, tab-
   // separated lines (Excel's text), else the one text for one cell.
   const pastedGrid = (text, html) => {
@@ -371,6 +384,16 @@ const pasteCtrl = ContentState => {
     // Several cells selected took nothing (a reader: a range copied could not be pasted into an empty one of its size).
     if (this.selectedTableCells) {
       return this.pasteIntoSelectedCells(text, html, type === 'pasteAsPlainText')
+    }
+
+    // Tab-separated rows pasted outside a table: a table (an HTML table copied beside them goes its own way, below).
+    if (type === 'normal' && !/<table/i.test(html || '')) {
+      const caretBlock = this.getBlock(this.cursor.start.key)
+      const table = caretBlock && caretBlock.functionType !== 'cellContent' && caretBlock.functionType !== 'codeContent' ? tsvTable(text) : null
+      if (table) {
+        text = table
+        html = ''
+      }
     }
 
     let copyType = this.checkCopyType(html, text)

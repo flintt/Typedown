@@ -132,6 +132,36 @@ const { openEditor } = require('./harness');
       '300 rows from the last cell: all of them there, the table grown to fit', `${big.length} rows, last ${JSON.stringify(big[big.length - 1])}`);
     report(took < 2000, '300 rows pasted in under 2 seconds', `${took} ms`);
 
+    // 8. Tab-separated rows (a spreadsheet's text, no HTML table beside it) pasted into a paragraph: a table, its first
+    //    row the header. One line with tabs stays a line.
+    await mode(true, false);
+    await load('Before\n');
+    await mode(false, false);
+    await pause(500);
+    const para = await page.evaluate(() => {
+      const r = document.querySelector('#ag-editor-id p').getBoundingClientRect();
+      return { x: r.right - 2, y: r.top + r.height / 2 };
+    });
+    await page.mouse.click(para.x, para.y);
+    await pause(250);
+    await page.keyboard.press('End');
+    await page.keyboard.press('Enter');
+    await pause(250);
+    await paste('Name\tAge\nAnn\t31\nBob\t42');
+    let md = await markdown();
+    report(/\| Name \| Age \|/.test(md) && /\| Ann \| 31 \|/.test(md) && /\| Bob \| 42 \|/.test(md) && /^Before$/m.test(md),
+      'tab-separated rows pasted into a paragraph: a table', JSON.stringify(md));
+    await mode(true, false);
+    await load('Before\n');
+    await mode(false, false);
+    await pause(500);
+    await page.mouse.click(para.x, para.y);
+    await pause(250);
+    await page.keyboard.press('End');
+    await paste('\tone\tline');
+    md = await markdown();
+    report(!/\|/.test(md) && /one/.test(md), 'one line with tabs stays a line', JSON.stringify(md));
+
     // 5. A single cell, one value: replaced as before.
     await fresh();
     const cell = await at(1, 0);
