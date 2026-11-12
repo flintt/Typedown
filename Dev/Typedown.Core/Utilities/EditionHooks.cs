@@ -397,6 +397,27 @@ namespace Typedown.Core.Utilities
             }
         }
 
+        /// <summary>
+        /// Review mode's record of a file for automation (document.reviewStatus): <c>{ on, revisions, outcomes }</c>, each
+        /// revision and decision with the automation edit (<c>op</c>) it came from; null when the file has none or review
+        /// mode is not available. Typedown sets none.
+        /// </summary>
+        public static Func<string, Newtonsoft.Json.Linq.JObject> ReviewRecord { get; set; }
+
+        public static Newtonsoft.Json.Linq.JObject ReviewRecordFor(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return null;
+            try
+            {
+                return ReviewRecord?.Invoke(path);
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("EditionReviewRecord", ex.ToString());
+                return null;
+            }
+        }
+
         /// <summary>The page's revisions of the document shown (review mode), as it reports them while they change. Raised on the window's thread.</summary>
         public static event Action<ReviewReport> ReviewReported;
 

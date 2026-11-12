@@ -1964,6 +1964,88 @@
     },
     "window.setView.result": {
       "$ref": "#/$defs/viewState"
+    },
+    "document.reviewStatus.params": {
+      "type": "object",
+      "description": "Review mode's verdict on the client's edits: each write's operationId, its revisions still waiting for the reader, accepted, or rejected.",
+      "properties": {
+        "documentId": {
+          "$ref": "#/$defs/documentId"
+        },
+        "operationIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "The edits asked about; omitted or empty: every edit review mode knows of in the document."
+        }
+      },
+      "required": [
+        "documentId"
+      ]
+    },
+    "document.reviewStatus.result": {
+      "type": "object",
+      "required": [
+        "documentId",
+        "available",
+        "on",
+        "operations"
+      ],
+      "properties": {
+        "documentId": {
+          "$ref": "#/$defs/documentId"
+        },
+        "available": {
+          "type": "boolean",
+          "description": "Review mode is available for the document (false: the edition has none, or the document is untitled)."
+        },
+        "on": {
+          "type": "boolean",
+          "description": "The document is in review now."
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "operationId",
+              "pending",
+              "accepted",
+              "rejected",
+              "status"
+            ],
+            "properties": {
+              "operationId": {
+                "type": "string"
+              },
+              "pending": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "accepted": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "rejected": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "status": {
+                "enum": [
+                  "none",
+                  "pending",
+                  "accepted",
+                  "rejected",
+                  "partly"
+                ],
+                "description": "none: review mode holds nothing of the edit (it was off); pending: all of it waits; accepted / rejected: all decided one way; partly: some decided, or both ways."
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -54,6 +54,8 @@ export interface ReviewOutcome {
     at: number
     source: string
     session?: string
+    /** The automation edit (operationId) the revision came from, if one did. */
+    op?: string
     kind: string
     oldText: string
     newText: string
@@ -240,7 +242,7 @@ export function reportNow() {
 // ---- acting on revisions ----
 
 const outcomeOf = (r: Revision, outcome: 'accepted' | 'rejected'): ReviewOutcome =>
-    ({ id: r.id, outcome, at: Date.now(), source: r.source, session: r.session, kind: r.kind, oldText: r.oldText, newText: r.newText })
+    ({ id: r.id, outcome, at: Date.now(), source: r.source, session: r.session, ...(r.op ? { op: r.op } : {}), kind: r.kind, oldText: r.oldText, newText: r.newText })
 
 // With the rest of their groups (a format's two marks).
 const withGroups = (revisions: Revision[]) => {

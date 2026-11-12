@@ -23,6 +23,8 @@ export interface Hunk {
 export interface RevisionSource {
     name: string
     session?: string
+    /** The automation edit that made it (its operationId): the client asks by it whether it was accepted or rejected. */
+    op?: string
 }
 
 export const YOU: RevisionSource = { name: '' }
@@ -37,6 +39,8 @@ export interface Revision extends Hunk {
     /** The program's name, '' for the reader. */
     source: string
     session?: string
+    /** The automation edit (operationId) it came from, if one did. */
+    op?: string
     /** When it was made (ms since 1970). */
     time: number
     /**
@@ -58,6 +62,7 @@ export interface StoredRevision {
     oldText?: string
     newText: string
     source: string
+    op?: string
     session?: string
     time: number
     /** Where its text is in the document as reported (matched again only where that text still is). */
@@ -588,7 +593,8 @@ export function trackRevisions(baseline: string, current: string, previous: Know
     const places = previous.map(p => ({ p, at: placesOf(p, current, region) }))
     const exact = new Map<string, Known>()
     for (const p of previous) exact.set(`${p.baseStart}:${p.baseEnd}:${p.newText}`, p)
-    const sameSource = (p: Known, s: RevisionSource) => p.source === s.name && (p.session ?? '') === (s.session ?? '')
+    // One automation edit's revisions stay apart from another's of the same client: each is asked about by its own.
+    const sameSource = (p: Known, s: RevisionSource) => p.source === s.name && (p.session ?? '') === (s.session ?? '') && ((p as Revision).op ?? '') === (s.op ?? '')
     const out: Revision[] = []
     for (const h of hunks) {
         const newText = current.slice(h.curStart, h.curEnd)
@@ -598,7 +604,7 @@ export function trackRevisions(baseline: string, current: string, previous: Know
             const id = from && !used.has(from.id) ? from.id : newRevisionId()
             used.add(id)
             const keeps = from && from.id === id && from.group ? { group: from.group, format: from.format } : {}
-            return { ...piece, id, kind: kindOf(piece), oldText: oldPart, newText: current.slice(piece.curStart, piece.curEnd), source: source.name, session: source.session, time, ...keeps }
+            return { ...piece, id, kind: kindOf(piece), oldText: oldPart, newText: current.slice(piece.curStart, piece.curEnd), source: source.name, session: source.session, ...(source.op ? { op: source.op } : {}), time, ...keeps }
         }
         // The new text, a character at a time: whose it is - a revision known before, or the change's.
         if (h.curEnd > h.curStart && (places.some(x => x.at.length) || region)) {
@@ -626,7 +632,7 @@ export function trackRevisions(baseline: string, current: string, previous: Know
             // the owner changes.
             const startsBlock = blockStarts(current, current.slice(h.curStart, h.curEnd))
             const blockStart = (i: number) => i > 0 && startsBlock(h.curStart + i)
-            const sourceOf = (o: Known | null): RevisionSource => o ? { name: o.source, session: o.session } : change.source
+            const sourceOf = (o: Known | null): RevisionSource => o ? { name: o.source, session: o.session, op: (o as Revision).op } : change.source
             let start = 0
             let first = true
             const from = out.length
@@ -634,7 +640,7 @@ export function trackRevisions(baseline: string, current: string, previous: Know
                 // Two revisions of one source side by side, made within a pause of each other (one split by text
                 // typed in it and rejected since), are one again.
                 const together = (a: Known | null, b: Known | null) => a === b ||
-                    (!!a && !!b && sameSource(a, { name: b.source, session: b.session }) && Math.abs(a.time - b.time) <= REVISION_PAUSE_MS)
+                    (!!a && !!b && sameSource(a, { name: b.source, session: b.session, op: (b as Revision).op }) && Math.abs(a.time - b.time) <= REVISION_PAUSE_MS)
                 // (Line breaks and marks alone before a block go with it: Enter in a quotation is one revision.)
                 const newBlock = blockStart(i) && /[\p{L}\p{N}]/u.test(current.slice(h.curStart + start, h.curStart + i))
                 if (i < owner.length && together(owner[i], owner[start]) && !newBlock) continue
@@ -782,7 +788,7 @@ export function storedOf(r: Revision, current: string): StoredRevision {
     for (let i = current.indexOf('\n'); i >= 0 && i < r.curStart; i = current.indexOf('\n', i + 1)) line++
     return {
         id: r.id, kind: r.kind, baseStart: r.baseStart, baseEnd: r.baseEnd, curStart: r.curStart, curEnd: r.curEnd, oldText: r.oldText, newText: r.newText,
-        source: r.source, session: r.session, time: r.time, line, ...(r.group ? { group: r.group, format: r.format } : {}),
+        source: r.source, session: r.session, ...(r.op ? { op: r.op } : {}), time: r.time, line, ...(r.group ? { group: r.group, format: r.format } : {}),
         block: current.slice(lineStart, lineEnd < 0 ? current.length : lineEnd).slice(0, 60),
     }
 }

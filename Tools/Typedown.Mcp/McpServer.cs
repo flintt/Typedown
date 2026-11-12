@@ -109,7 +109,7 @@ namespace Typedown.Mcp
             "revision, all or nothing - and do not replace the whole document. When a write fails with revision_conflict or " +
             "match_count_mismatch, read the document again and redo the edit against the new text; never resend an edit computed " +
             "from old text. The person may review your edits and reject them: a read reports what became of this session's last " +
-            "edit (lastEditThisSession) - check it before building on that edit. Each read and write reports normalization: " +
+            "edit (lastEditThisSession; when the document is in review, its review field says whether the person accepted or rejected it) - check it before building on that edit. Each read and write reports normalization: " +
             "pendingNormalization 'none' or 'knownFormatting' means nothing to do; 'unknown' means the person's first edit in the " +
             "visual editor may reformat the document (reasons say how - 'formatting-changed' is layout only, such as list markers " +
             "or spacing, no words lost); a write is refused then unless you pass allowFormattingChanges: true, which is fine when " +
@@ -346,7 +346,15 @@ namespace Typedown.Mcp
             var text = (string)textValue!;
             var documentId = (string)p["documentId"]!;
             // What became of this session's last edit, judged on the whole text before a part of it is cut out.
-            if (lastWrites.TryGetValue(documentId, out var last)) read["lastEditThisSession"] = LastEditStatus(last, (long?)read["revision"], text);
+            if (lastWrites.TryGetValue(documentId, out var last))
+            {
+                var status = LastEditStatus(last, (long?)read["revision"], text);
+                // And what review mode says of it, when the document is in review: the person's own verdict, not a guess
+                // from the text.
+                if (last.OperationId != null && await ReviewOfAsync(documentId, last.OperationId, ct).ConfigureAwait(false) is JObject review)
+                    status["review"] = review;
+                read["lastEditThisSession"] = status;
+            }
             NoteNormalization(read);
 
             // A part of the document: a heading's section, or lines.
@@ -418,8 +426,10 @@ namespace Typedown.Mcp
         /// <summary>A write this session made: its revision, and the text it put in (what a read looks for again).</summary>
         private sealed class LastWrite
         {
-            public LastWrite(long revision, IReadOnlyList<(string Text, int Count)> wrote) { Revision = revision; Wrote = wrote; }
+            public LastWrite(long revision, IReadOnlyList<(string Text, int Count)> wrote, string? operationId) { Revision = revision; Wrote = wrote; OperationId = operationId; }
             public long Revision { get; }
+            /// <summary>The write's operationId: review mode is asked about it (document.reviewStatus).</summary>
+            public string? OperationId { get; }
             public IReadOnlyList<(string Text, int Count)> Wrote { get; }
         }
 
@@ -430,10 +440,36 @@ namespace Typedown.Mcp
         {
             if (result is JObject r && (long?)r["revision"] is long revision && (string?)args["documentId"] is string documentId)
             {
-                lastWrites[documentId] = new LastWrite(revision, edits.Where(e => e.Replacement.Length > 0).Select(e => (e.Replacement, e.ExpectedCount)).ToList());
+                lastWrites[documentId] = new LastWrite(revision, edits.Where(e => e.Replacement.Length > 0).Select(e => (e.Replacement, e.ExpectedCount)).ToList(), (string?)r["operationId"]);
                 NoteNormalization(r);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Review mode's verdict on one write (document.reviewStatus): its status (pending, accepted, rejected, partly), the
+        /// counts and a note. Null when review mode is not available, the document is not in review and holds nothing of the
+        /// edit, or the host does not have the method (an older one).
+        /// </summary>
+        private async Task<JObject?> ReviewOfAsync(string documentId, string operationId, CancellationToken ct)
+        {
+            JToken answer;
+            try { answer = await typedown.CallAsync("document.reviewStatus", new JObject { ["documentId"] = documentId, ["operationIds"] = new JArray(operationId) }, ct).ConfigureAwait(false); }
+            catch (Exception) { return null; }
+            if (answer is not JObject r || (bool?)r["available"] != true) return null;
+            var op = (r["operations"] as JArray)?.OfType<JObject>().FirstOrDefault();
+            var status = (string?)op?["status"];
+            if (op == null || status == null || (status == "none" && (bool?)r["on"] != true)) return null;
+            op.Remove("operationId");
+            op["note"] = status switch
+            {
+                "pending" => "Your last edit waits in review: the person has not accepted or rejected it yet.",
+                "accepted" => "The person accepted your last edit in review.",
+                "rejected" => "The person rejected your last edit in review. Do not build on it; decide again from the current text.",
+                "partly" => "The person decided on part of your last edit in review (see pending/accepted/rejected). Check those places before going on.",
+                _ => "The document is in review, but review mode holds nothing of your last edit.",
+            };
+            return op;
         }
 
         /// <summary>

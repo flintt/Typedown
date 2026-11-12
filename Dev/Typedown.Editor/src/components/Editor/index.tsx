@@ -617,8 +617,9 @@ const Editor: React.FC = () => {
         flushRef.current?.()
         if (sha256Hex(markdownRef.current ?? '') !== baseContentHash) return refuse('conflict', 'baseContentHashMismatch')
         pendingEditRef.current = { operationId }
-        // Who wrote it, for review mode: the automation client's program and session ('' would be the reader).
-        noteChangeSource(source?.name ? { name: source.name, session: source.session } : null)
+        // Who wrote it, for review mode: the automation client's program and session ('' would be the reader), and the
+        // edit itself, which the client asks about (document.reviewStatus).
+        noteChangeSource(source?.name ? { name: source.name, session: source.session, op: operationId } : null)
         resetUserIntent()
         const y = optionsRef.current?.sourceCode ? codeMirrorScrollRef.current : window.scrollY
         scrollToChangeRef.current = !!scrollToChange

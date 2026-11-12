@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -105,5 +105,12 @@ namespace Typedown.Automation
         /// The window's only document is replaced by a new empty one: the window stays. Returns the closed document.
         /// </summary>
         Task<DocumentInfo> CloseDocumentAsync(string documentId, long? baseRevision, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// document.reviewStatus: review mode's record of the document - <c>{ on, revisions, outcomes }</c>, each revision
+        /// and decision with the automation edit (<c>op</c>) it came from (<see cref="ReviewStatus"/>). Null when review mode
+        /// is not available for it (an application or edition without it, an untitled document).
+        /// </summary>
+        Task<Newtonsoft.Json.Linq.JObject?> GetReviewAsync(string documentId, CancellationToken cancellationToken);
     }
 }

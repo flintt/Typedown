@@ -315,6 +315,13 @@ namespace Typedown.Core.Services
             });
         }
 
+        /// <summary>document.reviewStatus: review mode's record of the document's file (an edition's, EditionHooks.ReviewRecord).</summary>
+        public async Task<Newtonsoft.Json.Linq.JObject> GetReviewAsync(string documentId, CancellationToken cancellationToken)
+        {
+            var (window, tab) = await Find(documentId);
+            return await OnWindow(window.WindowId, app => Task.FromResult(EditionHooks.ReviewRecordFor(tab.FilePath)));
+        }
+
         public async Task<DocumentInfo> CloseDocumentAsync(string documentId, long? baseRevision, CancellationToken cancellationToken)
         {
             var (window, tab) = await Find(documentId);

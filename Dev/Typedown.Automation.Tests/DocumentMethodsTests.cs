@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -17,6 +17,14 @@ namespace Typedown.Automation.Tests
         public readonly List<string> Discarded = new();
         public FakeDocument? Active;
         public Func<ApplyCommand, ApplyReply>? NewDocumentPage;
+        /// <summary>Review mode's record for document.reviewStatus (null: review mode not available).</summary>
+        public JObject? Review;
+
+        public Task<JObject?> GetReviewAsync(string documentId, CancellationToken ct)
+        {
+            Find(documentId);
+            return Task.FromResult(Review);
+        }
 
         public string Version => "1.2.30";
         public int ClassifierVersion => 3;
@@ -422,6 +430,37 @@ namespace Typedown.Automation.Tests
             Assert.Equal(new[] { "Intro one", "Setext Title", "Intro one", "Link & Co.!", "中文 标题" }, headings.Select(x => x.Text));
             Assert.Equal(new[] { "intro-one", "setext-title", "intro-one-1", "link--co", "中文-标题" }, headings.Select(x => x.Slug));
             Assert.Equal(new[] { 1, 1, 2, 3, 4 }, headings.Select(x => x.Level));
+        }
+
+        // The client asks what the reader made of its edits, by each write's operationId.
+        [Fact]
+        public async Task Review_status_tells_each_edit_waiting_accepted_rejected_or_partly()
+        {
+            var (h, host) = Start();
+            await using var _ = h;
+            var doc = host.Add("a\n", "/tmp/r.md");
+            await h.InitializeAsync(AllScopes);
+
+            var none = (await h.CallAsync("document.reviewStatus", new JObject { ["documentId"] = doc.DocumentId }))["result"]!;
+            Valid("document.reviewStatus.result", none);
+            Assert.False((bool)none["available"]!);
+            Assert.Empty((JArray)none["operations"]!);
+
+            host.Review = JObject.Parse(@"{ on: true,
+                revisions: [ { id: 'r1', op: 'op1' }, { id: 'r2', op: 'op1' }, { id: 'r3', op: 'op3' }, { id: 'r4' } ],
+                outcomes: [ { id: 'r5', op: 'op2', outcome: 'rejected' }, { id: 'r6', op: 'op3', outcome: 'accepted' }, { id: 'r7', op: 'op4', outcome: 'accepted' }, { id: 'r8', outcome: 'rejected' } ] }");
+            var all = (await h.CallAsync("document.reviewStatus", new JObject { ["documentId"] = doc.DocumentId }))["result"]!;
+            Valid("document.reviewStatus.result", all);
+            Assert.True((bool)all["available"]! && (bool)all["on"]!);
+            var byOp = ((JArray)all["operations"]!).ToDictionary(o => (string)o["operationId"]!, o => (string)o["status"]!);
+            Assert.Equal(new Dictionary<string, string> { ["op1"] = "pending", ["op2"] = "rejected", ["op3"] = "partly", ["op4"] = "accepted" }, byOp);
+
+            var asked = (await h.CallAsync("document.reviewStatus", new JObject { ["documentId"] = doc.DocumentId, ["operationIds"] = new JArray("op1", "opX") }))["result"]!;
+            var ops = (JArray)asked["operations"]!;
+            Assert.Equal(new[] { "op1", "opX" }, ops.Select(o => (string)o["operationId"]!));
+            Assert.Equal(2, (int)ops[0]["pending"]!);
+            Assert.Equal("none", (string)ops[1]["status"]!);
+            Assert.Equal("document_not_found", Kind(await h.CallAsync("document.reviewStatus", new JObject { ["documentId"] = "d0123456789abcdef0123456789abcdef" })));
         }
     }
 }
