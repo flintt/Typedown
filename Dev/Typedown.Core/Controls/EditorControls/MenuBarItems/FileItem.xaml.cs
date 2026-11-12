@@ -127,12 +127,19 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 {
                     e.Handled = true;
                     ShowEntryMenu(item, e.TryGetPosition(item, out var at) ? at : new Windows.Foundation.Point(item.ActualWidth / 2, item.ActualHeight / 2),
-                        EntryMenu(menu, item, path, open, remove));
+                        EntryMenu(menu, item, path, open, remove), () => RemoveEntry(menu, item, path, remove));
                 };
                 item.KeyDown += (s, e) =>
                 {
                     if (e.Key != Windows.System.VirtualKey.Delete) return;
                     e.Handled = true;
+                    // The entry whose menu is open, not the one the keyboard is on (see ShowEntryMenu).
+                    if (entryPopup?.IsOpen == true && removeEntryShown is Action shown)
+                    {
+                        entryPopup.IsOpen = false;
+                        shown();
+                        return;
+                    }
                     RemoveEntry(menu, item, path, remove);
                 };
                 menu.Items.Insert(1, item);
@@ -162,12 +169,18 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         // The entry's menu over the menus, which stay open until one of its items is chosen (the user, 2026-11-11: the
         // menus went as it opened). A flyout opened from a submenu is not taken for that menu's child, and closes every
-        // menu open: a popup of its own instead, with the menu's look. A choice closes it and the menus; Esc, or a click
-        // anywhere else, closes it alone.
-        private void ShowEntryMenu(MenuFlyoutItem item, Windows.Foundation.Point at, List<MenuFlyoutItemBase> items)
+        // menu open: a popup of its own instead, with the menu's look. Remove from list closes it alone, the list left
+        // open for the next; another choice closes the menus too, as the menu bar closes them. Esc, or a click anywhere
+        // else, closes it alone. While it is open, Delete takes out the entry it is for: the keyboard stays in the list,
+        // on the entry the mouse last went over, and that one went (the user, 2026-11-12).
+        private Popup entryPopup;
+        private Action removeEntryShown;
+
+        private void ShowEntryMenu(MenuFlyoutItem item, Windows.Foundation.Point at, List<MenuFlyoutItemBase> items, Action removeThis)
         {
             var root = item.XamlRoot;
             if (root == null) return;
+            if (entryPopup != null) entryPopup.IsOpen = false;
             var presenter = new MenuFlyoutPresenter();
             UiLanguage.Set(presenter);
             // A menu's presenter draws no background of its own: a flyout puts the system's acrylic behind it. A popup does
@@ -180,16 +193,31 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 if (x is MenuFlyoutItem choice) choice.Click += (s, e) =>
                 {
                     popup.IsOpen = false;
-                    foreach (var open in VisualTreeHelper.GetOpenPopupsForXamlRoot(root)) open.IsOpen = false;
+                    if (AutomationProperties.GetAutomationId(choice) != "RecentRemoveItem") CloseMenus();
                 };
             }
             presenter.KeyDown += (s, e) =>
             {
+                if (e.Key == Windows.System.VirtualKey.Delete)
+                {
+                    e.Handled = true;
+                    popup.IsOpen = false;
+                    removeThis();
+                    return;
+                }
                 if (e.Key != Windows.System.VirtualKey.Escape) return;
                 e.Handled = true;
                 popup.IsOpen = false;
                 item.Focus(FocusState.Keyboard);
             };
+            popup.Closed += (s, e) =>
+            {
+                if (entryPopup != popup) return;
+                entryPopup = null;
+                removeEntryShown = null;
+            };
+            entryPopup = popup;
+            removeEntryShown = removeThis;
             var point = item.TransformToVisual(null).TransformPoint(at);
             popup.HorizontalOffset = point.X;
             popup.VerticalOffset = point.Y;
@@ -198,8 +226,24 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             Log.Debug($"recent: the entry's menu at {point.X:0},{point.Y:0}");
         }
 
+        // The menus closed as the menu bar closes them (its item collapsed): their popups shut from outside left the menu
+        // bar taking its menu for open.
+        private void CloseMenus()
+        {
+            var peer = Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.FromElement(this)
+                ?? Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(this);
+            if (peer?.GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.ExpandCollapse) is Microsoft.UI.Xaml.Automation.Provider.IExpandCollapseProvider menu)
+            {
+                menu.Collapse();
+                return;
+            }
+            Log.Debug("recent: the menu bar item cannot be collapsed; its popups closed");
+            if (XamlRoot != null) foreach (var open in VisualTreeHelper.GetOpenPopupsForXamlRoot(XamlRoot)) open.IsOpen = false;
+        }
+
         private void RemoveEntry(MenuFlyoutSubItem menu, MenuFlyoutItem item, string path, Action<string> remove)
         {
+            Log.Debug($"recent: {System.IO.Path.GetFileName(path)} taken out of the list");
             remove(path);
             var index = menu.Items.IndexOf(item);
             if (index >= 0) menu.Items.RemoveAt(index);
