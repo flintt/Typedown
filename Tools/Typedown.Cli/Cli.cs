@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
@@ -392,20 +392,9 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             return text;
         }
 
-        private static async Task<JObject> CallAsync(MessageFraming framing, int id, string method, JObject parameters, CancellationToken ct)
-        {
-            var message = new JObject { ["jsonrpc"] = "2.0", ["id"] = id, ["method"] = method, ["params"] = parameters };
-            await framing.WriteAsync(new UTF8Encoding(false).GetBytes(message.ToString(Formatting.None)), ct).ConfigureAwait(false);
-            while (true)
-            {
-                var frame = await framing.ReadAsync(ct).ConfigureAwait(false);
-                if (frame.Status == FrameStatus.EndOfStream) throw new IOException($"{Brand.Name} closed the connection.");
-                if (frame.Status != FrameStatus.Message) continue;
-                var reply = JObject.Parse(new UTF8Encoding(false).GetString(frame.Body!));
-                if (reply["id"]?.Type == JTokenType.Integer && (int)reply["id"]! == id) return reply;
-                if (reply["id"]?.Type == JTokenType.Null && reply["error"] != null) return reply;
-            }
-        }
+        // One request and its reply (the automation library's, shared with the MCP server).
+        private static Task<JObject> CallAsync(MessageFraming framing, int id, string method, JObject parameters, CancellationToken ct) =>
+            JsonRpcExchange.CallAsync(framing, id, method, parameters, ct);
 
         public static int ExitCodeFor(string? kind) => kind switch
         {

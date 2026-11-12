@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -98,21 +98,9 @@ namespace Typedown.Mcp
             return framing;
         }
 
-        private async Task<JObject> SendAsync(MessageFraming framing, string method, JObject parameters, CancellationToken ct)
-        {
-            var id = nextId++;
-            var message = new JObject { ["jsonrpc"] = "2.0", ["id"] = id, ["method"] = method, ["params"] = parameters };
-            await framing.WriteAsync(new UTF8Encoding(false).GetBytes(message.ToString(Formatting.None)), ct).ConfigureAwait(false);
-            while (true)
-            {
-                var frame = await framing.ReadAsync(ct).ConfigureAwait(false);
-                if (frame.Status == FrameStatus.EndOfStream) throw new IOException($"{Brand.Name} closed the connection.");
-                if (frame.Status != FrameStatus.Message) continue;
-                var reply = JObject.Parse(new UTF8Encoding(false).GetString(frame.Body!));
-                if (reply["id"]?.Type == JTokenType.Integer && (int)reply["id"]! == id) return reply;
-                if (reply["id"]?.Type == JTokenType.Null && reply["error"] != null) return reply;
-            }
-        }
+        // One request and its reply (the automation library's, shared with the CLI); the ids are this connection's.
+        private Task<JObject> SendAsync(MessageFraming framing, string method, JObject parameters, CancellationToken ct) =>
+            JsonRpcExchange.CallAsync(framing, nextId++, method, parameters, ct);
 
         private void Drop()
         {
