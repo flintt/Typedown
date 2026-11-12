@@ -185,6 +185,15 @@ namespace Typedown.Core.Controls
             }
         }
 
+        /// <summary>
+        /// The keyboard left to the content (a box to type in: Quick Open), not put on the default button. The keyboard is
+        /// still taken from the editor's web view first; the content focuses itself.
+        /// </summary>
+        public bool KeepContentFocus { get; set; }
+
+        /// <summary>Raised once the keyboard has been taken from the editor (KeepContentFocus): the content focuses itself then.</summary>
+        public event EventHandler KeyboardTaken;
+
         private async void SetFocusButton()
         {
             bool success = false;
@@ -195,6 +204,12 @@ namespace Typedown.Core.Controls
             // it, the XAML content has it again and the button's focus is real. Every dialog opened over the editor.
             if (prevFocusedElement is WebView2 && this.GetService<AppViewModel>()?.MainWindow is { } window && window != IntPtr.Zero)
                 PInvoke.SetFocus(window);
+            if (KeepContentFocus)
+            {
+                await Task.Delay(50);
+                KeyboardTaken?.Invoke(this, EventArgs.Empty);
+                return;
+            }
             for (int i = 0; i < 10 && !success; i++)
             {
                 await Task.Delay(100);

@@ -38,12 +38,10 @@ namespace Typedown.Core.Controls
             var content = new QuickOpenDialog();
             var dialog = AppContentDialog.Create(Locale.GetString("QuickOpen"), content, Locale.GetDialogString("Cancel"));
             content.dialog = dialog;
-            // The keyboard in the box, once the dialog has put it on its own button: typed letters go there at once.
-            content.Loaded += (_, _) =>
-            {
-                content.QueryBox.Focus(FocusState.Keyboard);
-                content.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => content.QueryBox.Focus(FocusState.Keyboard));
-            };
+            // The keyboard in the box, not on the dialog's button (Enter there was Cancel): typed letters and Enter go to
+            // the box, once the dialog has taken the keyboard from the editor.
+            dialog.KeepContentFocus = true;
+            dialog.KeyboardTaken += (_, _) => content.QueryBox.Focus(FocusState.Keyboard);
             _ = content.FillAsync(viewModel);
             await dialog.ShowAsync(viewModel.XamlRoot);
             content.listing.Cancel();
