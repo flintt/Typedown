@@ -32,7 +32,8 @@ internal static partial class Program
             return seen;
         }
         bool Headings(JObject s) => Names(s) == "Alpha,Beta,Gamma" && Shown(s) == 1;
-        bool Empty(JObject s) => ((JArray)s["rows"]!).Count == 0 && Shown(s) == 0;
+        // No rows; the outline block folds itself for a plain text without headings (#46), its page then not there (-1).
+        bool Empty(JObject s) => ((JArray)s["rows"]!).Count == 0 && Shown(s) <= 0;
         try
         {
             await c.Call("window.setView", new { windowId, mode = "visual", sidePane = new { open = true, page = "outline" } });
