@@ -133,7 +133,9 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 // OnRecentKey): it took out the first entry, where the keyboard had stayed (the user, 2026-11-12).
                 Action removeThis = () => RemoveEntry(menu, item, path, remove);
                 item.PointerEntered += (s, e) => { highlightedEntry = (item, removeThis); WatchRecentKeys(); };
-                item.GotFocus += (s, e) => highlightedEntry = (item, removeThis);
+                // Only the keys' own moves: the focus the list gives its first entry as it opens came after the mouse had
+                // gone onto another, and Delete took out the first (XM02, job 416).
+                item.GotFocus += (s, e) => { if (item.FocusState == FocusState.Keyboard) highlightedEntry = (item, removeThis); };
                 // Gone as soon as it is not drawn highlighted: a Delete typed in the document must reach the document.
                 item.PointerExited += (s, e) => { if (highlightedEntry.Item == item) highlightedEntry = default; };
                 item.LostFocus += (s, e) => { if (highlightedEntry.Item == item) highlightedEntry = default; };
