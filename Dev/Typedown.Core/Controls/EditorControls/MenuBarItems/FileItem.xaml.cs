@@ -129,7 +129,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                     ShowEntryMenu(item, e.TryGetPosition(item, out var at) ? at : new Windows.Foundation.Point(item.ActualWidth / 2, item.ActualHeight / 2),
                         EntryMenu(menu, item, path, open, remove), () => RemoveEntry(menu, item, path, remove));
                 };
-                item.KeyDown += (s, e) =>
+                item.AddHandler(KeyDownEvent, new Microsoft.UI.Xaml.Input.KeyEventHandler((s, e) =>
                 {
                     if (e.Key != Windows.System.VirtualKey.Delete) return;
                     e.Handled = true;
@@ -141,7 +141,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                         return;
                     }
                     RemoveEntry(menu, item, path, remove);
-                };
+                }), true);
                 menu.Items.Insert(1, item);
                 made.Insert(0, item);
             }
@@ -196,15 +196,16 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                     if (AutomationProperties.GetAutomationId(choice) != "RecentRemoveItem") CloseMenus();
                 };
             }
+            // Delete before the menu's items take the key (they mark it handled: XM02 saw it reach nothing).
+            presenter.PreviewKeyDown += (s, e) =>
+            {
+                if (e.Key != Windows.System.VirtualKey.Delete) return;
+                e.Handled = true;
+                popup.IsOpen = false;
+                removeThis();
+            };
             presenter.KeyDown += (s, e) =>
             {
-                if (e.Key == Windows.System.VirtualKey.Delete)
-                {
-                    e.Handled = true;
-                    popup.IsOpen = false;
-                    removeThis();
-                    return;
-                }
                 if (e.Key != Windows.System.VirtualKey.Escape) return;
                 e.Handled = true;
                 popup.IsOpen = false;

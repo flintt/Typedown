@@ -198,15 +198,18 @@ internal static partial class Program
             Check(remove != null, "a recent entry's right-click opens its menu with Remove from list");
             // A picture of it over the menus: it came up see-through, with no background (the user, 2026-11-12).
             notes.Add("the entry's menu: " + Screenshot("xm01-recent-entry-menu"));
-            // The menus stay open under the entry's menu, and go once one of its items is chosen (they went as it opened).
+            // The menus stay open under the entry's menu (they went as it opened). Remove from list closes the entry's menu
+            // alone: the list stays for the next entry to go (the user, 2026-11-12: a second could not be taken out).
             var still = FindAnywhereInHost(window, "RecentFile-0");
             Check(still != null && !still.Current.IsOffscreen, "the Open Recent menu stays open under the entry's menu");
             if (remove != null)
             {
                 await Click(window, remove, Mouse.Left);
                 await Task.Delay(800);
-                var left = FindAnywhereInHost(window, "OpenRecentSubMenu");
-                Check(left == null || left.Current.IsOffscreen, "a choice in the entry's menu closes the menus");
+                var gone = FindAnywhereInHost(window, "RecentRemoveItem");
+                Check(gone == null || gone.Current.IsOffscreen, "Remove from list closes the entry's menu");
+                var list = FindAnywhereInHost(window, "OpenRecentSubMenu");
+                Check(list != null && !list.Current.IsOffscreen, "and leaves the menus open, for the next entry");
             }
             await CloseMenus();
         }
