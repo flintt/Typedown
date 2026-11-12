@@ -50,6 +50,7 @@ function findAnchorBlock(blocks: any[], anchor: ScrollAnchor): { index: number, 
 }
 import transport, { beforeHostMessage } from "services/transport";
 import { followLink, removeLink } from "services/linkActions";
+import { STANDARD_Y, leastToShow, toStandard, toStandardIfOut } from "services/reveal";
 import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
@@ -309,7 +310,6 @@ function holdWindowBlock(who: string): () => void {
     }
 }
 
-const STANDAR_Y = 320
 // Where a heading goes when it is chosen in the outline: at the top, a line's breathing room below the
 // edge. The caret's 320 put it a third of the way down, and the reader then saw the section before it
 // at the top of the window — and the outline, reading the top, marked that one instead.
@@ -394,7 +394,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         noteScroll('relative', from)
     }, [])
 
-    const scrollToElement = useCallback((selector, offset = STANDAR_Y) => {
+    const scrollToElement = useCallback((selector, offset = STANDARD_Y) => {
         if (editor == null) {
             return;
         }
@@ -407,24 +407,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     const scrollToElementIfInvisible = useCallback((selector) => {
         const anchor = document.querySelector(selector)
-        if (anchor) {
-            const { y } = anchor.getBoundingClientRect()
-            if (y < 0 || y > window.innerHeight) {
-                scrollToElement(selector)
-            }
-        }
+        if (anchor && toStandardIfOut(anchor.getBoundingClientRect().y, window.innerHeight)) scrollToElement(selector)
     }, [scrollToElement])
 
     const scrollToCursor = useCallback(() => {
-        relativeScroll(editor?.getSelection().cursorCoords.y - STANDAR_Y)
+        relativeScroll(toStandard(editor?.getSelection().cursorCoords.y))
     }, [editor, relativeScroll])
 
     const scrollToCursorIfInvisible = useCallback(() => {
         try {
-            const y = editor?.getSelection().cursorCoords.y;
-            if (y < 0 || y > window.innerHeight) {
-                relativeScroll(y - STANDAR_Y)
-            }
+            const delta = toStandardIfOut(editor?.getSelection().cursorCoords.y, window.innerHeight)
+            if (delta) relativeScroll(delta)
         } catch (err) {
             console.log(err)
         }
@@ -436,10 +429,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         try {
             const coords = editor?.getSelection().cursorCoords
             if (!coords) return
-            const margin = 48
-            const height = coords.height || 24
-            if (coords.y < margin) relativeScroll(coords.y - margin)
-            else if (coords.y + height > window.innerHeight - margin) relativeScroll(coords.y + height - (window.innerHeight - margin))
+            const delta = leastToShow(coords.y, coords.height || 24, window.innerHeight)
+            if (delta) relativeScroll(delta)
         } catch (err) {
             console.log(err)
         }
@@ -993,7 +984,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 const writers = recentScrolls(1000)
                 const from = window.scrollY
                 const now = element.querySelector('.ag-highlight') || element
-                window.scrollBy(0, now.getBoundingClientRect().top - STANDAR_Y)
+                window.scrollBy(0, toStandard(now.getBoundingClientRect().top))
                 noteScroll('find hold', from)
                 if (!told) {
                     told = true
