@@ -1,4 +1,4 @@
-using Microsoft.Win32.SafeHandles;
+﻿using Microsoft.Win32.SafeHandles;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -87,54 +87,16 @@ namespace Typedown.Services.Automation
             }
         }
 
-        /// <summary>The current user's SID as a string (S-1-5-21-...), read from the process token.</summary>
+        /// <summary>
+        /// The current user's SID as a string (S-1-5-21-...), read from the process token by the automation library's
+        /// WindowsUser, as the CLI reads it (the same Win32 calls were written out twice: the modularity audit's M11). The
+        /// pipe's access rule is made of it: an empty one is refused, never taken for "anyone".
+        /// </summary>
         public static string CurrentUserSid()
         {
-            if (!OpenProcessToken(GetCurrentProcess(), 0x0008 /* TOKEN_QUERY */, out var token))
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-            try
-            {
-                GetTokenInformation(token, 1 /* TokenUser */, IntPtr.Zero, 0, out var length);
-                var buffer = Marshal.AllocHGlobal(length);
-                try
-                {
-                    if (!GetTokenInformation(token, 1, buffer, length, out _))
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
-                    var sid = Marshal.ReadIntPtr(buffer); // TOKEN_USER.User.Sid
-                    if (!ConvertSidToStringSidW(sid, out var text))
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
-                    try
-                    {
-                        return Marshal.PtrToStringUni(text)
-                            ?? throw new InvalidOperationException("Windows returned an empty SID string.");
-                    }
-                    finally { LocalFree(text); }
-                }
-                finally
-                {
-                    Marshal.FreeHGlobal(buffer);
-                }
-            }
-            finally
-            {
-                CloseHandle(token);
-            }
+            var sid = Typedown.Automation.WindowsUser.CurrentSid();
+            return string.IsNullOrEmpty(sid) ? throw new InvalidOperationException("Windows returned an empty SID string.") : sid;
         }
-
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr GetCurrentProcess();
-
-        [DllImport("advapi32.dll", SetLastError = true)]
-        private static extern bool OpenProcessToken(IntPtr process, uint access, out IntPtr token);
-
-        [DllImport("advapi32.dll", SetLastError = true)]
-        private static extern bool GetTokenInformation(IntPtr token, int infoClass, IntPtr info, int length, out int returnLength);
-
-        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern bool ConvertSidToStringSidW(IntPtr sid, out IntPtr stringSid);
-
-        [DllImport("kernel32.dll")]
-        private static extern bool CloseHandle(IntPtr handle);
 
         public void Dispose()
         {
