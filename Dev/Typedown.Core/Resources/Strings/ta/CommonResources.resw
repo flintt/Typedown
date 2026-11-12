@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML வரைபடம் வரையப்படவில்லை (அமைப்புகளில் முடக்கப்பட்டது)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>இணைப்பைத் திருத்து</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>தலைப்புக்கான இணைப்பை நகலெடு</value>
+  </data>
 </root>

@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML चित्र कोरिएन (सेटिङमा बन्द)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>लिङ्क सम्पादन गर्नुहोस्</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>शीर्षकको लिङ्क प्रतिलिपि गर्नुहोस्</value>
+  </data>
 </root>

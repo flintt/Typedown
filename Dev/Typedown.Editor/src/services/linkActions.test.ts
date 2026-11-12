@@ -27,3 +27,25 @@ describe('linkText', () => {
         expect(linkText('<b>bold</b>')).toBeNull()
     })
 })
+
+// The menu's Edit link: the address chosen in the link's Markdown, to type over.
+describe('editLink', () => {
+    const { editLink } = require('./linkActions')
+    const state = (text: string) => {
+        const block = { key: 'b1', text }
+        return { block, cursor: null as any, getBlock: (key: string) => key === 'b1' ? block : null, render: jest.fn() }
+    }
+    it('chooses an inline link\'s address', () => {
+        const s = state('See [the site](https://example.com "t") now')
+        const raw = '[the site](https://example.com "t")'
+        expect(editLink(s, { key: 'b1', start: 4, end: 4 + raw.length, raw })).toBe(true)
+        expect(s.block.text.slice(s.cursor.start.offset, s.cursor.end.offset)).toBe('https://example.com')
+        expect(s.render).toHaveBeenCalled()
+    })
+    it('chooses a link of another form whole, and nothing when the text has moved on', () => {
+        const s = state('x <https://a.org> y')
+        expect(editLink(s, { key: 'b1', start: 2, end: 17, raw: '<https://a.org>' })).toBe(true)
+        expect(s.block.text.slice(s.cursor.start.offset, s.cursor.end.offset)).toBe('<https://a.org>')
+        expect(editLink(s, { key: 'b1', start: 0, end: 5, raw: '[gone](x)' })).toBe(false)
+    })
+})

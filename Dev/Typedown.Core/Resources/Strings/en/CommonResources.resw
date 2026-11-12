@@ -1486,4 +1486,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML diagram not drawn (turned off in Settings)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Edit link</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Copy link to heading</value>
+  </data>
 </root>

@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Dijagramma PlantUML mhux miġbuda (mitfija fis-Settings)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Editja l-link</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Ikkopja link għall-intestatura</value>
+  </data>
 </root>

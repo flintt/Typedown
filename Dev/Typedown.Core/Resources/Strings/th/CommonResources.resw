@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>ไม่ได้วาดแผนภาพ PlantUML (ปิดอยู่ในการตั้งค่า)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>แก้ไขลิงก์</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>คัดลอกลิงก์ไปยังหัวข้อ</value>
+  </data>
 </root>

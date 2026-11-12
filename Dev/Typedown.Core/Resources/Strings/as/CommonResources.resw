@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML চিত্ৰ অঁকা হোৱা নাই (ছেটিংছত বন্ধ)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>লিংক সম্পাদনা কৰক</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>শিৰোনামৰ লিংক প্ৰতিলিপি কৰক</value>
+  </data>
 </root>

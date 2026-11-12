@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML diagramma netiek zīmēta (izslēgta iestatījumos)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Rediģēt saiti</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopēt saiti uz virsrakstu</value>
+  </data>
 </root>

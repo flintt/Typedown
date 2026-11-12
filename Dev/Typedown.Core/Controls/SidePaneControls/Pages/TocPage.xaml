@@ -14,9 +14,17 @@
     <Page.Resources>
         <Thickness x:Key="TreeViewItemPresenterPadding">0</Thickness>
         
+        <!-- A heading's menu (a right-click on its row): a link to it copied, the whole outline opened or folded. -->
+        <MenuFlyout x:Key="TocItemFlyout" Opening="OnTocItemFlyoutOpening">
+            <MenuFlyoutItem AutomationProperties.AutomationId="CopyHeadingLinkItem" Text="{u:LocaleString Key=CopyHeadingLink}" Click="OnCopyHeadingLinkClick"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem AutomationProperties.AutomationId="TocExpandAllItem" Text="{u:LocaleString Key=TocPane.ExpandAll}" Click="OnExpandAllClick"/>
+            <MenuFlyoutItem AutomationProperties.AutomationId="TocCollapseAllItem" Text="{u:LocaleString Key=TocPane.CollapseAll}" Click="OnCollapseAllClick"/>
+        </MenuFlyout>
+
         <!-- The tree holds nodes the page makes (TocPage.xaml.cs), each with a TocTreeItem as its content. -->
         <DataTemplate x:Key="TocItemTemplate" x:DataType="muxc:TreeViewNode">
-            <Grid Height="32">
+            <Grid Height="32" ContextFlyout="{StaticResource TocItemFlyout}" Background="Transparent">
                 <TextBlock Text="{x:Bind ((models:TocTreeItem)Content).TocItem.Content, Mode=OneWay}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,0,1"/>
             </Grid>
         </DataTemplate>

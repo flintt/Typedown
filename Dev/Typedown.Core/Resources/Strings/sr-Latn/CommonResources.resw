@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML dijagram nije nacrtan (isključeno u podešavanjima)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Uredi vezu</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopiraj vezu do naslova</value>
+  </data>
 </root>

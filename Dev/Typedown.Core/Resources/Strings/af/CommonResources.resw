@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML-diagram nie geteken nie (afgeskakel in Instellings)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Wysig skakel</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopieer skakel na opskrif</value>
+  </data>
 </root>

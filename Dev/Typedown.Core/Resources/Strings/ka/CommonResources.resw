@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML დიაგრამა არ დაიხატა (გამორთულია პარამეტრებში)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>ბმულის რედაქტირება</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>სათაურის ბმულის კოპირება</value>
+  </data>
 </root>

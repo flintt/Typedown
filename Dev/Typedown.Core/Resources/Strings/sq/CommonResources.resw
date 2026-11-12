@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Diagrami PlantUML nuk vizatohet (i çaktivizuar te Cilësimet)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Redakto lidhjen</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopjo lidhjen për te titulli</value>
+  </data>
 </root>

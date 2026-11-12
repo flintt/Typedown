@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>ដ្យាក្រាម PlantUML មិនបានគូរ (បិទក្នុងការកំណត់)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>កែតំណ</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>ចម្លងតំណទៅចំណងជើង</value>
+  </data>
 </root>

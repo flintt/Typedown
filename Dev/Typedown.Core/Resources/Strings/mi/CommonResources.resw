@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Kāore te hoahoa PlantUML i tuhia (kua whakawetohia i ngā Tautuhinga)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Whakatika hono</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Tāruatia te hono ki te upoko</value>
+  </data>
 </root>

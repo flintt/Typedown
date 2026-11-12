@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML գծապատկերը չի նկարվել (անջատված է կարգավորումներում)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Խմբագրել հղումը</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Պատճենել վերնագրի հղումը</value>
+  </data>
 </root>

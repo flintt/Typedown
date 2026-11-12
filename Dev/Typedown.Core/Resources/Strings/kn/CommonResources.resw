@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML ರೇಖಾಚಿತ್ರ ಚಿತ್ರಿಸಲಾಗಿಲ್ಲ (ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಆಫ್)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>ಲಿಂಕ್ ಸಂಪಾದಿಸಿ</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>ಶೀರ್ಷಿಕೆಯ ಲಿಂಕ್ ನಕಲಿಸಿ</value>
+  </data>
 </root>

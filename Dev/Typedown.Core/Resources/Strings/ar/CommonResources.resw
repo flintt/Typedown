@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>رسم PlantUML غير مرسوم (معطَّل في الإعدادات)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>تحرير الارتباط</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>نسخ ارتباط إلى العنوان</value>
+  </data>
 </root>

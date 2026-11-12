@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML diyagramı çizilmedi (Ayarlar’da kapalı)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Bağlantıyı düzenle</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Başlığa bağlantıyı kopyala</value>
+  </data>
 </root>

@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML-diagrammi ei joonistata (sätetes välja lülitatud)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Redigeeri linki</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopeeri link pealkirjale</value>
+  </data>
 </root>

@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML આકૃતિ દોરાઈ નથી (સેટિંગ્સમાં બંધ)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>લિંક સંપાદિત કરો</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>શીર્ષકની લિંક કૉપિ કરો</value>
+  </data>
 </root>

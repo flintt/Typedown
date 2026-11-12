@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML-mynd ekki teiknuð (slökkt í stillingum)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Breyta tengli</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Afrita tengil á fyrirsögn</value>
+  </data>
 </root>

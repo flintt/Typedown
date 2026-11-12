@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML-diagram tegnes ikke (slått av i Innstillinger)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Rediger kobling</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopier kobling til overskrift</value>
+  </data>
 </root>

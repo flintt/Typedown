@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Hindi iginuhit ang PlantUML diagram (naka-off sa Mga Setting)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>I-edit ang link</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopyahin ang link sa heading</value>
+  </data>
 </root>
