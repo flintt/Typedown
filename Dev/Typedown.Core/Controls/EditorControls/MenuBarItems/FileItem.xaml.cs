@@ -170,7 +170,10 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             if (root == null) return;
             var presenter = new MenuFlyoutPresenter();
             UiLanguage.Set(presenter);
-            var popup = new Popup { XamlRoot = root, Child = presenter, IsLightDismissEnabled = true, ShouldConstrainToRootBounds = false };
+            // A menu's presenter draws no background of its own: a flyout puts the system's acrylic behind it. A popup does
+            // not, and this menu came up see-through (the user, 2026-11-12): the same backdrop, in the window's theme.
+            if (root.Content is FrameworkElement content) presenter.RequestedTheme = content.ActualTheme;
+            var popup = new Popup { XamlRoot = root, Child = presenter, IsLightDismissEnabled = true, ShouldConstrainToRootBounds = false, SystemBackdrop = new DesktopAcrylicBackdrop() };
             foreach (var x in items)
             {
                 presenter.Items.Add(x);
