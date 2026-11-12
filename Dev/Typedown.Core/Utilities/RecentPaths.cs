@@ -78,6 +78,13 @@ namespace Typedown.Core.Utilities
             return string.Equals(Normalize(a), Normalize(b), StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// A path as a key of a store (cursor places, shared notes): <see cref="Normalize"/>d and in lower case, so one key
+        /// holds what <see cref="Same"/> takes for one path. The keys the stores wrote before (the full path, or the path
+        /// with its slashes turned, in lower case) are these for every file path they held.
+        /// </summary>
+        public static string Key(string path) => string.IsNullOrEmpty(path) ? path : Normalize(path).ToLowerInvariant();
+
         /// <summary>The full path without a trailing separator (a drive keeps its own), for comparing.</summary>
         public static string Normalize(string path)
         {
