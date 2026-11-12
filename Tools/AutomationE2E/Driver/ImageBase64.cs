@@ -77,7 +77,11 @@ internal static partial class Program
                 Check(at.Type == JTokenType.Object, "the picture is drawn in the editor");
                 var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
                 GetWindowRect(window, out var rc);
+                // Chosen first (a click on it), as a person does: the menu has the picture's entries for the picture chosen.
+                await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
+                await Task.Delay(400);
                 await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top, Mouse.Right);
+                notes.Add("menu after the right-click: " + Screenshot("IU05-menu"));
             }
             await RightClickPicture();
             System.Windows.Automation.AutomationElement? extract = null;
