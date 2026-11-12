@@ -3,7 +3,6 @@ import { PARAGRAPH_TYPES, PREVIEW_DOMPURIFY_CONFIG, HAS_TEXT_BLOCK_REG, IMAGE_EX
 import { sanitize, getUniqueId } from '../utils'
 import { getImageInfo } from '../utils/getImageInfo'
 import { dedentPastedText } from '../utils/pastedText'
-import { getAllTableCells } from './tableDragBarCtrl'
 
 const LIST_REG = /ul|ol/
 const LINE_BREAKS_REG = /\n/
@@ -297,12 +296,19 @@ const pasteCtrl = ContentState => {
     const grid = plain ? [[(text || '').trim().replace(/\t/g, ' ')]] : pastedGrid(text, html)
     const gridRows = grid.length
     const gridColumns = Math.max(...grid.map(r => r.length))
-    let all = getAllTableCells(tableId)
+    // The table's cells as rows, read from the document's model, not the page: rows and columns are added there and
+    // the table drawn once at the end. Each one added was a table edit of its own (drawn, its state sent) and the page
+    // read again: pasting a hundred rows of a spreadsheet took seconds (the user, 2026-11-12).
+    const table = this.getBlock(tableId)
+    const thead = table.children[0]
+    const tbody = table.children[1]
+    const modelRows = () => [...thead.children, ...tbody.children]
+    let all = modelRows().map(row => row.children)
     // The selection's top-left in the table.
     let top = 0
     let left = 0
     all.forEach((tr, i) => tr.forEach((td, j) => {
-      if (td.id === selected[0].key) {
+      if (td.key === selected[0].key) {
         top = i
         left = j
       }
@@ -313,29 +319,31 @@ const pasteCtrl = ContentState => {
     const width = one || tiled ? columns : gridColumns
     this.selectedTableCells = null
     // Rows and columns added where it runs past the table: after its last row, after its last column.
-    const contentOf = element => this.getBlock(element.id).children[0].key
     for (let n = top + height - all.length; n > 0; n--) {
-      this.editTable({ location: 'next', action: 'insert', target: 'row' }, contentOf(all[all.length - 1][0]))
-      all = getAllTableCells(tableId)
+      const rows = modelRows()
+      this.appendChild(tbody, this.createRow(rows[rows.length - 1], false))
     }
     for (let n = left + width - all[0].length; n > 0; n--) {
-      this.editTable({ location: 'next', action: 'insert', target: 'column' }, contentOf(all[0][all[0].length - 1]))
-      all = getAllTableCells(tableId)
+      modelRows().forEach(row => {
+        const lastCell = row.children[row.children.length - 1]
+        const cell = this.createBlock(lastCell.type, { align: '' })
+        this.appendChild(cell, this.createBlock('span', { functionType: 'cellContent' }))
+        this.insertAfter(cell, lastCell)
+        row.children.forEach((c, i) => { c.column = i })
+      })
     }
+    all = modelRows().map(row => row.children)
+    Object.assign(table, { row: all.length - 1, column: all[0].length - 1 })
     for (let i = 0; i < height; i++) {
       for (let j = 0; j < width; j++) {
         const value = one ? grid[0][0] : (grid[i % gridRows] || [])[j % gridColumns]
-        const element = (all[top + i] || [])[left + j]
-        if (value === undefined || !element) continue
-        const cell = this.getBlock(element.id)
-        if (!cell || !cell.children[0]) continue
+        const cell = (all[top + i] || [])[left + j]
+        if (value === undefined || !cell || !cell.children[0]) continue
         cell.children[0].text = value.replace(/\|/g, '\\|').replace(/\n/g, '<br/>')
       }
     }
-    const table = this.getBlock(tableId)
     // The caret in the last cell filled.
-    const last = (all[top + height - 1] || [])[left + width - 1]
-    const lastCell = last && this.getBlock(last.id)
+    const lastCell = (all[top + height - 1] || [])[left + width - 1]
     if (lastCell && lastCell.children[0]) {
       const { key, text: cellText } = lastCell.children[0]
       this.cursor = { start: { key, offset: cellText.length }, end: { key, offset: cellText.length } }
