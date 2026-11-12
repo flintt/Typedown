@@ -287,24 +287,32 @@ namespace Typedown.Core.Controls
             // the tabs (1.4.2.4) left no room for a tab made next, which went over the others, and tabs could not be
             // dragged again (the user, 2026-11-12). The + is drawn after the last tab instead: moved left by the room the
             // list has past its tabs, none when they fill it or overflow.
-            var list = Descendants(TabView).OfType<FrameworkElement>().FirstOrDefault(l => l.Name == "TabListView");
+            // The room is the list's width past its last tab's end, laid out (a tab being dragged is moved by a transform,
+            // which is left out); taken against the room while the column is the TabView's Auto (the list's own padding),
+            // not against none. The list's scroll viewer was no measure: its content is as wide as it (job 402).
+            var grid = Descendants(TabView).OfType<Grid>().FirstOrDefault(g => g.Name == "TabContainerGrid");
+            var list = Descendants(TabView).OfType<ListViewBase>().FirstOrDefault(l => l.Name == "TabListView");
             var add = Descendants(TabView).OfType<Button>().FirstOrDefault(b => b.Name == "AddButton");
-            var scroller = list == null ? null : Descendants(list).OfType<ScrollViewer>().FirstOrDefault();
-            if (add == null || scroller == null || add == watchedAdd) return;
+            Log.Debug($"tabs: the + after the last tab: grid {grid != null}, list {list != null}, + {add != null}");
+            if (grid == null || grid.ColumnDefinitions.Count < 3 || list == null || add == null || add == watchedAdd) return;
             watchedAdd = add;
+            var column = grid.ColumnDefinitions[1];
             var shift = new TranslateTransform();
             add.RenderTransform = shift;
+            double? autoRoom = null;
             void Place()
             {
-                var room = scroller.ViewportWidth - scroller.ExtentWidth;
-                var x = room > 1 ? -room : 0;
+                var count = list.Items.Count;
+                if (count == 0 || list.ContainerFromIndex(count - 1) is not FrameworkElement last || VisualTreeHelper.GetParent(last) is not UIElement panel) return;
+                var end = panel.TransformToVisual(list).TransformPoint(default).X + last.ActualOffset.X + last.ActualWidth;
+                var room = list.ActualWidth - end;
+                if (column.Width.IsAuto) autoRoom = room;
+                var x = !column.Width.IsAuto && autoRoom is double normal && room - normal > 1 ? -(room - normal) : 0;
                 if (Math.Abs(shift.X - x) <= 0.5) return;
-                Log.Debug($"tabs: the + moved {x:0} (list {scroller.ViewportWidth:0} wide, its tabs {scroller.ExtentWidth:0})");
+                Log.Debug($"tabs: the + moved {x:0} (list {list.ActualWidth:0} wide, its tabs end at {end:0}, {autoRoom:0} past them as laid out by itself)");
                 shift.X = x;
             }
-            scroller.SizeChanged += (s, e) => Place();
-            scroller.ViewChanged += (s, e) => Place();
-            scroller.LayoutUpdated += (s, e) => Place();
+            list.LayoutUpdated += (s, e) => Place();
             Place();
         }
 
