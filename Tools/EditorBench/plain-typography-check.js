@@ -54,6 +54,16 @@ const { openEditor } = require('./harness');
     console.log('  caret ' + JSON.stringify(caret));
     check(Math.abs(caret.caret - caret.letter) < 2, 'the caret at the start of an indented line is drawn where its text starts', `${caret.caret} vs ${caret.letter}`);
     check(caret.back.line === 0 && caret.back.ch <= 1, 'a click on the first letter puts the caret there', JSON.stringify(caret.back));
+
+    // Another preset chosen while the plain text file is shown: its font, size and paragraph rules at once (the user,
+    // 2026-11-12, 20: the font stayed the old one until a Markdown tab was shown - only the visual editor set it).
+    await page.evaluate(() => window.__deliver('SettingsChanged', { fontFamily: 'Verdana', fontSize: 24, lineHeight: 2,
+      editionCss: '.plain-prose .CodeMirror-line { text-indent: 3em; text-align: left; letter-spacing: normal; }' }));
+    await pause(600);
+    const changed = await read('.plain-prose .CodeMirror-line');
+    console.log('  after another preset: ' + JSON.stringify(changed));
+    check(changed && family(changed.font) === 'Verdana' && changed.size === '24px' && changed.indent === '72px',
+      'another preset chosen on the plain text tab: its font, size and indent at once', JSON.stringify(changed));
     if (errors.length) failures.push(`page errors: ${errors.slice(0, 3).join(' | ')}`);
   } finally {
     await close();

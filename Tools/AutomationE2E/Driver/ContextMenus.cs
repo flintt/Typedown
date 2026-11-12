@@ -25,7 +25,7 @@ internal static partial class Program
     private static async Task XM02(List<string> notes)
     {
         var folder = FixtureFolder("xm02");
-        var paths = Enumerable.Range(1, 4).Select(i => Path.Combine(folder, $"xm02-{i}.md")).ToList();
+        var paths = Enumerable.Range(1, 6).Select(i => Path.Combine(folder, $"xm02-{i}.md")).ToList();
         foreach (var p in paths) File.WriteAllText(p, "# " + Path.GetFileNameWithoutExtension(p) + "\n");
         using var c = await Session("e2e XM02");
         var keep = await Open(c, paths[0]);
@@ -48,7 +48,12 @@ internal static partial class Program
             Check(before.Count >= 3, $"at least three recent files ({before.Count})");
             foreach (var (round, index) in new[] { (1, 1), (2, 0) })
             {
-                var entry = await MenuEntry(window, "MenuBarFileItem", "OpenRecentSubMenu", $"RecentFile-{index}");
+                // The File menu opened with a click, as a reader opens it (opened through automation, a menu bar left taking
+                // its menu for open would not be seen).
+                var file = FindIn(window, "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
+                await Click(window, file);
+                await Task.Delay(500);
+                var entry = await MenuEntry(window, "OpenRecentSubMenu", $"RecentFile-{index}");
                 var target = entry.Current.HelpText;
                 notes.Add($"round {round}: right-click on {entry.Current.Name} ({Path.GetFileName(target)})");
                 await Click(window, entry, Mouse.Right);
@@ -63,6 +68,23 @@ internal static partial class Program
                 Check(others.All(p => after.Any(a => SamePath(a, p))), $"round {round}: the others stay ({string.Join(", ", others.Select(Path.GetFileName))} against {string.Join(", ", after.Select(Path.GetFileName))})");
                 before = after;
                 await CloseMenus();
+            }
+
+            // Delete with an entry's menu open, the mouse gone over another entry on the way: the entry right-clicked goes.
+            {
+                var entry = await MenuEntry(window, "MenuBarFileItem", "OpenRecentSubMenu", "RecentFile-0");
+                var target = entry.Current.HelpText;
+                await Click(window, entry, Mouse.Right);
+                await Task.Delay(600);
+                var other = FindAnywhereInHost(window, "RecentFile-1");
+                if (other != null) { var o = CenterOf(other); SetCursorPos(o.Item1, o.Item2); }
+                await Task.Delay(600);
+                Send(Key(0x2E, false), Key(0x2E, true));
+                await Task.Delay(1000);
+                var after = Files(await RecentMenu(c, windowId));
+                notes.Add($"Delete: right-clicked {Path.GetFileName(target)}, mouse over {other?.Current.Name}; recent now {string.Join(", ", after.Select(Path.GetFileName))}");
+                Check(!after.Any(p => SamePath(p, target)) && before.Where(p => !SamePath(p, target)).All(p => after.Any(a => SamePath(a, p))),
+                    $"Delete with the entry's menu open takes out the entry right-clicked ({Path.GetFileName(target)}), not the one the mouse went over");
             }
         }
         finally

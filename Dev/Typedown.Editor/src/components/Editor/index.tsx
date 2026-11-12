@@ -443,6 +443,15 @@ const Editor: React.FC = () => {
         optionsRef.current = options
     }, [options])
 
+    // The body text's font, here as well as in the visual editor (which sets it too, in its own order of effects): a plain
+    // text file laid out as prose reads it, and the visual editor, kept while one is shown, is given no options then - a
+    // preset chosen on a plain text tab kept the old font until a Markdown tab was shown (the user, 2026-11-12, 20).
+    useEffect(() => {
+        if (!options) return
+        if (options.fontFamily) document.body.style.setProperty('--editorFontFamily', options.fontFamily)
+        else document.body.style.removeProperty('--editorFontFamily')
+    }, [options, options?.fontFamily])
+
     // The host asks for this before it saves: whatever it holds must be what is on screen.
     // A custom theme, an edition's own styles and the user's own CSS are three style elements, in that order: a theme
     // sets the palette, and whatever the user writes in the settings still has the last word. Here, not in one editor, so they follow
