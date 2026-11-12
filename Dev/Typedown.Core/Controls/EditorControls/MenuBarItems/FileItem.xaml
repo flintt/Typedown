@@ -17,7 +17,7 @@
     <MenuFlyoutSeparator/>
     <MenuFlyoutItem x:Name="OpenFileItem" Text="{u:LocaleString Key=Open}" Command="{x:Bind File.OpenFileCommand}"/>
     <MenuFlyoutItem x:Name="OpenFolderItem" Text="{u:LocaleString Key=OpenFolder}" Command="{x:Bind File.OpenFolderCommand}"/>
-    <MenuFlyoutItem x:Name="QuickOpenItem" AutomationProperties.AutomationId="QuickOpenItem" Text="{u:LocaleString Key=QuickOpen}" Click="OnQuickOpenClick"/>
+    <MenuFlyoutItem x:Name="QuickOpenItem" AutomationProperties.AutomationId="QuickOpenItem" Text="{u:LocaleString Key=QuickOpen}" Command="{x:Bind File.QuickOpenCommand}"/>
     <!-- The recent files (name and folder; the path in the tooltip), then the recent folders in a submenu of their own.
          Each list is cleared by its own entry; a right-click or Delete on an entry takes that one out. -->
     <MenuFlyoutSubItem x:Name="OpenRecentSubMenu" AutomationProperties.AutomationId="OpenRecentSubMenu" Text="{u:LocaleString Key=OpenRecent}" Loaded="OnOpenRecentSubMenuLoaded">
@@ -44,7 +44,7 @@
         <MenuFlyoutSeparator/>
         <MenuFlyoutItem x:Name="ExportSettingsItem" Text="{u:LocaleString Key=ExportSettings}" Command="{x:Bind ViewModel.NavigateCommand}" CommandParameter="Settings/Export"/>
     </MenuFlyoutSubItem>
-    <MenuFlyoutItem x:Name="CheckDocumentItem" AutomationProperties.AutomationId="CheckDocumentItem" Text="{u:LocaleString Key=CheckDocument}" Click="OnCheckDocumentClick"/>
+    <MenuFlyoutItem x:Name="CheckDocumentItem" AutomationProperties.AutomationId="CheckDocumentItem" Text="{u:LocaleString Key=CheckDocument}" Command="{x:Bind File.CheckDocumentCommand}"/>
     <MenuFlyoutItem x:Name="PrintItem" Text="{u:LocaleString Key=Print}" Command="{x:Bind File.PrintCommand}"/>
     <MenuFlyoutItem x:Name="UploadLocalImagesItem" Text="{u:LocaleString Key=UploadLocalImages}" Command="{x:Bind File.UploadLocalImagesCommand}"/>
     <MenuFlyoutItem x:Name="ShareToHedgeDocItem" Text="{u:LocaleString Key=ShareToHedgeDoc}" Command="{x:Bind File.ShareToHedgeDocCommand}"/>

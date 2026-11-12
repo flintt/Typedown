@@ -16,7 +16,7 @@ namespace Typedown.Automation.Tests
             new[] { "a.png", "images/b.png", "notes.md", "sub" }.Select(p => Path.GetFullPath(Path.Combine(Folder, p.Replace('/', Path.DirectorySeparatorChar)))).Contains(path);
 
         private static List<DocumentProblem> Run(string markdown, params string[] slugs) =>
-            DocumentCheck.Run(markdown, Folder, Folder, slugs, There);
+            DocumentCheck.Run(markdown, Folder, Folder, DocumentCheck.HeadingMatcher(slugs.Select(s => (s, s))), There);
 
         [Fact]
         public void A_picture_not_there_is_named_with_its_line()
@@ -45,8 +45,19 @@ namespace Typedown.Automation.Tests
         [Fact]
         public void An_untitled_document_has_only_its_headings_looked_at()
         {
-            var problems = DocumentCheck.Run("![p](gone.png) [h](#nowhere)", null, null, new string[0], There);
+            var problems = DocumentCheck.Run("![p](gone.png) [h](#nowhere)", null, null, DocumentCheck.HeadingMatcher(new (string, string)[0]), There);
             Assert.Equal(DocumentProblemKind.MissingHeading, Assert.Single(problems).Kind);
+        }
+
+        [Fact]
+        public void A_fragment_matches_a_heading_as_a_click_on_the_link_does()
+        {
+            // The heading "1.1 研究" (anchor 11-研究); "Intro" (intro). Written with the dots kept, as the text, or loosely.
+            var has = DocumentCheck.HeadingMatcher(new[] { ("11-研究", "1.1 研究"), ("intro", "Intro") });
+            Assert.True(has("intro") && has("Intro") && has("11-研究") && has("1.1-研究") && has("1.1 研究"));
+            Assert.False(has("outro"));
+            // The headings not known (source mode): links to headings are not looked at.
+            Assert.Empty(DocumentCheck.Run("[h](#nowhere)", Folder, Folder, null, There));
         }
     }
 }

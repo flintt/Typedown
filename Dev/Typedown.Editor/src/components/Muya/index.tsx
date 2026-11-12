@@ -54,6 +54,8 @@ import { STANDARD_Y, leastToShow, toStandard, toStandardIfOut } from "services/r
 import { SearchSession } from "services/searchSession";
 import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
+import Slugger from 'components/Muya/lib/parser/marked/slugger'
+import { getHeadingPlainText } from 'components/Muya/lib/utils'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
 import CodePicker from 'components/Muya/lib/ui/codePicker'
 import EmojiPicker from 'components/Muya/lib/ui/emojiPicker'
@@ -740,6 +742,31 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             onOutlineCurrent(slug, { y: Math.round(window.scrollY), jump: true })
         }
     }), [editor, scrollToElement, props.options?.readOnly, onOutlineCurrent]);
+
+    // Host -> editor (File > Check Document, and before an export): the formulas and diagrams the page could not draw
+    // (PlantUML switched off is one too: the export shows its note, not the diagram), each by its kind and the first line
+    // of its source, which the host finds it by; and each heading's anchor and text, which a link's #fragment is matched
+    // against as a click on the link matches it (the slug, the text, or both loosely - clickEvent scrollToAnchor).
+    useEffect(() => transport.addListener<{ token: number }>('QueryNotDrawn', ({ token }) => {
+        const found: Array<{ kind: string, source: string }> = []
+        document.querySelectorAll('#ag-editor-id .ag-math-error, #ag-editor-id .ag-plantuml-off').forEach(element => {
+            const figure = element.closest('figure') as HTMLElement | null
+            const inline = element.previousElementSibling?.classList.contains('ag-math-text') ? element.previousElementSibling.textContent : null
+            const code = figure?.querySelector('pre code, code')?.textContent ?? ''
+            const source = (inline ?? code).split('\n').map(l => l.trim()).find(l => l.length > 0) ?? ''
+            const kind = element.classList.contains('ag-plantuml-off') ? 'plantuml-off' : inline != null ? 'math' : (figure?.dataset.role || 'diagram')
+            found.push({ kind, source })
+        })
+        const slugger = new Slugger()
+        const headings: Array<{ slug: string, text: string }> = []
+        for (const block of ((editor as any)?.contentState?.blocks ?? [])) {
+            if (!/^h\d$/.test(block.type)) continue
+            const text = block.children[0].text
+            const plain = getHeadingPlainText(block.headingStyle === 'setext' ? text.trim() : text.replace(/^\s*#{1,6}\s{1,}/, '').trim())
+            headings.push({ slug: slugger.slug(plain), text: plain })
+        }
+        transport.postMessage('NotDrawn', { token, found, headings })
+    }), [editor]);
 
     useEffect(() => transport.addListener('UpdateParagraph', type => {
         if (optionsRef.current?.readOnly) return
