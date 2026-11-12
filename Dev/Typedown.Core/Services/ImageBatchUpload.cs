@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -74,6 +74,8 @@ namespace Typedown.Core.Services
             var upload = app.ServiceProvider.GetService<ImageUpload>();
             var config = await upload.GetDefaultConfigAsync();
             var tab = app.TabsViewModel.ActiveTab;
+            // The document whose pictures go up (DocumentOperation): the new addresses go into it only.
+            var op = DocumentOperation.Of(app.TabsViewModel, tab);
             var images = await LocalImagesOfActiveDocumentAsync();
             var files = images.Values.Where(f => f != null).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
             result.Files = files.Count + images.Count(i => i.Value == null);
@@ -119,7 +121,9 @@ namespace Typedown.Core.Services
                 return result;
             try
             {
-                if (!app.TabsViewModel.Tabs.Contains(tab))
+                // Closed, or its tab given another document meanwhile (the tab alone was looked for: the other document got
+                // the addresses).
+                if (!op.SameDocument)
                     throw new InvalidOperationException(Locale.GetDialogString("UploadImages.DocumentClosed"));
                 await ApplyAsync(tab, replacements);
                 result.Replaced = replacements.Count;

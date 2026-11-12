@@ -1526,6 +1526,9 @@ namespace Typedown.Core.ViewModels
 
         public async void Paste(string type)
         {
+            // The document pasted into (Services.DocumentOperation): a picture copied or uploaded first went into whatever
+            // document was shown by then.
+            var op = DocumentOperation.Of(ServiceProvider.GetService<TabsViewModel>());
             try
             {
                 if (Clipboard.ContainsText(TextDataFormat.UnicodeText) || Clipboard.ContainsText(TextDataFormat.Html))
@@ -1545,6 +1548,7 @@ namespace Typedown.Core.ViewModels
                             img.Src = await ServiceProvider.GetService<ImageAction>().DoLocalFileAction(img.Src);
                             img.Src = img.Src.Replace('\\', '/');
                         }
+                        if (!op.Shown) { Log.Debug("paste: another document was shown while the picture was made ready; not inserted"); return; }
                         MarkdownEditor?.PostMessage("InsertImage", img);
                         return;
                     }
@@ -1559,6 +1563,7 @@ namespace Typedown.Core.ViewModels
 
                     var src = await ServiceProvider.GetService<ImageAction>().DoClipboardAction(image);
                     src = src.Replace('\\', '/');
+                    if (!op.Shown) { Log.Debug("paste: another document was shown while the picture was made ready; not inserted"); return; }
                     MarkdownEditor?.PostMessage("InsertImage", new HtmlImgTag(src));
                     EditionHooks.ReportActivity(ActivityKind.Pasted, AppViewModel);
 
@@ -1580,6 +1585,9 @@ namespace Typedown.Core.ViewModels
         public async Task PasteTextAsync(string type, string text, string html)
         {
             var tab = ServiceProvider.GetService<TabsViewModel>()?.ActiveTab;
+            // The document pasted into (Services.DocumentOperation): its pictures' addresses are looked for in its text and
+            // written back into it, not into a document its tab was given meanwhile.
+            var op = DocumentOperation.Of(ServiceProvider.GetService<TabsViewModel>(), tab);
             MarkdownEditor?.PostMessage("Paste", new { type, text, html });
             EditionHooks.ReportActivity(ActivityKind.Pasted, AppViewModel);
             if (type == "pasteAsPlainText" || string.IsNullOrEmpty(html)) return;
@@ -1589,6 +1597,12 @@ namespace Typedown.Core.ViewModels
             // The page has the text once it has answered a flush.
             await Task.Delay(300);
             await FlushContentAsync(2000);
+            // The text read below is the editor's: another document shown by now has the pictures' addresses nowhere.
+            if (!op.Shown)
+            {
+                Log.Debug("paste: another document was shown before the pasted text was read back; its web pictures left as they are");
+                return;
+            }
             var inDocument = MarkdownImages.Find(Markdown ?? "").Select(r => r.Address).ToHashSet();
             var wanted = addresses.Where(inDocument.Contains).ToList();
             if (wanted.Count < addresses.Count)
@@ -1626,6 +1640,11 @@ namespace Typedown.Core.ViewModels
                 {
                     try
                     {
+                        if (!op.SameDocument)
+                        {
+                            Log.Debug("paste: the document pasted into was closed or replaced while its pictures were fetched; not written");
+                            break;
+                        }
                         var changed = false;
                         await DocumentEdits.Coordinator.EditAsync(new AutomationDocument(AppViewModel, tab), new Typedown.Automation.EditRequest
                         {
@@ -1709,11 +1728,15 @@ namespace Typedown.Core.ViewModels
             if (files == null || files.Count == 0) return;
             // The document they were dropped or pasted into: a copy or an upload takes time, and another document shown
             // meanwhile got them at its cursor (the audit's A05). The files copied stay where they went.
+            // Held by the document's identity (Services.DocumentOperation), not the editor's load number: an undo or a
+            // redo loads the same document again, and dropped the pictures; the load number is kept for a window with no
+            // tabs.
             var load = LoadId;
+            var op = DocumentOperation.Of(ServiceProvider.GetService<TabsViewModel>());
             var images = new List<HtmlImgTag>();
             foreach (var file in files)
                 images.Add(await LocalImageAsync(file));
-            if (LoadId != load)
+            if (!op.Shown || (op.Tab == null && LoadId != load))
             {
                 Log.Debug($"insert images: another document was shown while {images.Count} were made ready; not inserted");
                 return;

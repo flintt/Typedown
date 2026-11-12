@@ -249,10 +249,12 @@ namespace Typedown.Core.ViewModels
             if (EditorViewModel.FileHash != EditorViewModel.CurrentHash && WorthBackup(FilePath, EditorViewModel.Markdown))
             {
                 var backedHash = EditorViewModel.CurrentHash;
+                var op = DocumentOperation.Of(TabsViewModel, active);
                 var ok = await AutoBackup.Backup(FilePath, EditorViewModel.Markdown, active?.DocumentId);
                 // Keep the active tab's BackupHash in step with what is on disk, so the invariant still holds when
-                // this tab later becomes a background one (see BackupDirtyBackgroundTabsAsync).
-                if (ok && active != null) active.BackupHash = backedHash;
+                // this tab later becomes a background one (see BackupDirtyBackgroundTabsAsync) - in the document backed
+                // up, not one the tab was given meanwhile.
+                if (ok && active != null && op.SameDocument) active.BackupHash = backedHash;
                 return ok;
             }
             AutoBackup.DeleteBackup(FilePath, active?.DocumentId);
@@ -337,10 +339,25 @@ namespace Typedown.Core.ViewModels
             FilePath = null;
             FileFormat = TextFileFormat.Default;
             EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
+            // The new document (Services.DocumentOperation): the backup question below is a wait.
+            var op = DocumentOperation.Of(TabsViewModel);
             string backup = null;
             if (AppViewModel.GetInstances().Where(x => x != AppViewModel).All(x => !string.IsNullOrEmpty(x.FileViewModel.FilePath)))
             {
                 backup = await CheckBackup(FilePath, EditorViewModel.FileHash);
+            }
+            // Another tab shown meanwhile: the new document's text does not go into its editor. Its own tab, put away before
+            // it had a text, is given the blank one.
+            if (!op.Shown)
+            {
+                Log.Debug("new document: another tab was shown while a backup was asked about; left blank");
+                if (op.SameDocument && op.Tab != null)
+                {
+                    op.Tab.Markdown = Common.DefaultMarkdwn;
+                    op.Tab.CurrentHash = op.Tab.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
+                    op.Tab.Saved = true;
+                }
+                return;
             }
             if (backup == null)
             {
@@ -440,6 +457,7 @@ namespace Typedown.Core.ViewModels
                 EditionHooks.ReportDocumentOnDisk(path, text, written: false);
                 // Read: the reused tab now holds another document.
                 if (startedTab == null) TabsViewModel?.ActiveTab?.BecomeNewDocument();
+                var op = DocumentOperation.Of(TabsViewModel, openingTab);
                 FileFormat = format;
                 var readMs = openedAt.ElapsedMilliseconds;
                 EditorViewModel.FirstStart = false;
@@ -448,6 +466,19 @@ namespace Typedown.Core.ViewModels
                 FilePath = path;
                 _ = AccessHistory.RecordFileHistory(FilePath);
                 var backup = await CheckBackup(path, EditorViewModel.FileHash);
+                // Another tab shown while the backup was asked about (an automation's switch): nothing of the file goes into
+                // the editor - it belongs to that tab now. Its own tab had its path and hashes already but not its text,
+                // and was put away like that: read again when it is shown (Pending), not saved with another text in it.
+                if (!op.Shown)
+                {
+                    Log.Debug($"open {System.IO.Path.GetFileName(path)}: another tab was shown while the backup was asked about; read when shown");
+                    if (op.SameDocument && op.Tab != null)
+                    {
+                        op.Tab.FilePath = path;
+                        op.Tab.Pending = true;
+                    }
+                    return false;
+                }
                 if (backup == null)
                 {
                     EditorViewModel.Markdown = text;
@@ -661,10 +692,12 @@ namespace Typedown.Core.ViewModels
         private async Task<bool> Save(bool alert = true)
         {
             var path = FilePath;
+            // The document asked to be saved, not only its path: two untitled ones have the same (no) path.
+            var op = DocumentOperation.Of(TabsViewModel);
             await saveLock.WaitAsync();
             try
             {
-                if (disposables.IsDisposed || FilePath != path)
+                if (disposables.IsDisposed || FilePath != path || !op.Shown)
                     return false;
                 return await SaveCore(alert);
             }
@@ -756,12 +789,15 @@ namespace Typedown.Core.ViewModels
             else
             {
                 var path = FilePath;
-                var tab = TabsViewModel?.ActiveTab;
+                // The document being saved (Services.DocumentOperation): after each wait - the flush, a question, the disk -
+                // it must still be the one shown, at this path; its tab given another document since is noticed too.
+                var op = DocumentOperation.Of(TabsViewModel);
+                bool Gone() => disposables.IsDisposed || FilePath != path || !op.Shown;
                 // What we write must be what is on screen; a save the reader asked for keeps their own text where they
                 // did not edit, at any length (an automatic save does not: it comes while they type).
                 var flushed = await EditorViewModel.FlushContentAsync(keepSource: alert);
                 // Saved by hand, the page given longer once more (a long document, a busy PC).
-                if (!flushed && alert && !disposables.IsDisposed && FilePath == path && TabsViewModel?.ActiveTab == tab)
+                if (!flushed && alert && !Gone())
                     flushed = await EditorViewModel.FlushContentAsync(timeoutMs: 8000, keepSource: true);
                 // The page did not hand over its text (no answer in time, or the page going away): what the host has may
                 // be older than what is on screen, and its hash is as old - written, it was marked saved with the last
@@ -770,7 +806,7 @@ namespace Typedown.Core.ViewModels
                 if (!flushed)
                 {
                     Log.Debug($"save: the editor did not hand over its text (load {EditorViewModel.LoadId}); {path} not written");
-                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab) return false;
+                    if (Gone()) return false;
                     var reason = new TimeoutException("the editor did not hand over its latest text in time; nothing was written").Message;
                     if (alert) await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), reason, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                     else EditorViewModel.AutoSaveHeldBack = string.Format(Locale.GetString("SaveState.WriteFailed"), reason);
@@ -780,7 +816,7 @@ namespace Typedown.Core.ViewModels
                 // under us the live buffer now belongs to another document, and writing it to this path would
                 // put one document's text into another. Check the tab reference too — two untitled tabs share a
                 // null path, so the path check alone would not notice a switch between them.
-                if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                if (Gone())
                     return false;
                 // Saved by hand over a file not read exactly: asked first; the answer may come after a tab switch.
                 if (alert && SaveNeedsEncodingConsent)
@@ -790,7 +826,7 @@ namespace Typedown.Core.ViewModels
                         Log.Debug($"save: '{path}' was not read exactly; the reader cancelled, nothing written");
                         return false;
                     }
-                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                    if (Gone())
                         return false;
                     FileFormat = FileFormat.AsUtf8();
                 }
@@ -802,7 +838,7 @@ namespace Typedown.Core.ViewModels
                 var onDisk = await ReadChangedOnDisk(path, hash);
                 if (onDisk != null)
                 {
-                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                    if (Gone())
                         return false;
                     if (!alert)
                     {
@@ -813,11 +849,13 @@ namespace Typedown.Core.ViewModels
                         return false;
                     }
                     var choice = await AskSaveOverChange();
-                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                    if (Gone())
                         return false;
                     if (choice == ContentDialogResult.Secondary)
                     {
                         await KeepVersion(path, EditorViewModel.Markdown, KeptUnsaved);
+                        // Kept; the disk's text goes into this document only if it is still the one shown.
+                        if (Gone()) return false;
                         FileFormat = onDisk.Value.Format;
                         ApplyDiskText(onDisk.Value.Text, keepHistory: true);
                         return false;
@@ -829,13 +867,15 @@ namespace Typedown.Core.ViewModels
                     }
                     await KeepVersion(path, onDisk.Value.Text, KeptOnDisk);
                     EditionHooks.ReportDocumentOnDisk(path, onDisk.Value.Text, written: false);
-                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                    if (Gone())
                         return false;
                     markdown = EditorViewModel.Markdown;
                     hash = Common.SimpleHash(markdown);
                 }
                 var result = await WriteAllText(path, markdown, alert);
-                if (result && !disposables.IsDisposed && FilePath == path)
+                // Written. Marked saved only in the document it was written from, still shown: the path alone took another
+                // tab's document for it, when that tab had been given this path's file again meanwhile.
+                if (result && !Gone())
                 {
                     EditorViewModel.FileHash = hash;
                     DiskHash = hash;
@@ -847,7 +887,7 @@ namespace Typedown.Core.ViewModels
                     }
                     _ = AccessHistory.RecordFileHistory(path);
                 }
-                return result && !disposables.IsDisposed && FilePath == path && EditorViewModel.Saved;
+                return result && !Gone() && EditorViewModel.Saved;
             }
         }
 
@@ -1320,6 +1360,8 @@ namespace Typedown.Core.ViewModels
         {
             if (tab == null || !tab.Pending) return true;
             var path = tab.FilePath;
+            // The tab read into (Services.DocumentOperation): closed meanwhile, or given another file, it takes nothing.
+            var op = DocumentOperation.Of(TabsViewModel, tab);
             if (!File.Exists(path)) throw new FileNotFoundException("File does not exist.", path);
             var (text, format) = await TextFileFormat.ReadAsync(path);
             var fileHash = Common.SimpleHash(text);
@@ -1331,8 +1373,9 @@ namespace Typedown.Core.ViewModels
                 else if (!mayAsk) return false;
                 else markdown = await CheckBackup(path, fileHash) ?? text;
             }
-            // Read meanwhile (switched to while this one was reading): that one counts.
-            if (!tab.Pending) return true;
+            // Read meanwhile (switched to while this one was reading): that one counts. Closed, or another file put in it: so
+            // does that.
+            if (!tab.Pending || !op.SameDocument || tab.FilePath != path) return true;
             EditionHooks.ReportDocumentOnDisk(path, text, written: false);
             tab.FileFormat = format;
             tab.Markdown = markdown;
@@ -1806,12 +1849,14 @@ namespace Typedown.Core.ViewModels
             }
 
             var path = FilePath;
+            // The document whose file changed (Services.DocumentOperation), not only its path.
+            var op = DocumentOperation.Of(TabsViewModel);
             string text = null;
             TextFileFormat format = null;
             ulong diskHash = 0;
             for (var i = 0; i < 10; i++)
             {
-                if (disposables.IsDisposed || FilePath != path)
+                if (disposables.IsDisposed || FilePath != path || !op.Shown)
                     return;
                 try
                 {
@@ -1849,7 +1894,7 @@ namespace Typedown.Core.ViewModels
                     return;
                 }
             }
-            if (text == null || disposables.IsDisposed || FilePath != path)
+            if (text == null || disposables.IsDisposed || FilePath != path || !op.Shown)
                 return;
             FileFormat = format;
 
@@ -1890,12 +1935,12 @@ namespace Typedown.Core.ViewModels
                 if (unsaved) dialog.DefaultButton = ContentDialogButton.Close;
                 var mine = EditorViewModel.Markdown;
                 var result = await dialog.ShowAsync(AppViewModel.XamlRoot);
-                if (disposables.IsDisposed || FilePath != path)
+                if (disposables.IsDisposed || FilePath != path || !op.Shown)
                     return;
                 if (result == ContentDialogResult.Primary)
                 {
                     if (unsaved) await KeepVersion(path, EditorViewModel.Markdown ?? mine, KeptUnsaved);
-                    if (disposables.IsDisposed || FilePath != path)
+                    if (disposables.IsDisposed || FilePath != path || !op.Shown)
                         return;
                     EditionHooks.ReportDocumentOnDisk(path, text, written: false);
                     ApplyDiskText(text, keepHistory: unsaved);
@@ -1906,7 +1951,7 @@ namespace Typedown.Core.ViewModels
                     // in the version history, Pro).
                     await KeepVersion(path, text, KeptOnDisk);
                     EditionHooks.ReportDocumentOnDisk(path, text, written: false);
-                    if (disposables.IsDisposed || FilePath != path)
+                    if (disposables.IsDisposed || FilePath != path || !op.Shown)
                         return;
                     EditorViewModel.FileHash = diskHash;
                     DiskHash = diskHash;
@@ -1926,9 +1971,10 @@ namespace Typedown.Core.ViewModels
         public async Task<bool> ReopenWithEncodingAsync(string encodingName)
         {
             var path = FilePath;
+            var op = DocumentOperation.Of(TabsViewModel);
             if (string.IsNullOrEmpty(path) || !EditorViewModel.Saved || !File.Exists(path)) return false;
             var (text, format) = await TextFileFormat.ReadAsync(path, TextFileFormat.EncodingByName(encodingName));
-            if (disposables.IsDisposed || FilePath != path || !EditorViewModel.Saved) return false;
+            if (disposables.IsDisposed || FilePath != path || !op.Shown || !EditorViewModel.Saved) return false;
             FileFormat = format;
             ApplyDiskText(text);
             return true;
