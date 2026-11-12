@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>ଭିଜୁଆଲ୍ ମୋଡରେ ସମ୍ପାଦନ ଡକ୍ୟୁମେଣ୍ଟର କିଛି ପାଠ, ଲିଙ୍କ କିମ୍ବା HTML ବଦଳାଇପାରିଲେ ଏକ ସୂଚନା; ସୋର୍ସ ମୋଡ ଏହାକୁ ଯେମିତି ସେମିତି ରଖେ</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>ଡକ୍ୟୁମେଣ୍ଟରେ ଏମ୍ବେଡ୍ କରନ୍ତୁ (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>ଏମ୍ବେଡ୍ କରିବାକୁ ସବୁଠାରୁ ବଡ଼ ଛବି (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>ଏହାଠାରୁ ବଡ଼ ଛବି ଏମ୍ବେଡ୍ ନକରି ଯେପରି ଭରାଯାଏ ସେହିପରି ଭରାଯାଏ।</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ପେଷ୍ଟ କରାଯାଇଥିବା ଛବି ଏହି ରୂପେ ଏମ୍ବେଡ୍ କରନ୍ତୁ</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ଗୁଣବତ୍ତା ନ ହରାଇ)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ଛୋଟ)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG ଗୁଣବତ୍ତା</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>ଏମ୍ବେଡ୍ କରିବାର ମୂଲ୍ୟ</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>ଏମ୍ବେଡ୍ କରାଯାଇଥିବା ଛବି Markdown ଫାଇଲ ଭିତରେ ଲେଖା ଭାବେ ରହେ:
+• ଫାଇଲଟି ଛବିଠାରୁ ପ୍ରାୟ ଏକ-ତୃତୀୟାଂଶ ଅଧିକ ବଢ଼େ (ସ୍କ୍ରିନସଟ୍ ପ୍ରାୟତଃ ଶହ ଶହ KB);
+• Git ତୁଳନା ଓ ସିଙ୍କ ମନ୍ଥର ହୁଏ;
+• GitHub Markdown ଫାଇଲରେ base64 ଛବି ଦେଖାଏ ନାହିଁ;
+• ଅନ୍ୟ ସମ୍ପାଦକ ଫାଇଲଟି ଧୀରେ ଖୋଲିପାରନ୍ତି;
+• ପୂର୍ବବତ୍ ଇତିହାସ ଅଧିକ ମେମୋରୀ ନିଏ।</value>
+  </data>
 </root>

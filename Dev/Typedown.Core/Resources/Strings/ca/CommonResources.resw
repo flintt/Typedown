@@ -1331,4 +1331,13 @@
     <value>Feu clic amb el botó dret per a més opcions; premeu Supr per treure-ho de la llista</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>Desa a la carpeta d’imatges</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>Substitueix la imatge…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>Incrusta al document (base64)</value>
+  </data>
 </root>

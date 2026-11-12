@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Paziņojums, kad rediģēšana vizuālajā režīmā var mainīt daļu dokumenta teksta, saišu vai HTML; avota režīms to saglabā nemainītu</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Iegult dokumentā (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Lielākais iegulstamais attēls (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Lielāks attēls tiek ievietots kā bez iegulšanas.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Ielīmētos attēlus iegult kā</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (bez zudumiem)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (mazāks)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG kvalitāte</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Ko maksā iegulšana</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Iegultais attēls tiek glabāts Markdown failā kā teksts:
+• fails palielinās par aptuveni trešdaļu vairāk nekā pats attēls (ekrānuzņēmums bieži ir simtiem KB);
+• Git salīdzināšana un sinhronizācija palēninās;
+• GitHub nerāda base64 attēlus Markdown failos;
+• citi redaktori var lēni atvērt failu;
+• atsaukšanas vēsture aizņem vairāk atmiņas.</value>
+  </data>
 </root>

@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>시각 모드에서 편집하면 문서의 일부 텍스트, 링크 또는 HTML이 바뀔 수 있을 때 알립니다. 소스 모드는 그대로 유지합니다</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>문서에 포함(base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>포함할 최대 그림 크기(KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>더 큰 그림은 포함하지 않을 때처럼 삽입됩니다.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>붙여넣은 그림 포함 형식</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (무손실)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (더 작음)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG 품질</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>포함의 단점</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>포함된 그림은 Markdown 파일 안에 텍스트로 저장됩니다:
+• 파일이 그림 자체보다 약 3분의 1 더 커집니다(스크린샷은 흔히 수백 KB);
+• Git 비교와 동기화 서비스가 느려집니다;
+• GitHub은 Markdown 파일의 base64 그림을 표시하지 않습니다;
+• 다른 편집기에서 열 때 느릴 수 있습니다;
+• 실행 취소 기록이 메모리를 더 사용합니다.</value>
+  </data>
 </root>

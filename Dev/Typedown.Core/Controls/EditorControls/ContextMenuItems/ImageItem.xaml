@@ -16,6 +16,10 @@
     <MenuFlyoutSeparator/>
     <MenuFlyoutItem x:Name="CopyImageItem" Text="{u:LocaleString Key=CopyImageTo}" Click="OnCopyImageToClick"/>
     <MenuFlyoutItem x:Name="MoveImageItem" Text="{u:LocaleString Key=MoveImageTo}" Click="OnMoveImageToClick"/>
+    <!-- A picture kept in the document (a data: address, #52) put in a file in the image folder, and the other way. -->
+    <MenuFlyoutItem x:Name="ExtractImageItem" AutomationProperties.AutomationId="ExtractImageItem" Text="{u:LocaleString Key=ImageMenu.ExtractToFolder}" Click="OnExtractImageClick"/>
+    <MenuFlyoutItem x:Name="EmbedImageItem" AutomationProperties.AutomationId="EmbedImageItem" Text="{u:LocaleString Key=ImageMenu.EmbedAsBase64}" Click="OnEmbedImageClick"/>
+    <MenuFlyoutItem x:Name="ReplaceImageItem" AutomationProperties.AutomationId="ReplaceImageItem" Text="{u:LocaleString Key=ImageMenu.Replace}" Click="OnReplaceImageClick"/>
     <MenuFlyoutSubItem x:Name="UploadSubMenu" Text="{u:LocaleString Key=UploadImage}">
         <!-- A picture from the web, or not a file: nothing to upload, and the menu says so (the report's M04: the entries
              were there and did nothing). -->

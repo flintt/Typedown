@@ -1029,4 +1029,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>在視覺化模式下編輯可能改變文件中的部分文字、連結或 HTML 時給出提示；原始碼模式會保持原樣</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>嵌入文件（base64）</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>可嵌入的最大圖片（KB）</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>較大的圖片會以不嵌入時的方式插入。</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>貼上的圖片嵌入為</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (無損)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (體積小)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG 品質</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>嵌入的代價</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>嵌入的圖片以文字形式存在 Markdown 檔案中：
+• 檔案比圖片本身還大約三分之一（一張截圖常有數百 KB）；
+• Git 比對和雲端同步會變慢；
+• GitHub 網頁不顯示 Markdown 檔案中的 base64 圖片；
+• 其他編輯器開啟可能變慢；
+• 復原記錄佔用更多記憶體。</value>
+  </data>
 </root>

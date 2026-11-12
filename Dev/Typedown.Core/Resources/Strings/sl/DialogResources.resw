@@ -361,4 +361,7 @@
     <value>»{0}« ima neshranjene spremembe, vendar ga ni bilo mogoče prikazati, da bi vprašali, ali naj se shrani. Okno ni bilo zaprto; poskusite znova čez trenutek.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Ta slika ima {0} KB, več od {1} KB, nastavljenih za vdelavo (Nastavitve &gt; Slika), zato je bila vstavljena brez vdelave.</value>
+  </data>
 </root>

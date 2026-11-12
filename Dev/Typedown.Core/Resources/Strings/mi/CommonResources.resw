@@ -1331,4 +1331,13 @@
     <value>Pāwhiri matau mō ētahi atu; pēhia Delete hei tango i tēnei i te rārangi</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>Tiakina ki te kōpaki pikitia</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>Whakakapia te pikitia…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>Tāmau ki te tuhinga (base64)</value>
+  </data>
 </root>

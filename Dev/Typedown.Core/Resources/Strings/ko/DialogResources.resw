@@ -361,4 +361,7 @@
     <value>“{0}”에 저장하지 않은 변경 내용이 있지만, 저장할지 묻기 위해 표시할 수 없었습니다. 창을 닫지 않았습니다. 잠시 후 다시 시도하세요.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>이 그림은 {0} KB로 포함 한도 {1} KB(설정 &gt; 그림)를 넘어 포함하지 않고 삽입했습니다.</value>
+  </data>
 </root>

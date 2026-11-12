@@ -361,4 +361,7 @@
     <value>“{0}” ina mabadiliko ambayo hayajahifadhiwa, lakini haikuweza kuonyeshwa ili kuuliza kama ihifadhiwe. Dirisha halijafungwa; jaribu tena baada ya muda mfupi.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Picha hii ni KB {0}, zaidi ya KB {1} zilizowekwa kwa kupachika (Mipangilio &gt; Picha), kwa hivyo imeingizwa bila kupachikwa.</value>
+  </data>
 </root>

@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Um aviso quando editar no modo visual pode alterar parte do texto, dos links ou do HTML de um documento; o modo de código-fonte o mantém igual</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Incorporar no documento (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Maior imagem a incorporar (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Uma imagem maior é inserida como seria sem incorporar.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Incorporar imagens coladas como</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (sem perdas)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (menor)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Qualidade JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>O custo de incorporar</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Uma imagem incorporada fica como texto dentro do arquivo Markdown:
+• o arquivo cresce cerca de um terço a mais que a própria imagem (uma captura de tela costuma ter centenas de KB);
+• as comparações do Git e a sincronização ficam mais lentas;
+• o GitHub não mostra imagens base64 em arquivos Markdown;
+• outros editores podem abrir o arquivo devagar;
+• o histórico de desfazer usa mais memória.</value>
+  </data>
 </root>

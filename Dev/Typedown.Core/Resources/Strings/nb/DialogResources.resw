@@ -361,4 +361,7 @@
     <value>«{0}» har endringer som ikke er lagret, men den kunne ikke vises for å spørre om den skal lagres. Vinduet ble ikke lukket; prøv igjen om litt.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Bildet er {0} kB, mer enn de {1} kB som er satt for innbygging (Innstillinger &gt; Bilde), så det ble satt inn uten innbygging.</value>
+  </data>
 </root>

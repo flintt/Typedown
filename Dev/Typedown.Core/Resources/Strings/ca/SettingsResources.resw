@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Un avís quan editar en mode visual pot canviar part del text, els enllaços o l’HTML d’un document; el mode de codi font el manté tal com és</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Incrusta al document (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Imatge més gran que s’incrusta (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Una imatge més gran s’insereix com sense incrustar.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Incrusta les imatges enganxades com a</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (sense pèrdua)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (més petit)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Qualitat JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>El que costa incrustar</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Una imatge incrustada es desa com a text dins del fitxer Markdown:
+• el fitxer creix prop d’un terç més que la mateixa imatge (una captura sovint fa centenars de KB);
+• les comparacions de Git i la sincronització van més lentes;
+• GitHub no mostra les imatges base64 dels fitxers Markdown;
+• altres editors poden obrir el fitxer lentament;
+• l’historial de desfer ocupa més memòria.</value>
+  </data>
 </root>

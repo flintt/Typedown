@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Ծանուցում, երբ տեսողական ռեժիմում խմբագրումը կարող է փոխել փաստաթղթի տեքստի, հղումների կամ HTML-ի մի մասը. աղբյուրի ռեժիմը պահում է այն անփոփոխ</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Ներդնել փաստաթղթում (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Ներդրվող ամենամեծ պատկերը (ԿԲ)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Ավելի մեծ պատկերը տեղադրվում է ինչպես առանց ներդրման։</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Տեղադրված պատկերները ներդնել որպես</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (առանց կորստի)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ավելի փոքր)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG որակ</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Ինչ արժե ներդրումը</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Ներդրված պատկերը պահվում է Markdown ֆայլում որպես տեքստ․
+• ֆայլը մեծանում է մոտ մեկ երրորդով ավելի, քան ինքը պատկերը (էկրանի պատկերը հաճախ հարյուրավոր ԿԲ է);
+• Git համեմատումները և համաժամեցումը դանդաղում են;
+• GitHub-ը չի ցուցադրում base64 պատկերները Markdown ֆայլերում;
+• այլ խմբագրիչները կարող են դանդաղ բացել ֆայլը;
+• հետարկման պատմությունն ավելի շատ հիշողություն է զբաղեցնում։</value>
+  </data>
 </root>

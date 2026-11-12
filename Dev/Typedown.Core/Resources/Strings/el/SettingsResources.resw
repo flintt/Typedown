@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Ειδοποίηση όταν η επεξεργασία σε οπτική λειτουργία μπορεί να αλλάξει μέρος του κειμένου, των συνδέσμων ή του HTML ενός εγγράφου· η λειτουργία πηγαίου κώδικα το διατηρεί αμετάβλητο</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Ενσωμάτωση στο έγγραφο (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Μέγιστη εικόνα για ενσωμάτωση (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Μια μεγαλύτερη εικόνα εισάγεται όπως χωρίς ενσωμάτωση.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Ενσωμάτωση επικολλημένων εικόνων ως</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (χωρίς απώλειες)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (μικρότερο)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Ποιότητα JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Τι κοστίζει η ενσωμάτωση</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Μια ενσωματωμένη εικόνα αποθηκεύεται ως κείμενο μέσα στο αρχείο Markdown:
+• το αρχείο μεγαλώνει περίπου ένα τρίτο περισσότερο από την ίδια την εικόνα (ένα στιγμιότυπο είναι συχνά εκατοντάδες KB);
+• οι συγκρίσεις Git και ο συγχρονισμός γίνονται πιο αργοί;
+• το GitHub δεν εμφανίζει εικόνες base64 σε αρχεία Markdown;
+• άλλοι επεξεργαστές μπορεί να ανοίγουν αργά το αρχείο;
+• το ιστορικό αναίρεσης πιάνει περισσότερη μνήμη.</value>
+  </data>
 </root>

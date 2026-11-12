@@ -1331,4 +1331,13 @@
     <value>Қосымша әрекеттер үшін тінтуірдің оң жағын басыңыз; тізімнен жою үшін Delete пернесін басыңыз</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>Суреттер қалтасына сақтау</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>Суретті ауыстыру…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>Құжатқа ендіру (base64)</value>
+  </data>
 </root>

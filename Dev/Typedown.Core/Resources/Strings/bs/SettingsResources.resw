@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Obavještenje kada uređivanje u vizuelnom načinu može promijeniti dio teksta, linkova ili HTML-a dokumenta; način izvornog koda čuva ga nepromijenjenim</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Ugradi u dokument (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Najveća slika za ugradnju (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Veća slika se umeće kao bez ugradnje.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Zalijepljene slike ugradi kao</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (bez gubitaka)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (manje)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Kvalitet JPEG-a</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Šta ugradnja košta</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Ugrađena slika čuva se kao tekst u Markdown datoteci:
+• datoteka naraste oko trećinu više od same slike (snimak ekrana često ima stotine KB);
+• Git poređenja i sinhronizacija postaju sporiji;
+• GitHub ne prikazuje base64 slike u Markdown datotekama;
+• drugi uređivači mogu sporo otvarati datoteku;
+• historija poništavanja zauzima više memorije.</value>
+  </data>
 </root>

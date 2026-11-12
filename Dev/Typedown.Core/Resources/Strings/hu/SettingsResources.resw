@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Értesítés, ha a vizuális módban történő szerkesztés megváltoztathatja a dokumentum szövegének, hivatkozásainak vagy HTML-jének egy részét; a forrás mód változatlanul hagyja</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Beágyazás a dokumentumba (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Legnagyobb beágyazható kép (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>A nagyobb kép úgy kerül be, mint beágyazás nélkül.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Beillesztett képek beágyazása mint</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (veszteségmentes)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (kisebb)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-minőség</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Mibe kerül a beágyazás</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>A beágyazott kép szövegként van a Markdown-fájlban:
+• a fájl nagyjából harmadával többet nő, mint maga a kép (egy képernyőkép gyakran több száz KB);
+• a Git-összehasonlítás és a szinkronizálás lassul;
+• a GitHub nem jeleníti meg a Markdown-fájlok base64 képeit;
+• más szerkesztők lassan nyithatják meg a fájlt;
+• a visszavonási előzmények több memóriát foglalnak.</value>
+  </data>
 </root>

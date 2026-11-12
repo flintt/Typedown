@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Avviż meta l-editjar fil-modalità viżwali jista’ jbiddel parti mit-test, il-links jew l-HTML ta’ dokument; il-modalità tas-sors iżżommu kif inhu</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Daħħal fid-dokument (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>L-akbar stampa li tiddaħħal (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Stampa akbar tiddaħħal bħallikieku mingħajr inkorporazzjoni.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Daħħal l-istampi mwaħħla bħala</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (mingħajr telf)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (iżgħar)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Kwalità JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>X’jiswa d-daħħil</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Stampa mdaħħla tinżamm bħala test fil-fajl Markdown:
+• il-fajl jikber madwar terz aktar mill-istampa nnifisha (screenshot ħafna drabi jkun mijiet ta’ KB);
+• il-paraguni ta’ Git u s-sinkronizzazzjoni jsiru aktar bil-mod;
+• GitHub ma jurix stampi base64 f’fajls Markdown;
+• editers oħra jistgħu jiftħu l-fajl bil-mod;
+• l-istorja tat-tneħħija tieħu aktar memorja.</value>
+  </data>
 </root>

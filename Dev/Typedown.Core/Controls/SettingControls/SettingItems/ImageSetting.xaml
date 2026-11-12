@@ -10,6 +10,7 @@
     xmlns:viewmodels="using:Typedown.Core.ViewModels" 
     xmlns:models="using:Typedown.Core.Models"
     xmlns:u="using:Typedown.Core.Utilities"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     d:DataContext="{d:DesignInstance Type=viewmodels:AppViewModel}"
@@ -105,6 +106,32 @@
                         <controls:PathPickerButton Grid.Column="2" Content="{u:LocaleString Key=Browse}" Mode="Folder" Path="{x:Bind Settings.InsertWebImageCopyPath, Mode=TwoWay}"/>
                     </Grid>
                 </controls:NormalSettingItem>
+
+                <!-- Embedding as base64, chosen for any of the three (#52): how large a picture may be, what a pasted one
+                     becomes, and - folded, to be read before choosing it - what keeping pictures in the document costs. -->
+                <StackPanel x:Name="Base64Items" Visibility="{x:Bind local:ImageSetting.Base64Visibility(Settings.InsertClipboardImageAction, Settings.InsertLocalImageAction, Settings.InsertWebImageAction), Mode=OneWay}">
+                    <controls:NormalSettingItem Title="{u:LocaleString Key=View.Image.Base64.MaxSize.Title}" Description="{u:LocaleString Key=View.Image.Base64.MaxSize.Description}"
+                                                BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="0,1,0,0">
+                        <muxc:NumberBox AutomationProperties.AutomationId="Base64MaxKB" MinWidth="200" Minimum="1" Maximum="102400" SmallChange="256" LargeChange="1024"
+                                        SpinButtonPlacementMode="Inline" NumberFormatter="{x:Bind IntegerFormatter}" Value="{x:Bind Settings.Base64ImageMaxKB, Mode=TwoWay}"/>
+                    </controls:NormalSettingItem>
+                    <controls:NormalSettingItem Title="{u:LocaleString Key=View.Image.Base64.ClipboardFormat.Title}"
+                                                BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="0,1,0,0">
+                        <ComboBox x:Name="Base64FormatBox" AutomationProperties.AutomationId="Base64ClipboardFormat" MinWidth="200" SelectionChanged="OnBase64FormatChanged">
+                            <ComboBoxItem Content="{u:LocaleString Key=View.Image.Base64.Png}"/>
+                            <ComboBoxItem Content="{u:LocaleString Key=View.Image.Base64.Jpeg}"/>
+                        </ComboBox>
+                    </controls:NormalSettingItem>
+                    <controls:NormalSettingItem Title="{u:LocaleString Key=View.Image.Base64.JpegQuality.Title}" Visibility="{x:Bind Settings.Base64ClipboardJpeg, Mode=OneWay}"
+                                                BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="0,1,0,0">
+                        <muxc:NumberBox AutomationProperties.AutomationId="Base64JpegQuality" MinWidth="200" Minimum="1" Maximum="100" SmallChange="5"
+                                        SpinButtonPlacementMode="Inline" NumberFormatter="{x:Bind IntegerFormatter}" Value="{x:Bind Settings.Base64JpegQuality, Mode=TwoWay}"/>
+                    </controls:NormalSettingItem>
+                    <muxc:Expander AutomationProperties.AutomationId="Base64Costs" Header="{u:LocaleString Key=View.Image.Base64.Costs.Header}"
+                                   HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,4,0,0">
+                        <TextBlock TextWrapping="Wrap" Text="{u:LocaleString Key=View.Image.Base64.Costs.Text}"/>
+                    </muxc:Expander>
+                </StackPanel>
                 
             </StackPanel>
         </controls:ExpanderSettingItem>

@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Fógra nuair a d’fhéadfadh eagarthóireacht sa mhód amhairc cuid den téacs, de na naisc nó den HTML i ndoiciméad a athrú; coinníonn an mód foinse é gan athrú</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Leabaigh sa doiciméad (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>An pictiúr is mó le leabú (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Cuirtear pictiúr níos mó isteach mar a dhéanfaí gan leabú.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Leabaigh pictiúir ghreamaithe mar</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (gan chailliúint)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (níos lú)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Cáilíocht JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Costas an leabaithe</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Coinnítear pictiúr leabaithe mar théacs sa chomhad Markdown:
+• fásann an comhad thart ar thrian níos mó ná an pictiúr féin (is minic roinnt céadta KB i scáilghraf);
+• éiríonn comparáidí Git agus sioncronú níos moille;
+• ní thaispeánann GitHub pictiúir base64 i gcomhaid Markdown;
+• d’fhéadfadh eagarthóirí eile an comhad a oscailt go mall;
+• tógann an stair cealaithe níos mó cuimhne.</value>
+  </data>
 </root>

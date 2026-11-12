@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>הודעה כאשר עריכה במצב חזותי עלולה לשנות חלק מהטקסט, הקישורים או ה־HTML של מסמך; מצב מקור שומר עליו כפי שהוא</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>הטמעה במסמך (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>התמונה הגדולה ביותר להטמעה (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>תמונה גדולה יותר תוכנס כפי שהייתה נכנסת בלי הטמעה.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>הטמעת תמונות מודבקות בתור</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ללא אובדן)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (קטן יותר)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>איכות JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>המחיר של הטמעה</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>תמונה מוטמעת נשמרת כטקסט בתוך קובץ ה-Markdown:
+• הקובץ גדל בכשליש יותר מהתמונה עצמה (צילום מסך הוא לעיתים קרובות מאות KB);
+• השוואות Git ושירותי סנכרון נעשים איטיים יותר;
+• GitHub אינו מציג תמונות base64 בקובצי Markdown;
+• עורכים אחרים עלולים לפתוח את הקובץ לאט;
+• היסטוריית הביטול תופסת יותר זיכרון.</value>
+  </data>
 </root>

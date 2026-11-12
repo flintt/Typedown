@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Tilkynning þegar breytingar í sjónrænni stillingu geta breytt hluta af texta, tenglum eða HTML skjals; frumkóðastilling heldur því óbreyttu</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Fella inn í skjalið (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Stærsta mynd sem er felld inn (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Stærri mynd er sett inn eins og án innfellingar.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Fella límdar myndir inn sem</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (taplaust)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (minna)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-gæði</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Hvað innfelling kostar</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Innfelld mynd er geymd sem texti í Markdown-skránni:
+• skráin stækkar um þriðjungi meira en myndin sjálf (skjámynd er oft nokkur hundruð KB);
+• Git-samanburður og samstilling verða hægari;
+• GitHub sýnir ekki base64-myndir í Markdown-skrám;
+• önnur forrit gætu opnað skrána hægt;
+• afturköllunarsagan tekur meira minni.</value>
+  </data>
 </root>

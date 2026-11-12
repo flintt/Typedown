@@ -1331,4 +1331,13 @@
     <value>Desni klik za više; pritisnite Delete da ga uklonite s popisa</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>Spremi u mapu slika</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>Zamijeni sliku…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>Ugradi u dokument (base64)</value>
+  </data>
 </root>

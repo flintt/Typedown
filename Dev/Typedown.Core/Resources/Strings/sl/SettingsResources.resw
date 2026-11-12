@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Obvestilo, ko lahko urejanje v vizualnem načinu spremeni del besedila, povezav ali HTML dokumenta; način izvorne kode ga ohrani nespremenjenega</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Vdelaj v dokument (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Največja slika za vdelavo (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Večja slika se vstavi kot brez vdelave.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Prilepljene slike vdelaj kot</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (brez izgub)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (manjše)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Kakovost JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Kaj stane vdelava</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Vdelana slika je shranjena kot besedilo v datoteki Markdown:
+• datoteka zraste za približno tretjino več od same slike (posnetek zaslona ima pogosto več sto KB);
+• primerjave v Gitu in sinhronizacija so počasnejše;
+• GitHub ne prikazuje slik base64 v datotekah Markdown;
+• drugi urejevalniki lahko datoteko odpirajo počasi;
+• zgodovina razveljavitev porabi več pomnilnika.</value>
+  </data>
 </root>

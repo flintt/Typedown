@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Isang abiso kapag ang pag-edit sa visual mode ay maaaring magbago ng ilang teksto, link o HTML ng dokumento; pinapanatili ito ng source mode nang eksakto</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>I-embed sa dokumento (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Pinakamalaking larawang i-e-embed (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Ang mas malaking larawan ay ipapasok gaya ng walang pag-embed.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>I-embed ang mga idinikit na larawan bilang</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (walang bawas sa kalidad)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (mas maliit)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Kalidad ng JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Ang kapalit ng pag-embed</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Ang naka-embed na larawan ay nakatago bilang teksto sa loob ng Markdown file:
+• lumalaki ang file nang humigit-kumulang isang-katlo higit sa mismong larawan (ang screenshot ay madalas daan-daang KB);
+• bumabagal ang paghahambing sa Git at ang sync;
+• hindi ipinapakita ng GitHub ang mga base64 na larawan sa mga Markdown file;
+• maaaring mabagal magbukas ang ibang editor;
+• mas maraming memorya ang kinakain ng undo history.</value>
+  </data>
 </root>

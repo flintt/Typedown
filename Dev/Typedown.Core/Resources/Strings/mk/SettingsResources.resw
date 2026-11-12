@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Известување кога уредувањето во визуелен режим може да промени дел од текстот, врските или HTML на документот; режимот на изворен код го зачувува непроменет</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Вгради во документот (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Најголема слика за вградување (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Поголема слика се вметнува како без вградување.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Залепените слики вгради како</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (без загуба)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (помало)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Квалитет на JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Што чини вградувањето</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Вградената слика се чува како текст во датотеката Markdown:
+• датотеката расте околу една третина повеќе од самата слика (слика од екранот често има стотици KB);
+• споредбите во Git и синхронизацијата стануваат побавни;
+• GitHub не прикажува base64 слики во датотеки Markdown;
+• други уредници може бавно да ја отвораат датотеката;
+• историјата за враќање зафаќа повеќе меморија.</value>
+  </data>
 </root>

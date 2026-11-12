@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Görsel modda düzenleme bir belgenin metninin, bağlantılarının veya HTML’sinin bir kısmını değiştirebileceğinde bir bildirim; kaynak modu onu olduğu gibi korur</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Belgeye göm (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Gömülecek en büyük resim (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Daha büyük bir resim gömülmeden eklenir.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Yapıştırılan resimleri şu biçimde göm</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (kayıpsız)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (daha küçük)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG kalitesi</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Gömmenin bedeli</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Gömülü resim Markdown dosyasında metin olarak tutulur:
+• dosya resmin kendisinden üçte bir kadar daha fazla büyür (bir ekran görüntüsü çoğu zaman yüzlerce KB’dir);
+• Git karşılaştırmaları ve eşitleme yavaşlar;
+• GitHub Markdown dosyalarındaki base64 resimleri göstermez;
+• diğer düzenleyiciler dosyayı yavaş açabilir;
+• geri alma geçmişi daha çok bellek kullanır.</value>
+  </data>
 </root>

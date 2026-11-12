@@ -361,4 +361,7 @@
     <value>“{0}” kaydedilmemiş değişiklikler içeriyor ancak kaydedilip kaydedilmeyeceğini sormak için gösterilemedi. Pencere kapatılmadı; biraz sonra yeniden deneyin.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Bu resim {0} KB; gömme için ayarlanan {1} KB’den büyük (Ayarlar &gt; Resim), bu yüzden gömülmeden eklendi.</value>
+  </data>
 </root>

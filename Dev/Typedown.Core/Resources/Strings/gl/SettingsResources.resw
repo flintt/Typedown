@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Un aviso cando editar no modo visual pode cambiar parte do texto, as ligazóns ou o HTML dun documento; o modo de código fonte mantéñeo igual</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Incrustar no documento (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Imaxe máis grande que se incrusta (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Unha imaxe maior insírese como sen incrustar.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Incrustar as imaxes pegadas como</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (sen perda)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (máis pequeno)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Calidade JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>O que custa incrustar</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Unha imaxe incrustada gárdase como texto dentro do ficheiro Markdown:
+• o ficheiro medra arredor dun terzo máis ca a propia imaxe (unha captura adoita ocupar centos de KB);
+• as comparacións de Git e a sincronización van máis lentas;
+• GitHub non mostra as imaxes base64 dos ficheiros Markdown;
+• outros editores poden abrir o ficheiro amodo;
+• o historial de desfacer ocupa máis memoria.</value>
+  </data>
 </root>

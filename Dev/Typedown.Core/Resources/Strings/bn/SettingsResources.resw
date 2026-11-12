@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>ভিজ্যুয়াল মোডে সম্পাদনা নথির কিছু লেখা, লিঙ্ক বা HTML পরিবর্তন করতে পারলে একটি বিজ্ঞপ্তি; সোর্স মোড এটি হুবহু রাখে</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>নথিতে এম্বেড করুন (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>এম্বেড করার সবচেয়ে বড় ছবি (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>এর চেয়ে বড় ছবি এম্বেড না করলে যেভাবে বসত সেভাবে বসানো হয়।</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>পেস্ট করা ছবি এভাবে এম্বেড করুন</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (মান না হারিয়ে)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ছোট)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG মান</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>এম্বেড করার মূল্য</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>এম্বেড করা ছবি Markdown ফাইলের ভিতরে লেখা হিসেবে থাকে:
+• ফাইল ছবির চেয়ে প্রায় এক-তৃতীয়াংশ বেশি বাড়ে (একটি স্ক্রিনশট প্রায়ই কয়েকশো KB);
+• Git তুলনা ও সিঙ্ক ধীর হয়;
+• GitHub Markdown ফাইলে base64 ছবি দেখায় না;
+• অন্য সম্পাদক ফাইলটি ধীরে খুলতে পারে;
+• পূর্বাবস্থার ইতিহাস বেশি মেমরি নেয়।</value>
+  </data>
 </root>

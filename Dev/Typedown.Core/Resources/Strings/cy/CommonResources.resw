@@ -1331,4 +1331,13 @@
     <value>De-gliciwch am fwy; pwyswch Delete i'w dynnu o'r rhestr hon</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>Cadw yn y ffolder lluniau</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>Amnewid llun…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>Mewnosod yn y ddogfen (base64)</value>
+  </data>
 </root>

@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>O notificare atunci când editarea în modul vizual poate schimba o parte din textul, linkurile sau HTML-ul unui document; modul sursă îl păstrează neschimbat</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Încorporează în document (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Cea mai mare imagine încorporată (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>O imagine mai mare se inserează ca fără încorporare.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Încorporează imaginile lipite ca</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (fără pierderi)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (mai mic)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Calitate JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Ce costă încorporarea</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>O imagine încorporată este păstrată ca text în fișierul Markdown:
+• fișierul crește cu aproximativ o treime mai mult decât imaginea (o captură de ecran are adesea sute de KB);
+• comparațiile Git și sincronizarea devin mai lente;
+• GitHub nu afișează imaginile base64 din fișierele Markdown;
+• alte editoare pot deschide fișierul încet;
+• istoricul de anulare ocupă mai multă memorie.</value>
+  </data>
 </root>

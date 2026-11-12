@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Pranešimas, kai redagavimas vaizdiniu režimu gali pakeisti dalį dokumento teksto, nuorodų ar HTML; šaltinio režimas jį išlaiko nepakeistą</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Įterpti į dokumentą (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Didžiausias įterpiamas paveikslėlis (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Didesnis paveikslėlis įdedamas kaip be įterpimo.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Įklijuotus paveikslėlius įterpti kaip</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (be nuostolių)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (mažesnis)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG kokybė</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Ką kainuoja įterpimas</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Įterptas paveikslėlis saugomas Markdown faile kaip tekstas:
+• failas padidėja maždaug trečdaliu daugiau nei pats paveikslėlis (ekrano kopija dažnai būna šimtai KB);
+• Git palyginimai ir sinchronizavimas sulėtėja;
+• GitHub nerodo base64 paveikslėlių Markdown failuose;
+• kiti redaktoriai gali lėtai atidaryti failą;
+• anuliavimo istorija užima daugiau atminties.</value>
+  </data>
 </root>

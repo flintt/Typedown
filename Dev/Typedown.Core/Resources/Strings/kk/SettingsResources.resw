@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Визуалды режимде өңдеу құжаттың мәтінінің, сілтемелерінің немесе HTML-інің бір бөлігін өзгертуі мүмкін болғанда хабарлама; бастапқы код режимі оны өзгеріссіз сақтайды</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Құжатқа ендіру (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Ендірілетін ең үлкен сурет (КБ)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Одан үлкен сурет ендірусіз қалай қойылса, солай қойылады.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Қойылған суреттерді былай ендіру</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (жоғалтусыз)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (кішірек)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG сапасы</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Ендірудің бағасы</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Ендірілген сурет Markdown файлының ішінде мәтін ретінде сақталады:
+• файл суреттің өзінен шамамен үштен бір есе көп үлкейеді (экран суреті жиі жүздеген КБ болады);
+• Git салыстыруы мен синхрондау баяулайды;
+• GitHub Markdown файлдарындағы base64 суреттерін көрсетпейді;
+• басқа редакторлар файлды баяу ашуы мүмкін;
+• болдырмау тарихы көбірек жад алады.</value>
+  </data>
 </root>

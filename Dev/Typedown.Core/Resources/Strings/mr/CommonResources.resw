@@ -1331,4 +1331,13 @@
     <value>अधिक पर्यायांसाठी उजवे-क्लिक करा; या सूचीतून काढण्यासाठी Delete दाबा</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>चित्र फोल्डरमध्ये जतन करा</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>चित्र बदला…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>दस्तऐवजात एम्बेड करा (base64)</value>
+  </data>
 </root>

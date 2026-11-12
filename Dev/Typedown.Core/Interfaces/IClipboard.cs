@@ -50,5 +50,8 @@ namespace Typedown.Core.Interfaces
         void SaveAsPng(string path);
 
         byte[] GetBytes();
+
+        /// <summary>The picture as a JPEG of that quality (1-100), on white where it was transparent.</summary>
+        byte[] GetJpegBytes(int quality);
     }
 }

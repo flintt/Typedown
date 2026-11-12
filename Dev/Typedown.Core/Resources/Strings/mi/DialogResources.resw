@@ -361,4 +361,7 @@
     <value>He panonitanga kāore anō kia tiakina kei “{0}”, engari kāore i taea te whakaatu kia pātai mēnā me tiaki. Kāore te matapihi i katia; whakamātau anō ā tōna wā.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>He {0} KB tēnei pikitia, nui ake i te {1} KB kua tautuhia mō te tāmau (Ngā Tautuhinga &gt; Pikitia), nō reira i kuhua kāore i tāmauhia.</value>
+  </data>
 </root>

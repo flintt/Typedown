@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Isaziso lapho ukuhlela kumodi ebonakalayo kungashintsha ingxenye yombhalo, izixhumanisi noma i-HTML yombhalo; imodi yomthombo iwugcina unjalo</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Shumeka kudokhumenti (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Isithombe esikhulu kunazo zonke ongasishumeka (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Isithombe esikhulu sifakwa njengoba besizofakwa ngaphandle kokushumeka.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Shumeka izithombe ezinamathiselwe njenge</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ngaphandle kokulahlekelwa)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (esincane)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Ikhwalithi ye-JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Izindleko zokushumeka</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Isithombe esishumekiwe sigcinwa njengombhalo efayeleni le-Markdown:
+• ifayela likhula cishe ngengxenye yesithathu ngaphezu kwesithombe uqobo (isithombe-skrini sivame ukuba ngamakhulu e-KB);
+• ukuqhathanisa kwe-Git nokuvumelanisa kuhamba kancane;
+• i-GitHub ayibonisi izithombe ze-base64 kumafayela e-Markdown;
+• abanye abahleli bangavula ifayela kancane;
+• umlando wokuhlehlisa uthatha inkumbulo eyengeziwe.</value>
+  </data>
 </root>

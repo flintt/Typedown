@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Un avis lorsque la modification en mode visuel peut changer une partie du texte, des liens ou du HTML d’un document ; le mode source le garde tel quel</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Intégrer au document (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Taille maximale des images intégrées (Ko)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Une image plus grande est insérée comme sans intégration.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Intégrer les images collées en</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (sans perte)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (plus léger)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Qualité JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Ce que coûte l’intégration</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Une image intégrée est stockée sous forme de texte dans le fichier Markdown :
+• le fichier grossit d’environ un tiers de plus que l’image (une capture d’écran fait souvent plusieurs centaines de Ko) ;
+• les comparaisons Git et la synchronisation ralentissent ;
+• GitHub n’affiche pas les images base64 des fichiers Markdown ;
+• d’autres éditeurs peuvent ouvrir le fichier lentement ;
+• l’historique d’annulation prend plus de mémoire.</value>
+  </data>
 </root>

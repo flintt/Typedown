@@ -361,4 +361,7 @@
     <value>„{0}“ turi neįrašytų pakeitimų, tačiau jo nepavyko parodyti, kad būtų paklausta, ar įrašyti. Langas neuždarytas; po akimirkos bandykite dar kartą.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Šis paveikslėlis yra {0} KB, daugiau nei įterpimui nustatyti {1} KB (Parametrai &gt; Paveikslėlis), todėl įdėtas neįterpiant.</value>
+  </data>
 </root>

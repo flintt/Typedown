@@ -361,4 +361,7 @@
     <value>„{0}“ sisaldab salvestamata muudatusi, kuid seda ei saanud kuvada, et küsida salvestamise kohta. Akent ei suletud; proovige hetke pärast uuesti.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>See pilt on {0} KB, rohkem kui manustamiseks seatud {1} KB (Sätted &gt; Pilt), seega lisati see manustamata.</value>
+  </data>
 </root>

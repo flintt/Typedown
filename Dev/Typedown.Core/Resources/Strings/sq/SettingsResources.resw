@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Njoftim kur redaktimi në modalitetin vizual mund të ndryshojë një pjesë të tekstit, lidhjeve ose HTML-së së dokumentit; modaliteti i burimit e mban të pandryshuar</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Ngulit në dokument (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Figura më e madhe për ngulitje (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Një figurë më e madhe futet si pa ngulitje.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Ngulit figurat e ngjitura si</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (pa humbje)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (më e vogël)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Cilësia JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Çfarë kushton ngulitja</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Një figurë e ngulitur ruhet si tekst brenda skedarit Markdown:
+• skedari rritet rreth një të tretë më shumë se vetë figura (një pamje ekrani shpesh është qindra KB);
+• krahasimet Git dhe sinkronizimi ngadalësohen;
+• GitHub nuk shfaq figura base64 në skedarët Markdown;
+• redaktorë të tjerë mund ta hapin skedarin ngadalë;
+• historiku i zhbërjes zë më shumë memorie.</value>
+  </data>
 </root>

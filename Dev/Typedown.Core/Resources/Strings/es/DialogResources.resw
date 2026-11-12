@@ -361,4 +361,7 @@
     <value>«{0}» tiene cambios sin guardar, pero no se pudo mostrar para preguntar si guardarlo. La ventana no se ha cerrado; vuelva a intentarlo en un momento.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Esta imagen ocupa {0} KB, más que los {1} KB fijados para incrustar (Configuración &gt; Imagen), así que se insertó sin incrustar.</value>
+  </data>
 </root>

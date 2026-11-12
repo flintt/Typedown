@@ -45,6 +45,12 @@ namespace Typedown.Core.Services
                     case Enums.InsertImageAction.Upload:
                         result = await Upload(InsertImageSource.Local, AppViewModel.GetImageAbsolutePath(filePath));
                         break;
+                    case Enums.InsertImageAction.Base64:
+                        var bytes = await File.ReadAllBytesAsync(AppViewModel.GetImageAbsolutePath(filePath));
+                        if (Embed(bytes) is { } embedded) return embedded;
+                        await SayTooLargeToEmbed(bytes.Length);
+                        result = ConvertImagePath(filePath);
+                        break;
                     default:
                         result = ConvertImagePath(filePath);
                         break;
@@ -75,6 +81,11 @@ namespace Typedown.Core.Services
                 case Enums.InsertImageAction.Upload:
                     result = await Upload(InsertImageSource.Web, await GetWebImage(new(src), page));
                     break;
+                case Enums.InsertImageAction.Base64:
+                    var bytes = await GetWebImage(new(src), page);
+                    if (Embed(bytes) is { } embedded) return embedded;
+                    await SayTooLargeToEmbed(bytes.Length);
+                    return src;
                 default:
                     return src;
             }
@@ -109,6 +120,12 @@ namespace Typedown.Core.Services
                         // and called from a paste it hung the window for good.
                         result = await Upload(InsertImageSource.Clipboard, await Task.Run(image.GetBytes));
                         break;
+                    case Enums.InsertImageAction.Base64:
+                        var bytes = await Task.Run(() => Settings.Base64ClipboardJpeg ? image.GetJpegBytes(Settings.Base64JpegQuality) : image.GetBytes());
+                        if (Embed(bytes) is { } embedded) return embedded;
+                        await SayTooLargeToEmbed(bytes.Length);
+                        result = await Task.Run(() => SaveImage(InsertImageSource.Clipboard, image));
+                        break;
                     default:
                         result = await Task.Run(() => SaveImage(InsertImageSource.Clipboard, image));
                         break;
@@ -122,6 +139,20 @@ namespace Typedown.Core.Services
                 await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                 return string.Empty;
             }
+        }
+
+        /// <summary>
+        /// The picture as a data: address, kept in the document itself (Settings > Image > Embed as base64), or null when it
+        /// is larger than the size set for that: it is then inserted as it would be without embedding, and the reader told.
+        /// </summary>
+        public string Embed(byte[] bytes) =>
+            bytes.Length > Math.Max(1, Settings.Base64ImageMaxKB) * 1024L ? null : ImageData.ToDataUri(bytes);
+
+        private async Task SayTooLargeToEmbed(long bytes)
+        {
+            Log.Debug($"image: {bytes / 1024} KB is over the {Settings.Base64ImageMaxKB} KB set for embedding; inserted without");
+            var text = string.Format(Locale.GetDialogString("Image.Base64.TooLarge"), (bytes + 1023) / 1024, Settings.Base64ImageMaxKB);
+            await AppContentDialog.Create(Locale.GetString("Image.InsertActions.Base64"), text, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
         }
 
         public string CopyImage(InsertImageSource source, string sourceFile, string destFolder = null)
@@ -287,59 +318,7 @@ namespace Typedown.Core.Services
 
         public enum InsertImageSource { Clipboard, Local, Web };
 
-        public static string GetImageType(byte[] bytes, string defaultType)
-        {
-            string headerCode = GetHeaderInfo(bytes).ToUpper();
-
-            // Every JPEG starts FF D8 FF (E0 JFIF, E1 Exif, DB raw...): only E0 was known, and an Exif photo was "png".
-            if (headerCode.StartsWith("FFD8FF"))
-            {
-                return "jpg";
-            }
-            else if (bytes.Length >= 12 && Encoding.ASCII.GetString(bytes, 0, 4) == "RIFF" && Encoding.ASCII.GetString(bytes, 8, 4) == "WEBP")
-            {
-                return "webp";
-            }
-            else if (bytes.Length >= 12 && Encoding.ASCII.GetString(bytes, 4, 4) == "ftyp" && Encoding.ASCII.GetString(bytes, 8, 4) is "avif" or "avis")
-            {
-                return "avif";
-            }
-            else if (headerCode.StartsWith("00000100"))
-            {
-                return "ico";
-            }
-            else if (IsSvg(bytes))
-            {
-                return "svg";
-            }
-            else if (headerCode.StartsWith("49492A"))
-            {
-                return "tiff";
-            }
-            else if (headerCode.StartsWith("424D"))
-            {
-                return "bmp";
-            }
-            else if (headerCode.StartsWith("474946"))
-            {
-                return "gif";
-            }
-            else if (headerCode.StartsWith("89504E470D0A1A0A"))
-            {
-                return "png";
-            }
-            else
-            {
-                return defaultType; //UnKnown
-            }
-        }
-
-        private static bool IsSvg(byte[] bytes)
-        {
-            var head = Encoding.UTF8.GetString(bytes, 0, Math.Min(bytes.Length, 1024)).TrimStart('\uFEFF', ' ', '\t', '\r', '\n');
-            return head.StartsWith("<svg", StringComparison.OrdinalIgnoreCase)
-                || (head.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) && head.IndexOf("<svg", StringComparison.OrdinalIgnoreCase) >= 0);
-        }
+        public static string GetImageType(byte[] bytes, string defaultType) => ImageData.Sniff(bytes, defaultType);
 
         /// <summary>
         /// The document saved into another folder (an untitled one's first save, or Save as): the pictures it points at
@@ -372,13 +351,7 @@ namespace Typedown.Core.Services
             return copied;
         }
 
-        public static string GetHeaderInfo(byte[] bytes)
-        {
-            var sb = new StringBuilder();
-            foreach (byte b in bytes.Take(8))
-                sb.Append(b.ToString("X2"));
-            return sb.ToString();
-        }
+        public static string GetHeaderInfo(byte[] bytes) => ImageData.HeaderInfo(bytes);
 
         public string ConvertImagePath(string filePath)
         {

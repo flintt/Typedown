@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Уведомление, когда правка в визуальном режиме может изменить часть текста, ссылок или HTML документа; режим исходного кода сохраняет его без изменений</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Встроить в документ (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Наибольшее встраиваемое изображение (КБ)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Изображение больше вставляется так, как без встраивания.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Встраивать вставленные изображения как</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (без потерь)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (меньше)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Качество JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Чем приходится платить за встраивание</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Встроенное изображение хранится в файле Markdown как текст:
+• файл растёт примерно на треть больше самого изображения (снимок экрана часто весит сотни КБ);
+• сравнение в Git и синхронизация замедляются;
+• GitHub не показывает изображения base64 в файлах Markdown;
+• другие редакторы могут открывать файл медленно;
+• история отмены занимает больше памяти.</value>
+  </data>
 </root>

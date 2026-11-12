@@ -1331,4 +1331,13 @@
     <value>ចុចកណ្ដុរស្ដាំដើម្បីមើលបន្ថែម ចុច Delete ដើម្បីដកវាចេញពីបញ្ជីនេះ</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>រក្សាទុកក្នុងថតរូបភាព</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>ជំនួសរូបភាព…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>បង្កប់ក្នុងឯកសារ (base64)</value>
+  </data>
 </root>

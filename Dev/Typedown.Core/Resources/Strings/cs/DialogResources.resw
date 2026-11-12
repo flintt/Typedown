@@ -361,4 +361,7 @@
     <value>„{0}“ obsahuje neuložené změny, ale nepodařilo se ho zobrazit a zeptat se na uložení. Okno se nezavřelo; zkuste to za chvíli znovu.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Tento obrázek má {0} kB, víc než {1} kB nastavených pro vkládání (Nastavení &gt; Obrázek), proto byl vložen bez vložení do dokumentu.</value>
+  </data>
 </root>

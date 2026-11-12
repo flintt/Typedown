@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>اطلاع جب بصری موڈ میں ترمیم دستاویز کے کچھ متن، روابط یا HTML کو بدل سکتی ہو؛ سورس موڈ اسے جوں کا توں رکھتا ہے</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>دستاویز میں شامل کریں (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>شامل کی جانے والی سب سے بڑی تصویر (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>بڑی تصویر ویسے ہی داخل ہوتی ہے جیسے شامل کیے بغیر ہوتی۔</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>چسپاں کی گئی تصاویر بطور شامل کریں</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (بغیر نقصان)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (چھوٹا)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG معیار</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>شامل کرنے کی قیمت</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>شامل کی گئی تصویر Markdown فائل کے اندر متن کی صورت میں رہتی ہے:
+• فائل تصویر سے تقریباً ایک تہائی زیادہ بڑھ جاتی ہے (اسکرین شاٹ اکثر سینکڑوں KB کا ہوتا ہے)؛
+• Git موازنے اور ہم آہنگی سست ہو جاتے ہیں؛
+• GitHub ‏Markdown فائلوں میں base64 تصاویر نہیں دکھاتا؛
+• دوسرے ایڈیٹر فائل آہستہ کھول سکتے ہیں؛
+• کالعدم کرنے کی تاریخ زیادہ میموری لیتی ہے۔</value>
+  </data>
 </root>

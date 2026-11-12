@@ -1331,4 +1331,13 @@
     <value>마우스 오른쪽 단추로 더 보기, Delete 키로 이 목록에서 제거</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>그림 폴더에 저장</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>그림 바꾸기…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>문서에 포함(base64)</value>
+  </data>
 </root>

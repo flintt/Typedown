@@ -361,4 +361,7 @@
     <value>“{0}” għandu bidliet mhux salvati, iżda ma setax jintwera biex nistaqsu jekk għandux jiġi salvat. It-tieqa ma ngħalqitx; erġa' pprova ftit wara.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Din l-istampa hija {0} KB, aktar mill-{1} KB issettjati għad-daħħil (Settings &gt; Stampa), għalhekk iddaħħlet mingħajr ma ġiet inkorporata.</value>
+  </data>
 </root>

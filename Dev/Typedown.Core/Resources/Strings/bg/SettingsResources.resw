@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Известие, когато редактирането във визуален режим може да промени част от текста, връзките или HTML на документ; режимът на изходен код го запазва непроменен</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Вграждане в документа (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Най-голямо вграждано изображение (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>По-голямо изображение се вмъква като без вграждане.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Вграждане на поставените изображения като</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (без загуби)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (по-малък)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Качество на JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Цената на вграждането</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Вграденото изображение се пази като текст във файла Markdown:
+• файлът расте с около една трета повече от самото изображение (екранна снимка често е стотици KB);
+• сравненията в Git и синхронизацията стават по-бавни;
+• GitHub не показва base64 изображения във файлове Markdown;
+• други редактори може да отварят файла бавно;
+• историята за отмяна заема повече памет.</value>
+  </data>
 </root>

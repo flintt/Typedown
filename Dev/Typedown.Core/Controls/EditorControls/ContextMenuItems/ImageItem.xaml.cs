@@ -53,6 +53,7 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
         private void UpdateMenuItemState()
         {
             var isLocalImage = UriHelper.TryGetLocalPath(ImageSrc, out _);
+            var embedded = ImageData.IsDataUri(ImageSrc);
             // Reading mode changes nothing: not the document's reference (copy or move and point there, upload), not the
             // files on disk (move, delete) - only a copy kept elsewhere and where the picture is (the report's M01).
             var editable = !ReadOnly;
@@ -61,6 +62,9 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
             MoveImageItem.IsEnabled = isLocalImage && editable;
             UploadSubMenu.IsEnabled = editable;
             DeleteImageItem.IsEnabled = isLocalImage && editable;
+            ExtractImageItem.Visibility = embedded ? Visibility.Visible : Visibility.Collapsed;
+            EmbedImageItem.Visibility = embedded ? Visibility.Collapsed : Visibility.Visible;
+            ExtractImageItem.IsEnabled = EmbedImageItem.IsEnabled = ReplaceImageItem.IsEnabled = editable;
         }
 
         // Asked again when an item runs, not only when the menu opened: the mode can change while it is open, and an
@@ -148,6 +152,71 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
             {
                 ShowError(ex);
             }
+        }
+
+        // The picture kept in the document saved as a file in the image folder (Settings > Image), and pointed at there.
+        private async void OnExtractImageClick(object sender, RoutedEventArgs e)
+        {
+            if (ReadOnly) return;
+            try
+            {
+                if (!ImageData.TryParseDataUri(ImageSrc, out var bytes, out var extension)) return;
+                var name = string.IsNullOrWhiteSpace(ImageAlt) ? null : $"{FileNameOf(ImageAlt)}.{extension}";
+                var saved = await ImageAction.SaveImage(ImageAction.InsertImageSource.Local, bytes, name ?? $"{Guid.NewGuid()}.{extension}");
+                ReplaceImage(new(DocumentAddress(ViewModel.GetImageAbsolutePath(saved)), ImageAlt, ImageTitle));
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+
+        // The picture (a file, or on the web) written into the document itself as a data: address.
+        private async void OnEmbedImageClick(object sender, RoutedEventArgs e)
+        {
+            if (ReadOnly) return;
+            try
+            {
+                var bytes = await GetImageBytes();
+                if (bytes == null) return;
+                ReplaceImage(new(ImageData.ToDataUri(bytes), ImageAlt, ImageTitle));
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+
+        // Another picture in its place, kept the way this one is: in the document if it was, else as Settings > Image says.
+        private async void OnReplaceImageClick(object sender, RoutedEventArgs e)
+        {
+            if (ReadOnly) return;
+            try
+            {
+                var picker = new FileOpenPicker();
+                foreach (var type in new[] { ".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".bmp" }) picker.FileTypeFilter.Add(type);
+                picker.SetOwnerWindow(ViewModel.MainWindow);
+                var file = await FilePickersExtensions.ShowAsync(() => picker.PickSingleFileAsync());
+                if (file == null || ReadOnly) return;
+                var src = ImageData.IsDataUri(ImageSrc)
+                    ? ImageData.ToDataUri(await File.ReadAllBytesAsync(file.Path))
+                    : await ImageAction.DoLocalFileAction(new Uri(file.Path).AbsoluteUri);
+                ReplaceImage(new(src, ImageAlt, ImageTitle));
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+
+        // A file saved for the document: written relative to it as Settings > Image prefers; an untitled one has no folder.
+        private string DocumentAddress(string absolutePath) =>
+            string.IsNullOrEmpty(ViewModel.FileViewModel.FilePath) ? new Uri(absolutePath).AbsoluteUri : ImageAction.ConvertImagePath(absolutePath);
+
+        private static string FileNameOf(string text)
+        {
+            var name = string.Concat(text.Trim().Select(ch => Path.GetInvalidFileNameChars().Contains(ch) ? '_' : ch));
+            return name.Length > 60 ? name.Substring(0, 60) : name;
         }
 
         private async void OnUploadImageClick(ImageUploadConfig config)
@@ -243,6 +312,8 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
 
         private async Task<byte[]> GetImageBytes()
         {
+            if (ImageData.TryParseDataUri(ImageSrc, out var embedded, out _))
+                return embedded;
             if (UriHelper.IsWebUrl(ImageSrc))
             {
                 return await ImageAction.GetWebImage(new(ImageSrc));

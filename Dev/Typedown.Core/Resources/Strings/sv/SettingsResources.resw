@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Ett meddelande när redigering i visuellt läge kan ändra en del av ett dokuments text, länkar eller HTML; källkodsläget behåller det oförändrat</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Bädda in i dokumentet (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Största bild att bädda in (kB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>En större bild infogas som utan inbäddning.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Bädda in inklistrade bilder som</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (förlustfri)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (mindre)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-kvalitet</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Vad inbäddning kostar</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>En inbäddad bild sparas som text i Markdown-filen:
+• filen växer ungefär en tredjedel mer än själva bilden (en skärmbild är ofta flera hundra kB);
+• Git-jämförelser och synktjänster blir långsammare;
+• GitHub visar inte base64-bilder i Markdown-filer;
+• andra redigerare kan öppna filen långsamt;
+• ångrahistoriken tar mer minne.</value>
+  </data>
 </root>

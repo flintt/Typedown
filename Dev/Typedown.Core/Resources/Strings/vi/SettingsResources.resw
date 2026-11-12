@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Thông báo khi chỉnh sửa ở chế độ trực quan có thể thay đổi một phần văn bản, liên kết hoặc HTML của tài liệu; chế độ mã nguồn giữ nguyên</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Nhúng vào tài liệu (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Ảnh lớn nhất được nhúng (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Ảnh lớn hơn được chèn như khi không nhúng.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Nhúng ảnh dán vào dưới dạng</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (không mất dữ liệu)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (nhỏ hơn)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Chất lượng JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Cái giá của việc nhúng</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Ảnh được nhúng nằm trong tệp Markdown dưới dạng văn bản:
+• tệp lớn thêm khoảng một phần ba so với chính ảnh (ảnh chụp màn hình thường vài trăm KB);
+• so sánh Git và dịch vụ đồng bộ chậm hơn;
+• GitHub không hiển thị ảnh base64 trong tệp Markdown;
+• các trình soạn thảo khác có thể mở tệp chậm;
+• lịch sử hoàn tác chiếm nhiều bộ nhớ hơn.</value>
+  </data>
 </root>

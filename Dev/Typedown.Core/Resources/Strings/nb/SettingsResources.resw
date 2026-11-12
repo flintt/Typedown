@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Et varsel når redigering i visuell modus kan endre noe av tekst, lenker eller HTML i et dokument; kildemodus beholder det uendret</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Bygg inn i dokumentet (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Største bilde som bygges inn (kB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Et større bilde settes inn som uten innbygging.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Bygg inn innlimte bilder som</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (tapsfritt)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (mindre)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-kvalitet</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Hva innbygging koster</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Et innebygd bilde lagres som tekst i Markdown-filen:
+• filen vokser omtrent en tredjedel mer enn selve bildet (et skjermbilde er ofte flere hundre kB);
+• Git-sammenligninger og synkronisering går tregere;
+• GitHub viser ikke base64-bilder i Markdown-filer;
+• andre redigeringsprogrammer kan åpne filen sakte;
+• angreloggen bruker mer minne.</value>
+  </data>
 </root>

@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>सूचना जब विज़ुअल मोड में संपादन दस्तावेज़ के कुछ पाठ, लिंक या HTML को बदल सकता है; सोर्स मोड इसे वैसा ही रखता है</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>दस्तावेज़ में एम्बेड करें (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>एम्बेड करने के लिए सबसे बड़ी तस्वीर (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>इससे बड़ी तस्वीर बिना एम्बेड किए जैसे डाली जाती है वैसे ही डाली जाती है।</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>चिपकाई गई तस्वीरें इस रूप में एम्बेड करें</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (बिना गुणवत्ता हानि)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (छोटा)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG गुणवत्ता</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>एम्बेड करने की कीमत</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>एम्बेड की गई तस्वीर Markdown फ़ाइल के भीतर पाठ के रूप में रहती है:
+• फ़ाइल तस्वीर से लगभग एक-तिहाई अधिक बढ़ती है (स्क्रीनशॉट अक्सर सैकड़ों KB का होता है);
+• Git तुलना और सिंक धीमे हो जाते हैं;
+• GitHub Markdown फ़ाइलों में base64 तस्वीरें नहीं दिखाता;
+• अन्य संपादक फ़ाइल धीरे खोल सकते हैं;
+• पूर्ववत इतिहास अधिक मेमोरी लेता है।</value>
+  </data>
 </root>
