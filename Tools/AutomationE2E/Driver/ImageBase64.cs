@@ -81,7 +81,13 @@ internal static partial class Program
                 await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
                 await Task.Delay(400);
                 await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top, Mouse.Right);
+                // The picture's entries are in the editor menu's Image submenu (EditorContainer's MenuImageItem).
+                System.Windows.Automation.AutomationElement? sub = null;
+                var opened = await Eventually(() => Task.FromResult((sub = FindAnywhereInHost(window, "MenuImageItem")) != null), 4000, 150);
                 notes.Add("menu after the right-click: " + Screenshot("IU05-menu"));
+                Check(opened, "the right-click on the picture has the Image submenu");
+                await ClickInPopup(window, sub!);
+                await Task.Delay(500);
             }
             await RightClickPicture();
             System.Windows.Automation.AutomationElement? extract = null;
