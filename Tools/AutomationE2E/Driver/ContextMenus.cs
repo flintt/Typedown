@@ -119,6 +119,8 @@ internal static partial class Program
             System.Windows.Automation.AutomationElement? remove = null;
             try { remove = await MenuEntry(window, "RecentRemoveItem"); } catch (CaseFailed) { }
             Check(remove != null, "a recent entry's right-click opens its menu with Remove from list");
+            // A picture of it over the menus: it came up see-through, with no background (the user, 2026-11-12).
+            notes.Add("the entry's menu: " + Screenshot("xm01-recent-entry-menu"));
             // The menus stay open under the entry's menu, and go once one of its items is chosen (they went as it opened).
             var still = FindAnywhereInHost(window, "RecentFile-0");
             Check(still != null && !still.Current.IsOffscreen, "the Open Recent menu stays open under the entry's menu");
