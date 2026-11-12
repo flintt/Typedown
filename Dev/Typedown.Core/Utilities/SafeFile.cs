@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +48,7 @@ namespace Typedown.Core.Utilities
             // becoming the target. It is a dot-file and marked hidden and temporary so a sync client (Synology
             // Drive, OneDrive) skips it rather than uploading a file that is about to vanish.
             var tempPath = Path.Combine(string.IsNullOrEmpty(directory) ? "." : directory, $".{Path.GetFileName(path)}.{Guid.NewGuid():N}.tmp");
+            RemoveStaleTemps(directory, path);
             var keepTemp = false;
             // The rename below makes the temp file the target, attributes and all: remember the target's own.
             FileAttributes? previous = null;
@@ -81,8 +82,24 @@ namespace Typedown.Core.Utilities
                 {
                     // The file system has no atomic rename at all (some network/virtual file systems); the copy
                     // is the only way to place the content. This is the one path where a non-atomic overwrite is
-                    // unavoidable.
-                    File.Copy(tempPath, path, overwrite: true);
+                    // unavoidable - so the file as it was is copied aside first, and kept with the new content's temp
+                    // file when the copy over it fails part way (R05: a cut copy left neither version whole).
+                    string before = null;
+                    if (File.Exists(path))
+                    {
+                        before = Path.Combine(string.IsNullOrEmpty(directory) ? "." : directory, $".{Path.GetFileName(path)}.{Guid.NewGuid():N}.before.tmp");
+                        File.Copy(path, before);
+                    }
+                    try
+                    {
+                        File.Copy(tempPath, path, overwrite: true);
+                    }
+                    catch
+                    {
+                        keepTemp = true;
+                        throw;
+                    }
+                    if (before != null) try { File.Delete(before); } catch { }
                 }
                 catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
@@ -122,6 +139,23 @@ namespace Typedown.Core.Utilities
                     try { if (File.Exists(tempPath)) File.Delete(tempPath); } catch { }
                 }
             }
+        }
+
+        /// <summary>
+        /// This file's own temp files left by a write that never finished (the app ended, the power went) or kept as the
+        /// recovery copy of a failed replace, once they are a week old: they were never cleaned up (R05). Newer ones stay
+        /// - a failed save's copy is there to be found.
+        /// </summary>
+        private static void RemoveStaleTemps(string directory, string path)
+        {
+            try
+            {
+                var folder = string.IsNullOrEmpty(directory) ? "." : directory;
+                foreach (var stale in Directory.EnumerateFiles(folder, $".{Path.GetFileName(path)}.*.tmp"))
+                    if (DateTime.UtcNow - File.GetLastWriteTimeUtc(stale) > TimeSpan.FromDays(7))
+                        try { File.Delete(stale); } catch { }
+            }
+            catch { }
         }
 
         /// <summary>

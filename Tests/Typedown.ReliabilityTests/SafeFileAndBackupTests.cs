@@ -21,6 +21,29 @@ namespace Typedown.ReliabilityTests
             CollectionAssert.AreEqual(new[] { path }, Directory.GetFiles(directory.Path));
         }
 
+        // A write that never finished (the app ended) or a failed replace's kept copy left a temp file beside the document
+        // for good: one a week old goes with the next write, a newer one (a recovery copy to be found) stays (R05).
+        [TestMethod]
+        public async Task OldTempFilesGoNewOnesStay()
+        {
+            using var directory = new TestDirectory();
+            var path = directory.File("document.md");
+            await File.WriteAllTextAsync(path, "old\n");
+            var stale = directory.File(".document.md.0123456789abcdef.tmp");
+            var recent = directory.File(".document.md.fedcba9876543210.tmp");
+            var other = directory.File(".another.md.0123456789abcdef.tmp");
+            foreach (var f in new[] { stale, recent, other }) await File.WriteAllTextAsync(f, "left\n");
+            File.SetLastWriteTimeUtc(stale, DateTime.UtcNow.AddDays(-8));
+            File.SetLastWriteTimeUtc(other, DateTime.UtcNow.AddDays(-8));
+
+            await SafeFile.WriteAllTextAtomicAsync(path, "new\n");
+
+            Assert.IsFalse(File.Exists(stale), "this file's week-old temp file removed");
+            Assert.IsTrue(File.Exists(recent), "a newer one kept");
+            Assert.IsTrue(File.Exists(other), "another file's left alone");
+            Assert.AreEqual("new\n", await File.ReadAllTextAsync(path));
+        }
+
         // The typography designer, version history and writing statistics wait for the write on the window's thread
         // (GetResult). A write completing later must not need that thread to go on: the window hung for good when it did
         // (the user's x280, 2026-11-05). Here a thread whose context runs nothing it is handed while it waits, as a
