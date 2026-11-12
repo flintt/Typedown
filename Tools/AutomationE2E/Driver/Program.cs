@@ -5083,6 +5083,7 @@ internal static partial class Program
     [DllImport("user32.dll", EntryPoint = "ClientToScreen")] private static extern bool DmClientToScreen(IntPtr window, ref POINT point);
     [DllImport("user32.dll")] private static extern bool SetCursorPos(int x, int y);
     [StructLayout(LayoutKind.Sequential)] private struct POINT { public int X, Y; }
+    [DllImport("user32.dll")] private static extern bool GetCursorPos(out POINT point);
     [DllImport("user32.dll")] private static extern IntPtr WindowFromPoint(POINT point);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern int GetClassName(IntPtr window, System.Text.StringBuilder name, int size);
     private delegate bool EnumWindowsProc(IntPtr window, IntPtr data);

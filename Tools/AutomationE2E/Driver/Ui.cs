@@ -160,6 +160,20 @@ internal static partial class Program
     /// A press at one point, a move to another in steps, and the release there - moved as a mouse moves (SendInput):
     /// a cursor only placed (SetCursorPos) sends no pointer moves, and a splitter dragged that way did not move.
     /// </summary>
+    /// <summary>The mouse moved to a point as a hand moves it: input moves in steps, each one a mouse move the app sees
+    /// (SetCursorPos alone raised no pointer events on menu entries in a popup).</summary>
+    private static async Task MoveMouse((int X, int Y) to, int steps = 8)
+    {
+        GetCursorPos(out var from);
+        int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+        for (var i = 1; i <= steps; i++)
+        {
+            int x = from.X + (to.X - from.X) * i / steps, y = from.Y + (to.Y - from.Y) * i / steps;
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = x * 65535 / (screenW - 1), dy = y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } });
+            await Task.Delay(20);
+        }
+    }
+
     /// <param name="whileHeld">Run at the end of the move, before the button is let go.</param>
     private static async Task Drag(IntPtr window, (int X, int Y) from, (int X, int Y) to, int steps = 12, Func<Task>? whileHeld = null)
     {

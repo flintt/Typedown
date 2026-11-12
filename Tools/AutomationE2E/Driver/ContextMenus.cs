@@ -81,7 +81,7 @@ internal static partial class Program
                 await Task.Delay(1500);
                 var recent = await FileMenuByClick(window);
                 var r = CenterOf(recent);
-                SetCursorPos(r.Item1, r.Item2);
+                await MoveMouse((r.Item1, r.Item2));
                 bool Shown() => FindAnywhereInHost(window, "RecentFile-0") is { } x && !x.Current.IsOffscreen;
                 if (!await Eventually(() => Task.FromResult(Shown()), 3000, 150))
                 {
@@ -90,11 +90,17 @@ internal static partial class Program
                 }
                 var entry = FindAnywhereInHost(window, "RecentFile-0") ?? throw new CaseFailed("no recent entry");
                 await Click(window, entry, Mouse.Right);
-                await Task.Delay(900);
-                var remove = FindAnywhereInHost(window, "RecentRemoveItem");
-                var folders = FindAnywhereInHost(window, "OpenRecentFoldersSubMenu");
+                System.Windows.Automation.AutomationElement? remove = null, folders = null;
+                await Eventually(() => Task.FromResult((remove = FindAnywhereInHost(window, "RecentRemoveItem")) != null
+                    && (folders = FindAnywhereInHost(window, "OpenRecentFoldersSubMenu")) != null), 3000, 150);
+                await Task.Delay(500);
                 notes.Add($"{name}: " + Screenshot($"xm03-{name}"));
-                if (remove == null || folders == null) { bad.Add($"{name}: menus not found"); await CloseMenus(); continue; }
+                if (remove == null || folders == null)
+                {
+                    bad.Add($"{name}: {(remove == null ? "no entry's menu after the right-click" : "")}{(folders == null ? " no Open Recent menu" : "")}");
+                    await CloseMenus();
+                    continue;
+                }
                 var own = Patch(remove);
                 var menus = Patch(folders);
                 var apart = Math.Abs(own.R - menus.R) + Math.Abs(own.G - menus.G) + Math.Abs(own.B - menus.B);
@@ -176,7 +182,7 @@ internal static partial class Program
                 await Click(window, entry, Mouse.Right);
                 await Task.Delay(600);
                 var other = FindAnywhereInHost(window, "RecentFile-1");
-                if (other != null) { var o = CenterOf(other); SetCursorPos(o.Item1, o.Item2); }
+                if (other != null) { var o = CenterOf(other); await MoveMouse((o.Item1, o.Item2)); }
                 await Task.Delay(600);
                 Send(Key(0x2E, false), Key(0x2E, true));
                 await Task.Delay(1000);
@@ -205,7 +211,7 @@ internal static partial class Program
                 notes.Add($"{how}: recent {string.Join(", ", list.Select(Path.GetFileName))}");
                 var recent = await FileMenuByClick(window);
                 var r = CenterOf(recent);
-                SetCursorPos(r.Item1, r.Item2);
+                await MoveMouse((r.Item1, r.Item2));
                 // Open on the mouse resting there; clicked if it has not opened in 3 s.
                 bool Shown() => FindAnywhereInHost(window, "RecentFile-1") is { } x && !x.Current.IsOffscreen;
                 if (!await Eventually(() => Task.FromResult(Shown()), 3000, 150))
@@ -220,9 +226,9 @@ internal static partial class Program
                     target = entry.Current.HelpText;
                     // Across, then down onto it, as a hand goes.
                     var e = CenterOf(entry);
-                    SetCursorPos(e.Item1, r.Item2);
+                    await MoveMouse((e.Item1, r.Item2));
                     await Task.Delay(200);
-                    SetCursorPos(e.Item1, e.Item2);
+                    await MoveMouse((e.Item1, e.Item2));
                     await Task.Delay(600);
                 }
                 else
