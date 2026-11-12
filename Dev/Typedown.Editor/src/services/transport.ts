@@ -104,6 +104,14 @@ const postMessageDiff = (name: string, arg: unknown) => {
   prevMap.set(name, newArg);
 };
 
+// The host could not apply a change of one of these messages to its own copy (a change from a text it did not have,
+// out of its range): it dropped its copy and asks for the whole of the next one. Without this every later change was
+// made against a text the host never had, and could fit its range and read as another text (R12).
+transport.addListener('ResyncMessage', (args: { name?: string }) => {
+  if (args?.name) prevMap.delete(args.name);
+  else prevMap.clear();
+});
+
 export default {
   addListener: <T>(eventName: string, listener: Listener<T>) => {
     transport.addListener(eventName, listener);
