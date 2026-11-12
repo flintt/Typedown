@@ -17,8 +17,15 @@ internal static partial class Program
     private static async Task PS02(List<string> notes)
     {
         using var c = await Session("e2e PS02");
-        var md = await Open(c, Fixture("ps02.md", "# PS02 heading\n\nText under it.\n\n## PS02 second\n\nMore.\n"));
-        var txt = await Open(c, Fixture("ps02-plain.txt", "A plain line.\n\nAnother one.\n"));
+        // A folder of its own: in the shared fixtures folder the file was listed below what the files block shows.
+        var folder = Path.Combine(fixtures, "ps02");
+        Directory.CreateDirectory(folder);
+        var mdPath = Path.Combine(folder, "ps02.md");
+        var txtPath = Path.Combine(folder, "ps02-plain.txt");
+        File.WriteAllText(mdPath, "# PS02 heading\n\nText under it.\n\n## PS02 second\n\nMore.\n");
+        File.WriteAllText(txtPath, "A plain line.\n\nAnother one.\n");
+        var md = await Open(c, mdPath);
+        var txt = await Open(c, txtPath);
         var windowId = await WindowIdOf(c, md);
         var window = await WindowOf(windowId, c);
         async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
@@ -42,7 +49,7 @@ internal static partial class Program
             await Set("SidePaneFilesCollapsed", false);
             await Set("SidePaneOutlineCollapsed", false);
             await c.Call("window.setView", new { windowId, bounds = new { x = 40, y = 40, width = 1200, height = 820 }, mode = "visual", sidePane = new { open = true, page = "files" } });
-            await c.Call("test.folder.open", new { windowId, path = Path.GetDirectoryName(Fixture("ps02.md", "# PS02 heading\n\nText under it.\n\n## PS02 second\n\nMore.\n"))! });
+            await c.Call("test.folder.open", new { windowId, path = folder });
             await c.Call("document.focus", new { documentId = md });
             await Task.Delay(1500);
             Screenshot("PS02-both");
