@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Powiadomienie, gdy edycja w trybie wizualnym może zmienić część tekstu, linków lub HTML dokumentu; tryb źródłowy zachowuje go bez zmian</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Osadź w dokumencie (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Największy osadzany obraz (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Większy obraz jest wstawiany tak jak bez osadzania.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Osadzaj wklejone obrazy jako</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (bezstratnie)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (mniejszy)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Jakość JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Koszty osadzania</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Osadzony obraz jest zapisany w pliku Markdown jako tekst:
+• plik rośnie o około jedną trzecią więcej niż sam obraz (zrzut ekranu ma często kilkaset KB);
+• porównania w Git i synchronizacja zwalniają;
+• GitHub nie pokazuje obrazów base64 w plikach Markdown;
+• inne edytory mogą wolno otwierać plik;
+• historia cofania zajmuje więcej pamięci.</value>
+  </data>
 </root>

@@ -908,6 +908,9 @@
     {
       "reason": "candidate: application preference not yet reviewed for exposure (type, range, apply path, multi-window test)",
       "windows": [
+        "Base64ImageMaxKB",
+        "Base64ClipboardJpeg",
+        "Base64JpegQuality",
         "RememberCursorPosition",
         "HedgeDocPublishReadOnly",
         "OpenFilesInNewTab",

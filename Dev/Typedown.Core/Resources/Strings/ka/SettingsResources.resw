@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>შეტყობინება, როცა ვიზუალურ რეჟიმში რედაქტირებამ შეიძლება შეცვალოს დოკუმენტის ტექსტის, ბმულების ან HTML-ის ნაწილი; წყაროს რეჟიმი მას უცვლელად ინახავს</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>დოკუმენტში ჩაშენება (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>ჩასაშენებელი უდიდესი სურათი (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>უფრო დიდი სურათი ჩაისმება ისე, როგორც ჩაშენების გარეშე.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ჩასმული სურათების ჩაშენება როგორც</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (დანაკარგის გარეშე)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (უფრო პატარა)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG ხარისხი</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>რა უჯდება ჩაშენება</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>ჩაშენებული სურათი Markdown ფაილში ტექსტად ინახება:
+• ფაილი თვითონ სურათზე დაახლოებით მესამედით მეტად იზრდება (ეკრანის ანაბეჭდი ხშირად ასობით KB-ია);
+• Git-ის შედარება და სინქრონიზაცია ნელდება;
+• GitHub არ აჩვენებს base64 სურათებს Markdown ფაილებში;
+• სხვა რედაქტორებმა ფაილი შეიძლება ნელა გახსნან;
+• გაუქმების ისტორია მეტ მეხსიერებას იკავებს.</value>
+  </data>
 </root>

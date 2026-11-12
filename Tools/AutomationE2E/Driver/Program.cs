@@ -184,6 +184,7 @@ internal static partial class Program
             await Case("IU03 a window that has not used the upload service yet finds the configuration at once (it said none until the database was read)", IU03);
             await Case("IU02 File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text", IU02);
             await Case("IU04 pictures saved and uploaded under the right names: a pasted screenshot goes up as image.png, a second different picture of the same name is copied as \"name (2)\" and the document says so, a new upload configuration starts enabled", IU04);
+            await Case("IU05 pictures embedded in the document (base64): a pasted screenshot as a PNG or, chosen, a JPEG; an inserted picture file with its own bytes; its right-click menu saves it into the image folder and embeds it again", IU05);
             await Case("IN01 several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step", IN01);
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);

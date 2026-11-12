@@ -361,4 +361,7 @@
     <value>„{0}” ima nespremljene promjene, ali nije se mogao prikazati da se pita treba li ga spremiti. Prozor nije zatvoren; pokušajte ponovno za trenutak.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Ova slika ima {0} KB, više od {1} KB postavljenih za ugradnju (Postavke &gt; Slika), pa je umetnuta bez ugradnje.</value>
+  </data>
 </root>

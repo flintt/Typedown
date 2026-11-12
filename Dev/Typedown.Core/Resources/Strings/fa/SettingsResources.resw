@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>اعلانی وقتی ویرایش در حالت دیداری ممکن است بخشی از متن، پیوندها یا HTML سند را تغییر دهد؛ حالت منبع آن را دست‌نخورده نگه می‌دارد</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>جاسازی در سند (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>بزرگ‌ترین تصویر برای جاسازی (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>تصویر بزرگ‌تر همان‌طور که بدون جاسازی درج می‌شود درج می‌شود.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>جاسازی تصاویر چسبانده‌شده به‌صورت</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (بدون افت کیفیت)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (کوچک‌تر)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>کیفیت JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>هزینهٔ جاسازی</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>تصویر جاسازی‌شده به‌صورت متن درون فایل Markdown نگه داشته می‌شود:
+• فایل حدود یک‌سوم بیشتر از خود تصویر بزرگ می‌شود (یک نماگرفت اغلب چندصد KB است)؛
+• مقایسه‌های Git و همگام‌سازی کندتر می‌شوند؛
+• GitHub تصاویر base64 را در فایل‌های Markdown نشان نمی‌دهد؛
+• ویرایشگرهای دیگر ممکن است فایل را کند باز کنند؛
+• تاریخچهٔ واگرد حافظهٔ بیشتری می‌گیرد.</value>
+  </data>
 </root>

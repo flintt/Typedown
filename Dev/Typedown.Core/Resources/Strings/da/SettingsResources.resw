@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>En besked, når redigering i visuel tilstand kan ændre noget af et dokuments tekst, links eller HTML; kildetilstand bevarer det uændret</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Indlejr i dokumentet (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Største billede der indlejres (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Et større billede indsættes som uden indlejring.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Indlejr indsatte billeder som</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (tabsfrit)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (mindre)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-kvalitet</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Hvad indlejring koster</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Et indlejret billede gemmes som tekst i Markdown-filen:
+• filen vokser omkring en tredjedel mere end selve billedet (et skærmbillede fylder ofte flere hundrede KB);
+• Git-sammenligninger og synkronisering bliver langsommere;
+• GitHub viser ikke base64-billeder i Markdown-filer;
+• andre editorer kan åbne filen langsomt;
+• fortrydelseshistorikken bruger mere hukommelse.</value>
+  </data>
 </root>

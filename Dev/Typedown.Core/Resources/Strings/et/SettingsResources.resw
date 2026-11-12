@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Teade, kui visuaalses režiimis redigeerimine võib muuta osa dokumendi tekstist, linkidest või HTML-ist; lähterežiim jätab selle muutmata</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Manusta dokumenti (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Suurim manustatav pilt (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Suurem pilt lisatakse nagu ilma manustamata.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Kleebitud pildid manustatakse kui</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (kadudeta)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (väiksem)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-kvaliteet</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Mida manustamine maksab</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Manustatud pilt hoitakse Markdowni failis tekstina:
+• fail kasvab umbes kolmandiku võrra rohkem kui pilt ise (ekraanipilt on sageli sadu KB);
+• Giti võrdlused ja sünkroonimine aeglustuvad;
+• GitHub ei näita Markdowni failides base64-pilte;
+• teised redaktorid võivad faili aeglaselt avada;
+• tagasivõtmise ajalugu võtab rohkem mälu.</value>
+  </data>
 </root>

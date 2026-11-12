@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Notis apabila menyunting dalam mod visual boleh mengubah sebahagian teks, pautan atau HTML dokumen; mod sumber mengekalkannya seperti asal</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Benamkan dalam dokumen (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Gambar terbesar untuk dibenamkan (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Gambar yang lebih besar disisipkan seperti tanpa dibenamkan.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Benamkan gambar yang ditampal sebagai</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (tanpa kehilangan)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (lebih kecil)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Kualiti JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Kos membenamkan</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Gambar terbenam disimpan sebagai teks di dalam fail Markdown:
+• fail bertambah kira-kira satu pertiga lebih besar daripada gambar itu sendiri (tangkapan skrin selalunya ratusan KB);
+• perbandingan Git dan perkhidmatan penyegerakan menjadi lebih perlahan;
+• GitHub tidak memaparkan gambar base64 dalam fail Markdown;
+• editor lain mungkin membuka fail dengan perlahan;
+• sejarah buat asal menggunakan lebih banyak memori.</value>
+  </data>
 </root>

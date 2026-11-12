@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Taarifa wakati kuhariri katika hali ya kuona kunaweza kubadilisha sehemu ya maandishi, viungo au HTML ya hati; hali ya chanzo huiweka kama ilivyo</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Pachika kwenye hati (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Picha kubwa zaidi ya kupachika (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Picha kubwa zaidi huingizwa kama bila kupachika.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Pachika picha zilizobandikwa kama</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (bila kupoteza ubora)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ndogo zaidi)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Ubora wa JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Gharama ya kupachika</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Picha iliyopachikwa huhifadhiwa kama maandishi ndani ya faili la Markdown:
+• faili hukua takriban theluthi zaidi ya picha yenyewe (picha ya skrini mara nyingi ni mamia ya KB);
+• ulinganisho wa Git na usawazishaji huwa polepole;
+• GitHub haionyeshi picha za base64 katika faili za Markdown;
+• vihariri vingine vinaweza kufungua faili polepole;
+• historia ya kutendua hutumia kumbukumbu zaidi.</value>
+  </data>
 </root>

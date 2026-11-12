@@ -361,4 +361,7 @@
     <value>“{0}” có thay đổi chưa lưu, nhưng không thể hiển thị để hỏi có lưu hay không. Cửa sổ chưa được đóng; hãy thử lại sau giây lát.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Ảnh này {0} KB, lớn hơn {1} KB đặt cho việc nhúng (Cài đặt &gt; Hình ảnh), nên đã được chèn mà không nhúng.</value>
+  </data>
 </root>

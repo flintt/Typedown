@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>በእይታ ሁነታ ማርትዕ የሰነድን የተወሰነ ጽሑፍ፣ አገናኞች ወይም HTML ሊቀይር ሲችል ማሳሰቢያ፤ የምንጭ ሁነታ እንዳለ ያቆየዋል</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>በሰነዱ ውስጥ አካት (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>የሚካተት ትልቁ ምስል (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>ከዚህ የሚበልጥ ምስል ሳይካተት እንደሚገባ ይገባል።</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>የተለጠፉ ምስሎችን እንደዚህ አካት</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ያለ ጥራት ኪሳራ)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ያነሰ)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>የJPEG ጥራት</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>የማካተት ዋጋ</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>የተካተተ ምስል በMarkdown ፋይሉ ውስጥ እንደ ጽሑፍ ይቀመጣል፦
+• ፋይሉ ከምስሉ በሲሶ ያህል ይበልጣል (የማያ ገጽ ቀረጻ ብዙ ጊዜ በመቶዎች KB ነው)፤
+• የGit ንጽጽርና ማመሳሰል ይዘገያሉ፤
+• GitHub በMarkdown ፋይሎች ውስጥ ያሉ base64 ምስሎችን አያሳይም፤
+• ሌሎች አርታዒዎች ፋይሉን በዝግታ ሊከፍቱ ይችላሉ፤
+• የመቀልበስ ታሪክ ብዙ ማህደረ ትውስታ ይይዛል።</value>
+  </data>
 </root>

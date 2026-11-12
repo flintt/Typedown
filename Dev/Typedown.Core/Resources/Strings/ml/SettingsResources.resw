@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>വിഷ്വൽ മോഡിലെ എഡിറ്റിംഗ് പ്രമാണത്തിലെ ചില വാചകം, ലിങ്കുകൾ അല്ലെങ്കിൽ HTML മാറ്റാനിടയുള്ളപ്പോൾ ഒരു അറിയിപ്പ്; സോഴ്‌സ് മോഡ് അതേപടി നിലനിർത്തുന്നു</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>പ്രമാണത്തിൽ ഉൾച്ചേർക്കുക (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>ഉൾച്ചേർക്കാവുന്ന ഏറ്റവും വലിയ ചിത്രം (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>ഇതിലും വലിയ ചിത്രം ഉൾച്ചേർക്കാതെ ചേർക്കുന്നതുപോലെ ചേർക്കും.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ഒട്ടിച്ച ചിത്രങ്ങൾ ഇങ്ങനെ ഉൾച്ചേർക്കുക</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (നിലവാരം നഷ്ടപ്പെടാതെ)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ചെറുത്)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG നിലവാരം</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>ഉൾച്ചേർക്കുന്നതിന്റെ വില</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>ഉൾച്ചേർത്ത ചിത്രം Markdown ഫയലിനുള്ളിൽ ടെക്സ്റ്റായി സൂക്ഷിക്കുന്നു:
+• ഫയൽ ചിത്രത്തേക്കാൾ ഏകദേശം മൂന്നിലൊന്ന് കൂടുതൽ വലുതാകും (സ്ക്രീൻഷോട്ട് പലപ്പോഴും നൂറുകണക്കിന് KB);
+• Git താരതമ്യവും സമന്വയവും മന്ദഗതിയിലാകും;
+• GitHub Markdown ഫയലുകളിലെ base64 ചിത്രങ്ങൾ കാണിക്കില്ല;
+• മറ്റ് എഡിറ്ററുകൾ ഫയൽ പതുക്കെ തുറന്നേക്കാം;
+• പഴയപടിയാക്കൽ ചരിത്രം കൂടുതൽ മെമ്മറി എടുക്കും.</value>
+  </data>
 </root>

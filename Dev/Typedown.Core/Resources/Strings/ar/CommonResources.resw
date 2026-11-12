@@ -1331,4 +1331,13 @@
     <value>انقر بزر الماوس الأيمن لمزيد من الخيارات، أو اضغط Delete لإزالته من هذه القائمة</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>حفظ في مجلد الصور</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>استبدال الصورة…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>تضمين في المستند (base64)</value>
+  </data>
 </root>

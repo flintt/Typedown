@@ -1331,4 +1331,13 @@
     <value>और विकल्पों के लिए राइट-क्लिक करें; इस सूची से हटाने के लिए Delete दबाएँ</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>तस्वीर फ़ोल्डर में सहेजें</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>तस्वीर बदलें…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>दस्तावेज़ में एम्बेड करें (base64)</value>
+  </data>
 </root>

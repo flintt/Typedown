@@ -361,4 +361,7 @@
     <value>“{0}” tem alterações não salvas, mas não foi possível mostrá-lo para perguntar se deve ser salvo. A janela não foi fechada; tente novamente em instantes.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Esta imagem tem {0} KB, mais que os {1} KB definidos para incorporar (Configurações &gt; Imagem), por isso foi inserida sem incorporar.</value>
+  </data>
 </root>

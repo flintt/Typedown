@@ -1605,7 +1605,7 @@ namespace Typedown.Core.ViewModels
             MarkdownEditor?.PostMessage("Paste", new { type, text, html });
             EditionHooks.ReportActivity(ActivityKind.Pasted, AppViewModel);
             if (type == "pasteAsPlainText" || string.IsNullOrEmpty(html)) return;
-            if (Settings.InsertWebImageAction != Enums.InsertImageAction.CopyToPath && Settings.InsertWebImageAction != Enums.InsertImageAction.Upload) return;
+            if (Settings.InsertWebImageAction is not (Enums.InsertImageAction.CopyToPath or Enums.InsertImageAction.Upload or Enums.InsertImageAction.Base64)) return;
             var addresses = WebImageAddresses(html);
             if (addresses.Count == 0 || tab == null) return;
             // The page has the text once it has answered a flush.

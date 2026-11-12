@@ -361,4 +361,7 @@
     <value>A(z) „{0}” nem mentett módosításokat tartalmaz, de nem lehetett megjeleníteni, hogy rákérdezzünk a mentésre. Az ablak nem záródott be; próbálja újra egy pillanat múlva.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>A kép {0} KB, több a beágyazáshoz beállított {1} KB-nál (Beállítások &gt; Kép), ezért beágyazás nélkül került be.</value>
+  </data>
 </root>

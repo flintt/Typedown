@@ -15,6 +15,10 @@ namespace Typedown.Core.Enums
 
         [Locale("Image.InsertActions.Upload")]
         Upload,
+
+        /// <summary>The picture written into the document as a data: address (base64). Off unless chosen.</summary>
+        [Locale("Image.InsertActions.Base64")]
+        Base64,
     }
 
     public static partial class Enumerable

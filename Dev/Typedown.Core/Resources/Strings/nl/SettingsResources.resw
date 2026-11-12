@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Een melding wanneer bewerken in de visuele modus tekst, koppelingen of HTML van een document kan wijzigen; de bronmodus laat het ongewijzigd</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>In het document insluiten (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Grootste in te sluiten afbeelding (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Een grotere afbeelding wordt ingevoegd zoals zonder insluiten.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Geplakte afbeeldingen insluiten als</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (verliesvrij)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (kleiner)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-kwaliteit</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Wat insluiten kost</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Een ingesloten afbeelding staat als tekst in het Markdown-bestand:
+• het bestand groeit ongeveer een derde meer dan de afbeelding zelf (een schermafbeelding is vaak honderden KB);
+• Git-vergelijkingen en synchronisatie worden trager;
+• GitHub toont geen base64-afbeeldingen in Markdown-bestanden;
+• andere editors openen het bestand mogelijk traag;
+• de geschiedenis voor ongedaan maken gebruikt meer geheugen.</value>
+  </data>
 </root>

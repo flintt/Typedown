@@ -336,6 +336,11 @@ namespace Typedown.Core.ViewModels
         public string InsertLocalImageCopyPath { get => GetSettingValue("./images"); set => SetSettingValue(value); }
         public int? InsertLocalImageUseUploadConfigId { get => GetSettingValue<int?>(null); set => SetSettingValue(value); }
         public InsertImageAction InsertWebImageAction { get => GetSettingValue(InsertImageAction.None); set => SetSettingValue(value); }
+        /// <summary>A picture larger than this (KB) is not embedded as base64 but inserted as it would be otherwise.</summary>
+        public int Base64ImageMaxKB { get => GetSettingValue(1024); set => SetSettingValue(value); }
+        /// <summary>A pasted picture embedded as base64 is a JPEG (smaller) rather than a PNG (lossless).</summary>
+        public bool Base64ClipboardJpeg { get => GetSettingValue(false); set => SetSettingValue(value); }
+        public int Base64JpegQuality { get => GetSettingValue(85); set => SetSettingValue(value); }
         public string InsertWebImageCopyPath { get => GetSettingValue("./images"); set => SetSettingValue(value); }
         public int? InsertWebImageUseUploadConfigId { get => GetSettingValue<int?>(null); set => SetSettingValue(value); }
         /// <summary>

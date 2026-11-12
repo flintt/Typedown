@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Hysbysiad pan allai golygu yn y modd gweledol newid rhan o destun, dolenni neu HTML dogfen; mae’r modd ffynhonnell yn ei chadw heb ei newid</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Mewnosod yn y ddogfen (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Y llun mwyaf i’w fewnosod (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Mae llun mwy yn cael ei roi i mewn fel heb fewnosod.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Mewnosod lluniau a ludwyd fel</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (heb golled)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (llai)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Ansawdd JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Cost mewnosod</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Mae llun wedi’i fewnosod yn cael ei gadw fel testun yn y ffeil Markdown:
+• mae’r ffeil yn tyfu tua thraean yn fwy na’r llun ei hun (mae sgrinlun yn aml yn gannoedd o KB);
+• mae cymariaethau Git a gwasanaethau cysoni’n arafach;
+• nid yw GitHub yn dangos lluniau base64 mewn ffeiliau Markdown;
+• gall golygyddion eraill agor y ffeil yn araf;
+• mae’r hanes dadwneud yn defnyddio mwy o gof.</value>
+  </data>
 </root>

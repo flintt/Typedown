@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Upozornění, když úpravy ve vizuálním režimu mohou změnit část textu, odkazů nebo HTML dokumentu; režim zdrojového kódu jej zachová beze změny</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Vložit do dokumentu (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Největší vkládaný obrázek (kB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Větší obrázek se vloží jako bez vkládání do dokumentu.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Vložené obrázky ze schránky ukládat jako</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (bezeztrátově)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (menší)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Kvalita JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Co vkládání stojí</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Vložený obrázek je uložen jako text v souboru Markdown:
+• soubor naroste asi o třetinu víc než samotný obrázek (snímek obrazovky mívá stovky kB);
+• porovnání v Gitu a synchronizace se zpomalí;
+• GitHub nezobrazuje obrázky base64 v souborech Markdown;
+• jiné editory mohou soubor otevírat pomalu;
+• historie zpět zabere více paměti.</value>
+  </data>
 </root>

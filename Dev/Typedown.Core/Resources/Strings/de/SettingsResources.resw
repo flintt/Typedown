@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Ein Hinweis, wenn das Bearbeiten im visuellen Modus Text, Links oder HTML eines Dokuments ändern kann; der Quellmodus lässt es unverändert</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Im Dokument einbetten (Base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Größtes einzubettendes Bild (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Ein größeres Bild wird wie ohne Einbetten eingefügt.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Eingefügte Bilder einbetten als</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (verlustfrei)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (kleiner)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-Qualität</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Was das Einbetten kostet</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Ein eingebettetes Bild steht als Text in der Markdown-Datei:
+• die Datei wird etwa ein Drittel größer als das Bild selbst (ein Screenshot hat oft mehrere hundert KB);
+• Git-Vergleiche und Sync-Dienste werden langsamer;
+• GitHub zeigt Base64-Bilder in Markdown-Dateien nicht an;
+• andere Editoren öffnen die Datei womöglich langsam;
+• der Rückgängig-Verlauf braucht mehr Speicher.</value>
+  </data>
 </root>

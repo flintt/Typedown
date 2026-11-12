@@ -1331,4 +1331,13 @@
     <value>Աջ սեղմեք ավելին տեսնելու համար. սեղմեք Delete՝ ցանկից հեռացնելու համար</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>Պահել պատկերների թղթապանակում</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>Փոխարինել պատկերը…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>Ներդնել փաստաթղթում (base64)</value>
+  </data>
 </root>

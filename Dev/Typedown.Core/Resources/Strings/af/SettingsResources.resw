@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>’n Kennisgewing wanneer redigering in visuele modus van ’n dokument se teks, skakels of HTML kan verander; bronmodus hou dit onveranderd</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Bed in die dokument in (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Grootste prent om in te bed (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>’n Groter prent word ingevoeg soos sonder inbedding.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Bed geplakte prente in as</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (verliesloos)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (kleiner)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-gehalte</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Wat inbedding kos</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>’n Ingebedde prent word as teks in die Markdown-lêer gehou:
+• die lêer groei omtrent ’n derde meer as die prent self (’n skermskoot is dikwels honderde KB);
+• Git-vergelykings en sinkronisering word stadiger;
+• GitHub wys nie base64-prente in Markdown-lêers nie;
+• ander redigeerders kan die lêer stadig oopmaak;
+• die ontdoengeskiedenis neem meer geheue.</value>
+  </data>
 </root>

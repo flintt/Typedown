@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>ਸੂਚਨਾ ਜਦੋਂ ਵਿਜ਼ੂਅਲ ਮੋਡ ਵਿੱਚ ਸੰਪਾਦਨ ਦਸਤਾਵੇਜ਼ ਦੇ ਕੁਝ ਪਾਠ, ਲਿੰਕ ਜਾਂ HTML ਨੂੰ ਬਦਲ ਸਕਦਾ ਹੈ; ਸੋਰਸ ਮੋਡ ਇਸਨੂੰ ਜਿਵੇਂ ਦਾ ਤਿਵੇਂ ਰੱਖਦਾ ਹੈ</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>ਦਸਤਾਵੇਜ਼ ਵਿੱਚ ਜੋੜੋ (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>ਜੋੜਨ ਲਈ ਸਭ ਤੋਂ ਵੱਡੀ ਤਸਵੀਰ (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>ਇਸ ਤੋਂ ਵੱਡੀ ਤਸਵੀਰ ਬਿਨਾਂ ਜੋੜੇ ਜਿਵੇਂ ਪਾਈ ਜਾਂਦੀ ਹੈ ਤਿਵੇਂ ਪਾਈ ਜਾਂਦੀ ਹੈ।</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ਚਿਪਕਾਈਆਂ ਤਸਵੀਰਾਂ ਇਸ ਰੂਪ ਵਿੱਚ ਜੋੜੋ</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ਬਿਨਾਂ ਨੁਕਸਾਨ)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ਛੋਟਾ)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG ਗੁਣਵੱਤਾ</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>ਜੋੜਨ ਦੀ ਕੀਮਤ</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>ਜੋੜੀ ਗਈ ਤਸਵੀਰ Markdown ਫ਼ਾਈਲ ਦੇ ਅੰਦਰ ਲਿਖਤ ਵਜੋਂ ਰਹਿੰਦੀ ਹੈ:
+• ਫ਼ਾਈਲ ਤਸਵੀਰ ਨਾਲੋਂ ਲਗਭਗ ਇੱਕ ਤਿਹਾਈ ਵੱਧ ਵਧਦੀ ਹੈ (ਸਕਰੀਨਸ਼ਾਟ ਅਕਸਰ ਸੈਂਕੜੇ KB ਦਾ ਹੁੰਦਾ ਹੈ);
+• Git ਤੁਲਨਾ ਅਤੇ ਸਿੰਕ ਹੌਲੀ ਹੋ ਜਾਂਦੇ ਹਨ;
+• GitHub Markdown ਫ਼ਾਈਲਾਂ ਵਿੱਚ base64 ਤਸਵੀਰਾਂ ਨਹੀਂ ਦਿਖਾਉਂਦਾ;
+• ਹੋਰ ਸੰਪਾਦਕ ਫ਼ਾਈਲ ਹੌਲੀ ਖੋਲ੍ਹ ਸਕਦੇ ਹਨ;
+• ਵਾਪਸ ਕਰੋ ਇਤਿਹਾਸ ਵੱਧ ਮੈਮਰੀ ਲੈਂਦਾ ਹੈ।</value>
+  </data>
 </root>

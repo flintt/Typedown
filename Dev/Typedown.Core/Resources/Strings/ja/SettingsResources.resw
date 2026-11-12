@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>ビジュアルモードでの編集で文書の文字、リンク、HTML の一部が変わる可能性があるときに知らせます。ソースモードではそのまま保たれます</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>文書に埋め込む（base64）</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>埋め込む画像の上限（KB）</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>これより大きい画像は埋め込まずに挿入します。</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>貼り付けた画像の埋め込み形式</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (可逆)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (小さい)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG の品質</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>埋め込みのデメリット</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>埋め込んだ画像は Markdown ファイル内にテキストとして保存されます：
+• ファイルは画像自体より約 3 分の 1 大きくなります（スクリーンショットは数百 KB になることが多い）；
+• Git の差分や同期サービスが遅くなります；
+• GitHub は Markdown ファイル内の base64 画像を表示しません；
+• 他のエディターで開くのが遅くなることがあります；
+• 元に戻す履歴のメモリ使用量が増えます。</value>
+  </data>
 </root>

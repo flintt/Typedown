@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>แจ้งเตือนเมื่อการแก้ไขในโหมดภาพอาจเปลี่ยนข้อความ ลิงก์ หรือ HTML บางส่วนของเอกสาร โหมดซอร์สจะคงไว้ตามเดิม</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>ฝังในเอกสาร (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>รูปใหญ่สุดที่จะฝัง (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>รูปที่ใหญ่กว่านี้จะแทรกแบบไม่ฝัง</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ฝังรูปที่วางเป็น</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ไม่สูญเสียคุณภาพ)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ขนาดเล็กกว่า)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>คุณภาพ JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>ข้อเสียของการฝัง</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>รูปที่ฝังจะเก็บเป็นข้อความในไฟล์ Markdown:
+• ไฟล์ใหญ่ขึ้นมากกว่าตัวรูปราวหนึ่งในสาม (ภาพหน้าจอมักมีหลายร้อย KB);
+• การเปรียบเทียบใน Git และบริการซิงค์จะช้าลง;
+• GitHub ไม่แสดงรูป base64 ในไฟล์ Markdown;
+• โปรแกรมแก้ไขอื่นอาจเปิดไฟล์ได้ช้า;
+• ประวัติการเลิกทำใช้หน่วยความจำมากขึ้น</value>
+  </data>
 </root>

@@ -361,4 +361,7 @@
     <value>”{0}” har osparade ändringar, men den kunde inte visas för att fråga om den ska sparas. Fönstret stängdes inte; försök igen om en stund.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Bilden är {0} kB, mer än de {1} kB som är inställda för inbäddning (Inställningar &gt; Bild), så den infogades utan inbäddning.</value>
+  </data>
 </root>

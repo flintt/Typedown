@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>విజువల్ మోడ్‌లో సవరణ పత్రంలోని కొంత వచనం, లింక్‌లు లేదా HTML‌ను మార్చగలిగినప్పుడు నోటీసు; సోర్స్ మోడ్ దాన్ని అలాగే ఉంచుతుంది</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>పత్రంలో పొందుపరచు (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>పొందుపరచే అతిపెద్ద చిత్రం (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>దీనికంటే పెద్ద చిత్రం పొందుపరచకుండా ఎలా చేర్చబడుతుందో అలాగే చేర్చబడుతుంది.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>అతికించిన చిత్రాలను ఇలా పొందుపరచు</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (నాణ్యత కోల్పోకుండా)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (చిన్నది)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG నాణ్యత</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>పొందుపరచడం వల్ల ఖర్చు</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>పొందుపరచిన చిత్రం Markdown ఫైల్‌లో వచనంగా ఉంటుంది:
+• ఫైల్ చిత్రం కంటే సుమారు మూడో వంతు ఎక్కువ పెరుగుతుంది (స్క్రీన్‌షాట్ తరచుగా వందల KB);
+• Git పోలికలు, సమకాలీకరణ నెమ్మదిస్తాయి;
+• GitHub Markdown ఫైల్‌లలోని base64 చిత్రాలను చూపదు;
+• ఇతర ఎడిటర్లు ఫైల్‌ను నెమ్మదిగా తెరవవచ్చు;
+• రద్దు చరిత్ర ఎక్కువ మెమరీ తీసుకుంటుంది.</value>
+  </data>
 </root>

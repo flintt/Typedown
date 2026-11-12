@@ -67,6 +67,18 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             disposables.Add(ImageUpload.ImageUploadConfigs.GetCollectionObservable().Subscribe(_ => UpdateUploadConfigOptions()));
             UpdateUploadConfigOptions();
             UpdateUploadHistoryDescription();
+            Base64FormatBox.SelectedIndex = Settings?.Base64ClipboardJpeg == true ? 1 : 0;
+        }
+
+        public Windows.Globalization.NumberFormatting.DecimalFormatter IntegerFormatter { get; } = new() { FractionDigits = 0, NumberRounder = new Windows.Globalization.NumberFormatting.IncrementNumberRounder { Increment = 1, RoundingAlgorithm = Windows.Globalization.NumberFormatting.RoundingAlgorithm.RoundHalfUp } };
+
+        /// <summary>The base64 items are shown once any kind of picture is embedded.</summary>
+        public static Visibility Base64Visibility(InsertImageAction clipboard, InsertImageAction local, InsertImageAction web) =>
+            clipboard == InsertImageAction.Base64 || local == InsertImageAction.Base64 || web == InsertImageAction.Base64 ? Visibility.Visible : Visibility.Collapsed;
+
+        private void OnBase64FormatChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Settings != null && Base64FormatBox.SelectedIndex >= 0) Settings.Base64ClipboardJpeg = Base64FormatBox.SelectedIndex == 1;
         }
 
         public Visibility IsCopyImagePathSettingItemVisibility(InsertImageAction action)

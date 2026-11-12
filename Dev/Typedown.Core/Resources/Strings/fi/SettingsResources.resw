@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Ilmoitus, kun muokkaus visuaalisessa tilassa voi muuttaa osaa asiakirjan tekstistä, linkeistä tai HTML:stä; lähdekooditila säilyttää sen ennallaan</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Upota asiakirjaan (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Suurin upotettava kuva (kt)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Suurempi kuva lisätään kuten ilman upotusta.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Upota liitetyt kuvat muodossa</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (häviötön)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (pienempi)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG-laatu</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Mitä upottaminen maksaa</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Upotettu kuva tallennetaan Markdown-tiedostoon tekstinä:
+• tiedosto kasvaa noin kolmanneksen enemmän kuin itse kuva (kuvakaappaus on usein satoja kt);
+• Git-vertailut ja synkronointi hidastuvat;
+• GitHub ei näytä base64-kuvia Markdown-tiedostoissa;
+• muut editorit voivat avata tiedoston hitaasti;
+• kumoamishistoria vie enemmän muistia.</value>
+  </data>
 </root>

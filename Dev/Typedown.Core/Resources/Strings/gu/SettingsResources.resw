@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>જ્યારે વિઝ્યુઅલ મોડમાં સંપાદન દસ્તાવેજના કેટલાક લખાણ, લિંક અથવા HTML બદલી શકે ત્યારે સૂચના; સોર્સ મોડ તેને જેમ છે તેમ રાખે છે</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>દસ્તાવેજમાં એમ્બેડ કરો (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>એમ્બેડ કરવાની સૌથી મોટી છબી (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>આનાથી મોટી છબી એમ્બેડ કર્યા વગર જેમ દાખલ થાય તેમ દાખલ થાય છે.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>પેસ્ટ કરેલી છબીઓ આ રીતે એમ્બેડ કરો</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ગુણવત્તા ગુમાવ્યા વગર)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (નાનું)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG ગુણવત્તા</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>એમ્બેડ કરવાની કિંમત</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>એમ્બેડ કરેલી છબી Markdown ફાઇલની અંદર લખાણ તરીકે રહે છે:
+• ફાઇલ છબી કરતાં લગભગ ત્રીજા ભાગ જેટલી વધુ વધે છે (સ્ક્રીનશૉટ ઘણી વાર સેંકડો KB હોય છે);
+• Git સરખામણી અને સિંક ધીમાં થાય છે;
+• GitHub Markdown ફાઇલોમાં base64 છબીઓ બતાવતું નથી;
+• અન્ય સંપાદકો ફાઇલ ધીમેથી ખોલી શકે છે;
+• પૂર્વવત્ ઇતિહાસ વધુ મેમરી લે છે.</value>
+  </data>
 </root>

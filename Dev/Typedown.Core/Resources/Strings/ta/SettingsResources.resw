@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>காட்சி பயன்முறையில் திருத்துவது ஆவணத்தின் சில உரை, இணைப்புகள் அல்லது HTML-ஐ மாற்றக்கூடும் போது அறிவிப்பு; மூலப் பயன்முறை அதை அப்படியே வைத்திருக்கும்</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>ஆவணத்தில் உட்பொதி (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>உட்பொதிக்கும் மிகப்பெரிய படம் (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>இதைவிடப் பெரிய படம் உட்பொதிக்காமல் செருகுவது போலவே செருகப்படும்.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ஒட்டிய படங்களை இப்படி உட்பொதி</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (இழப்பில்லாமல்)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (சிறியது)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG தரம்</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>உட்பொதிப்பதன் விலை</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>உட்பொதித்த படம் Markdown கோப்பினுள் உரையாக வைக்கப்படும்:
+• கோப்பு படத்தைவிட ஏறக்குறைய மூன்றில் ஒரு பங்கு கூடுதலாகப் பெருகும் (ஒரு திரைப்பிடிப்பு பெரும்பாலும் நூற்றுக்கணக்கான KB);
+• Git ஒப்பீடுகளும் ஒத்திசைவும் மெதுவாகும்;
+• GitHub Markdown கோப்புகளில் உள்ள base64 படங்களைக் காட்டாது;
+• மற்ற திருத்திகள் கோப்பை மெதுவாகத் திறக்கலாம்;
+• செயல்தவிர் வரலாறு அதிக நினைவகம் எடுக்கும்.</value>
+  </data>
 </root>

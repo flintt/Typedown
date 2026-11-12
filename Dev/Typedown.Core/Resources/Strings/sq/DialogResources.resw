@@ -361,4 +361,7 @@
     <value>“{0}” ka ndryshime të paruajtura, por nuk mund të shfaqej për të pyetur nëse duhet ruajtur. Dritarja nuk u mbyll; provoni sërish pas pak.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Kjo figurë është {0} KB, më shumë se {1} KB të caktuar për ngulitje (Cilësimet &gt; Figura), ndaj u fut pa ngulitje.</value>
+  </data>
 </root>

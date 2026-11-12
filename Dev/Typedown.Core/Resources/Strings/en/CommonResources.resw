@@ -1435,4 +1435,13 @@
     <value>Right-click for more; press Delete to remove it from this list</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>Save to the image folder</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>Embed in the document (base64)</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>Replace picture…</value>
+  </data>
 </root>

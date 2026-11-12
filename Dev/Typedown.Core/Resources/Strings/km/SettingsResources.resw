@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>ការជូនដំណឹងនៅពេលការកែសម្រួលក្នុងរបៀបមើលឃើញអាចផ្លាស់ប្ដូរអត្ថបទ តំណ ឬ HTML ខ្លះនៃឯកសារ; របៀបកូដប្រភពរក្សាវាដដែល</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>បង្កប់ក្នុងឯកសារ (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>រូបភាពធំបំផុតដែលត្រូវបង្កប់ (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>រូបភាពធំជាងនេះត្រូវបញ្ចូលដូចពេលមិនបង្កប់។</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>បង្កប់រូបភាពដែលបានបិទភ្ជាប់ជា</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (មិនបាត់គុណភាព)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (តូចជាង)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>គុណភាព JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>តម្លៃនៃការបង្កប់</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>រូបភាពដែលបានបង្កប់ត្រូវរក្សាទុកជាអត្ថបទក្នុងឯកសារ Markdown៖
+• ឯកសារធំឡើងប្រហែលមួយភាគបីច្រើនជាងរូបភាពខ្លួនឯង (រូបថតអេក្រង់ច្រើនតែមានរាប់រយ KB)៖
+• ការប្រៀបធៀប Git និងការធ្វើសមកាលកម្មយឺតជាងមុន៖
+• GitHub មិនបង្ហាញរូបភាព base64 ក្នុងឯកសារ Markdown ទេ៖
+• កម្មវិធីកែសម្រួលផ្សេងអាចបើកឯកសារយឺត៖
+• ប្រវត្តិមិនធ្វើវិញប្រើអង្គចងចាំច្រើនជាង។</value>
+  </data>
 </root>

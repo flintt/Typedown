@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>ብናይ ርእይቶ ኣገባብ ምእራም ገለ ጽሑፍ፣ መላግቦታት ወይ HTML ናይ ሰነድ ክቕይር ምስ ዝኽእል መዘኻኸሪ፤ ናይ ምንጪ ኣገባብ ከም ዘለዎ የዕቅቦ</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>ኣብ ሰነድ ኣእቱ (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>ዝኣቱ ዝዓበየ ስእሊ (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>ካብዚ ዝዓበየ ስእሊ ከይኣተወ ከም ዝኣቱ ይኣቱ።</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ዝተጣበቑ ስእልታት ከምዚ ኣእቱ</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ብዘይ ክሳራ)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ዝነኣሰ)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>ብቕዓት JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>ዋጋ ምእታው</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>ዝኣተወ ስእሊ ኣብ ውሽጢ ፋይል Markdown ከም ጽሑፍ ይቕመጥ፦
+• ፋይሉ ካብቲ ስእሊ ብሳልሳይ ዝኸውን ይዓቢ (ስእሊ ስክሪን መብዛሕትኡ ግዜ ኣማኢት KB እዩ)፤
+• ምንጽጻር Git ከምኡውን ምስምማዕ ይዘሓሉ፤
+• GitHub ኣብ ፋይላት Markdown ዘለዉ base64 ስእልታት ኣየርእን፤
+• ካልኦት ኣሰናደውቲ ነቲ ፋይል ብዝግታ ክኸፍትዎ ይኽእሉ፤
+• ታሪኽ ምምላስ ዝያዳ ዝኽሪ ይወስድ።</value>
+  </data>
 </root>

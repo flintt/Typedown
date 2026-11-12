@@ -1331,4 +1331,13 @@
     <value>மேலும் விருப்பங்களுக்கு வலது-கிளிக் செய்யவும்; இந்தப் பட்டியலிலிருந்து நீக்க Delete அழுத்தவும்</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>படக் கோப்புறையில் சேமி</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>படத்தை மாற்று…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>ஆவணத்தில் உட்பொதி (base64)</value>
+  </data>
 </root>

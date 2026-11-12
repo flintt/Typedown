@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>Abisua modu bisualean editatzeak dokumentu baten testuaren, esteken edo HTMLaren zati bat alda dezakeenean; iturburu moduak bere horretan uzten du</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Txertatu dokumentuan (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Txertatzeko irudi handiena (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Irudi handiagoa txertatu gabe bezala sartzen da.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Itsatsitako irudiak honela txertatu</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (galerarik gabe)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (txikiagoa)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG kalitatea</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Txertatzearen kostua</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Txertatutako irudia testu gisa gordetzen da Markdown fitxategian:
+• fitxategia irudia bera baino herena gehiago handitzen da (pantaila-argazki batek ehunka KB izan ohi ditu);
+• Git konparazioak eta sinkronizazioa motelagoak dira;
+• GitHub-ek ez ditu erakusten Markdown fitxategietako base64 irudiak;
+• beste editore batzuek poliki ireki dezakete fitxategia;
+• desegin-historiak memoria gehiago hartzen du.</value>
+  </data>
 </root>

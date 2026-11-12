@@ -361,4 +361,7 @@
     <value>May mga hindi na-save na pagbabago ang “{0}”, pero hindi ito maipakita para itanong kung ise-save. Hindi isinara ang window; subukang muli maya-maya.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Ang larawang ito ay {0} KB, higit sa {1} KB na itinakda para sa pag-embed (Mga Setting &gt; Larawan), kaya ipinasok ito nang hindi naka-embed.</value>
+  </data>
 </root>

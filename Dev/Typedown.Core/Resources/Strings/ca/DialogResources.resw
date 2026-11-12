@@ -361,4 +361,7 @@
     <value>«{0}» té canvis sense desar, però no s'ha pogut mostrar per preguntar si es desa. La finestra no s'ha tancat; torneu-ho a provar d'aquí a un moment.</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>Aquesta imatge fa {0} KB, més dels {1} KB fixats per incrustar (Configuració &gt; Imatge), així que s’ha inserit sense incrustar.</value>
+  </data>
 </root>

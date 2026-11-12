@@ -1331,4 +1331,13 @@
     <value>Δεξί κλικ για περισσότερα· πατήστε Delete για να το αφαιρέσετε από τη λίστα</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>Αποθήκευση στον φάκελο εικόνων</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>Αντικατάσταση εικόνας…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>Ενσωμάτωση στο έγγραφο (base64)</value>
+  </data>
 </root>

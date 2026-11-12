@@ -1345,4 +1345,13 @@
     <value>按右鍵查看更多動作；按 Delete 從清單中移除</value>
     <comment>“打开最近”里条目的提示：右键看更多操作，按 Delete 从列表中移除</comment>
   </data>
+  <data name="ImageMenu.ExtractToFolder" xml:space="preserve">
+    <value>儲存到圖片資料夾</value>
+  </data>
+  <data name="ImageMenu.Replace" xml:space="preserve">
+    <value>取代圖片…</value>
+  </data>
+  <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
+    <value>嵌入文件（base64）</value>
+  </data>
 </root>

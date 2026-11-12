@@ -366,4 +366,7 @@
     <value>“{0}”有未保存的修改，但没能切换过去询问是否保存。窗口没有关闭，请稍后再试。</value>
     <comment>关窗口时，有未保存修改的标签切不过去（编辑页没有交出上一个文档的内容），没法问是否保存；窗口不关。{0} 是标签名</comment>
   </data>
+  <data name="Image.Base64.TooLarge" xml:space="preserve">
+    <value>这张图片有 {0} KB，超过了嵌入上限 {1} KB（设置 &gt; 图片），已按不嵌入的方式插入。</value>
+  </data>
 </root>

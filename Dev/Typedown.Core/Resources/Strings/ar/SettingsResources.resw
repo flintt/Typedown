@@ -1006,4 +1006,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>إشعار عندما قد يغيّر التحرير في الوضع المرئي جزءًا من نص المستند أو روابطه أو HTML؛ يحافظ وضع المصدر عليه كما هو</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>تضمين في المستند (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>أكبر صورة تُضمَّن (ك.ب)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>تُدرج الصورة الأكبر كما تُدرج دون تضمين.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>تضمين الصور الملصقة بصيغة</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (بلا فقد)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (أصغر)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>جودة JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>كلفة التضمين</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>تُحفظ الصورة المضمَّنة نصًا داخل ملف Markdown:
+• يكبر الملف بنحو الثلث أكثر من الصورة نفسها (لقطة الشاشة غالبًا مئات الكيلوبايت)؛
+• تصبح مقارنات Git وخدمات المزامنة أبطأ؛
+• لا يعرض GitHub صور base64 في ملفات Markdown؛
+• قد تفتح المحررات الأخرى الملف ببطء؛
+• يستهلك سجل التراجع ذاكرة أكبر.</value>
+  </data>
 </root>

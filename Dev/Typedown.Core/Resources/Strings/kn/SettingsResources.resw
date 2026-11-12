@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>ದೃಶ್ಯ ಮೋಡ್‌ನಲ್ಲಿ ಸಂಪಾದನೆ ದಾಖಲೆಯ ಕೆಲವು ಪಠ್ಯ, ಲಿಂಕ್‌ಗಳು ಅಥವಾ HTML ಅನ್ನು ಬದಲಿಸಬಹುದಾದಾಗ ಸೂಚನೆ; ಮೂಲ ಮೋಡ್ ಅದನ್ನು ಹಾಗೆಯೇ ಇರಿಸುತ್ತದೆ</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>ದಾಖಲೆಯಲ್ಲಿ ಎಂಬೆಡ್ ಮಾಡಿ (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>ಎಂಬೆಡ್ ಮಾಡುವ ಅತಿ ದೊಡ್ಡ ಚಿತ್ರ (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>ಇದಕ್ಕಿಂತ ದೊಡ್ಡ ಚಿತ್ರವನ್ನು ಎಂಬೆಡ್ ಮಾಡದೆ ಸೇರಿಸುವಂತೆಯೇ ಸೇರಿಸಲಾಗುತ್ತದೆ.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ಅಂಟಿಸಿದ ಚಿತ್ರಗಳನ್ನು ಹೀಗೆ ಎಂಬೆಡ್ ಮಾಡಿ</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ಗುಣಮಟ್ಟ ಕಳೆಯದೆ)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ಚಿಕ್ಕದು)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>JPEG ಗುಣಮಟ್ಟ</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>ಎಂಬೆಡ್ ಮಾಡುವುದರ ಬೆಲೆ</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>ಎಂಬೆಡ್ ಮಾಡಿದ ಚಿತ್ರ Markdown ಫೈಲ್‌ನೊಳಗೆ ಪಠ್ಯವಾಗಿ ಇರುತ್ತದೆ:
+• ಫೈಲ್ ಚಿತ್ರಕ್ಕಿಂತ ಸುಮಾರು ಮೂರನೇ ಒಂದು ಭಾಗ ಹೆಚ್ಚು ಬೆಳೆಯುತ್ತದೆ (ಸ್ಕ್ರೀನ್‌ಶಾಟ್ ಹಲವು ಬಾರಿ ನೂರಾರು KB);
+• Git ಹೋಲಿಕೆ ಮತ್ತು ಸಿಂಕ್ ನಿಧಾನವಾಗುತ್ತವೆ;
+• GitHub Markdown ಫೈಲ್‌ಗಳಲ್ಲಿನ base64 ಚಿತ್ರಗಳನ್ನು ತೋರಿಸುವುದಿಲ್ಲ;
+• ಇತರ ಸಂಪಾದಕಗಳು ಫೈಲ್ ಅನ್ನು ನಿಧಾನವಾಗಿ ತೆರೆಯಬಹುದು;
+• ರದ್ದುಗೊಳಿಸುವ ಇತಿಹಾಸ ಹೆಚ್ಚು ಮೆಮೊರಿ ಬಳಸುತ್ತದೆ.</value>
+  </data>
 </root>

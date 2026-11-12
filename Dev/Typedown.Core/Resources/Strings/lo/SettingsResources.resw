@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>ແຈ້ງເຕືອນເມື່ອການແກ້ໄຂໃນໂໝດສາຍຕາອາດປ່ຽນຂໍ້ຄວາມ, ລິ້ງ ຫຼື HTML ບາງສ່ວນຂອງເອກະສານ; ໂໝດຊອດຮັກສາມັນໄວ້ຄືເກົ່າ</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>ຝັງໃນເອກະສານ (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>ຮູບໃຫຍ່ສຸດທີ່ຈະຝັງ (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>ຮູບທີ່ໃຫຍ່ກວ່ານີ້ຈະແຊກແບບບໍ່ຝັງ.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>ຝັງຮູບທີ່ວາງເປັນ</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (ບໍ່ເສຍຄຸນນະພາບ)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (ນ້ອຍກວ່າ)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>ຄຸນນະພາບ JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>ຂໍ້ເສຍຂອງການຝັງ</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>ຮູບທີ່ຝັງຈະເກັບເປັນຂໍ້ຄວາມໃນໄຟລ໌ Markdown:
+• ໄຟລ໌ໃຫຍ່ຂຶ້ນຫຼາຍກວ່າຮູບປະມານໜຶ່ງສ່ວນສາມ (ຮູບໜ້າຈໍມັກມີຫຼາຍຮ້ອຍ KB);
+• ການປຽບທຽບ Git ແລະການຊິງຊ້າລົງ;
+• GitHub ບໍ່ສະແດງຮູບ base64 ໃນໄຟລ໌ Markdown;
+• ໂປຣແກຣມແກ້ໄຂອື່ນອາດເປີດໄຟລ໌ຊ້າ;
+• ປະຫວັດການຍົກເລີກໃຊ້ໜ່ວຍຄວາມຈຳຫຼາຍຂຶ້ນ.</value>
+  </data>
 </root>

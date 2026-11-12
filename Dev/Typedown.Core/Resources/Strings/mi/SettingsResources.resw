@@ -1000,4 +1000,36 @@
   <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
     <value>He pānui ina tērā pea ka huri te whakatika i te aratau ataata i ētahi kuputuhi, hononga, HTML rānei o te tuhinga; ka mau tonu te aratau pūtake</value>
   </data>
+  <data name="Image.InsertActions.Base64" xml:space="preserve">
+    <value>Tāmau ki te tuhinga (base64)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Title" xml:space="preserve">
+    <value>Te pikitia rahi rawa hei tāmau (KB)</value>
+  </data>
+  <data name="View.Image.Base64.MaxSize.Description" xml:space="preserve">
+    <value>Ka kuhua tētahi pikitia rahi ake pēnei i te kore tāmau.</value>
+  </data>
+  <data name="View.Image.Base64.ClipboardFormat.Title" xml:space="preserve">
+    <value>Tāmauhia ngā pikitia i whakapiria hei</value>
+  </data>
+  <data name="View.Image.Base64.Png" xml:space="preserve">
+    <value>PNG (kore ngaro)</value>
+  </data>
+  <data name="View.Image.Base64.Jpeg" xml:space="preserve">
+    <value>JPEG (iti ake)</value>
+  </data>
+  <data name="View.Image.Base64.JpegQuality.Title" xml:space="preserve">
+    <value>Te kounga JPEG</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Header" xml:space="preserve">
+    <value>Te utu o te tāmau</value>
+  </data>
+  <data name="View.Image.Base64.Costs.Text" xml:space="preserve">
+    <value>Ka puritia tētahi pikitia tāmau hei kuputuhi i roto i te kōnae Markdown:
+• ka tipu te kōnae kia toru hautanga te nui ake i te pikitia anō (he maha ngā rau KB o tētahi whakaahua mata);
+• ka pōturi ake ngā whakatairite Git me te tukutahi;
+• kāore a GitHub e whakaatu i ngā pikitia base64 i ngā kōnae Markdown;
+• ka pōturi pea ētahi atu ētita ki te whakatuwhera i te kōnae;
+• ka nui ake te pūmahara ka pau i te hītori wetekina.</value>
+  </data>
 </root>
