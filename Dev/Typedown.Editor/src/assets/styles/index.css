@@ -1969,3 +1969,14 @@ tr.ag-review-ghost td { text-decoration: line-through var(--reviewDel) 1.5px; }
   .ag-review-whole { box-shadow: none; padding-left: 0; }
   #td-review-actions { display: none !important; }
 }
+
+/* A picture's base64 in source mode, folded to its kind and size (services/dataUriFold). */
+.cm-data-uri-fold {
+  padding: 0 4px;
+  margin: 0 1px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--editorColor60, inherit);
+  background: var(--codeBlockBgColor, rgba(127, 127, 127, 0.15));
+  cursor: default;
+}
