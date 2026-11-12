@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Diagram PlantUML heb ei luniadu (wedi’i ddiffodd yn y Gosodiadau)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Golygu’r ddolen</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Copïo dolen i’r pennawd</value>
+  </data>
 </root>

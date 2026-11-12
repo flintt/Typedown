@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Діаграму PlantUML не намальовано (вимкнено в параметрах)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Змінити посилання</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Копіювати посилання на заголовок</value>
+  </data>
 </root>

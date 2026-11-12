@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML 다이어그램이 그려지지 않음(설정에서 꺼짐)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>링크 편집</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>제목 링크 복사</value>
+  </data>
 </root>

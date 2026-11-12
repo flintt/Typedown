@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML diagrama ez da marraztu (desaktibatuta ezarpenetan)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Editatu esteka</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopiatu izenbururako esteka</value>
+  </data>
 </root>

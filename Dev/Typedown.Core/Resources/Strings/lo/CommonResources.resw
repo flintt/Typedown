@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>ບໍ່ໄດ້ແຕ້ມແຜນພາບ PlantUML (ປິດໃນການຕັ້ງຄ່າ)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>ແກ້ໄຂລິ້ງ</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>ສຳເນົາລິ້ງໄປຫາຫົວຂໍ້</value>
+  </data>
 </root>

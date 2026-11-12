@@ -1398,4 +1398,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML 图表未绘制（设置中已关闭）</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>编辑链接</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>复制标题链接</value>
+  </data>
 </root>

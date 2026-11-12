@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML-diagram ritas inte (avstängt i Inställningar)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Redigera länk</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopiera länk till rubrik</value>
+  </data>
 </root>

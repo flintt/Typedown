@@ -1354,6 +1354,21 @@ namespace Typedown.Core.ViewModels
         private readonly Dictionary<int, TaskCompletionSource<JToken>> styleWaiters = new();
 
         /// <summary>
+        /// A heading of the outline as a link to it, copied: "[text](#anchor)", the anchor the export and a click on a
+        /// link use (the page's own, asked for). False when the page did not answer or the heading is not its.
+        /// </summary>
+        public async Task<bool> CopyHeadingLinkAsync(TocItem item)
+        {
+            var flat = ContentState?.Toc;
+            var index = item == null || flat == null ? -1 : flat.FindIndex(t => ReferenceEquals(t, item) || t.Slug == item.Slug);
+            var (_, headings) = await QueryNotDrawnAsync();
+            if (index < 0 || headings == null || index >= headings.Count) return false;
+            var (anchor, text) = headings[index];
+            Clipboard?.SetText($"[{text}](#{anchor})");
+            return true;
+        }
+
+        /// <summary>
         /// The formulas and diagrams the page could not draw (or PlantUML switched off): each one's kind and the first line
         /// of its source; and the headings' anchors and texts, null when the page does not answer in time.
         /// </summary>

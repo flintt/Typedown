@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML diagrama nenupiešta (išjungta parametruose)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Redaguoti saitą</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopijuoti saitą į antraštę</value>
+  </data>
 </root>

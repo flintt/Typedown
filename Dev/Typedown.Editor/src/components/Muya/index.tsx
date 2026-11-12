@@ -49,7 +49,7 @@ function findAnchorBlock(blocks: any[], anchor: ScrollAnchor): { index: number, 
     return null
 }
 import transport, { beforeHostMessage } from "services/transport";
-import { followLink, removeLink } from "services/linkActions";
+import { editLink, followLink, removeLink } from "services/linkActions";
 import { STANDARD_Y, leastToShow, toStandard, toStandardIfOut } from "services/reveal";
 import { SearchSession } from "services/searchSession";
 import { currentLoadId } from "services/scrollbar";
@@ -837,11 +837,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         } else if (action === 'copyBlock') {
             const figure = kept.figure && document.getElementById(kept.figure)
             if (figure) contentState.copyBlockToClipboard(figure, figure.querySelector(':scope > .ag-diagram-copy'))
-        } else if (action === 'openLink' || action === 'removeLink') {
-            // As a click does it (services/linkActions): opening wants the address only, removing the link's place.
+        } else if (action === 'openLink' || action === 'removeLink' || action === 'editLink') {
+            // As a click does it (services/linkActions): opening wants the address only, removing and editing the link's place.
             const link = kept.link
             if (!link) return
             if (action === 'openLink') followLink(editor, link.href)
+            else if (action === 'editLink') editLink(contentState, link)
             else removeLink(contentState, link)
         }
     }), [editor]);

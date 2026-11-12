@@ -1381,4 +1381,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>የPlantUML ስዕል አልተሳለም (በቅንብሮች ጠፍቷል)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>አገናኙን አርትዕ</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>ወደ ርዕሱ የሚወስድ አገናኝ ቅዳ</value>
+  </data>
 </root>

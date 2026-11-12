@@ -277,6 +277,28 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         // With nodes given to it, the tree hands its nodes to these, not the models.
         private static object ContentOf(object item) => item is TreeViewNode node ? node.Content : item;
 
+        // The heading right-clicked: the menu is one for all the rows, and knows its row by the element it opened on.
+        private Models.TocTreeItem menuItem;
+
+        private void OnTocItemFlyoutOpening(object sender, object e) =>
+            menuItem = ((sender as Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase)?.Target as FrameworkElement)?.DataContext is Microsoft.UI.Xaml.Controls.TreeViewNode node
+                ? node.Content as Models.TocTreeItem
+                : null;
+
+        private async void OnCopyHeadingLinkClick(object sender, RoutedEventArgs e)
+        {
+            var item = menuItem;
+            try
+            {
+                if (item?.TocItem == null || Editor == null || !await Editor.CopyHeadingLinkAsync(item.TocItem))
+                    Log.Debug("outline: no link copied for the heading right-clicked");
+            }
+            catch (System.Exception ex)
+            {
+                Log.Debug($"outline: copy heading link: {ex.Message}");
+            }
+        }
+
         private void OnExpandAllClick(object sender, RoutedEventArgs e) => SetExpanded(TreeView.RootNodes, true);
 
         private void OnCollapseAllClick(object sender, RoutedEventArgs e) => SetExpanded(TreeView.RootNodes, false);

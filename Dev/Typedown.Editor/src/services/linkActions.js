@@ -49,3 +49,19 @@ export const removeLink = (contentState, { key, start, end, raw }) => {
   contentState.muya.dispatchChange()
   return true
 }
+
+/**
+ * The menu's Edit link: the link's address chosen in its Markdown, to type over - the caret in the link shows the
+ * Markdown. A link written another way (<address>, a bare address, [text][label]) is chosen whole. False when the text
+ * has moved on since the right-click.
+ */
+export const editLink = (contentState, { key, start, end, raw }) => {
+  const block = contentState.getBlock(key)
+  if (!block || !raw || !(end > start) || block.text.slice(start, end) !== raw) return false
+  const address = /\]\(\s*<?([^\s)>]*)/.exec(raw)
+  const from = address && address[1] ? start + address.index + address[0].length - address[1].length : start
+  const to = address && address[1] ? from + address[1].length : end
+  contentState.cursor = { start: { key, offset: from }, end: { key, offset: to }, anchor: { key, offset: from }, focus: { key, offset: to } }
+  contentState.render()
+  return true
+}

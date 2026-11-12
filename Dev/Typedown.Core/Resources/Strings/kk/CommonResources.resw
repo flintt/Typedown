@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML диаграммасы сызылмады (параметрлерде өшірулі)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Сілтемені өңдеу</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Тақырыпқа сілтемені көшіру</value>
+  </data>
 </root>

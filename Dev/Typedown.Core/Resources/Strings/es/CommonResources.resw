@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Diagrama PlantUML sin dibujar (desactivado en Configuración)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Editar vínculo</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Copiar vínculo al título</value>
+  </data>
 </root>

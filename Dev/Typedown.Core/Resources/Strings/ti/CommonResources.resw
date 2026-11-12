@@ -1381,4 +1381,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>ስእሊ PlantUML ኣይተሳእለን (ኣብ ቅጥዕታት ጠፊኡ)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>መላግቦ ኣርትዕ</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>ናብ ኣርእስቲ ዝወስድ መላግቦ ቅዳሕ</value>
+  </data>
 </root>

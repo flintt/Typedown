@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Diagram PlantUML se nevykreslí (vypnuto v nastavení)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Upravit odkaz</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopírovat odkaz na nadpis</value>
+  </data>
 </root>

@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Diagram PlantUML tidak digambar (dimatikan di Pengaturan)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Edit tautan</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Salin tautan ke judul</value>
+  </data>
 </root>

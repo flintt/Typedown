@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML ଚିତ୍ର ଅଙ୍କା ହୋଇନାହିଁ (ସେଟିଂସରେ ବନ୍ଦ)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>ଲିଙ୍କ ସମ୍ପାଦନ କରନ୍ତୁ</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>ଶୀର୍ଷକର ଲିଙ୍କ କପି କରନ୍ତୁ</value>
+  </data>
 </root>

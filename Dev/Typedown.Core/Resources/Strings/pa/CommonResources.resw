@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML ਚਿੱਤਰ ਨਹੀਂ ਬਣਿਆ (ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਬੰਦ)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>ਲਿੰਕ ਸੋਧੋ</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>ਸਿਰਲੇਖ ਦਾ ਲਿੰਕ ਕਾਪੀ ਕਰੋ</value>
+  </data>
 </root>

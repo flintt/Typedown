@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Диаграмма PlantUML не нарисована (отключено в параметрах)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Изменить ссылку</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Копировать ссылку на заголовок</value>
+  </data>
 </root>

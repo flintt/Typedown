@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Rajah PlantUML tidak dilukis (dimatikan dalam Tetapan)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Edit pautan</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Salin pautan ke tajuk</value>
+  </data>
 </root>

@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML రేఖాచిత్రం గీయబడలేదు (సెట్టింగ్‌లలో ఆఫ్)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>లింక్‌ను సవరించు</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>శీర్షిక లింక్‌ను కాపీ చేయి</value>
+  </data>
 </root>

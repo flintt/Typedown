@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>A PlantUML-diagram nem készül el (kikapcsolva a beállításokban)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Hivatkozás szerkesztése</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Hivatkozás másolása a címsorra</value>
+  </data>
 </root>

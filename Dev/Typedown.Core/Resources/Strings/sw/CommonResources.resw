@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Mchoro wa PlantUML haujachorwa (umezimwa kwenye Mipangilio)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Hariri kiungo</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Nakili kiungo cha kichwa</value>
+  </data>
 </root>

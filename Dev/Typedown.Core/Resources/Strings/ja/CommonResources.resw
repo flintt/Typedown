@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML の図は描画されません（設定でオフ）</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>リンクを編集</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>見出しへのリンクをコピー</value>
+  </data>
 </root>

@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML-kaaviota ei piirretä (pois päältä asetuksissa)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Muokkaa linkkiä</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopioi linkki otsikkoon</value>
+  </data>
 </root>

@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Diagrama PlantUML nu este desenată (dezactivată în Setări)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Editare link</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Copiere link către titlu</value>
+  </data>
 </root>

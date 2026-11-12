@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML ഡയഗ്രം വരച്ചില്ല (ക്രമീകരണങ്ങളിൽ ഓഫ്)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>ലിങ്ക് എഡിറ്റ് ചെയ്യുക</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>തലക്കെട്ടിലേക്കുള്ള ലിങ്ക് പകർത്തുക</value>
+  </data>
 </root>

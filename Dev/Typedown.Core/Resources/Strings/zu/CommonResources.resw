@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>Umdwebo we-PlantUML awudwetshiwe (uvaliwe kuzilungiselelo)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>Hlela isixhumanisi</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>Kopisha isixhumanisi esiya esihlokweni</value>
+  </data>
 </root>

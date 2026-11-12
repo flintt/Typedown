@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>نمودار PlantUML رسم نشد (در تنظیمات خاموش است)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>ویرایش پیوند</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>کاپی پیوند به عنوان</value>
+  </data>
 </root>

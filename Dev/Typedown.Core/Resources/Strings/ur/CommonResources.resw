@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML خاکہ نہیں بنا (ترتیبات میں بند ہے)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>لنک میں ترمیم کریں</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>سرخی کا لنک کاپی کریں</value>
+  </data>
 </root>

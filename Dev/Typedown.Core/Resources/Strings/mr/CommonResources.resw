@@ -1382,4 +1382,10 @@
   <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
     <value>PlantUML आकृती काढली नाही (सेटिंग्जमध्ये बंद)</value>
   </data>
+  <data name="EditLink" xml:space="preserve">
+    <value>दुवा संपादित करा</value>
+  </data>
+  <data name="CopyHeadingLink" xml:space="preserve">
+    <value>शीर्षकाचा दुवा कॉपी करा</value>
+  </data>
 </root>
