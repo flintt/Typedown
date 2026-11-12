@@ -181,6 +181,7 @@ jobs:
           node review-check.js
           node review-layout-check.js
           node heading-click-check.js
+          node fold-check.js
           node paste-lines-check.js
           node review-matrix.js --quick
           node blank-jump-check.js

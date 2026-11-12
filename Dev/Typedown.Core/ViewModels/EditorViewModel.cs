@@ -459,7 +459,7 @@ namespace Typedown.Core.ViewModels
             var scrollAnchor = Settings.RememberCursorPosition ? ScrollAnchorOf(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
             loadText = text;
-            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, scrollAnchor, loadId = NoteLoad(text), hold = inputHold, review = ReviewForLoad() });
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, path = FileViewModel.FilePath, cursor, scrollTop, scrollAnchor, loadId = NoteLoad(text), hold = inputHold, review = ReviewForLoad() });
             Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
         }
 
@@ -1468,7 +1468,7 @@ namespace Typedown.Core.ViewModels
             reloadWaiters[loadId] = waiter;
             try
             {
-                MarkdownEditor.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId, review = ReviewForLoad() });
+                MarkdownEditor.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, path = FileViewModel.FilePath, cursor, scrollTop, loadId, review = ReviewForLoad() });
                 var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
                 return finished == waiter.Task ? waiter.Task.Result : null;
             }

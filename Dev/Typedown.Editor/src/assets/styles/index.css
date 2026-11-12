@@ -1980,3 +1980,42 @@ tr.ag-review-ghost td { text-decoration: line-through var(--reviewDel) 1.5px; }
   background: var(--codeBlockBgColor, rgba(127, 127, 127, 0.15));
   cursor: default;
 }
+
+/* A long code block's or table's fold button (services/blockFold), left of its copy button; always a little visible on a
+   folded one, so it can be found to open it again. */
+.ag-block-fold {
+  position: absolute;
+  top: .45em;
+  right: 2.3em;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: default;
+  opacity: 0;
+  z-index: 1;
+  user-select: none;
+  color: var(--editorColor);
+  transition: opacity .2s ease-in-out;
+}
+pre:hover > .ag-block-fold,
+figure:hover > .ag-block-fold,
+.ag-folded > .ag-block-fold {
+  opacity: .6;
+}
+.ag-block-fold:hover {
+  opacity: 1 !important;
+  background: var(--floatHoverColor, rgba(127, 127, 127, .2));
+}
+figure.ag-folded,
+pre.ag-folded {
+  max-height: 11em;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent);
+  mask-image: linear-gradient(to bottom, #000 65%, transparent);
+}
+figure:has(> .ag-block-fold) {
+  position: relative;
+}
