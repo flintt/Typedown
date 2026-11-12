@@ -252,11 +252,19 @@ namespace Typedown.Core.ViewModels
                 // the strip, the strip selects the neighbour and asks for it here, and the close then shows that very tab
                 // itself - loaded twice, the first load's reports were dropped as stale and the page, given the same text
                 // again, did not report it again: the outline stayed on the closed document (E2E TC02).
-                if (tab == ActiveTab || !Tabs.Contains(tab)) return;
+                if (tab == ActiveTab || !Tabs.Contains(tab))
+                {
+                    Log.Debug($"tab switch: {tab.Title} shown or closed while the page handed its text over; not switched again");
+                    return;
+                }
                 // Something later meanwhile: a file opened right after a tab was closed was shown, and then the strip's
                 // switch to the closed tab's neighbour (asked for as the tab went) came out of its wait and put that
                 // neighbour back over it (HJ02/HJ03 on w10, 2026-10-24). The last one asked for is the one shown.
-                if (request != showRequests) return;
+                if (request != showRequests)
+                {
+                    Log.Debug($"tab switch: {tab.Title} left for a later one asked for meanwhile");
+                    return;
+                }
                 switching = true;
                 try
                 {

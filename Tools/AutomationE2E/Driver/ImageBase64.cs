@@ -62,7 +62,7 @@ internal static partial class Program
 
             // A picture file inserted: its own bytes in the document.
             await c.Call("test.settings.set", new { windowId, name = "InsertLocalImageAction", value = "Base64" });
-            var file = MakePng(Path.Combine(folder, "file.png"), 24, 24);
+            var file = MakePng(Path.Combine(folder, "file.png"), 240, 160);
             await c.Call("test.images.insert", new { windowId, paths = new[] { file } });
             string text = "";
             var embedded = await Eventually(async () => (text = await Text()).Contains("data:image/png;base64,"), 5000, 200);
