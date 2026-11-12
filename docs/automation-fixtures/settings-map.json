@@ -849,6 +849,9 @@
         "SidePaneOpen",
         "SidePaneWidth",
         "SidePaneIndex",
+        "SidePaneSplit",
+        "SidePaneFilesCollapsed",
+        "SidePaneOutlineCollapsed",
         "StatusBarOpen",
         "FindReplaceDialogWidth",
         "Topmost"

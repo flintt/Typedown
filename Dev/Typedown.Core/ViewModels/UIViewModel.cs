@@ -209,8 +209,7 @@ namespace Typedown.Core.ViewModels
         {
             DropFindResults();
             FolderSearchOpen = false;
-            SettingsViewModel.SidePaneOpen = true;
-            SettingsViewModel.SidePaneIndex = 0;
+            ShowSidePane(0);
             FolderRevealPath = path;
         }
 
@@ -219,9 +218,33 @@ namespace Typedown.Core.ViewModels
         {
             DropFindResults();
             FolderSearchOpen = false;
-            SettingsViewModel.SidePaneOpen = true;
-            SettingsViewModel.SidePaneIndex = 0;
+            ShowSidePane(0);
             FolderRevealActiveFile = true;
+        }
+
+        /// <summary>
+        /// A block of the side pane asked to be shown (0 the files, 1 the outline), until the pane takes it: the pane may
+        /// not be there yet (it was closed). The block is opened out even if it had folded itself away (no folder open, a
+        /// plain text without headings).
+        /// </summary>
+        public int? SidePaneBlockRequest { get; private set; }
+
+        /// <summary>The side pane opened with its files (0) or outline (1) opened out.</summary>
+        public void ShowSidePane(int page)
+        {
+            SettingsViewModel.SidePaneIndex = page;
+            if (page == 1) SettingsViewModel.SidePaneOutlineCollapsed = false;
+            else SettingsViewModel.SidePaneFilesCollapsed = false;
+            SidePaneBlockRequest = page;
+            SettingsViewModel.SidePaneOpen = true;
+        }
+
+        /// <summary>The block asked for, once: the pane opens it out and it is forgotten.</summary>
+        public int? TakeSidePaneBlockRequest()
+        {
+            var page = SidePaneBlockRequest;
+            if (page != null) SidePaneBlockRequest = null;
+            return page;
         }
 
         /// <summary>Whether the document shown was asked for, once (the folder page shows it).</summary>
