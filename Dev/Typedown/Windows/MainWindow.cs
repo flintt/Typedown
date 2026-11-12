@@ -302,13 +302,14 @@ namespace Typedown.Windows
                 presenter.IsAlwaysOnTop = topmost;
         }
 
-        private AppMicaBackdrop micaBackdrop;
+        // Mica in the app's theme, not Windows' (Core's AppBackdrop, shared with the app's own menus in popups).
+        private Typedown.Core.Utilities.AppBackdrop micaBackdrop;
 
         private void EnableMicaEffect(bool enable)
         {
             try
             {
-                micaBackdrop = enable && Config.IsMicaSupported ? new AppMicaBackdrop(rootGrid.ActualTheme == ElementTheme.Dark) : null;
+                micaBackdrop = enable && Config.IsMicaSupported ? new Typedown.Core.Utilities.AppBackdrop(Typedown.Core.Utilities.AppBackdrop.Kind.Mica, rootGrid.ActualTheme == ElementTheme.Dark) : null;
                 micaBackdrop?.SetActive(IsActive);
                 SystemBackdrop = micaBackdrop;
                 RootControl.Background = SystemBackdrop != null ? new SolidColorBrush(Colors.Transparent) : null;
