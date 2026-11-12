@@ -14,6 +14,7 @@ import { wordCount as countWords } from 'components/Muya/lib/utils';
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults';
 import { FENCE, isTableRow, lineMarksLength, previewOf } from 'services/findPreview';
 import { MarkdownBlocksView } from './markdownBlocks';
+import { foldDataUris } from 'services/dataUriFold';
 import { keyBinding } from 'components/Muya/lib/utils/keyBinding';
 import { registerReviewView, reviewActive } from 'services/reviewSession';
 import type { Revision } from 'services/review';
@@ -634,6 +635,9 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             }
         })
     }, [editor, setMatchSelection, remark, scrollToElementIfInvisible])
+
+    // Pictures kept in the document as base64: their encoded part one short label (services/dataUriFold).
+    useEffect(() => editor ? foldDataUris(editor) : undefined, [editor])
 
     // An edit while the results list is open: the matches found again once the typing stops, the selection left as it is.
     useEffect(() => {

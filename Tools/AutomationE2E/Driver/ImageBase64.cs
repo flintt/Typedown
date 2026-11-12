@@ -99,6 +99,15 @@ internal static partial class Program
             await ClickInPopup(window, embed!);
             var again = await Eventually(async () => (text = await Text()).Contains("data:image/png;base64,"), 5000, 200);
             Check(again && Decode(Regex.Match(text, @"\]\((data:image/png;base64,[A-Za-z0-9+/=]+)\)").Groups[1].Value)?.SequenceEqual(File.ReadAllBytes(file)) == true, "embedded again, the same bytes");
+
+            // Source mode: the encoded part is one short label (its kind and size), the text itself whole.
+            await c.Call("window.setView", new { windowId, mode = "source" });
+            JToken fold = JValue.CreateNull();
+            var folded = await Eventually(async () => (fold = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const f = document.querySelector('.cm-data-uri-fold'); const l = f && f.closest('.CodeMirror-line'); return f ? { label: f.textContent, line: l ? l.textContent.length : -1 } : null })()" }))["result"]!).Type == JTokenType.Object, 5000, 200);
+            notes.Add("source mode: " + fold.ToString(Formatting.None));
+            Check(folded && ((string?)fold["label"] ?? "").Contains("PNG") && (int)fold["line"]! < 200, "in source mode the base64 is one short label");
+            Check((await Text()).Contains(inDoc), "and the document's text is still the whole address");
+            await c.Call("window.setView", new { windowId, mode = "visual" });
         }
         finally
         {
