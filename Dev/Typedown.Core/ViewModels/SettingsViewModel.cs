@@ -91,7 +91,12 @@ namespace Typedown.Core.ViewModels
         public bool SearchIsCaseSensitive { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool SearchIsRegexp { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool SearchIsWholeWord { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>The side pane's block last asked for (0 files, 1 outline); both are shown, one above the other.</summary>
         public int SidePaneIndex { get => GetSettingValue(0); set => SetSettingValue(value); }
+        /// <summary>The share of the side pane's height the files block has, when both blocks are open.</summary>
+        public double SidePaneSplit { get => GetSettingValue(0.5d); set => SetSettingValue(value); }
+        public bool SidePaneFilesCollapsed { get => GetSettingValue(false); set => SetSettingValue(value); }
+        public bool SidePaneOutlineCollapsed { get => GetSettingValue(false); set => SetSettingValue(value); }
         public double FontSize { get => GetSettingValue(16d); set => SetSettingValue(value); }
         public double LineHeight { get => GetSettingValue(1.6d); set => SetSettingValue(value); }
         public bool AutoPairBracket { get => GetSettingValue(true); set => SetSettingValue(value); }

@@ -398,7 +398,8 @@ namespace Typedown.Core.Services
                     else if (change.Mode == "reading") settings.ReadOnly = true;
                     else { settings.ReadOnly = false; settings.SourceCode = false; }
                 }
-                if (change.SidePanePage != null) settings.SidePaneIndex = change.SidePanePage == "outline" ? 1 : 0;
+                // The block asked for opened out, as the status bar's heading and Open Folder do.
+                if (change.SidePanePage != null) app.UIViewModel.ShowSidePane(change.SidePanePage == "outline" ? 1 : 0);
                 if (change.SidePaneOpen is bool open) settings.SidePaneOpen = open;
                 if (change.StatusBar is bool statusBar) settings.StatusBarOpen = statusBar;
                 if (change.FocusMode is bool focus) settings.FocusMode = focus;

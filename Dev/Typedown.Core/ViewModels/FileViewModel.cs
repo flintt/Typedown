@@ -384,8 +384,7 @@ namespace Typedown.Core.ViewModels
                 return false;
             if (!await LoadFolder(folderPath, explicitRoot: true))
                 return false;
-            SettingsViewModel.SidePaneOpen = true;
-            SettingsViewModel.SidePaneIndex = 0;
+            AppViewModel.UIViewModel.ShowSidePane(0);
             return true;
         }
 

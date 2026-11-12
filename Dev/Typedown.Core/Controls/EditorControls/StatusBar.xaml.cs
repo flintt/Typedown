@@ -480,9 +480,7 @@ namespace Typedown.Core.Controls
 
         private void OnHeadingClick(object sender, RoutedEventArgs e)
         {
-            if (Settings == null) return;
-            Settings.SidePaneIndex = 1;
-            Settings.SidePaneOpen = true;
+            ViewModel?.UIViewModel?.ShowSidePane(1);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

@@ -92,6 +92,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         // when there is no root yet, or via the "reveal current file" button.
         private string stickyRoot;
 
+        /// <summary>The tree has a folder to show (a folder or a document opened): without one the side pane folds the block away.</summary>
+        public bool HasFolder => !string.IsNullOrEmpty(WorkFolderExplorerItem?.FullPath);
+
+        public event System.Action FolderShownChanged;
+
         private void UpdateWorkFolder()
         {
             var explicitFolder = FileViewModel.WorkFolderIsExplicit ? FileViewModel.WorkFolder : null;
@@ -114,6 +119,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             WorkFolderExplorerItem.FullPath = workFolder;
             WorkFolderExplorerItem.IsExpanded = true;
             FileViewModel.FolderTreeRoot = workFolder; // the search starts where the tree is
+            FolderShownChanged?.Invoke();
         }
 
         private void OnFileOpened(string path, bool preview)
