@@ -7,6 +7,12 @@ import renderCopyButton from './renderCopyButton'
 import { renderLeftBar, renderBottomBar } from './renderTableDargBar'
 import { h } from '../snabbdom'
 import { detectTextDirection, findBlockText } from '../../../utils/detectTextDirection'
+import { FOLD_MIN_LINES, blockFingerprint, isFolded } from 'services/blockFold'
+
+// A long code block's or table's fold button (services/blockFold), by its copy button.
+const renderFoldButton = (fingerprint, folded) => h(`a.ag-block-fold${folded ? '.folded' : ''}`, {
+  attrs: { contenteditable: 'false', 'data-fold': fingerprint, 'aria-expanded': folded ? 'false' : 'true' }
+}, folded ? '\u25B8' : '\u25BE')
 
 const PRE_BLOCK_HASH = {
   fencecode: `.${CLASS_OR_ID.AG_FENCE_CODE}`,
@@ -88,6 +94,16 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     }
     if (type === 'pre') {
       children.unshift(renderCopyButton())
+      if (/^(?:fencecode|indentcode)$/.test(functionType)) {
+        const code = block.children.find(child => child.type === 'code')
+        const text = (code && findBlockText(code)) || ''
+        if (text.split('\n').length >= FOLD_MIN_LINES) {
+          const fingerprint = blockFingerprint('code', text)
+          const folded = isFolded(fingerprint)
+          children.unshift(renderFoldButton(fingerprint, folded))
+          if (folded) selector += '.ag-folded'
+        }
+      }
     }
     // Settings > Editor > Line numbers in code blocks, for code (fenced or indented; not a diagram's or maths' source).
     // The lines do not wrap then (they scroll across, assets/styles/index.css), so each number stands by its line with
@@ -192,6 +208,15 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     // (ContentState.copyBlockToClipboard). Inline formulas have none.
     if (/^(?:flowchart|mermaid|sequence|plantuml|vega-lite|multiplemath|table)$/.test(functionType)) {
       children.push(renderCopyButton(true))
+    }
+    // A long table folds (services/blockFold): known by its header row.
+    if (functionType === 'table' && block.children[0] && block.children[0].row + 1 >= FOLD_MIN_LINES) {
+      const head = block.children[0].children[0]
+      const header = head && head.children[0] ? head.children[0].children.map(cell => findBlockText(cell) || '').join('|') : ''
+      const fingerprint = blockFingerprint('table', header)
+      const folded = isFolded(fingerprint)
+      children.push(renderFoldButton(fingerprint, folded))
+      if (folded) selector += '.ag-folded'
     }
   } else if (/ul|ol/.test(type) && listType) {
     selector += `.ag-${listType}-list`

@@ -1,4 +1,5 @@
 ﻿import { setScrollLoadId } from 'services/scrollbar'
+import { setFoldDocument } from 'services/blockFold'
 import CodeMirror from "components/CodeMirror";
 import MuyaEditor from "components/Muya";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -565,8 +566,10 @@ const Editor: React.FC = () => {
     // the host's answer, the newer load, came first. Taking the older one after it left the page reporting a load
     // the host had dropped, and nothing the page said was heard again (R04).
     const isStaleLoad = (loadId?: number) => typeof loadId === 'number' && typeof loadIdRef.current === 'number' && loadId < loadIdRef.current
-    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number, review?: ReviewPayload | null }>('LoadFile', (load) => {
+    useEffect(() => transport.addListener<{ text: string, basePath: string, path?: string | null, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number, review?: ReviewPayload | null }>('LoadFile', (load) => {
         if (isStaleLoad(load.loadId)) return
+        // The blocks folded in this document (services/blockFold), before it is drawn.
+        setFoldDocument(load.path)
         // A load replaces whatever an automation edit was applying (the host restoring it, or a tab switch): that
         // edit's outcome is unknown to the host, which then restores from its own copy.
         const edit = pendingEditRef.current

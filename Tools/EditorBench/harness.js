@@ -121,13 +121,13 @@ async function openEditor({ browserArgs = [] } = {}) {
   let loadId = 1;
   /** LoadFile as the host sends it; resolves with the text FileLoaded reported - as the host reads it: `same` (the page
    *  holds what it was given, and leaves the text out) means the text sent. */
-  const load = async text => {
+  const load = async (text, path) => {
     const id = ++loadId;
-    await page.evaluate(({ text, id }) => {
+    await page.evaluate(({ text, id, path }) => {
       delete window.__last.FileLoaded;
       delete window.__last.MarkdownChange;
-      window.__deliver('LoadFile', { text, loadId: id, basePath: '/tmp' });
-    }, { text, id });
+      window.__deliver('LoadFile', { text, loadId: id, basePath: '/tmp', path });
+    }, { text, id, path: path || null });
     await page.waitForFunction(id => window.__last.FileLoaded?.loadId === id, { timeout: 60000 }, id);
     return page.evaluate(text => window.__last.FileLoaded.same === true ? text : window.__last.FileLoaded.text, text);
   };

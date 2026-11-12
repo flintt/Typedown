@@ -6,6 +6,7 @@ import { followLink } from 'services/linkActions'
 import Slugger from '../parser/marked/slugger'
 import { getHeadingPlainText } from '../utils'
 import { keyBinding, matchesClick } from '../utils/keyBinding'
+import { toggleFold } from 'services/blockFold'
 
 class ClickEvent {
   constructor(muya) {
@@ -170,6 +171,20 @@ class ClickEvent {
         selectionText(mathText)
       } else if (rubyText) {
         selectionText(rubyText)
+      }
+      // A long code block's or table's fold button: folded or opened, and remembered (services/blockFold).
+      const foldButton = target.closest('.ag-block-fold')
+      if (foldButton) {
+        event.stopPropagation()
+        event.preventDefault()
+        if (event.type === 'click') {
+          const folded = toggleFold(foldButton.getAttribute('data-fold'))
+          foldButton.parentElement.classList.toggle('ag-folded', folded)
+          foldButton.classList.toggle('folded', folded)
+          foldButton.textContent = folded ? '\u25B8' : '\u25BE'
+          foldButton.setAttribute('aria-expanded', folded ? 'false' : 'true')
+        }
+        return
       }
       if (codeCopy) {
         event.stopPropagation()
