@@ -88,11 +88,12 @@ internal static partial class Program
             blank = await ActiveOf(c, windowId);
             await Both("home page", async () =>
             {
-                // In the home page only (a search of the whole window found the file's tab by its name, and right-clicked it).
+                // In the home page's recent files only (a search of the whole window found the file's tab by its name, and right-clicked
+                // it; the page itself is a UserControl, not in the automation tree).
                 AutomationElement? row = null;
                 AutomationElement? Find()
                 {
-                    var home = FindIn(window, "HomePage");
+                    var home = FindIn(window, "HomeRecentFiles");
                     if (home == null) return null;
                     // The path as the list has it (its case may not be the fixture's), or the name.
                     return home.FindAll(TreeScope.Descendants, Condition.TrueCondition).Cast<AutomationElement>()
@@ -101,7 +102,7 @@ internal static partial class Program
                 await Eventually(() => Task.FromResult((row = Find()) != null), 5000);
                 if (row == null)
                 {
-                    var home = FindIn(window, "HomePage");
+                    var home = FindIn(window, "HomeRecentFiles");
                     var seen = home == null ? "no home page" : string.Join(" | ", home.FindAll(TreeScope.Descendants, Condition.TrueCondition).Cast<AutomationElement>()
                         .Select(x => $"{x.Current.ControlType.ProgrammaticName.Replace("ControlType.", "")}:{x.Current.Name}{(string.IsNullOrEmpty(x.Current.HelpText) ? "" : " [" + x.Current.HelpText + "]")}").Take(40));
                     notes.Add("home page shows: " + seen);

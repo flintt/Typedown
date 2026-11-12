@@ -25,7 +25,6 @@ import inputCtrl from './inputCtrl'
 import tocCtrl from './tocCtrl'
 import emojiCtrl from './emojiCtrl'
 import imageCtrl from './imageCtrl'
-import linkCtrl from './linkCtrl'
 import dragDropCtrl from './dragDropCtrl'
 import listDragCtrl from './listDragCtrl'
 import footnoteCtrl from './footnoteCtrl'
@@ -56,7 +55,6 @@ const prototypes = [
   tocCtrl,
   emojiCtrl,
   imageCtrl,
-  linkCtrl,
   dragDropCtrl,
   listDragCtrl,
   footnoteCtrl,

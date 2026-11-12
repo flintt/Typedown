@@ -49,7 +49,7 @@ function findAnchorBlock(blocks: any[], anchor: ScrollAnchor): { index: number, 
     return null
 }
 import transport, { beforeHostMessage } from "services/transport";
-import remote from "services/remote/common";
+import { followLink, removeLink } from "services/linkActions";
 import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
@@ -815,27 +815,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             const figure = kept.figure && document.getElementById(kept.figure)
             if (figure) contentState.copyBlockToClipboard(figure, figure.querySelector(':scope > .ag-diagram-copy'))
         } else if (action === 'openLink' || action === 'removeLink') {
+            // As a click does it (services/linkActions): opening wants the address only, removing the link's place.
             const link = kept.link
             if (!link) return
-            const block = contentState.getBlock(link.key)
-            const from = link.start, to = link.end, raw = link.raw
-            if (!block || !raw || !(to > from) || block.text.slice(from, to) !== raw) return
-            if (action === 'openLink') {
-                const href = link.href
-                if (!href) return
-                if (href.startsWith('#')) (editor as any).clickEvent.scrollToAnchor(href)
-                else remote.openNewWindow(href)
-                return
-            }
-            // The link's text kept, its address gone: "[text](url)" becomes "text" in the block's text.
-            const close = raw.lastIndexOf('](')
-            if (!raw.startsWith('[') || close < 1) return
-            const text = raw.slice(1, close)
-            block.text = block.text.slice(0, from) + text + block.text.slice(to)
-            const caret = { key: block.key, offset: from + text.length }
-            contentState.cursor = { start: caret, end: caret, anchor: caret, focus: caret }
-            contentState.render()
-            ;(editor as any).dispatchChange()
+            if (action === 'openLink') followLink(editor, link.href)
+            else removeLink(contentState, link)
         }
     }), [editor]);
 
