@@ -38,7 +38,12 @@ namespace Typedown.Core.Controls
             var content = new QuickOpenDialog();
             var dialog = AppContentDialog.Create(Locale.GetString("QuickOpen"), content, Locale.GetDialogString("Cancel"));
             content.dialog = dialog;
-            content.Loaded += (_, _) => content.QueryBox.Focus(FocusState.Programmatic);
+            // The keyboard in the box, once the dialog has put it on its own button: typed letters go there at once.
+            content.Loaded += (_, _) =>
+            {
+                content.QueryBox.Focus(FocusState.Keyboard);
+                content.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => content.QueryBox.Focus(FocusState.Keyboard));
+            };
             _ = content.FillAsync(viewModel);
             await dialog.ShowAsync(viewModel.XamlRoot);
             content.listing.Cancel();
@@ -115,7 +120,8 @@ namespace Typedown.Core.Controls
         {
             if (candidate == null) return;
             picked = candidate.Path;
-            dialog?.Hide();
+            // Close, not Hide: Hide only takes it off the screen, and ShowAsync (and every dialog after it) went on waiting.
+            dialog?.Close();
         }
     }
 }

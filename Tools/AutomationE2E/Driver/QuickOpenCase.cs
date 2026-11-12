@@ -56,7 +56,8 @@ internal static partial class Program
             // Ctrl+P in the editor: the box, with the keyboard in it.
             await CtrlP();
             Check(await Eventually(() => Task.FromResult(FindAnywhereInHost(window, "QuickOpenBox") != null), 4000, 150), "Ctrl+P in the editor opens Quick Open");
-            await Task.Delay(400);
+            Check(await Eventually(() => Task.FromResult(FocusedAutomationId() == "QuickOpenBox"), 3000, 100), $"with the keyboard in its box (focus: {FocusedAutomationId()})");
+            await Task.Delay(200);
             TypeText("gmpl");
             List<string> shown = new();
             await Eventually(() => Task.FromResult((shown = Listed()).Count >= 2), 4000, 150);

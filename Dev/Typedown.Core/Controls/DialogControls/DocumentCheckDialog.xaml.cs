@@ -84,7 +84,8 @@ namespace Typedown.Core.Controls
         {
             if (e.ClickedItem is not DocumentProblemRow row || string.IsNullOrEmpty(row.Problem.Find)) return;
             chosen = row.Problem;
-            dialog?.Hide();
+            // Close, not Hide: Hide only takes it off the screen, and ShowAsync (and every dialog after it) went on waiting.
+            dialog?.Close();
         }
     }
 }
