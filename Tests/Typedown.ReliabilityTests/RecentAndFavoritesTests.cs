@@ -31,6 +31,17 @@ namespace Typedown.ReliabilityTests
             Assert.AreEqual(0, RecentPaths.Ancestors(null).Count);
         }
 
+        // One key for what Same takes for one path: the cursor places and the shared notes kept their own rules (M10).
+        [TestMethod]
+        public void AStoreKeyIsTheSameForTheSamePath()
+        {
+            var file = P("a", "Note.md");
+            Assert.AreEqual(RecentPaths.Key(file), RecentPaths.Key(file.ToUpperInvariant()));
+            Assert.AreEqual(RecentPaths.Key(P("a", "b")), RecentPaths.Key(P("a", "b") + Path.DirectorySeparatorChar));
+            Assert.AreEqual(Path.GetFullPath(file).ToLowerInvariant(), RecentPaths.Key(file), "a file's key is the full path in lower case, as the stores wrote it");
+            Assert.IsTrue(RecentPaths.Same(file, file.ToUpperInvariant()) == (RecentPaths.Key(file) == RecentPaths.Key(file.ToUpperInvariant())));
+        }
+
         [TestMethod]
         public void InsideMeansTheFolderItselfOrBelowItNotANameThatStartsTheSame()
         {

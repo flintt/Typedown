@@ -129,6 +129,7 @@ namespace Typedown.Core.Services
             }
         }
 
-        private static string Normalize(string path) => path.Replace('/', '\\').ToLowerInvariant();
+        // The path as RecentPaths keys it (the modularity audit's M10: each store had its own rule).
+        private static string Normalize(string path) => Typedown.Core.Utilities.RecentPaths.Key(path);
     }
 }
