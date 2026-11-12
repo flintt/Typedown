@@ -221,6 +221,8 @@ namespace Typedown.Core.Services
             return await OnWindow(window.WindowId, async app =>
             {
                 if (app.TabsViewModel.ActiveTab != tab) await app.TabsViewModel.SwitchTo(tab);
+                if (app.TabsViewModel.ActiveTab != tab)
+                    Log.Debug($"automation: focus {documentId} left {app.TabsViewModel.ActiveTab?.Title} shown");
                 Focus(app);
                 return Info(app, window.WindowId, tab);
             });

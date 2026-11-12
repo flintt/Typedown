@@ -1215,7 +1215,11 @@ namespace Typedown.Core.ViewModels
             int? asked = null;
             lock (flushWaiters) { flushWaiters.TryGetValue(token, out waiter); flushLoads.TryGetValue(token, out asked); }
             var answered = args?["loadId"]?.Type == JTokenType.Integer ? args["loadId"].ToObject<int>() : (int?)null;
-            if (waiter != null && asked != null && answered != null && answered != asked)
+            // The page already on a later load: what it answered is another document's text, no flush of this one. The
+            // page not yet given the load asked about (a tab just shown, its text on the way) has nothing typed in it:
+            // nothing to bring in, and the text the host gave it is the document's. Refused, that closed tabs asked to
+            // save documents nobody had changed and held a tab switch from a plain text (E2E OL06).
+            if (waiter != null && asked != null && answered != null && answered > asked)
             {
                 Log.Debug($"editor: flush {token} answered for load {answered}, asked for {asked}; not this document's text");
                 waiter.TrySetResult(false);
