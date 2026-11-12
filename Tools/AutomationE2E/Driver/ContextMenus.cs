@@ -243,6 +243,26 @@ internal static partial class Program
                     $"{how}: Delete takes out the entry highlighted ({Path.GetFileName(target)}), and no other ({string.Join(", ", list.Select(Path.GetFileName))} -> {string.Join(", ", after.Select(Path.GetFileName))})");
                 await CloseMenus();
             }
+
+            // The menus closed, Delete in the document is the document's (the list's Delete is taken from the window's
+            // keyboard hook, which must leave it alone then); undone after.
+            {
+                var recentBefore = Files(await RecentMenu(c, windowId));
+                var textBefore = ((string)(await Get(c, keep))["text"]!).Replace("\r\n", "\n");
+                var body = CenterOf(System.Windows.Automation.AutomationElement.FromHandle(window));
+                await Click(window, body.Item1, body.Item2);
+                await Task.Delay(400);
+                Send(Key(0x11, false), Key(0x24, false), Key(0x24, true), Key(0x11, true));
+                await Task.Delay(300);
+                Send(Key(0x2E, false), Key(0x2E, true));
+                string textAfter = textBefore;
+                await Eventually(async () => (textAfter = ((string)(await Get(c, keep))["text"]!).Replace("\r\n", "\n")) != textBefore, 3000, 150);
+                var recentAfter = Files(await RecentMenu(c, windowId));
+                notes.Add($"Delete in the document: {textBefore.Length} -> {textAfter.Length} characters; recent {recentBefore.Count} -> {recentAfter.Count}");
+                Check(textAfter.Length == textBefore.Length - 1 && recentAfter.Count == recentBefore.Count, "with the menus closed, Delete deletes in the document and takes nothing out of the list");
+                Send(Key(0x11, false), Key(0x5A, false), Key(0x5A, true), Key(0x11, true));
+                await Task.Delay(500);
+            }
         }
         finally
         {
