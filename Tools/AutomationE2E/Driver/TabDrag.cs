@@ -177,6 +177,10 @@ internal static partial class Program
             var editor = CenterOf(AutomationElement.FromHandle(window));
             await Click(window, editor.Item1, editor.Item2 + 120);
             await Task.Delay(600);
+            // How far the tab shown reaches over the one before it, as drawn by itself (its rounded foot, outside its box):
+            // what a new tab shown may too.
+            var shownOver = Math.Max(0, TabOf(middle).Current.BoundingRectangle.Right - TabOf(last).Current.BoundingRectangle.Left);
+            notes.Add($"the tab shown reaches {shownOver:0} px over the one before it");
             var before = (moved: Look(TabOf(first)), other: Look(TabOf(middle)));
             notes.Add($"before: {first} {Show(before.moved)}; {middle} {Show(before.other)}");
             var ringBefore = Ring(TabOf(first));
@@ -272,13 +276,15 @@ internal static partial class Program
             Check(addButton != null, "the + is there");
             if (addButton != null)
             {
+                List<(string name, System.Windows.Rect r)> AllTabs() => Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>()
+                    .Select(t => (name: t.Current.Name, r: t.Current.BoundingRectangle)).Where(t => !t.r.IsEmpty && t.r.Width > 0).OrderBy(t => t.r.Left).ToList();
+                var countBefore = AllTabs().Count;
                 Invoke(addButton);
                 await Task.Delay(1500);
-                var all = Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>()
-                    .Select(t => (name: t.Current.Name, r: t.Current.BoundingRectangle)).Where(t => !t.r.IsEmpty && t.r.Width > 0).OrderBy(t => t.r.Left).ToList();
+                var all = AllTabs();
                 notes.Add("after +: " + string.Join(" | ", all.Select(t => $"{t.name} {t.r.Left:0}-{t.r.Right:0}")));
-                var overlaps = all.Zip(all.Skip(1), (a, b) => (a, b)).Where(p => p.b.r.Left < p.a.r.Right - 2).Select(p => $"{p.a.name} / {p.b.name}").ToList();
-                Check(all.Count == 4 && overlaps.Count == 0, $"four tabs side by side, none over another ({all.Count} tabs; over: {string.Join(", ", overlaps)})");
+                var overlaps = all.Zip(all.Skip(1), (a, b) => (a, b)).Where(p => p.b.r.Left < p.a.r.Right - shownOver - 2).Select(p => $"{p.a.name} / {p.b.name} {p.a.r.Right - p.b.r.Left:0} px").ToList();
+                Check(all.Count == countBefore + 1 && overlaps.Count == 0, $"one tab more, side by side, none over another further than the tab shown reaches ({countBefore} -> {all.Count} tabs; over: {string.Join(", ", overlaps)})");
                 var plus = FindIn(window, "AddButton")?.Current.BoundingRectangle;
                 notes.Add($"+ at {plus?.Left:0}, the last tab ends at {all.LastOrDefault().r.Right:0}");
                 Check(plus != null && all.Count > 0 && plus.Value.Left >= all.Last().r.Right - 2 && plus.Value.Left <= all.Last().r.Right + 40,
