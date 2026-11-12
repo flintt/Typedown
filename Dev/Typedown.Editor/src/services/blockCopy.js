@@ -1,3 +1,4 @@
+import { discoverKatexFontFaces } from './katexFonts'
 import katex from 'katex'
 import 'katex/contrib/mhchem'
 import katexCss from '!!raw-loader!katex/dist/katex.css'
@@ -24,22 +25,11 @@ let fontFacesPromise = null
 const katexFontFaces = () => {
   if (!fontFacesPromise) {
     fontFacesPromise = (async () => {
-      const faces = []
-      for (const sheet of Array.from(document.styleSheets)) {
-        let rules
-        try { rules = sheet.cssRules } catch (e) { continue }
-        for (const rule of Array.from(rules)) {
-          if (!(rule instanceof CSSFontFaceRule)) continue
-          const family = (rule.style.getPropertyValue('font-family') || '').replace(/["']/g, '').trim()
-          if (!family.startsWith('KaTeX_')) continue
-          const first = (rule.style.getPropertyValue('src') || '').match(/url\(["']?([^"')]+)["']?\)/)
-          if (!first) continue
-          faces.push({ family, style: rule.style.getPropertyValue('font-style') || 'normal', weight: rule.style.getPropertyValue('font-weight') || 'normal', url: new URL(first[1], sheet.href || document.baseURI).href })
-        }
-      }
+      // The faces as the page has them (services/katexFonts); the first source of each.
+      const faces = discoverKatexFontFaces()
       const css = await Promise.all(faces.map(async face => {
         try {
-          const response = await fetch(face.url)
+          const response = await fetch(face.sources[0])
           if (!response.ok) return ''
           const data = await blobDataUrl(await response.blob())
           return `@font-face{font-family:${face.family};font-style:${face.style};font-weight:${face.weight};src:url(${data})}`
