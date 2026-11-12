@@ -67,7 +67,7 @@ namespace Typedown.Utilities
             }
 
             using var memoryStream = new InMemoryRandomAccessStream();
-            var options = new BitmapPropertySet { { "ImageQuality", new BitmapTypedValue(Math.Clamp(quality, 1, 100) / 100.0f, Windows.Foundation.PropertyType.Single) } };
+            var options = new BitmapPropertySet { { "ImageQuality", new BitmapTypedValue(Math.Clamp(quality, 1, 100) / 100.0f, global::Windows.Foundation.PropertyType.Single) } };
             var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, memoryStream, options);
             encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, decoder.PixelWidth, decoder.PixelHeight, decoder.DpiX, decoder.DpiY, bytes);
             await encoder.FlushAsync();
