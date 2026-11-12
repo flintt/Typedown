@@ -335,6 +335,18 @@ namespace Typedown.Core.Models
                     if (!disposed && fileSystemWatcher == watcher) OnFileDeleted(e);
                 });
             };
+            // Events lost (the buffer overflowed: many files at once) or the watcher stopped (a network folder gone and
+            // back): the folder read again and watched anew, what changed meanwhile shown (R06).
+            fileSystemWatcher.Error += (s, e) =>
+            {
+                Log.Debug($"folder pane: the watcher of a folder failed ({e.GetException()?.GetType().Name}); read again");
+                dispatcherQueue?.TryEnqueueSafe(() =>
+                {
+                    if (disposed || fileSystemWatcher != watcher) return;
+                    StartWatchFolder();
+                    UpdateChildren();
+                });
+            };
             fileSystemWatcher.Path = FullPath;
             fileSystemWatcher.EnableRaisingEvents = true;
         }
