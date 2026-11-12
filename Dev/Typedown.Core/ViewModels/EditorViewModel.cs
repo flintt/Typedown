@@ -1181,7 +1181,10 @@ namespace Typedown.Core.ViewModels
             var wait = timeoutMs ?? (length >= CoverFromChars ? (keepSource ? 8000 : 3000) : 500);
             var token = ++flushToken;
             var waiter = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-            lock (flushWaiters) flushWaiters[token] = waiter;
+            // The load the flush is asked about: the page's answer names the load its text belongs to, and one about
+            // another (the page given the next document meanwhile, or not yet the one asked about) is no flush of this
+            // document's text (R03: an answer was taken by its token alone).
+            lock (flushWaiters) { flushWaiters[token] = waiter; flushLoads[token] = LoadId; }
             try
             {
                 MarkdownEditor.PostMessage("FlushContent", new { token, keepSource });
@@ -1191,9 +1194,12 @@ namespace Typedown.Core.ViewModels
             }
             finally
             {
-                lock (flushWaiters) flushWaiters.Remove(token);
+                lock (flushWaiters) { flushWaiters.Remove(token); flushLoads.Remove(token); }
             }
         }
+
+        // The load each flush in flight was asked about, by its token.
+        private readonly Dictionary<int, int?> flushLoads = new();
 
         /// <summary>The test host's stand-in for a page that does not answer a flush (busy, or going away): its answers are dropped.</summary>
         public static bool TestDropFlushAnswers { get; set; }
@@ -1206,7 +1212,15 @@ namespace Typedown.Core.ViewModels
             lock (pageTextWaiters) pageTextWaiters.TryGetValue(token, out pageText);
             pageText?.TrySetResult(args?["text"]?.ToString());
             TaskCompletionSource<bool> waiter = null;
-            lock (flushWaiters) flushWaiters.TryGetValue(token, out waiter);
+            int? asked = null;
+            lock (flushWaiters) { flushWaiters.TryGetValue(token, out waiter); flushLoads.TryGetValue(token, out asked); }
+            var answered = args?["loadId"]?.Type == JTokenType.Integer ? args["loadId"].ToObject<int>() : (int?)null;
+            if (waiter != null && asked != null && answered != null && answered != asked)
+            {
+                Log.Debug($"editor: flush {token} answered for load {answered}, asked for {asked}; not this document's text");
+                waiter.TrySetResult(false);
+                return;
+            }
             waiter?.TrySetResult(true);
         }
 

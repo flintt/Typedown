@@ -484,7 +484,8 @@ const Editor: React.FC = () => {
         flushRef.current?.(fileLoadPending.current ? undefined : { ifPending: true, keepSource: !!keepSource })
         // The revisions first (a save, a switch away): the host keeps them with the text it is given now.
         reportReview()
-        transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current })
+        // With the load the text belongs to: a reply about a document no longer shown is told apart (R03).
+        transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current, loadId: loadIdRef.current })
     }), []);
 
     useEffect(() => transport.addListener<IExportArgs>('Export', async ({ type, context, basePath, title, options }) => {
