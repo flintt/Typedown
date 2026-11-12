@@ -359,24 +359,7 @@ namespace Typedown.Core.ViewModels
                 }
                 return;
             }
-            if (backup == null)
-            {
-                EditorViewModel.Markdown = Common.DefaultMarkdwn;
-                EditorViewModel.CurrentHash = EditorViewModel.FileHash;
-                EditorViewModel.Saved = true;
-                EditorViewModel.AutoSavedSucc = true;
-                EditorViewModel.AutoSaveHeldBack = null;
-                EditorViewModel.FileLoaded = false;
-            }
-            else
-            {
-                EditorViewModel.Markdown = backup;
-                EditorViewModel.CurrentHash = Common.SimpleHash(backup);
-                EditorViewModel.Saved = false;
-                EditorViewModel.AutoSavedSucc = false;
-                EditorViewModel.FileLoaded = true;
-            }
-            EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
+            ApplyLoadedState(backup ?? Common.DefaultMarkdwn, fromBackup: backup != null);
             if (postMessage)
             {
                 EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
@@ -479,23 +462,7 @@ namespace Typedown.Core.ViewModels
                     }
                     return false;
                 }
-                if (backup == null)
-                {
-                    EditorViewModel.Markdown = text;
-                    EditorViewModel.CurrentHash = EditorViewModel.FileHash;
-                    EditorViewModel.Saved = true;
-                    EditorViewModel.FileLoaded = false;
-                }
-                else
-                {
-                    EditorViewModel.Markdown = backup;
-                    EditorViewModel.CurrentHash = Common.SimpleHash(backup);
-                    EditorViewModel.Saved = false;
-                    EditorViewModel.FileLoaded = true;
-                }
-                EditorViewModel.AutoSavedSucc = true;
-                EditorViewModel.AutoSaveHeldBack = null;
-                EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
+                ApplyLoadedState(backup ?? text, fromBackup: backup != null);
                 if (postMessage)
                 {
                     var cursor = SettingsViewModel.RememberCursorPosition ? CursorMemory.Get(path) : null;
@@ -646,13 +613,7 @@ namespace Typedown.Core.ViewModels
             FileFormat = TextFileFormat.Default;
             DiskHash = 0;
             EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
-            EditorViewModel.Markdown = Common.DefaultMarkdwn;
-            EditorViewModel.CurrentHash = EditorViewModel.FileHash;
-            EditorViewModel.Saved = true;
-            EditorViewModel.AutoSavedSucc = true;
-            EditorViewModel.AutoSaveHeldBack = null;
-            EditorViewModel.FileLoaded = false;
-            EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
+            ApplyLoadedState(Common.DefaultMarkdwn, fromBackup: false);
             EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
             EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
         }
@@ -2003,6 +1964,26 @@ namespace Typedown.Core.ViewModels
 
         // keepHistory: reloaded over the reader's unsaved changes - their text stays one undo step back (and its backup is
         // not deleted: the next save tick puts it right).
+        /// <summary>
+        /// A document's text put into the editor as it comes - new, read, recovered from a backup, reloaded, reset - with the
+        /// state that goes with it, in one place (the modularity audit's M03: each way set the fields itself, and they had
+        /// drifted - a new document recovered from a backup kept the last document's "held back" note). Its file's hash
+        /// (<see cref="EditorViewModel.FileHash"/>) is set first by the caller. Read from the file it is saved; recovered
+        /// from a backup it is not, and counts as loaded (the page reports its own text back); an untitled one recovered has
+        /// nowhere to be saved to automatically. A history begun anew unless <paramref name="initHistory"/> is false (a
+        /// reload that keeps the undo steps).
+        /// </summary>
+        private void ApplyLoadedState(string text, bool fromBackup, bool initHistory = true)
+        {
+            EditorViewModel.Markdown = text;
+            EditorViewModel.CurrentHash = fromBackup ? Common.SimpleHash(text) : EditorViewModel.FileHash;
+            EditorViewModel.Saved = !fromBackup;
+            EditorViewModel.FileLoaded = fromBackup;
+            EditorViewModel.AutoSavedSucc = !(fromBackup && string.IsNullOrEmpty(FilePath));
+            EditorViewModel.AutoSaveHeldBack = null;
+            if (initHistory) EditorViewModel.History.InitHistory(text);
+        }
+
         private void ApplyDiskText(string text, bool keepHistory = false)
         {
             if (!string.Equals(EditorViewModel.Markdown, text, StringComparison.Ordinal))
@@ -2011,17 +1992,8 @@ namespace Typedown.Core.ViewModels
             EditorViewModel.FirstStart = false;
             EditorViewModel.FileHash = Common.SimpleHash(text);
             DiskHash = EditorViewModel.FileHash;
-            EditorViewModel.Markdown = text;
-            EditorViewModel.CurrentHash = EditorViewModel.FileHash;
-            EditorViewModel.Saved = true;
-            EditorViewModel.FileLoaded = false;
-            EditorViewModel.AutoSavedSucc = true;
-            EditorViewModel.AutoSaveHeldBack = null;
-            if (!keepHistory)
-            {
-                EditorViewModel.History.InitHistory(text);
-                AutoBackup.DeleteBackup(FilePath);
-            }
+            ApplyLoadedState(text, fromBackup: false, initHistory: !keepHistory);
+            if (!keepHistory) AutoBackup.DeleteBackup(FilePath);
             EditorViewModel.PostLoadFile(text);
         }
 
