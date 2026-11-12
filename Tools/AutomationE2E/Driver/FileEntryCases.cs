@@ -94,12 +94,20 @@ internal static partial class Program
                 {
                     var home = FindIn(window, "HomePage");
                     if (home == null) return null;
-                    return home.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.HelpTextProperty, file))
-                        ?? home.FindAll(TreeScope.Descendants, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.ListItem)).Cast<AutomationElement>()
-                            .FirstOrDefault(x => x.Current.Name.Contains("fe01-entry") || x.Current.HelpText == file);
+                    // The path as the list has it (its case may not be the fixture's), or the name.
+                    return home.FindAll(TreeScope.Descendants, Condition.TrueCondition).Cast<AutomationElement>()
+                        .FirstOrDefault(x => SamePath(x.Current.HelpText, file) || x.Current.Name.Contains("fe01-entry", StringComparison.OrdinalIgnoreCase));
                 }
                 await Eventually(() => Task.FromResult((row = Find()) != null), 5000);
-                if (row == null) throw new CaseFailed("the file is not in the home page's lists");
+                if (row == null)
+                {
+                    var home = FindIn(window, "HomePage");
+                    var seen = home == null ? "no home page" : string.Join(" | ", home.FindAll(TreeScope.Descendants, Condition.TrueCondition).Cast<AutomationElement>()
+                        .Select(x => $"{x.Current.ControlType.ProgrammaticName.Replace("ControlType.", "")}:{x.Current.Name}{(string.IsNullOrEmpty(x.Current.HelpText) ? "" : " [" + x.Current.HelpText + "]")}").Take(40));
+                    notes.Add("home page shows: " + seen);
+                    notes.Add("home state: " + (await HomeState(c, windowId)).ToString(Newtonsoft.Json.Formatting.None));
+                    throw new CaseFailed("the file is not in the home page's lists");
+                }
                 notes.Add($"home page entry: {row.Current.ControlType.ProgrammaticName} '{row.Current.Name}'");
                 await Click(window, row, Mouse.Right);
                 await Task.Delay(600);

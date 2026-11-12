@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +29,9 @@ namespace Typedown.Core.Services
 
         private readonly HashSet<string> untitled = new(StringComparer.Ordinal);
 
-        private Task writing = Task.CompletedTask;
+        // The file written a snapshot at a time (Utilities.SnapshotWriter).
+        private SnapshotWriter writer;
+        private SnapshotWriter Writer => System.Threading.LazyInitializer.EnsureInitialized(ref writer, () => new SnapshotWriter(file, "first-edit mutes"));
 
         public FirstEditMutesStore(string file) => this.file = file;
 
@@ -133,25 +135,14 @@ namespace Typedown.Core.Services
         /// <summary>Done when every change so far is on disk.</summary>
         public Task FlushAsync()
         {
-            lock (gate) return writing;
+            return Writer.FlushAsync();
         }
 
         // Under the lock: the text taken now, written after the writes before it, atomically.
         private void Save()
         {
             var text = JsonConvert.SerializeObject(new Stored { Paths = paths.ToList() }, Formatting.Indented);
-            writing = writing.ContinueWith(async _ =>
-            {
-                try
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(file));
-                    await SafeFile.WriteAllTextAtomicAsync(file, text);
-                }
-                catch (Exception ex)
-                {
-                    Log.Debug($"first-edit mutes: could not write {file}: {ex.Message}");
-                }
-            }, TaskScheduler.Default).Unwrap();
+            Writer.Write(text);
         }
     }
 
