@@ -136,6 +136,17 @@ namespace Typedown.Automation
                 var info = await host.CloseDocumentAsync(p.RequiredString("documentId", allowEmpty: false), p.OptionalInteger("baseRevision"), ct).ConfigureAwait(false);
                 return new JObject { ["documentId"] = info.DocumentId, ["windowId"] = info.WindowId, ["closed"] = true };
             }));
+            // What review mode has made of the client's edits (each write's operationId): waiting, accepted, rejected.
+            table.Add(new MethodDescriptor("document.reviewStatus", Scopes.DocumentRead, "document.reviewStatus/1", async (c, ct) =>
+            {
+                var p = c.Params;
+                var documentId = p.RequiredString("documentId", allowEmpty: false);
+                var ids = p.OptionalStringArray("operationIds");
+                var record = await host.GetReviewAsync(documentId, ct).ConfigureAwait(false);
+                var result = ReviewStatus.Summarize(record, ids);
+                result["documentId"] = documentId;
+                return result;
+            }));
             table.Add(new MethodDescriptor("document.save", Scopes.DocumentSave, "document.save/1", async (c, ct) =>
             {
                 var p = c.Params;

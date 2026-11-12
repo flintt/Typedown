@@ -81,7 +81,7 @@ MVP 定义最小 scope 名称：`app.read`、`document.read`、`document.write`�
 | --- | --- |
 | 无 | `system.initialize`；完成初始化后的 `system.ping` |
 | `app.read` | `app.getState`、`window.list` |
-| `document.read` | `document.list/get`，包括路径和未保存正文 |
+| `document.read` | `document.list/get`，包括路径和未保存正文；`document.reviewStatus`（审阅模式对每次写入的结论，按写入返回的 operationId：pending／accepted／rejected／partly，2026-11-12 新增） |
 | `document.write` | `document.open/create/replace/replaceText/undo/redo` |
 | `document.save` | `document.save`；不能由 `document.write` 隐式获得 |
 | `window.focus` | `window.focus`、`document.focus` 和任何 `reveal` 请求 |

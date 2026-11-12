@@ -74,6 +74,19 @@ test('many scattered changes round-trip', () => {
     roundTrip(base, cur)
 })
 
+// An automation client asks about each of its edits by its operationId (document.reviewStatus): two edits of one client
+// made in a row stay two revisions, each with its own.
+test('each automation edit keeps its operation id, apart from the next one of the same client', () => {
+    const baseline = 'one\n'
+    const first = 'one two\n'
+    let revs = trackRevisions(baseline, first, [], { ...changedRegion(baseline, first)!, source: { name: 'Bot', session: 's1', op: 'op1' }, time: 2 })
+    expect(revs.map(r => r.op)).toEqual(['op1'])
+    const second = 'one two three\n'
+    revs = trackRevisions(baseline, second, revs, { ...changedRegion(first, second)!, source: { name: 'Bot', session: 's1', op: 'op2' }, time: 3 })
+    expect(revs.map(r => [r.newText, r.op])).toEqual([[' two', 'op1'], [' three', 'op2']])
+    expect(storedOf(revs[1], second).op).toBe('op2')
+})
+
 test('a revision keeps its source while the reader types elsewhere', () => {
     const baseline = 'one\n\ntwo\n'
     const afterProgram = 'one more\n\ntwo\n'

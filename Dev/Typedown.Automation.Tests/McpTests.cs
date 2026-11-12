@@ -249,6 +249,27 @@ namespace Typedown.Automation.Tests
             Assert.Equal("unchanged", (string)theirs["structuredContent"]!["lastEditThisSession"]!["status"]!);
         }
 
+        // Review mode's own verdict on the last edit, by its operationId (document.reviewStatus), when the document is in
+        // review: the agent learns the person rejected it, not only that its text is gone.
+        [Fact]
+        public async Task A_read_in_review_says_whether_the_person_accepted_or_rejected_the_last_edit()
+        {
+            var wrote = await Tool("typedown_replace_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 0, ["find"] = "old text", ["replacement"] = "brand new words" });
+            var op = (string)wrote["structuredContent"]!["operationId"]!;
+            var read = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId });
+            Assert.Null(read["structuredContent"]!["lastEditThisSession"]!["review"]);
+
+            host.Review = new JObject { ["on"] = true, ["revisions"] = new JArray(new JObject { ["id"] = "r1", ["op"] = op }), ["outcomes"] = new JArray() };
+            read = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId });
+            Assert.Equal("pending", (string)read["structuredContent"]!["lastEditThisSession"]!["review"]!["status"]!);
+
+            host.Review = new JObject { ["on"] = true, ["revisions"] = new JArray(), ["outcomes"] = new JArray(new JObject { ["id"] = "r1", ["op"] = op, ["outcome"] = "rejected" }) };
+            read = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId });
+            var review = read["structuredContent"]!["lastEditThisSession"]!["review"]!;
+            Assert.Equal("rejected", (string)review["status"]!);
+            Assert.Contains("rejected your last edit", (string)review["note"]!);
+        }
+
         [Fact]
         public async Task A_read_explains_normalization_in_words()
         {

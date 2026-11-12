@@ -52,6 +52,6 @@ claude mcp add typedown -- typedownctl mcp
 
 规范化（`normalization`）：`pendingNormalization` 为 `none` 或 `knownFormatting` 时不用管；`unknown` 表示无法证明可视编辑器会逐字保留这段 Markdown，你第一次在可视模式里编辑时可能被重排格式，`reasons` 说明是哪种（`formatting-changed` 只是列表符号、空行、表格对齐之类的排版，不丢字；`notEvaluated` 是这个标签还没在可视编辑器里显示过），这时写入默认被拒（`normalization_unclassified`），确认只是格式变化可以接受时再传 `allowFormattingChanges: true`；`unsafe` 和 `content_not_roundtrippable` 表示会丢内容（多是原始 HTML），任何选项都不写。
 
-`lastEditThisSession` 是按正文判断的：本会话上次写进去的文字是否还在。`gone` 说明被你在审阅里拒绝、撤销或改掉了；接口目前不区分这三种（宿主还没有把审阅状态开放给自动化）。
+`lastEditThisSession` 是按正文判断的：本会话上次写进去的文字是否还在。`gone` 说明被你在审阅里拒绝、撤销或改掉了。文档开着审阅模式时，它还带 `review`：审阅模式对这次修改（按写入返回的 `operationId`）的结论——`pending`（待审）、`accepted`（已接受）、`rejected`（已拒绝）、`partly`（部分处理）及各自的条数。自动化接口对应的方法是 `document.reviewStatus`（`documentId`，可选 `operationIds`）。AI 不能自己接受或拒绝修订。
 
 失败时返回 `isError: true`，`structuredContent` 是 `{ "error": <接口错误，和 typedownctl --json 输出的完全一样>, "next": "<下一步该怎么做>" }`。遇到 `revision_conflict` 或 `match_count_mismatch` 时什么都没写，AI 必须重新读取；服务器不会拿旧内容重试。
