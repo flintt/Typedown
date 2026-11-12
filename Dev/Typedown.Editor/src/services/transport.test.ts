@@ -129,3 +129,15 @@ test('a resolved invoke does not fire a late timeout', async () => {
     await expect(p).resolves.toBe(1);
     jest.advanceTimersByTime(5000); // the timer was cleared on resolve; nothing rejects here
 });
+
+// The host out of step with a message (a change it could not apply) asks for the next one whole (R12).
+test('a message the host asks to resync goes whole next', () => {
+    transport.postMessage('StateChange', { words: 1 });
+    transport.postMessage('StateChange', { words: 2 });
+    expect(messages()[1].diff).toBe(true);
+    transport.emitLocal('ResyncMessage', { name: 'StateChange' });
+    transport.postMessage('StateChange', { words: 3 });
+    const last = messages()[messages().length - 1];
+    expect(last.diff).toBe(false);
+    expect(JSON.parse(last.args)).toEqual({ words: 3 });
+});

@@ -68,7 +68,14 @@ namespace Typedown.Services
                         // A change needs the text it was made from: without it (or out of its range) the message is dropped
                         // and logged, not applied to another text.
                         if (!prevDic.TryGetValue(msg.Name, out var baseText) || msg.Start < 0 || msg.End < msg.Start || msg.End > baseText.Length)
-                            throw new InvalidOperationException($"'{msg.Name}' changed from a text this page did not send");
+                        {
+                            // Out of step with the page: this copy is dropped (the changes after it, made from a text it
+                            // does not have, are dropped too until a whole one comes), and the page asked to send the
+                            // next one whole (R12: they could fit and read as another text).
+                            prevDic.Remove(msg.Name);
+                            sender?.PostMessage("ResyncMessage", new { name = msg.Name });
+                            throw new InvalidOperationException($"'{msg.Name}' changed from a text this page did not send; the page asked for it whole");
+                        }
                         prevDic[msg.Name] = baseText.Substring(0, msg.Start) + msg.Args + baseText.Substring(msg.End);
                     }
                     else
