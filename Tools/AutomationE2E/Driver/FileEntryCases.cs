@@ -88,10 +88,20 @@ internal static partial class Program
             blank = await ActiveOf(c, windowId);
             await Both("home page", async () =>
             {
+                // In the home page only (a search of the whole window found the file's tab by its name, and right-clicked it).
                 AutomationElement? row = null;
-                await Eventually(() => Task.FromResult((row = FindIn(window, "HomePage")?.FindFirst(TreeScope.Descendants,
-                    new PropertyCondition(AutomationElement.HelpTextProperty, file)) ?? FindNamed(window, "fe01-entry.md")) != null), 5000);
-                await Click(window, row!, Mouse.Right);
+                AutomationElement? Find()
+                {
+                    var home = FindIn(window, "HomePage");
+                    if (home == null) return null;
+                    return home.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.HelpTextProperty, file))
+                        ?? home.FindAll(TreeScope.Descendants, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.ListItem)).Cast<AutomationElement>()
+                            .FirstOrDefault(x => x.Current.Name.Contains("fe01-entry") || x.Current.HelpText == file);
+                }
+                await Eventually(() => Task.FromResult((row = Find()) != null), 5000);
+                if (row == null) throw new CaseFailed("the file is not in the home page's lists");
+                notes.Add($"home page entry: {row.Current.ControlType.ProgrammaticName} '{row.Current.Name}'");
+                await Click(window, row, Mouse.Right);
                 await Task.Delay(600);
             }, "HomeLocationItem", "HomeCopyPathItem");
 

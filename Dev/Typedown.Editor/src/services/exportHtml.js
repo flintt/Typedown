@@ -1,3 +1,4 @@
+import { discoverKatexFontFaces } from './katexFonts'
 import marked from '../components/Muya/lib/parser/marked'
 import Prism from 'prismjs'
 import katex from 'katex'
@@ -174,20 +175,12 @@ const sizeWideTables = container => {
 const withAbsoluteKatexFonts = (css) => {
   const found = {}
   try {
-    for (const sheet of document.styleSheets) {
-      let rules
-      try { rules = sheet.cssRules } catch (e) { continue }
-      for (const rule of rules) {
-        if (!(rule instanceof CSSFontFaceRule)) continue
-        const family = (rule.style.getPropertyValue('font-family') || '').replace(/["']/g, '')
-        if (!family.startsWith('KaTeX_')) continue
-        const src = rule.style.getPropertyValue('src') || ''
-        for (const m of src.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
-          const url = new URL(m[1], sheet.href || document.baseURI).href
-          // Bundled as KaTeX_Main-BoldItalic.<hash>.woff2: the base name is the one the raw stylesheet uses.
-          const named = url.match(/(KaTeX_[A-Za-z0-9-]+)\.[0-9a-f]+\.(woff2|woff|ttf)(\?|$)/)
-          if (named) found[`${named[1]}|${named[2]}`] = url
-        }
+    // The faces as the page has them (services/katexFonts); every source of each.
+    for (const face of discoverKatexFontFaces()) {
+      for (const url of face.sources) {
+        // Bundled as KaTeX_Main-BoldItalic.<hash>.woff2: the base name is the one the raw stylesheet uses.
+        const named = url.match(/(KaTeX_[A-Za-z0-9-]+)\.[0-9a-f]+\.(woff2|woff|ttf)(\?|$)/)
+        if (named) found[`${named[1]}|${named[2]}`] = url
       }
     }
   } catch (e) {
