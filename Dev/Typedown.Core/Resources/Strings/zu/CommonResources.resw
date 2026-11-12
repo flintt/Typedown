@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Shumeka kudokhumenti (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Vula ngokushesha</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Thayipha ingxenye yegama lefayela</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Alikho ifayela elitholiwe</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Hlola idokhumenti</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Azikho izinkinga ezitholiwe.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Izinkinga ezitholiwe: {0}. Chofoza eyodwa ukuze uye kuyo.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Izinkinga ezingeke ziphume kahle ekuthumeleni: {0}. Chofoza eyodwa ukuze uye kuyo, noma uthumele noma kunjalo.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Thumela noma kunjalo</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Umugqa {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Isithombe asitholakalanga</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Ifayela elixhunyiwe alitholakalanga</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Asikho isihloko esinale ankhali</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Ifomula noma umdwebo ongakwazi ukudwetshwa</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Umdwebo we-PlantUML awudwetshiwe (uvaliwe kuzilungiselelo)</value>
+  </data>
 </root>

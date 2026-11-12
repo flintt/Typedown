@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>הטמעה במסמך (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>פתיחה מהירה</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>הקלד חלק משם הקובץ</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>לא נמצא קובץ</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>בדיקת מסמך</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>לא נמצאו בעיות.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>בעיות שנמצאו: {0}. לחץ על אחת כדי לעבור אליה.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>בעיות שלא ייצאו נכון בייצוא: {0}. לחץ על אחת כדי לעבור אליה, או ייצא בכל זאת.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>ייצא בכל זאת</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>שורה {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>התמונה לא נמצאה</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>הקובץ המקושר לא נמצא</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>אין כותרת עם עוגן זה</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>נוסחה או תרשים שלא ניתן לצייר</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>תרשים PlantUML לא צויר (כבוי בהגדרות)</value>
+  </data>
 </root>

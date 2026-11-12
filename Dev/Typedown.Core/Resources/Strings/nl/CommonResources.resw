@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>In het document insluiten (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Snel openen</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Typ een deel van een bestandsnaam</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Geen bestand gevonden</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Document controleren</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Geen problemen gevonden.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Gevonden problemen: {0}. Klik op een probleem om erheen te gaan.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemen die bij het exporteren niet goed uitkomen: {0}. Klik op een probleem om erheen te gaan, of exporteer toch.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Toch exporteren</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Regel {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Afbeelding niet gevonden</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Gekoppeld bestand niet gevonden</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Geen kop met dit anker</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formule of diagram dat niet getekend kan worden</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagram niet getekend (uitgeschakeld in Instellingen)</value>
+  </data>
 </root>

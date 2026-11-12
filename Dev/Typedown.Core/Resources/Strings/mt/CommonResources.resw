@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Daħħal fid-dokument (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Iftaħ malajr</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Ikteb parti minn isem ta’ fajl</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Ma nstab l-ebda fajl</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Iċċekkja d-dokument</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Ma nstabet l-ebda problema.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Problemi misjuba: {0}. Ikklikkja waħda biex tmur fiha.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemi li mhux se joħorġu tajjeb fl-esportazzjoni: {0}. Ikklikkja waħda biex tmur fiha, jew esporta xorta waħda.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Esporta xorta waħda</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Linja {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>L-istampa ma nstabitx</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Il-fajl marbut ma nstabx</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>L-ebda intestatura b’dan l-ankra</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formula jew dijagramma li ma tistax tinġibed</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Dijagramma PlantUML mhux miġbuda (mitfija fis-Settings)</value>
+  </data>
 </root>

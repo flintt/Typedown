@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>દસ્તાવેજમાં એમ્બેડ કરો (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>ઝડપથી ખોલો</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ફાઇલ નામનો ભાગ લખો</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>કોઈ ફાઇલ મળી નથી</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>દસ્તાવેજ તપાસો</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>કોઈ સમસ્યા મળી નથી.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>મળેલી સમસ્યાઓ: {0}. ત્યાં જવા માટે કોઈ એક પર ક્લિક કરો.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>નિકાસમાં બરાબર નહીં આવે તેવી સમસ્યાઓ: {0}. ત્યાં જવા માટે કોઈ એક પર ક્લિક કરો, અથવા છતાં નિકાસ કરો.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>છતાં નિકાસ કરો</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>પંક્તિ {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>છબી મળી નથી</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>લિંક કરેલી ફાઇલ મળી નથી</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>આ એન્કર સાથે કોઈ શીર્ષક નથી</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>દોરી ન શકાય તેવું સૂત્ર કે આકૃતિ</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML આકૃતિ દોરાઈ નથી (સેટિંગ્સમાં બંધ)</value>
+  </data>
 </root>

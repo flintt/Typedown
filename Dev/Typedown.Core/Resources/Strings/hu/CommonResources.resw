@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Beágyazás a dokumentumba (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Gyors megnyitás</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Írja be a fájlnév egy részét</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Nem található fájl</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Dokumentum ellenőrzése</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Nem találtunk problémát.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Talált problémák: {0}. Kattintson egyre, hogy odaugorjon.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problémák, amelyek miatt az exportálás nem lesz helyes: {0}. Kattintson egyre, hogy odaugorjon, vagy exportáljon mégis.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Exportálás mégis</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>{0}. sor</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>A kép nem található</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>A hivatkozott fájl nem található</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Nincs ilyen horgonyú címsor</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Nem megrajzolható képlet vagy diagram</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>A PlantUML-diagram nem készül el (kikapcsolva a beállításokban)</value>
+  </data>
 </root>

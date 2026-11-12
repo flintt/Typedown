@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Fella inn í skjalið (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Flýtiopnun</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Skrifaðu hluta af skráarheiti</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Engin skrá fannst</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Yfirfara skjal</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Engin vandamál fundust.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Vandamál fundust: {0}. Smelltu á eitt til að fara þangað.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Vandamál sem koma ekki rétt út við útflutning: {0}. Smelltu á eitt til að fara þangað, eða fluttu samt út.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Flytja samt út</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Lína {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Mynd fannst ekki</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Tengd skrá fannst ekki</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Engin fyrirsögn með þessu akkeri</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formúla eða skýringarmynd sem ekki er hægt að teikna</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-mynd ekki teiknuð (slökkt í stillingum)</value>
+  </data>
 </root>

@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>ฝังในเอกสาร (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>เปิดด่วน</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>พิมพ์ส่วนหนึ่งของชื่อไฟล์</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>ไม่พบไฟล์</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>ตรวจเอกสาร</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>ไม่พบปัญหา</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>พบปัญหา: {0} รายการ คลิกเพื่อไปยังตำแหน่งนั้น</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>ปัญหาที่จะทำให้การส่งออกออกมาไม่ถูกต้อง: {0} รายการ คลิกเพื่อไปยังตำแหน่งนั้น หรือส่งออกต่อไป</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>ส่งออกต่อไป</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>บรรทัด {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>ไม่พบรูปภาพ</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>ไม่พบไฟล์ที่ลิงก์</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>ไม่มีหัวข้อที่มีจุดยึดนี้</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>สูตรหรือแผนภาพที่วาดไม่ได้</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>ไม่ได้วาดแผนภาพ PlantUML (ปิดอยู่ในการตั้งค่า)</value>
+  </data>
 </root>

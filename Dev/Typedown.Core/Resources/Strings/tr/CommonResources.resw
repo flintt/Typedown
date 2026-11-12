@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Belgeye göm (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Hızlı aç</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Dosya adının bir kısmını yazın</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Dosya bulunamadı</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Belgeyi denetle</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Sorun bulunamadı.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Bulunan sorunlar: {0}. Yerine gitmek için birine tıklayın.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Dışa aktarmada doğru çıkmayacak sorunlar: {0}. Yerine gitmek için birine tıklayın ya da yine de dışa aktarın.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Yine de dışa aktar</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Satır {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Resim bulunamadı</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Bağlantılı dosya bulunamadı</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Bu bağlantı noktasına sahip başlık yok</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Çizilemeyen formül veya diyagram</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML diyagramı çizilmedi (Ayarlar’da kapalı)</value>
+  </data>
 </root>

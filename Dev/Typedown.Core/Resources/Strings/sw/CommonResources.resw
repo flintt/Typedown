@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Pachika kwenye hati (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Fungua haraka</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Andika sehemu ya jina la faili</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Hakuna faili lililopatikana</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Kagua hati</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Hakuna matatizo yaliyopatikana.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Matatizo yaliyopatikana: {0}. Bofya moja kwenda mahali lilipo.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Matatizo yatakayofanya uhamishaji usitoke vizuri: {0}. Bofya moja kwenda mahali lilipo, au hamisha hata hivyo.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Hamisha hata hivyo</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Mstari wa {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Picha haikupatikana</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Faili lililounganishwa halikupatikana</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Hakuna kichwa chenye nanga hii</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Fomula au mchoro usioweza kuchorwa</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Mchoro wa PlantUML haujachorwa (umezimwa kwenye Mipangilio)</value>
+  </data>
 </root>

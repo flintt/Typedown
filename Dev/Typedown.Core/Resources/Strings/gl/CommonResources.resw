@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Incrustar no documento (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Apertura rápida</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Escribe parte do nome dun ficheiro</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Non se atopou ningún ficheiro</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Revisar documento</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Non se atoparon problemas.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Problemas atopados: {0}. Preme nun para ir a el.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemas que non sairán ben na exportación: {0}. Preme nun para ir a el, ou exporta igualmente.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Exportar igualmente</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Liña {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Non se atopou a imaxe</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Non se atopou o ficheiro ligado</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Ningún título con esta áncora</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Fórmula ou diagrama que non se pode debuxar</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagrama PlantUML sen debuxar (desactivado na configuración)</value>
+  </data>
 </root>

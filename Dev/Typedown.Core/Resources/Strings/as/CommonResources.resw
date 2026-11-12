@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>নথিত এম্বেড কৰক (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>দ্ৰুতভাৱে খোলক</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ফাইলৰ নামৰ অংশ লিখক</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>কোনো ফাইল পোৱা নগ’ল</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>নথি পৰীক্ষা কৰক</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>কোনো সমস্যা পোৱা নগ’ল।</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>পোৱা সমস্যা: {0}। তালৈ যাবলৈ এটাত ক্লিক কৰক।</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>ৰপ্তানিত শুদ্ধকৈ নোলোৱা সমস্যা: {0}। তালৈ যাবলৈ এটাত ক্লিক কৰক, বা তথাপিও ৰপ্তানি কৰক।</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>তথাপিও ৰপ্তানি কৰক</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>শাৰী {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>ছবি পোৱা নগ’ল</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>সংযুক্ত ফাইল পোৱা নগ’ল</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>এই এংকৰৰ কোনো শিৰোনাম নাই</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>আঁকিব নোৱাৰা সূত্ৰ বা চিত্ৰ</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML চিত্ৰ অঁকা হোৱা নাই (ছেটিংছত বন্ধ)</value>
+  </data>
 </root>

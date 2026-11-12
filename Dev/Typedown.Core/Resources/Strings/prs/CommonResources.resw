@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>جاسازی در سند (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>باز کردن سریع</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>بخشی از نام فایل را بنویسید</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>فایلی پیدا نشد</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>بررسی سند</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>مشکلی پیدا نشد.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>مشکلات پیدا شده: {0}. برای رفتن به هر کدام روی آن کلیک کنید.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>مشکلاتی که در صادر کردن درست نمی‌برآیند: {0}. برای رفتن به هر کدام روی آن کلیک کنید، یا به هر حال صادر کنید.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>به هر حال صادر کن</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>سطر {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>تصویر پیدا نشد</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>فایل پیوند شده پیدا نشد</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>عنوانی با این لنگر وجود ندارد</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>فورمول یا نموداری که رسم شده نمی‌تواند</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>نمودار PlantUML رسم نشد (در تنظیمات خاموش است)</value>
+  </data>
 </root>

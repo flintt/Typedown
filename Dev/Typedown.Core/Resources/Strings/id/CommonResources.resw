@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Sematkan di dokumen (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Buka cepat</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Ketik sebagian nama file</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Tidak ada file ditemukan</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Periksa dokumen</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Tidak ada masalah ditemukan.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Masalah ditemukan: {0}. Klik salah satu untuk menuju ke sana.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Masalah yang tidak akan keluar dengan benar saat ekspor: {0}. Klik salah satu untuk menuju ke sana, atau tetap ekspor.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Tetap ekspor</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Baris {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Gambar tidak ditemukan</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>File yang ditautkan tidak ditemukan</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Tidak ada judul dengan jangkar ini</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Rumus atau diagram yang tidak dapat digambar</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagram PlantUML tidak digambar (dimatikan di Pengaturan)</value>
+  </data>
 </root>

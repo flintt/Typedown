@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Iegult dokumentā (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Ātrā atvēršana</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Ierakstiet daļu no faila nosaukuma</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Fails nav atrasts</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Pārbaudīt dokumentu</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Problēmas netika atrastas.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Atrastās problēmas: {0}. Noklikšķiniet uz vienas, lai dotos uz to.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problēmas, kuru dēļ eksports neizdosies pareizi: {0}. Noklikšķiniet uz vienas, lai dotos uz to, vai tomēr eksportējiet.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Tomēr eksportēt</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>{0}. rinda</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Attēls nav atrasts</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Saistītais fails nav atrasts</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Nav virsraksta ar šo enkuru</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formula vai diagramma, ko nevar uzzīmēt</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML diagramma netiek zīmēta (izslēgta iestatījumos)</value>
+  </data>
 </root>

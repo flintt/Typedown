@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Txertatu dokumentuan (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Ireki azkar</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Idatzi fitxategi-izenaren zati bat</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Ez da fitxategirik aurkitu</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Egiaztatu dokumentua</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Ez da arazorik aurkitu.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Aurkitutako arazoak: {0}. Egin klik batean hara joateko.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Esportazioan ondo aterako ez diren arazoak: {0}. Egin klik batean hara joateko, edo esportatu hala ere.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Esportatu hala ere</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>{0}. lerroa</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Ez da irudia aurkitu</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Ez da estekatutako fitxategia aurkitu</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Ez dago aingura hau duen izenbururik</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Marraztu ezin den formula edo diagrama</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML diagrama ez da marraztu (desaktibatuta ezarpenetan)</value>
+  </data>
 </root>

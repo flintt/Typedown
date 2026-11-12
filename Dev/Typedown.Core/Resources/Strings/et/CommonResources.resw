@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Manusta dokumenti (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Kiiravamine</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Sisestage osa failinimest</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Faili ei leitud</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Kontrolli dokumenti</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Probleeme ei leitud.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Leitud probleemid: {0}. Klõpsake ühel, et sinna minna.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Probleemid, mis ei tule ekspordis õigesti välja: {0}. Klõpsake ühel, et sinna minna, või eksportige ikkagi.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Ekspordi ikkagi</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Rida {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Pilti ei leitud</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Lingitud faili ei leitud</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Selle ankruga pealkirja pole</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Valem või diagramm, mida ei saa joonistada</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagrammi ei joonistata (sätetes välja lülitatud)</value>
+  </data>
 </root>

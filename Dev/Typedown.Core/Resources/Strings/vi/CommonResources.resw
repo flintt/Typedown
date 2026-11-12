@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Nhúng vào tài liệu (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Mở nhanh</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Nhập một phần tên tệp</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Không tìm thấy tệp</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Kiểm tra tài liệu</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Không tìm thấy vấn đề.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Vấn đề tìm thấy: {0}. Bấm vào một mục để đi tới đó.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Vấn đề sẽ khiến bản xuất không đúng: {0}. Bấm vào một mục để đi tới đó, hoặc vẫn xuất.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Vẫn xuất</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Dòng {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Không tìm thấy ảnh</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Không tìm thấy tệp được liên kết</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Không có tiêu đề với neo này</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Công thức hoặc sơ đồ không vẽ được</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Sơ đồ PlantUML không được vẽ (đã tắt trong Cài đặt)</value>
+  </data>
 </root>

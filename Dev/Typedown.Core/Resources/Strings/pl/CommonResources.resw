@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Osadź w dokumencie (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Szybkie otwieranie</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Wpisz część nazwy pliku</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Nie znaleziono pliku</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Sprawdź dokument</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Nie znaleziono problemów.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Znalezione problemy: {0}. Kliknij, aby przejść do miejsca.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemy, przez które eksport nie wyjdzie poprawnie: {0}. Kliknij, aby przejść do miejsca, lub mimo to eksportuj.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Mimo to eksportuj</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Wiersz {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Nie znaleziono obrazu</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Nie znaleziono połączonego pliku</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Brak nagłówka z tą kotwicą</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formuła lub diagram, których nie da się narysować</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagram PlantUML nienarysowany (wyłączony w ustawieniach)</value>
+  </data>
 </root>

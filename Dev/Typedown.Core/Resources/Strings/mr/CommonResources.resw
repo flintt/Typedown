@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>दस्तऐवजात एम्बेड करा (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>झटपट उघडा</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>फाइल नावाचा भाग टाइप करा</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>कोणतीही फाइल सापडली नाही</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>दस्तऐवज तपासा</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>कोणतीही समस्या सापडली नाही.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>सापडलेल्या समस्या: {0}. तिथे जाण्यासाठी एकावर क्लिक करा.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>निर्यातीत नीट न येणाऱ्या समस्या: {0}. तिथे जाण्यासाठी एकावर क्लिक करा, किंवा तरीही निर्यात करा.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>तरीही निर्यात करा</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>ओळ {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>चित्र सापडले नाही</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>दुवा दिलेली फाइल सापडली नाही</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>या अँकरचे कोणतेही शीर्षक नाही</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>काढता न येणारे सूत्र किंवा आकृती</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML आकृती काढली नाही (सेटिंग्जमध्ये बंद)</value>
+  </data>
 </root>

@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>تضمين في المستند (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>فتح سريع</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>اكتب جزءًا من اسم الملف</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>لم يُعثر على ملف</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>فحص المستند</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>لم يُعثر على مشكلات.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>المشكلات التي وُجدت: {0}. انقر على إحداها للانتقال إليها.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>مشكلات لن تظهر صحيحة في التصدير: {0}. انقر على إحداها للانتقال إليها، أو صدِّر على أي حال.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>التصدير على أي حال</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>السطر {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>لم يُعثر على الصورة</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>لم يُعثر على الملف المرتبط</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>لا يوجد عنوان بهذا المرساة</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>صيغة أو رسم بياني لا يمكن رسمه</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>رسم PlantUML غير مرسوم (معطَّل في الإعدادات)</value>
+  </data>
 </root>

@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>I-embed sa dokumento (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Mabilis na pagbukas</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>I-type ang bahagi ng pangalan ng file</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Walang nakitang file</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Suriin ang dokumento</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Walang nakitang problema.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Mga problemang nakita: {0}. I-click ang isa para pumunta roon.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Mga problemang hindi lalabas nang tama sa pag-export: {0}. I-click ang isa para pumunta roon, o i-export pa rin.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>I-export pa rin</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Linya {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Hindi nakita ang larawan</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Hindi nakita ang naka-link na file</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Walang heading na may ganitong anchor</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Pormula o diagram na hindi maiguhit</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Hindi iginuhit ang PlantUML diagram (naka-off sa Mga Setting)</value>
+  </data>
 </root>

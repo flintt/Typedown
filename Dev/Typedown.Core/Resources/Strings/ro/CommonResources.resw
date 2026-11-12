@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Încorporează în document (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Deschidere rapidă</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Tastați o parte din numele fișierului</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Niciun fișier găsit</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Verificare document</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Nu s-au găsit probleme.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Probleme găsite: {0}. Faceți clic pe una pentru a merge la ea.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Probleme care nu vor ieși corect la export: {0}. Faceți clic pe una pentru a merge la ea sau exportați oricum.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Exportă oricum</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Rândul {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Imaginea nu a fost găsită</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Fișierul legat nu a fost găsit</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Niciun titlu cu această ancoră</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formulă sau diagramă care nu poate fi desenată</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagrama PlantUML nu este desenată (dezactivată în Setări)</value>
+  </data>
 </root>

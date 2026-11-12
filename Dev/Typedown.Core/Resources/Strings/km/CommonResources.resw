@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>បង្កប់ក្នុងឯកសារ (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>បើកយ៉ាងរហ័ស</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>វាយផ្នែកមួយនៃឈ្មោះឯកសារ</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>រកមិនឃើញឯកសារ</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>ពិនិត្យឯកសារ</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>រកមិនឃើញបញ្ហា។</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>បញ្ហាដែលរកឃើញ៖ {0}។ ចុចលើមួយដើម្បីទៅកាន់ទីតាំងនោះ។</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>បញ្ហាដែលនឹងមិនចេញត្រឹមត្រូវពេលនាំចេញ៖ {0}។ ចុចលើមួយដើម្បីទៅកាន់ទីតាំងនោះ ឬនាំចេញទោះយ៉ាងណាក៏ដោយ។</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>នាំចេញទោះយ៉ាងណាក៏ដោយ</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>បន្ទាត់ {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>រកមិនឃើញរូបភាព</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>រកមិនឃើញឯកសារដែលបានភ្ជាប់</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>គ្មានចំណងជើងដែលមានយុថ្កានេះ</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>រូបមន្ត ឬដ្យាក្រាមដែលមិនអាចគូរបាន</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>ដ្យាក្រាម PlantUML មិនបានគូរ (បិទក្នុងការកំណត់)</value>
+  </data>
 </root>

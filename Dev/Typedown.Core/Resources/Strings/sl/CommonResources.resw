@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Vdelaj v dokument (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Hitro odpiranje</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Vnesite del imena datoteke</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Datoteke ni mogoče najti</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Preveri dokument</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Ni najdenih težav.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Najdene težave: {0}. Kliknite eno, da skočite nanjo.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Težave, zaradi katerih izvoz ne bo pravilen: {0}. Kliknite eno, da skočite nanjo, ali vseeno izvozite.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Vseeno izvozi</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Vrstica {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Slike ni mogoče najti</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Povezane datoteke ni mogoče najti</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Ni naslova s tem sidrom</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Formula ali diagram, ki ga ni mogoče narisati</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagram PlantUML ni narisan (izklopljeno v nastavitvah)</value>
+  </data>
 </root>

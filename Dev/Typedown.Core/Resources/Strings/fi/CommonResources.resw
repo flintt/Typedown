@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Upota asiakirjaan (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Pikavalinta</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Kirjoita osa tiedoston nimestä</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>Tiedostoa ei löytynyt</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Tarkista asiakirja</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>Ongelmia ei löytynyt.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Löytyneet ongelmat: {0}. Siirry kohtaan napsauttamalla.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Ongelmia, jotka eivät tule viennissä oikein: {0}. Siirry kohtaan napsauttamalla tai vie silti.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Vie silti</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Rivi {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Kuvaa ei löytynyt</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Linkitettyä tiedostoa ei löytynyt</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Tällä ankkurilla ei ole otsikkoa</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Kaava tai kaavio, jota ei voi piirtää</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-kaaviota ei piirretä (pois päältä asetuksissa)</value>
+  </data>
 </root>

@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>ದಾಖಲೆಯಲ್ಲಿ ಎಂಬೆಡ್ ಮಾಡಿ (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>ತ್ವರಿತವಾಗಿ ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ಫೈಲ್ ಹೆಸರಿನ ಭಾಗವನ್ನು ಟೈಪ್ ಮಾಡಿ</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>ಯಾವುದೇ ಫೈಲ್ ಸಿಗಲಿಲ್ಲ</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>ದಾಖಲೆ ಪರಿಶೀಲಿಸಿ</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>ಯಾವುದೇ ಸಮಸ್ಯೆ ಕಂಡುಬಂದಿಲ್ಲ.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>ಕಂಡುಬಂದ ಸಮಸ್ಯೆಗಳು: {0}. ಅಲ್ಲಿಗೆ ಹೋಗಲು ಒಂದನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>ರಫ್ತಿನಲ್ಲಿ ಸರಿಯಾಗಿ ಬಾರದ ಸಮಸ್ಯೆಗಳು: {0}. ಅಲ್ಲಿಗೆ ಹೋಗಲು ಒಂದನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ, ಅಥವಾ ಹೇಗಿದ್ದರೂ ರಫ್ತು ಮಾಡಿ.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>ಹೇಗಿದ್ದರೂ ರಫ್ತು ಮಾಡಿ</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>ಸಾಲು {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>ಚಿತ್ರ ಸಿಗಲಿಲ್ಲ</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>ಲಿಂಕ್ ಮಾಡಿದ ಫೈಲ್ ಸಿಗಲಿಲ್ಲ</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>ಈ ಆಂಕರ್ ಇರುವ ಶೀರ್ಷಿಕೆ ಇಲ್ಲ</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>ಚಿತ್ರಿಸಲಾಗದ ಸೂತ್ರ ಅಥವಾ ರೇಖಾಚಿತ್ರ</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML ರೇಖಾಚಿತ್ರ ಚಿತ್ರಿಸಲಾಗಿಲ್ಲ (ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಆಫ್)</value>
+  </data>
 </root>

@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>নথিতে এম্বেড করুন (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>দ্রুত খুলুন</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>ফাইলের নামের অংশ লিখুন</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>কোনো ফাইল পাওয়া যায়নি</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>নথি পরীক্ষা করুন</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>কোনো সমস্যা পাওয়া যায়নি।</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>পাওয়া সমস্যা: {0}। সেখানে যেতে একটিতে ক্লিক করুন।</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>রপ্তানিতে ঠিকমতো আসবে না এমন সমস্যা: {0}। সেখানে যেতে একটিতে ক্লিক করুন, অথবা তবুও রপ্তানি করুন।</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>তবুও রপ্তানি করুন</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>লাইন {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>ছবি পাওয়া যায়নি</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>লিঙ্ক করা ফাইল পাওয়া যায়নি</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>এই অ্যাঙ্কর সহ কোনো শিরোনাম নেই</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>আঁকা যায় না এমন সূত্র বা চিত্র</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>PlantUML চিত্র আঁকা হয়নি (সেটিংসে বন্ধ)</value>
+  </data>
 </root>

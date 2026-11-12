@@ -1340,4 +1340,46 @@
   <data name="ImageMenu.EmbedAsBase64" xml:space="preserve">
     <value>Incrustar en el documento (base64)</value>
   </data>
+  <data name="QuickOpen" xml:space="preserve">
+    <value>Apertura rápida</value>
+  </data>
+  <data name="QuickOpenBox.Placeholder" xml:space="preserve">
+    <value>Escribe parte del nombre de un archivo</value>
+  </data>
+  <data name="QuickOpenBox.None" xml:space="preserve">
+    <value>No se encontró ningún archivo</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Revisar documento</value>
+  </data>
+  <data name="DocumentCheck.None" xml:space="preserve">
+    <value>No se encontraron problemas.</value>
+  </data>
+  <data name="DocumentCheck.Found" xml:space="preserve">
+    <value>Problemas encontrados: {0}. Haz clic en uno para ir a él.</value>
+  </data>
+  <data name="DocumentCheck.BeforeExport" xml:space="preserve">
+    <value>Problemas que no saldrán bien al exportar: {0}. Haz clic en uno para ir a él, o exporta de todos modos.</value>
+  </data>
+  <data name="DocumentCheck.ExportAnyway" xml:space="preserve">
+    <value>Exportar de todos modos</value>
+  </data>
+  <data name="DocumentCheck.Line" xml:space="preserve">
+    <value>Línea {0}</value>
+  </data>
+  <data name="DocumentCheck.MissingImage" xml:space="preserve">
+    <value>Imagen no encontrada</value>
+  </data>
+  <data name="DocumentCheck.MissingFile" xml:space="preserve">
+    <value>Archivo enlazado no encontrado</value>
+  </data>
+  <data name="DocumentCheck.MissingHeading" xml:space="preserve">
+    <value>Ningún título con este ancla</value>
+  </data>
+  <data name="DocumentCheck.NotDrawn" xml:space="preserve">
+    <value>Fórmula o diagrama que no se puede dibujar</value>
+  </data>
+  <data name="DocumentCheck.PlantUmlOff" xml:space="preserve">
+    <value>Diagrama PlantUML sin dibujar (desactivado en Configuración)</value>
+  </data>
 </root>
