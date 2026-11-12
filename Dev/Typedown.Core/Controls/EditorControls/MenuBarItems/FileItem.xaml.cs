@@ -94,14 +94,14 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             if (files)
             {
                 var list = FileHistory.FileRecentlyOpened.Take(RecentInMenu).ToList();
-                made.AddRange(Fill(OpenRecentSubMenu, list, "RecentFile-", File.OpenFileCommand, path => _ = FileHistory.RemoveFileHistory(path)));
+                made.AddRange(Fill(OpenRecentSubMenu, list, "RecentFile-", File.OpenFileCommand, path => _ = FileEntryActions.RemoveFromRecent(new FileEntry(path, false), FileHistory)));
                 NoRecentFilesItem.Visibility = list.Any() ? Visibility.Collapsed : Visibility.Visible;
                 ClearRecentFilesItem.IsEnabled = list.Any();
             }
             if (folders)
             {
                 var list = FileHistory.FolderRecentlyOpened.Take(RecentInMenu).ToList();
-                made.AddRange(Fill(OpenRecentFoldersSubMenu, list, "RecentFolder-", File.OpenFolderCommand, path => _ = FileHistory.RemoveFolderHistory(path)));
+                made.AddRange(Fill(OpenRecentFoldersSubMenu, list, "RecentFolder-", File.OpenFolderCommand, path => _ = FileEntryActions.RemoveFromRecent(new FileEntry(path, true), FileHistory)));
                 NoRecentFoldersItem.Visibility = list.Any() ? Visibility.Collapsed : Visibility.Visible;
                 ClearRecentFoldersItem.IsEnabled = list.Any();
             }
@@ -155,14 +155,14 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         {
             var openItem = new MenuFlyoutItem { Text = Locale.GetString("Open") };
             openItem.Click += (s, e) => open.Execute(path);
+            // What every file menu does with an entry (Services.FileEntryActions).
+            var entry = new FileEntry(path, menu == OpenRecentFoldersSubMenu);
             var location = new MenuFlyoutItem { Text = Locale.GetString("OpenFileLocation") };
-            location.Click += (s, e) => Common.OpenFileLocation(path);
+            AutomationProperties.SetAutomationId(location, "RecentLocationItem");
+            location.Click += (s, e) => FileEntryActions.Report(XamlRoot, FileEntryActions.ShowLocation(entry));
             var copy = new MenuFlyoutItem { Text = Locale.GetString("CopyAsPath") };
-            copy.Click += (s, e) =>
-            {
-                try { this.GetService<Interfaces.IClipboard>()?.SetText(path); }
-                catch (Exception ex) { Log.Debug($"recent: copy path: {ex.Message}"); }
-            };
+            AutomationProperties.SetAutomationId(copy, "RecentCopyPathItem");
+            copy.Click += (s, e) => FileEntryActions.Report(XamlRoot, FileEntryActions.CopyPath(entry, this.GetService<Interfaces.IClipboard>()));
             var removeItem = new MenuFlyoutItem { Text = Locale.GetString("HomePage.RemoveFromList") };
             AutomationProperties.SetAutomationId(removeItem, "RecentRemoveItem");
             removeItem.Click += (s, e) => RemoveEntry(menu, item, path, remove);

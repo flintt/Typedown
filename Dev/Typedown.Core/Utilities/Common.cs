@@ -42,8 +42,12 @@ namespace Typedown.Core.Utilities
         /// <summary>The test host's (Services/Automation/TestHostHooks): what would have opened is kept, and no browser comes up over the cases.</summary>
         public static Func<string, bool> OpenUrlOverride;
 
+        /// <summary>The test host's: the place that would have been shown in Explorer is kept, and no Explorer comes up.</summary>
+        public static Func<string, bool> OpenFileLocationOverride;
+
         public static void OpenFileLocation(string filePath)
         {
+            if (OpenFileLocationOverride?.Invoke(filePath) == true) return;
             Process.Start("explorer.exe", $"/select, \"{filePath}\"");
         }
 

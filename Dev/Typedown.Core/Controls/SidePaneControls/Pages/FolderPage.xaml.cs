@@ -335,7 +335,9 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnFavoriteLocationClick(object sender, RoutedEventArgs e)
         {
-            if ((sender as FrameworkElement)?.DataContext is PathItem item) Common.OpenFileLocation(item.Path);
+            // What every file menu does with an entry (Services.FileEntryActions).
+            if ((sender as FrameworkElement)?.DataContext is PathItem item)
+                Services.FileEntryActions.Report(XamlRoot, Services.FileEntryActions.ShowLocation(new Services.FileEntry(item.Path, item.Folder)));
         }
 
         // The tree's "Add to favourites" / "Remove from favourites", worded for the item the menu is open on.
@@ -345,19 +347,21 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var item = GetExplorerItemFromMenuFlyout(flyout);
             var entry = flyout.Items.OfType<MenuFlyoutItem>().FirstOrDefault(x => "Favorite".Equals(x.Tag));
             if (entry == null || item == null) return;
-            var store = Typedown.Core.Services.Favorites.Shared;
-            var isFavorite = store.Contains(item.FullPath);
+            var (isFavorite, canToggle) = Services.FileEntryActions.FavoriteState(EntryOf(item));
             entry.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
-            entry.IsEnabled = isFavorite || store.Items.Count < Typedown.Core.Services.FavoritesStore.MaxCount;
+            entry.IsEnabled = canToggle;
         }
 
         private void OnToggleFavoriteClick(object sender, RoutedEventArgs e)
         {
             var item = GetExplorerItemFromMenuFlyoutItem(sender);
             if (item == null || item.IsNotice) return;
-            var store = Typedown.Core.Services.Favorites.Shared;
-            if (!store.Remove(item.FullPath)) store.Add(item.FullPath, item.Type == ExplorerItem.ExplorerItemType.Folder);
+            Services.FileEntryActions.ToggleFavorite(EntryOf(item));
         }
+
+        // A row of the tree as every file menu acts on it (Services.FileEntryActions).
+        private static Services.FileEntry EntryOf(ExplorerItem item) =>
+            item == null ? null : new Services.FileEntry(item.FullPath, item.Type == ExplorerItem.ExplorerItemType.Folder);
 
         /// <summary>The root's menu as it would open now (the automation test host): each entry's id, text and path.</summary>
         public IReadOnlyList<(string Id, string Text, string Path)> RootMenu() =>
@@ -649,7 +653,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnOpenFileLocationClick(object sender, RoutedEventArgs e)
         {
             var item = GetExplorerItemFromMenuFlyoutItem(sender);
-            Common.OpenFileLocation(item?.FullPath);
+            Services.FileEntryActions.Report(XamlRoot, Services.FileEntryActions.ShowLocation(EntryOf(item)));
         }
 
         // A file operation that fails (a file gone, the clipboard held by another program) says why, rather than ending
@@ -688,7 +692,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnCopyAsPathClick(object sender, RoutedEventArgs e)
         {
             var item = GetExplorerItemFromMenuFlyoutItem(sender);
-            Try("copy as path", () => { Clipboard.SetText(item?.FullPath); return System.Threading.Tasks.Task.CompletedTask; });
+            Services.FileEntryActions.Report(XamlRoot, Services.FileEntryActions.CopyPath(EntryOf(item), this.GetService<Interfaces.IClipboard>()));
         }
 
         private void OnRenameClick(object sender, RoutedEventArgs e)

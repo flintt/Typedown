@@ -32,7 +32,7 @@
             <MenuFlyoutItem Tag="File" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
             <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFile}" Click="OnNewFileClick"/>
             <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFolder}" Click="OnNewFolderClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnOpenFileLocationClick"/>
+            <MenuFlyoutItem AutomationProperties.AutomationId="TreeLocationItem" Text="{u:LocaleString Key=OpenFileLocation}" Click="OnOpenFileLocationClick"/>
             <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=FolderPane.SetAsRoot}" AutomationProperties.AutomationId="FolderSetAsRoot" Click="OnSetAsRootClick"/>
             <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TreeFavoriteItem" Text="{u:LocaleString Key=Favorites.Add}" Click="OnToggleFavoriteClick"/>
             <MenuFlyoutSeparator/>
@@ -40,7 +40,7 @@
             <MenuFlyoutItem Text="{u:LocaleString Key=Copy}" Click="OnCopyClick"/>
             <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=Paste}" Click="OnPasteClick"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyAsPathClick"/>
+            <MenuFlyoutItem AutomationProperties.AutomationId="TreeCopyPathItem" Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyAsPathClick"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Rename}" AutomationProperties.AutomationId="TreeRenameItem" Click="OnRenameClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Delete}" Click="OnDeleteClick"/>

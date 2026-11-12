@@ -38,6 +38,13 @@ namespace Typedown.Services.Automation
                 Core.Utilities.Log.Debug($"test host: not opened (a test host opens no links): {Core.Utilities.LogText.Address(url)}");
                 return true;
             };
+            // Nor Explorer for a file's place: kept as "location:<path>" with the links (test.links.opened).
+            Core.Utilities.Common.OpenFileLocationOverride = path =>
+            {
+                lock (openedLinks) openedLinks.Add("location:" + path);
+                Core.Utilities.Log.Debug("test host: Explorer not opened for a file's place");
+                return true;
+            };
             // What the app would have opened as links since the test host started (a browser, a file's own program).
             methods.Add(new MethodDescriptor("test.links.opened", null, "test.links.opened/1", (c, ct) =>
             {
