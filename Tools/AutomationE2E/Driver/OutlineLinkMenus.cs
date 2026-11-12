@@ -16,7 +16,7 @@ internal static partial class Program
     private static async Task XM04(List<string> notes)
     {
         using var c = await Session("e2e XM04");
-        var id = await Open(c, Fixture("xm02.md", "# Alpha\n\nText.\n\n## Beta\n\nSee [the site](https://example.com/old) here.\n\n### Gamma\n\nEnd.\n"));
+        var id = await Open(c, Fixture("xm04.md", "# Alpha\n\nText.\n\n## Beta\n\nSee [the site](https://example.com/old) here.\n\n### Gamma\n\nEnd.\n"));
         var windowId = await WindowIdOf(c, id);
         var window = await WindowOf(windowId, c);
         AutomationElement? Row(string name) => Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.NameProperty, name))
@@ -54,7 +54,9 @@ internal static partial class Program
             Check(await Eventually(() => Task.FromResult(Row("Gamma") != null), 3000, 150), "Expand all opens it again");
 
             // Edit link: the address chosen, typed over.
-            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const a = [...document.querySelectorAll('#ag-editor-id a, #ag-editor-id span')].find(e => e.textContent === 'the site'); const r = a.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const a = [...document.querySelectorAll('#ag-editor-id a, #ag-editor-id span')].find(e => e.textContent === 'the site'); if (!a) return null; a.scrollIntoView({ block: 'center' }); const r = a.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+            Check(at.Type == JTokenType.Object, "the link is drawn in the editor");
+            await Task.Delay(300);
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
             GetWindowRect(window, out var rc);
             await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top, Mouse.Right);
