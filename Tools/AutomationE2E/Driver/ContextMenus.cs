@@ -85,6 +85,61 @@ internal static partial class Program
                 notes.Add($"Delete: right-clicked {Path.GetFileName(target)}, mouse over {other?.Current.Name}; recent now {string.Join(", ", after.Select(Path.GetFileName))}");
                 Check(!after.Any(p => SamePath(p, target)) && before.Where(p => !SamePath(p, target)).All(p => after.Any(a => SamePath(a, p))),
                     $"Delete with the entry's menu open takes out the entry right-clicked ({Path.GetFileName(target)}), not the one the mouse went over");
+                before = after;
+                await CloseMenus();
+            }
+
+            // No right-click: File clicked, Open Recent and then an entry below the first gone over with the mouse (it is
+            // drawn highlighted), Delete - that entry goes, not the first (the user, 2026-11-12: Delete took out the top
+            // one whatever was highlighted). And with the keys: Down to the second entry, Delete.
+            foreach (var how in new[] { "mouse", "keys" })
+            {
+                // Two more opened and closed, for entries to choose among.
+                foreach (var p in paths.Skip(1).Take(2))
+                {
+                    var id = await Open(c, p);
+                    await Task.Delay(300);
+                    await c.Call("document.close", new { documentId = id });
+                    await Task.Delay(300);
+                }
+                var list = Files(await RecentMenu(c, windowId));
+                notes.Add($"{how}: recent {string.Join(", ", list.Select(Path.GetFileName))}");
+                var file = FindIn(window, "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
+                await Click(window, file);
+                await Task.Delay(500);
+                var recent = FindAnywhereInHost(window, "OpenRecentSubMenu") ?? throw new CaseFailed("no Open Recent");
+                var r = CenterOf(recent);
+                SetCursorPos(r.Item1, r.Item2);
+                await Task.Delay(900);
+                string target;
+                if (how == "mouse")
+                {
+                    var entry = FindAnywhereInHost(window, "RecentFile-1") ?? throw new CaseFailed("no second entry");
+                    target = entry.Current.HelpText;
+                    // Across, then down onto it, as a hand goes.
+                    var e = CenterOf(entry);
+                    SetCursorPos(e.Item1, r.Item2);
+                    await Task.Delay(200);
+                    SetCursorPos(e.Item1, e.Item2);
+                    await Task.Delay(600);
+                }
+                else
+                {
+                    // Into the submenu with Right, then Down once: the second entry.
+                    Send(Key(0x27, false), Key(0x27, true));
+                    await Task.Delay(400);
+                    Send(Key(0x28, false), Key(0x28, true));
+                    await Task.Delay(400);
+                    target = (FindAnywhereInHost(window, "RecentFile-1") ?? throw new CaseFailed("no second entry")).Current.HelpText;
+                }
+                notes.Add($"{how}: Delete on {Path.GetFileName(target)} " + Screenshot($"xm02-{how}-before-delete"));
+                Send(Key(0x2E, false), Key(0x2E, true));
+                await Task.Delay(1000);
+                var after = Files(await RecentMenu(c, windowId));
+                notes.Add($"{how}: recent now {string.Join(", ", after.Select(Path.GetFileName))}");
+                Check(!after.Any(p => SamePath(p, target)) && list.Where(p => !SamePath(p, target)).All(p => after.Any(a => SamePath(a, p))),
+                    $"{how}: Delete takes out the entry highlighted ({Path.GetFileName(target)}), and no other ({string.Join(", ", list.Select(Path.GetFileName))} -> {string.Join(", ", after.Select(Path.GetFileName))})");
+                await CloseMenus();
             }
         }
         finally
