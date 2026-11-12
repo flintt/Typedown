@@ -28,6 +28,34 @@ export function kindLabel(subtype: string): string {
     return (kind === 'jpg' ? 'jpeg' : kind).toUpperCase()
 }
 
+/**
+ * Where the encoded parts of data: picture addresses are in a text, any length: [start, end) each. A search does not
+ * look in them (a word found in base64 is noise, and replacing it breaks the picture), and a count does not count them.
+ */
+export function dataUriPayloads(text: string): Array<[number, number]> {
+    if (!text.includes('data:image/')) return []
+    const ranges: Array<[number, number]> = []
+    DATA_URI.lastIndex = 0
+    let m: RegExpExecArray | null
+    while ((m = DATA_URI.exec(text))) {
+        const end = m.index + m[0].length
+        ranges.push([end - m[3].length, end])
+    }
+    return ranges
+}
+
+/** The text with each picture's encoded part left out (a count's text). */
+export function withoutDataUriPayloads(text: string): string {
+    const ranges = dataUriPayloads(text)
+    if (ranges.length === 0) return text
+    let out = '', at = 0
+    for (const [start, end] of ranges) {
+        out += text.slice(at, start)
+        at = end
+    }
+    return out + text.slice(at)
+}
+
 /** The base64 runs of data: picture addresses in a line long enough to fold. */
 export function findDataUris(line: string): DataUriRun[] {
     if (!line.includes('data:image/')) return []

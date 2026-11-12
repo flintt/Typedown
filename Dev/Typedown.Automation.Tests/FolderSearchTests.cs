@@ -236,5 +236,20 @@ namespace Typedown.Automation.Tests
             Assert.Empty(results.Contents);
             Assert.Equal(1, results.NameCount);
         }
+
+        [Fact]
+        public void A_word_inside_a_pictures_base64_is_not_a_match()
+        {
+            // #52: a file with a picture embedded matched nearly any short query, inside its encoding.
+            Write("shot.md", "# Shot\n\n![s](data:image/png;base64,iVBORw0KGgoQUERYabc+/=)\n");
+            Write("words.md", "the QUERY is here\n");
+            Write("both.md", "![s](data:image/png;base64,QUERYQUERY==) and query after\n");
+
+            var (hits, _) = Run("query");
+
+            Assert.Equal(new[] { "both.md", "words.md" }, hits.Where(h => h.Kind == FolderSearchHitKind.Content).Select(Slashed).OrderBy(x => x));
+            Assert.Empty(hits.Where(h => Slashed(h) == "shot.md"));
+            Assert.Equal(-1, FolderSearch.IndexOutsidePictures("![s](data:image/png;base64,ABCquery==)", "query"));
+        }
     }
 }

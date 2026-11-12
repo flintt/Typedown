@@ -4,6 +4,7 @@ import { sanitize, getHeadingPlainText } from 'components/Muya/lib/utils';
 import execAll from 'execall'
 import { setSearchGivenUp } from './searchGivenUp'
 import { Lexer } from 'components/Muya/lib/parser/marked'
+import { dataUriPayloads } from './dataUriFold'
 
 /** The slug of the heading on a line in source mode's outline: the line it is on (sourceHeadingLine reads it back). */
 export const sourceHeadingSlug = (line: number) => `src:${line}`
@@ -182,7 +183,12 @@ export const matchString = (text: string, value: string, options: any) => {
     if (!searchMayRun(value, options)) return []
     const SEARCH_REG = searchRegExp(value, options)
     // Not all strings make a valid RegExp, for example `\`.
-    return SEARCH_REG ? execAll(SEARCH_REG, text) : []
+    if (!SEARCH_REG) return []
+    const found = execAll(SEARCH_REG, text)
+    // Not in a picture's base64 (#52): noise to find, and a replace there broke the picture.
+    const payloads = dataUriPayloads(text)
+    if (payloads.length === 0) return found
+    return found.filter(({ index, match }) => !payloads.some(([start, end]) => index < end && index + match.length > start))
 }
 
 // The search as a regular expression: the bar's text as written for a regular expression search, escaped otherwise.

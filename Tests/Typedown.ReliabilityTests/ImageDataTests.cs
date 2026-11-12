@@ -58,6 +58,19 @@ namespace Typedown.ReliabilityTests
         }
 
         [TestMethod]
+        public void AnEmbeddedPictureIsShownAsItsStartKindAndSize()
+        {
+            // As source mode folds it (services/dataUriFold.ts): the first 8 characters of the encoding, then [KIND · size].
+            var bytes = new byte[3000];
+            Array.Copy(Png, bytes, Png.Length);
+            var uri = ImageData.ToDataUri(bytes);
+            Assert.AreEqual("data:image/png;base64," + uri.Substring(22, 8) + "…[PNG · 3 KB]", ImageData.ShortLabel(uri));
+            Assert.AreEqual("…[JPEG · 10 B]", ImageData.ShortLabel(ImageData.ToDataUri(Jpeg))![^14..]);
+            Assert.IsNull(ImageData.ShortLabel("images/a.png"));
+            Assert.AreEqual("1.5 MB", ImageData.SizeLabel(1536 * 1024));
+        }
+
+        [TestMethod]
         public void TheKindComesFromTheBytes()
         {
             Assert.AreEqual("png", ImageData.Sniff(Png, null));

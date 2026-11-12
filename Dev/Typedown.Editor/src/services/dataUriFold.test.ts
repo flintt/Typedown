@@ -1,3 +1,4 @@
+jest.mock('execall', () => (re: RegExp, s: string) => [...s.matchAll(re)].map(m => ({ match: m[0], index: m.index, subMatches: m.slice(1) })))
 const CodeMirror = require('codemirror')
 import { findDataUris, foldDataUris, kindLabel, MIN_FOLDED, sizeLabel } from './dataUriFold'
 
@@ -57,4 +58,19 @@ test('in the editor: folded, kept whole in the text, and folded again after an e
     expect(folds()).toHaveLength(1)
     stop()
     expect(folds()).toHaveLength(0)
+})
+
+test('a search does not find what is inside a picture\'s base64, and a count does not count it', () => {
+    const { matchString } = require('./common')
+    const { wordCount } = require('components/Muya/lib/utils/wordCount')
+    // "AAAA" and "iVBO" are in the encoding; "AAAA" is also in the text after it.
+    const text = `Before ![shot](data:image/png;base64,${encoded(400)}) AAAA after`
+    const found = matchString(text, 'AAAA', { searchIsCaseSensitive: true })
+    expect(found.map((m: any) => m.index)).toEqual([text.lastIndexOf('AAAA')])
+    expect(matchString(text, 'iVBO', {})).toEqual([])
+    expect(matchString(text, 'shot', {}).length).toBe(1)
+    const counted = wordCount(text)
+    const plain = wordCount('Before shot AAAA after')
+    expect(counted.word).toBe(plain.word)
+    expect(counted.character).toBe(plain.character)
 })

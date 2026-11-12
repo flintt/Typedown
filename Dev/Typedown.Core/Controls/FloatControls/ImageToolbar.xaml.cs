@@ -36,6 +36,9 @@ namespace Typedown.Core.Controls.FloatControls
         public void Open(Rect rect, JToken attrs)
         {
             this.attrs = attrs;
+            // A picture kept in the document (base64, #52): its address is the picture itself, nothing to edit in a box -
+            // the box came up as large as the encoding. Saved as a file or replaced from the editor menu's Image.
+            EditButton.IsEnabled = !ImageData.IsDataUri(attrs?["src"]?.ToString());
             AreOpenCloseAnimationsEnabled = ViewModel.SettingsViewModel.AnimationEnable;
             OverlayInputPassThroughElement = ViewModel.XamlRoot.Content;
             ShowAt(MarkdownEditor.GetDummyRectangle(rect));

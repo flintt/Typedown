@@ -2,13 +2,117 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Typedown.Core.Models
 {
     public class HistoryModel
     {
-        public string Text { get; set; } = null;
+        private string text;
+
+        // The text in pieces once kept in the history, a picture's base64 among them shared with every other step that
+        // has it (EmbeddedPictures): put together when it is read (an undo, a redo).
+        private string[] parts;
+
+        public string Text
+        {
+            get => text ?? (parts == null ? null : string.Concat(parts));
+            set { text = value; parts = null; }
+        }
+
         public CursorState Cursor { get; set; } = null;
+
+        /// <summary>The characters this step holds of its own (a shared picture's are counted once, by the pool).</summary>
+        internal long OwnChars { get; private set; }
+
+        internal IReadOnlyList<string> Shared { get; private set; } = Array.Empty<string>();
+
+        internal void Keep(EmbeddedPictures pool)
+        {
+            var (pieces, shared) = pool.Split(text);
+            if (shared.Count == 0)
+            {
+                OwnChars = text?.Length ?? 0;
+                return;
+            }
+            parts = pieces;
+            text = null;
+            Shared = shared;
+            OwnChars = 0;
+            foreach (var piece in pieces) OwnChars += piece.Length;
+            foreach (var payload in shared) OwnChars -= payload.Length;
+        }
+    }
+
+    /// <summary>
+    /// The base64 of the pictures kept in a document (#52), held once for all the undo history: every step was a copy of
+    /// the whole text, and a document with a screenshot of 300 KB in it held a hundred copies of it.
+    /// </summary>
+    internal sealed class EmbeddedPictures
+    {
+        // Shorter is left in the text: not worth the pieces.
+        internal const int MinShared = 1024;
+
+        private static readonly Regex payload = new(@"data:image/[\w.+-]+(?:;[\w.+-]+=[^;,)\s]*)*;base64,(?<data>[A-Za-z0-9+/=]{" + MinShared + ",})", RegexOptions.Compiled);
+
+        private readonly Dictionary<string, (string Value, int Uses)> pool = new(StringComparer.Ordinal);
+
+        /// <summary>The characters held, each picture once.</summary>
+        internal long Chars { get; private set; }
+
+        internal int Count => pool.Count;
+
+        /// <summary>The text in pieces, each picture's base64 the pool's one copy; and the pictures it used (taken once each).</summary>
+        internal (string[] Pieces, List<string> Shared) Split(string text)
+        {
+            var shared = new List<string>();
+            if (text == null || !text.Contains("data:image/", StringComparison.Ordinal)) return (null, shared);
+            var pieces = new List<string>();
+            var at = 0;
+            foreach (Match m in payload.Matches(text))
+            {
+                var data = m.Groups["data"];
+                pieces.Add(text.Substring(at, data.Index - at));
+                pieces.Add(Take(data.Value));
+                shared.Add(pieces[^1]);
+                at = data.Index + data.Length;
+            }
+            if (shared.Count == 0) return (null, shared);
+            pieces.Add(text.Substring(at));
+            return (pieces.ToArray(), shared);
+        }
+
+        private string Take(string data)
+        {
+            if (pool.TryGetValue(data, out var held))
+            {
+                pool[data] = (held.Value, held.Uses + 1);
+                return held.Value;
+            }
+            pool[data] = (data, 1);
+            Chars += data.Length;
+            return data;
+        }
+
+        internal void Release(IEnumerable<string> shared)
+        {
+            foreach (var data in shared)
+            {
+                if (!pool.TryGetValue(data, out var held)) continue;
+                if (held.Uses > 1) pool[data] = (held.Value, held.Uses - 1);
+                else
+                {
+                    pool.Remove(data);
+                    Chars -= data.Length;
+                }
+            }
+        }
+
+        internal void Clear()
+        {
+            pool.Clear();
+            Chars = 0;
+        }
     }
 
     // The commit timer is the other part (ContentHistory.Timer.cs, the window's DispatcherTimer); the tests give their own.
@@ -20,6 +124,10 @@ namespace Typedown.Core.Models
         const long maxTotalChars = 32L * 1024 * 1024;
         long totalChars = 0;
         readonly List<HistoryModel> histories = new();
+        readonly EmbeddedPictures pictures = new();
+
+        /// <summary>The characters the history holds, each embedded picture once (the tests read it).</summary>
+        internal long HeldChars => totalChars + pictures.Chars;
         HistoryModel pending = new();
         int index = -1;
         // The caret last reported. Source mode reports it before the change it goes with: a change then had no caret, was
@@ -100,6 +208,7 @@ namespace Typedown.Core.Models
                 selectionSinceChange = null;
                 selectedSinceChange = false;
                 histories.Clear();
+                pictures.Clear();
                 totalChars = 0;
                 StopTimer();
                 pending = new();
@@ -121,14 +230,15 @@ namespace Typedown.Core.Models
                 if (!IsPending) return;
                 StopTimer();
                 for (var i = index + 1; i < histories.Count; i++)
-                    totalChars -= histories[i].Text?.Length ?? 0;
+                    Forget(histories[i]);
                 histories.RemoveRange(index + 1, histories.Count - (index + 1));
+                pending.Keep(pictures);
                 histories.Add(pending);
-                totalChars += pending.Text?.Length ?? 0;
+                totalChars += pending.OwnChars;
                 index++;
-                while (histories.Count > deep || (histories.Count > 1 && totalChars > maxTotalChars))
+                while (histories.Count > deep || (histories.Count > 1 && HeldChars > maxTotalChars))
                 {
-                    totalChars -= histories[0].Text?.Length ?? 0;
+                    Forget(histories[0]);
                     histories.RemoveAt(0);
                     index--;
                 }
@@ -141,6 +251,12 @@ namespace Typedown.Core.Models
             {
                 Trace.WriteLine(ex.Message);
             }
+        }
+
+        private void Forget(HistoryModel step)
+        {
+            totalChars -= step.OwnChars;
+            pictures.Release(step.Shared);
         }
 
         private void ResetPendingKind()

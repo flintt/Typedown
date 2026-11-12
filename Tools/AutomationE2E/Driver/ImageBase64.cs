@@ -80,6 +80,13 @@ internal static partial class Program
                 // Chosen first (a click on it), as a person does: the menu has the picture's entries for the picture chosen.
                 await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
                 await Task.Delay(400);
+                // The picture's toolbar, up with the click: its Edit (the address box) off for a picture kept in the
+                // document - the box came up as large as the encoding (the user, 2026-11-12) - on for a file.
+                System.Windows.Automation.AutomationElement? edit = null;
+                await Eventually(() => Task.FromResult((edit = FindAnywhereInHost(window, "ImageEditButton")) != null), 3000, 150);
+                var embeddedNow = (await Text()).Contains("data:image/");
+                notes.Add($"toolbar Edit: {(edit == null ? "not found" : edit.Current.IsEnabled ? "enabled" : "disabled")}, embedded {embeddedNow}");
+                Check(edit != null && edit.Current.IsEnabled != embeddedNow, embeddedNow ? "an embedded picture's toolbar has Edit off" : "a file picture's toolbar has Edit on");
                 await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top, Mouse.Right);
                 // The picture's entries are in the editor menu's Image submenu (EditorContainer's MenuImageItem).
                 System.Windows.Automation.AutomationElement? sub = null;
