@@ -1,4 +1,5 @@
-﻿import { toStandard, toStandardIfOut } from 'services/reveal'
+﻿import { SearchSession } from 'services/searchSession'
+import { toStandard, toStandardIfOut } from 'services/reveal'
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import transport from "services/transport";
 import { setScroller } from "services/scrollbar";
@@ -163,6 +164,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
 
     // The last search: its matches are found again with it after an edit while the results list is open.
     const lastSearchRef = useRef<{ value: string, opt: any } | null>(null)
+    // Which query is the one asked for now (services/searchSession: the same rule as the visual editor's).
+    const sessionRef = useRef(new SearchSession())
     const searchAgainRef = useRef<(arg: { value: string, opt: any }) => void>(() => { })
 
     const search = useCallback(({ value, opt }) => {
@@ -176,15 +179,17 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             // No matches left (their marks are gone): the bar counts none, the results list is empty.
             matchsRef.current = []
             lastSearchRef.current = null
+            sessionRef.current.clear()
             noteFindChange()
             return;
         }
         const asked = lastSearchRef.current = { value, opt }
+        sessionRef.current.ask(value, opt)
         // A regular expression is tried in a worker first (services/common trySearch): this search finds nothing, and is
-        // done again once it came through, if it is still the last one.
+        // done again once it came through, if its query is still the one asked for (services/searchSession).
         trySearch(value, opt, () => [editor.getValue()], () => {
-            if (lastSearchRef.current !== asked) return
-            searchAgainRef.current(asked)
+            if (!sessionRef.current.isLatest(value, opt)) return
+            searchAgainRef.current(lastSearchRef.current ?? asked)
             setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
         })
         let startIndex = 0
@@ -573,6 +578,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             matchsRef.current.forEach(({ marker }) => marker.clear())
             matchsRef.current = []
             lastSearchRef.current = null
+            sessionRef.current.clear()
             props.onSearchArgChange(undefined)
             noteFindChange()
         }

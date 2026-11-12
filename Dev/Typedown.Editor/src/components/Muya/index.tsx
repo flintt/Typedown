@@ -51,6 +51,7 @@ function findAnchorBlock(blocks: any[], anchor: ScrollAnchor): { index: number, 
 import transport, { beforeHostMessage } from "services/transport";
 import { followLink, removeLink } from "services/linkActions";
 import { STANDARD_Y, leastToShow, toStandard, toStandardIfOut } from "services/reveal";
+import { SearchSession } from "services/searchSession";
 import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
@@ -443,19 +444,23 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const fromMessageRef = useRef(new WeakSet<object>())
     // The last search a Search message asked for: a Find steps through its matches, whatever else was searched since.
     const lastSearchRef = useRef<any>()
+    // Which query is the one asked for now (services/searchSession: the same rule as the source editor's).
+    const sessionRef = useRef(new SearchSession())
     const searchAgainRef = useRef<(arg: any) => void>(() => { })
     const search = useCallback(arg => {
         if (arg?.value != "" && arg?.opt?.selection && editor) {
             const { value, opt } = arg
             // A regular expression is tried in a worker first (services/common trySearch): this search finds nothing, and
-            // is done again once it came through, if it is still the one asked for.
+            // is done again once it came through, if its query - the text and its options - is still the one asked for
+            // (services/searchSession; the text alone was compared).
+            sessionRef.current.ask(value, opt)
             trySearch(value, opt, () => {
                 const texts: string[] = []
                 const travel = (blocks: any[]) => blocks.forEach(b => { if (typeof b.text === 'string' && b.text) texts.push(b.text); if (b.children?.length) travel(b.children) })
                 travel((editor as any).contentState.blocks)
                 return texts
             }, () => {
-                if (lastSearchRef.current?.value !== value && searchArgRef.current?.value !== value) return
+                if (!sessionRef.current.isLatest(value, opt)) return
                 searchAgainRef.current(arg)
                 setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
             })
@@ -1105,6 +1110,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             contentState.renderSearch(before, true);
             props.onSearchArgChange(undefined)
             lastSearchRef.current = undefined
+            sessionRef.current.clear()
             noteFindChange()
             // Back from the search with the keyboard in the page: the editor has it, not the body.
             if (document.hasFocus()) restoreEditorFocus(editor, loadHoldingRef.current)
