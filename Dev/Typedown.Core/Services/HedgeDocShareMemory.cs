@@ -67,7 +67,7 @@ namespace Typedown.Core.Services
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(StorePath));
-                File.WriteAllText(StorePath, JsonConvert.SerializeObject(snapshot));
+                Typedown.Core.Utilities.SafeFile.WriteAllTextAtomic(StorePath, JsonConvert.SerializeObject(snapshot));
             }
             catch
             {

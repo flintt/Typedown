@@ -4074,7 +4074,7 @@ internal static partial class Program
         var init = await mcp.Send("initialize", new { protocolVersion = "2025-06-18", capabilities = new { }, clientInfo = new { name = "E2E agent", version = "1" } });
         Check((string?)init["result"]?["protocolVersion"] == "2025-06-18", "initialize answers with the protocol version");
         var tools = ((JArray)(await mcp.Send("tools/list", new { }))["result"]!["tools"]!).Select(t => (string)t["name"]!).ToList();
-        Check(tools.Count == 8 && tools.Contains("typedown_replace_text") && tools.Contains("typedown_close_document"), $"eight tools ({string.Join(", ", tools)})");
+        Check(tools.Count == 9 && tools.Contains("typedown_replace_text") && tools.Contains("typedown_edit_text") && tools.Contains("typedown_close_document"), $"nine tools, typedown_edit_text among them ({string.Join(", ", tools)})");
 
         var list = await mcp.Tool("typedown_list_documents", new { });
         Check(!(bool)list["isError"]! && list["structuredContent"]!["documents"]!.Any(d => (string)d["documentId"]! == a), "the document is listed");

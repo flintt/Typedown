@@ -20,6 +20,7 @@
     <Compile Include="../../Dev/Typedown.Core/Services/AutoBackup.cs" Link="Production/AutoBackup.cs" />
     <Compile Include="../../Dev/Typedown.Core/Services/JsonSettingsStore.cs" Link="Production/JsonSettingsStore.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/SafeFile.cs" Link="Production/SafeFile.cs" />
+    <Compile Include="../../Dev/Typedown.Core/Utilities/SnapshotWriter.cs" Link="Production/SnapshotWriter.cs" />
     <Compile Include="../../Dev/Typedown.Core/Models/RuntimeModels/ContentHistory.cs" Link="Production/ContentHistory.cs" />
     <Compile Include="../../Dev/Typedown.Core/Models/RuntimeModels/CursorState.cs" Link="Production/CursorState.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/ThemeDesignerPage.cs" Link="Production/ThemeDesignerPage.cs" />

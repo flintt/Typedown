@@ -17,6 +17,14 @@ namespace Typedown.Core.Utilities
             WriteAllBytesAtomicAsync(path, (encoding ?? new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)).GetBytes(text));
 
         /// <summary>
+        /// The same, waited for: for a store that saves as the window closes (cursor places, the session, shared notes),
+        /// which wrote over its file directly and could leave half of it after a crash (the modularity audit's M09). Safe
+        /// on the window's thread: the write never comes back to the caller's thread (ConfigureAwait(false) throughout).
+        /// </summary>
+        public static void WriteAllTextAtomic(string path, string text) =>
+            WriteAllTextAtomicAsync(path, text).GetAwaiter().GetResult();
+
+        /// <summary>
         /// The same atomic write for content whose bytes the caller has already produced — a document keeps the
         /// encoding, byte order mark and line ending it was opened with (see <see cref="TextFileFormat"/>).
         /// </summary>

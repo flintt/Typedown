@@ -70,7 +70,7 @@ namespace Typedown.Core.Services
             {
                 var list = files.Where(f => !string.IsNullOrEmpty(f)).ToList();
                 Directory.CreateDirectory(Path.GetDirectoryName(StorePath));
-                File.WriteAllText(StorePath, JsonConvert.SerializeObject(new Session { Files = list, ActiveIndex = Math.Max(0, activeIndex), ActiveDocumentId = activeDocumentId, Order = order, Time = DateTime.UtcNow }));
+                Typedown.Core.Utilities.SafeFile.WriteAllTextAtomic(StorePath, JsonConvert.SerializeObject(new Session { Files = list, ActiveIndex = Math.Max(0, activeIndex), ActiveDocumentId = activeDocumentId, Order = order, Time = DateTime.UtcNow }));
             }
             catch
             {
