@@ -1355,22 +1355,23 @@ namespace Typedown.Core.ViewModels
 
         /// <summary>
         /// The formulas and diagrams the page could not draw (or PlantUML switched off): each one's kind and the first line
-        /// of its source. Empty when the page does not answer in time.
+        /// of its source; and the headings' anchors and texts, null when the page does not answer in time.
         /// </summary>
-        public async Task<List<(string Kind, string Source)>> QueryNotDrawnAsync(int timeoutMs = 2000)
+        public async Task<(List<(string Kind, string Source)> NotDrawn, List<(string Slug, string Text)> Headings)> QueryNotDrawnAsync(int timeoutMs = 2000)
         {
             var found = new List<(string, string)>();
-            if (MarkdownEditor == null) return found;
+            if (MarkdownEditor == null) return (found, null);
             var token = ++normalizationToken;
             var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
             styleWaiters[token] = waiter;
             try
             {
                 MarkdownEditor.PostMessage("QueryNotDrawn", new { token });
-                if (await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) != waiter.Task) return found;
+                if (await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) != waiter.Task) return (found, null);
                 foreach (var item in waiter.Task.Result?["found"] as JArray ?? new JArray())
                     found.Add(((string)item["kind"] ?? "", (string)item["source"] ?? ""));
-                return found;
+                var headings = (waiter.Task.Result?["headings"] as JArray)?.Select(h => ((string)h["slug"] ?? "", (string)h["text"] ?? "")).ToList();
+                return (found, headings);
             }
             finally
             {

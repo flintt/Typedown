@@ -38,12 +38,12 @@ namespace Typedown.Core.Utilities
 
         /// <param name="documentFolder">The document's folder, for links; null for a document not yet saved (its links are not looked at).</param>
         /// <param name="imageFolder">The folder pictures are relative to (the document's, or its image root); null as above.</param>
-        /// <param name="headingSlugs">The anchors of the document's headings, as the editor makes them.</param>
+        /// <param name="hasHeading">Whether a #fragment names a heading of the document (<see cref="HeadingMatcher"/>); null
+        /// when the headings are not known (source mode, the page not answering): links to headings are then not looked at.</param>
         /// <param name="exists">Whether a path is there (a file or folder); the disk by default.</param>
-        public static List<DocumentProblem> Run(string markdown, string documentFolder, string imageFolder, IEnumerable<string> headingSlugs, Func<string, bool> exists = null)
+        public static List<DocumentProblem> Run(string markdown, string documentFolder, string imageFolder, Func<string, bool> hasHeading, Func<string, bool> exists = null)
         {
             exists ??= path => File.Exists(path) || Directory.Exists(path);
-            var slugs = new HashSet<string>(headingSlugs ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
             var problems = new List<DocumentProblem>();
             var lines = (markdown ?? "").Replace("\r\n", "\n").Split('\n');
             string open = null;
@@ -89,13 +89,33 @@ namespace Typedown.Core.Utilities
                 if (path.StartsWith("#"))
                 {
                     var anchor = Decode(path.Substring(1));
-                    if (anchor.Length > 0 && !slugs.Contains(anchor) && !slugs.Contains(anchor.ToLowerInvariant()))
+                    if (hasHeading != null && anchor.Length > 0 && !hasHeading(anchor))
                         problems.Add(new(DocumentProblemKind.MissingHeading, line, target, found));
                     return;
                 }
                 var full = Resolve(documentFolder, path);
                 if (full != null && !exists(full)) problems.Add(new(DocumentProblemKind.MissingFile, line, target, found));
             }
+        }
+
+        /// <summary>
+        /// A #fragment matched against the headings as a click on the link matches it (the page's scrollToAnchor): the
+        /// heading's anchor, its text, or either with everything but letters and digits left out ("1.1-研究" is "11 研究").
+        /// </summary>
+        public static Func<string, bool> HeadingMatcher(IEnumerable<(string Slug, string Text)> headings)
+        {
+            static string Loose(string text) => Regex.Replace((text ?? "").ToLowerInvariant(), @"[^\p{L}\p{N}]+", "");
+            var exact = new HashSet<string>(StringComparer.Ordinal);
+            var loose = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var (slug, text) in headings)
+            {
+                exact.Add(slug ?? "");
+                exact.Add((text ?? "").ToLowerInvariant());
+                loose.Add(Loose(slug));
+                loose.Add(Loose(text));
+            }
+            loose.Remove("");
+            return fragment => exact.Contains(fragment.ToLowerInvariant()) || loose.Contains(Loose(fragment));
         }
 
         private static string Target(Match m)

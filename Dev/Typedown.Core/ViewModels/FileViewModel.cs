@@ -79,6 +79,12 @@ namespace Typedown.Core.ViewModels
         public Command<Unit> SaveAsCommand { get; } = new();
         public Command<Unit> ImportCommand { get; } = new();
         public Command<ExportConfig> ExportCommand { get; } = new();
+
+        /// <summary>File > Quick Open (Ctrl+P). A command, not a click: a menu entry's shortcut runs its command.</summary>
+        public Command<Unit> QuickOpenCommand { get; } = new();
+
+        /// <summary>File > Check Document.</summary>
+        public Command<Unit> CheckDocumentCommand { get; } = new();
         public Command<Unit> PrintCommand { get; } = new();
         public Command<Unit> ShareToHedgeDocCommand { get; } = new();
         public Command<Unit> UploadLocalImagesCommand { get; } = new();
@@ -132,6 +138,8 @@ namespace Typedown.Core.ViewModels
             ClearFolderHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearFolderHistory(); });
             ClearAllHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearHistory(); });
             ExportCommand.OnExecute.Subscribe(Export);
+            QuickOpenCommand.OnExecute.Subscribe(_ => QuickOpen());
+            CheckDocumentCommand.OnExecute.Subscribe(_ => CheckDocument());
             PrintCommand.OnExecute.Subscribe(_ => Print());
             ShareToHedgeDocCommand.OnExecute.Subscribe(_ => ShareToHedgeDoc());
             UploadLocalImagesCommand.OnExecute.Subscribe(async _ => await UploadLocalImages());
@@ -1514,10 +1522,12 @@ namespace Typedown.Core.ViewModels
             await editor.FlushContentAsync(2000);
             var text = editor.Markdown ?? "";
             var folder = string.IsNullOrEmpty(FilePath) ? null : Path.GetDirectoryName(FilePath);
-            var slugs = editor.ContentState?.Toc?.Select(t => t.Slug).Where(s => !string.IsNullOrEmpty(s)).ToList() ?? new List<string>();
             var imageFolder = string.IsNullOrEmpty(FilePath) ? null : ImageBasePath;
-            var problems = await Task.Run(() => DocumentCheck.Run(text, folder, imageFolder, slugs));
-            foreach (var (kind, source) in await editor.QueryNotDrawnAsync())
+            // The page's word on what it drew and on the headings' anchors (the same anchors a click on a link finds).
+            var (notDrawn, headings) = await editor.QueryNotDrawnAsync();
+            var hasHeading = headings == null ? null : DocumentCheck.HeadingMatcher(headings);
+            var problems = await Task.Run(() => DocumentCheck.Run(text, folder, imageFolder, hasHeading));
+            foreach (var (kind, source) in notDrawn)
                 problems.Add(new DocumentProblem(DocumentProblemKind.NotDrawn, 0, kind, source));
             Log.Debug($"check document: {problems.Count} problem(s): {string.Join(", ", problems.GroupBy(p => p.Kind).Select(g => $"{g.Key} {g.Count()}"))}");
             return problems;
@@ -1533,6 +1543,41 @@ namespace Typedown.Core.ViewModels
             var problems = await CheckDocumentAsync();
             if (problems.Count == 0) return true;
             return await Controls.DocumentCheckDialog.ShowAsync(AppViewModel, problems, beforeExport: true);
+        }
+
+        private bool quickOpenShown;
+
+        // The file chosen opened in a tab, as Open opens one. Asked twice quickly, one box.
+        private async void QuickOpen()
+        {
+            if (quickOpenShown) return;
+            quickOpenShown = true;
+            try
+            {
+                var path = await QuickOpenDialog.PickAsync(AppViewModel);
+                if (path != null) await OpenFile(path);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"quick open: {ex.Message}");
+            }
+            finally
+            {
+                quickOpenShown = false;
+            }
+        }
+
+        // The problems listed (or that there are none); a row clicked finds its place.
+        private async void CheckDocument()
+        {
+            try
+            {
+                await DocumentCheckDialog.ShowAsync(AppViewModel, await CheckDocumentAsync(), beforeExport: false);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"check document: {ex.Message}");
+            }
         }
 
         private async void Export(ExportConfig config)

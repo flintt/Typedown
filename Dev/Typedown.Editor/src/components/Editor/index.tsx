@@ -263,22 +263,6 @@ const Editor: React.FC = () => {
         })
     }), []);
 
-    // Host -> editor: the formulas and diagrams the page could not draw (File > Check Document, and before an export):
-    // each one's kind and the first line of its source, which the host finds it by. PlantUML switched off is one too:
-    // the export would show its note, not the diagram.
-    useEffect(() => transport.addListener<{ token: number }>('QueryNotDrawn', ({ token }) => {
-        const found: Array<{ kind: string, source: string }> = []
-        document.querySelectorAll('#ag-editor-id .ag-math-error, #ag-editor-id .ag-plantuml-off').forEach(element => {
-            const figure = element.closest('figure') as HTMLElement | null
-            const inline = element.previousElementSibling?.classList.contains('ag-math-text') ? element.previousElementSibling.textContent : null
-            const code = figure?.querySelector('pre code, code')?.textContent ?? ''
-            const source = (inline ?? code).split('\n').map(l => l.trim()).find(l => l.length > 0) ?? ''
-            const kind = element.classList.contains('ag-plantuml-off') ? 'plantuml-off' : inline != null ? 'math' : (figure?.dataset.role || 'diagram')
-            found.push({ kind, source })
-        })
-        transport.postMessage('NotDrawn', { token, found })
-    }), []);
-
     // Host -> editor: answer once the page has drawn twice more (automation awaitPresentation). Two frames, because
     // the first callback runs before the frame that shows the latest change is painted.
     useEffect(() => transport.addListener<{ token: number }>('AwaitPresentation', ({ token }) => {
