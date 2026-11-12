@@ -1,27 +1,12 @@
 // Rapid Mermaid edits used to start overlapping renders against one shared queue. The older render could clear
 // the latest work or overwrite it, leaving "Loading..." until the user changed editor mode.
 const assert = require('assert/strict');
-const puppeteer = require('puppeteer-core');
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-
-const statics = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
-const server = http.createServer((req, res) => {
-  let requestPath = decodeURIComponent(req.url.split('?')[0]);
-  if (requestPath === '/') requestPath = '/index.html';
-  const file = path.join(statics, requestPath);
-  if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.statusCode = 404; return res.end(); }
-  fs.createReadStream(file).pipe(res);
-});
+// The page served and the browser launched as every check does (harness); the host stubbed here, before the page starts.
+const { serveStatics, launchBrowser } = require('./harness');
 
 (async () => {
-  await new Promise(resolve => server.listen(0, resolve));
-  const browser = await puppeteer.launch({
-    executablePath: process.env.CHROME || '/opt/google/chrome/chrome',
-    headless: 'new',
-    args: ['--no-sandbox']
-  });
+  const server = await serveStatics();
+  const browser = await launchBrowser();
   const page = await browser.newPage();
   const markdown = 'Before\n\n~~~mermaid\nflowchart LR\n  A[Initial] --> B[End]\n~~~\n';
   const settings = {
@@ -48,7 +33,7 @@ const server = http.createServer((req, res) => {
     } };
   }, settings);
 
-  await page.goto(`http://127.0.0.1:${server.address().port}/`, { waitUntil: 'load' });
+  await page.goto(server.url, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__marks.FileLoaded && document.querySelector('.ag-container-preview svg'), { timeout: 30000 });
 
   await page.evaluate(() => {

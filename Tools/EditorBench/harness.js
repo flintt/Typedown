@@ -53,10 +53,10 @@ const firstDifference = (expected, actual) => {
   return `at ${i}: expected ${show(expected)} got ${show(actual)} (lengths ${expected.length}/${actual.length})`;
 };
 
-/** Serves the built editor and opens it in headless Chrome behind a stub host. `window.__deliver(name, args)`
- *  sends a host message; `window.__last[name]` holds the latest page message of each kind. `browserArgs`: more
- *  Chrome switches (the host's own, Config.WebView2Args, where a check depends on them). */
-async function openEditor({ browserArgs = [] } = {}) {
+/** The built editor served on a free local port: `url` (its index), `close()`. A check with a host of its own (one that
+ *  hooks the page before it starts, as the Mermaid ones do) uses this and launchBrowser and stubs the host itself; the
+ *  rest use openEditor (the modularity audit's M15: each had its own server and launch). */
+async function serveStatics() {
   const server = http.createServer((req, res) => {
     const p = decodeURIComponent(req.url.split('?')[0]);
     const f = path.join(statics, p === '/' ? 'index.html' : p);
@@ -64,8 +64,20 @@ async function openEditor({ browserArgs = [] } = {}) {
     fs.createReadStream(f).pipe(res);
   });
   await new Promise(r => server.listen(0, '127.0.0.1', r));
-  const browser = await puppeteer.launch({ executablePath: process.env.CHROME || '/opt/google/chrome/chrome', headless: true, args: ['--no-sandbox', ...browserArgs] });
-  const close = async () => { await browser.close(); server.close(); };
+  return { url: `http://127.0.0.1:${server.address().port}/`, close: () => server.close() };
+}
+
+/** Headless Chrome as the checks run it; `browserArgs`: more switches. */
+const launchBrowser = (browserArgs = []) =>
+  puppeteer.launch({ executablePath: process.env.CHROME || '/opt/google/chrome/chrome', headless: true, args: ['--no-sandbox', ...browserArgs] });
+
+/** Serves the built editor and opens it in headless Chrome behind a stub host. `window.__deliver(name, args)`
+ *  sends a host message; `window.__last[name]` holds the latest page message of each kind. `browserArgs`: more
+ *  Chrome switches (the host's own, Config.WebView2Args, where a check depends on them). */
+async function openEditor({ browserArgs = [] } = {}) {
+  const served = await serveStatics();
+  const browser = await launchBrowser(browserArgs);
+  const close = async () => { await browser.close(); served.close(); };
   const page = await browser.newPage();
   const settings = { markdown: '', sourceCode: true, readOnly: false, fontSize: 16, lineHeight: 1.6, editorAreaWidth: '900px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, basePath: '/tmp', loadId: 1 };
   await page.evaluateOnNewDocument(settings => {
@@ -86,7 +98,7 @@ async function openEditor({ browserArgs = [] } = {}) {
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   try {
-    await page.goto(`http://127.0.0.1:${server.address().port}/`, { waitUntil: 'load' });
+    await page.goto(served.url, { waitUntil: 'load' });
     await page.waitForFunction(() => window.__last.FileLoaded, { timeout: 30000 });
   } catch (e) { await close(); throw e; }
 
@@ -122,4 +134,4 @@ async function openEditor({ browserArgs = [] } = {}) {
   return { page, errors, mode, flush, load, pause, close };
 }
 
-module.exports = { sourceFixtures, firstDifference, openEditor };
+module.exports = { sourceFixtures, firstDifference, openEditor, serveStatics, launchBrowser };
