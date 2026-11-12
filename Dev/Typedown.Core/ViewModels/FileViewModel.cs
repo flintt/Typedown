@@ -1691,6 +1691,7 @@ namespace Typedown.Core.ViewModels
                 fileWatcher.Created += OnDiskFileEvent;
                 fileWatcher.Deleted += OnDiskFileEvent;
                 fileWatcher.Renamed += OnDiskFileRenamed;
+                fileWatcher.Error += OnDiskWatchError;
                 fileWatcher.EnableRaisingEvents = true;
                 // Looked at once now it is watched: a change written between the file being read and the watcher starting
                 // (while it opened, while reloading was off, while the tab was in the background) had no event and was
@@ -1713,8 +1714,23 @@ namespace Typedown.Core.ViewModels
             fileWatcher.Created -= OnDiskFileEvent;
             fileWatcher.Deleted -= OnDiskFileEvent;
             fileWatcher.Renamed -= OnDiskFileRenamed;
+            fileWatcher.Error -= OnDiskWatchError;
             fileWatcher.Dispose();
             fileWatcher = null;
+        }
+
+        // The watcher lost events (its buffer overflowed, a burst of writes) or stopped (a network folder gone and back):
+        // what changed meanwhile was never offered (R06). Watched anew a moment later, which looks at the file once - the
+        // disk's text against what was read.
+        private void OnDiskWatchError(object sender, ErrorEventArgs e)
+        {
+            Log.Debug($"watch: the watcher failed ({e.GetException()?.GetType().Name}: {e.GetException()?.Message}); watched again and the file looked at");
+            var watcher = sender as FileSystemWatcher;
+            _ = Task.Delay(1000).ContinueWith(_ => dispatcherQueue?.TryEnqueueSafe(() =>
+            {
+                if (disposables.IsDisposed || fileWatcher != watcher) return;
+                StartWatchFile();
+            }), TaskScheduler.Default);
         }
 
         private void OnDiskFileEvent(object sender, FileSystemEventArgs e)
