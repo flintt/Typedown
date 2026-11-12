@@ -109,6 +109,29 @@ const { openEditor } = require('./harness');
     r = rows(await markdown());
     report(r.length === 3 && r[0].length === 4 && r[1][2] === 'a b' && r[1][3] === '', 'pasted as plain text: tabs and all in one cell, as spaces', JSON.stringify(r));
 
+    // 7. A spreadsheet's 300 rows pasted at a caret in the last cell: the table given 299 rows at once, quickly (the
+    //    user, 2026-11-12: slow - each row added was a table edit of its own, drawn and reported, the page read again).
+    await fresh();
+    const lastCell = await at(2, 3);
+    await page.mouse.click(5, 5);
+    await pause(150);
+    await page.mouse.click(lastCell.x, lastCell.y);
+    await pause(250);
+    const tsv = Array.from({ length: 300 }, (_, i) => `r${i}\ta${i}\tb${i}\tc${i}`).join('\n');
+    const started = Date.now();
+    await page.evaluate(text => window.__deliver('Paste', { type: 'normal', text, html: '' }), tsv);
+    let big = [];
+    while (Date.now() - started < 20000) {
+      big = rows(await markdown());
+      if (big.length >= 302) break;
+      await pause(50);
+    }
+    const took = Date.now() - started;
+    console.log(`  300 rows pasted in ${took} ms`);
+    report(big.length === 302 && big[0].length === 7 && JSON.stringify(big[301].slice(3)) === JSON.stringify(['r299', 'a299', 'b299', 'c299']) && big[2][3] === 'r0',
+      '300 rows from the last cell: all of them there, the table grown to fit', `${big.length} rows, last ${JSON.stringify(big[big.length - 1])}`);
+    report(took < 2000, '300 rows pasted in under 2 seconds', `${took} ms`);
+
     // 5. A single cell, one value: replaced as before.
     await fresh();
     const cell = await at(1, 0);
