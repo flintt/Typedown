@@ -44,16 +44,8 @@ namespace Typedown.Core.Pages.SettingPages
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                ExportConfig = await ExportService.Value.GetExportConfig(configId);
-            }
-            catch (Exception ex)
-            {
-                // The database could not be read: the page stays empty rather than taking the window down.
-                Log.WriteLocal("ExportConfigLoad", ex.ToString());
-                return;
-            }
+            // Read, or the page left empty (ConfigEditor: the export and upload pages alike).
+            ExportConfig = await ConfigEditor.LoadAsync(() => ExportService.Value.GetExportConfig(configId), "ExportConfigLoad");
             if (ExportConfig != null)
                 disposables.Add(ExportConfig.WhenPropertyChanged(nameof(ExportConfig.Name)).Cast<string>().StartWith(ExportConfig.Name).Subscribe(UpdateTitle));
         }
@@ -61,13 +53,8 @@ namespace Typedown.Core.Pages.SettingPages
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             // The window's own root: this page is gone by the time the save answers.
-            var root = this.GetService<AppViewModel>()?.XamlRoot;
-            _ = DispatcherQueue.RunIdleAsync(async () =>
-            {
-                // A configuration that could not be saved (the database locked) says so: the edits were lost silently.
-                if (ExportConfig != null && !await ExportService.Value.SaveExportConfig(ExportConfig) && root != null)
-                    await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), ExportConfig.Name, Locale.GetString("Ok")).ShowAsync(root);
-            });
+            // Saved once the page is gone, a failure said (ConfigEditor).
+            ConfigEditor.SaveOnLeave(DispatcherQueue, this.GetService<AppViewModel>()?.XamlRoot, ExportConfig, ExportService.Value.SaveExportConfig, c => c.Name);
             disposables.Clear();
             Bindings?.StopTracking();
         }

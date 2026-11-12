@@ -33,14 +33,8 @@ namespace Typedown.Core.Controls.DialogControls
         public static async Task<Result> OpenAddExportConfigDialog(XamlRoot xamlRoot)
         {
             var dialog = new AddExportConfigDialog() { XamlRoot = xamlRoot, };
-            dialog.PrimaryButtonClick += (s, e) =>
-            {
-                if (string.IsNullOrEmpty(dialog.ConfigName))
-                {
-                    e.Cancel = true;
-                    dialog.ErrMsg = Locale.GetString("NameCannotBeEmpty");
-                }
-            };
+            // A name required, as every configuration's "add" dialog has it (ConfigEditor).
+            ConfigEditor.RequireName(dialog, () => dialog.ConfigName, message => dialog.ErrMsg = message);
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
                 return new Result() { ConfigName = dialog.ConfigName, ExportType = dialog.ExportType };

@@ -43,16 +43,8 @@ namespace Typedown.Core.Pages.SettingPages
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                ImageUploadConfig = await UploadService.Value.GetImageUploadConfig(configId);
-            }
-            catch (Exception ex)
-            {
-                // The database could not be read: the page stays empty rather than taking the window down.
-                Log.WriteLocal("ImageUploadConfigLoad", ex.ToString());
-                return;
-            }
+            // Read, or the page left empty (ConfigEditor: the export and upload pages alike).
+            ImageUploadConfig = await ConfigEditor.LoadAsync(() => UploadService.Value.GetImageUploadConfig(configId), "ImageUploadConfigLoad");
             if (ImageUploadConfig != null)
                 disposables.Add(ImageUploadConfig.WhenPropertyChanged(nameof(ImageUploadConfig.Name)).Cast<string>().StartWith(ImageUploadConfig.Name).Subscribe(UpdateTitle));
         }
@@ -60,13 +52,8 @@ namespace Typedown.Core.Pages.SettingPages
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             // The window's own root: this page is gone by the time the save answers.
-            var root = this.GetService<AppViewModel>()?.XamlRoot;
-            _ = DispatcherQueue.RunIdleAsync(async () =>
-            {
-                // A configuration that could not be saved (the database locked) says so: the edits were lost silently.
-                if (ImageUploadConfig != null && !await UploadService.Value.SaveImageUploadConfig(ImageUploadConfig) && root != null)
-                    await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), ImageUploadConfig.Name, Locale.GetString("Ok")).ShowAsync(root);
-            });
+            // Saved once the page is gone, a failure said (ConfigEditor).
+            ConfigEditor.SaveOnLeave(DispatcherQueue, this.GetService<AppViewModel>()?.XamlRoot, ImageUploadConfig, UploadService.Value.SaveImageUploadConfig, c => c.Name);
             disposables.Clear();
             Bindings?.StopTracking();
         }
