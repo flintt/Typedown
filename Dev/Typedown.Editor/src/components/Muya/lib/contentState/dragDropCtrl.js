@@ -1,6 +1,5 @@
 import { findNearestParagraph, findOutMostParagraph } from '../selection/dom'
-import { verticalPositionInRect, getUniqueId, getImageInfo as getImageSrc, checkImageContentType } from '../utils'
-import { getImageInfo } from '../utils/getImageInfo'
+import { verticalPositionInRect, getUniqueId, checkImageContentType } from '../utils'
 import { URL_REG, IMAGE_EXT_REG } from '../config'
 
 const GHOST_ID = 'mu-dragover-ghost'
@@ -158,25 +157,8 @@ const dragDropCtrl = ContentState => {
         }
         this.render()
 
-        try {
-          const newSrc = await this.muya.options.imageAction(path, id, name)
-          const { src } = getImageSrc(path)
-          if (src) {
-            this.stateRender.urlMap.set(newSrc, src)
-          }
-          const imageWrapper = this.muya.container.querySelector(`span[data-id=${id}]`)
-
-          if (imageWrapper) {
-            const imageInfo = getImageInfo(imageWrapper)
-            this.replaceImage(imageInfo, {
-              alt: name,
-              src: newSrc
-            })
-          }
-        } catch (error) {
-          // TODO: Notify user about an error.
-          console.error('Unexpected error on image action:', error)
-        }
+        // Made ready by the host and put in place of the placeholder (ContentState.settleImagePlaceholder).
+        await this.settleImagePlaceholder(id, path, name)
       }
       this.muya.eventCenter.dispatch('stateChange')
     }
