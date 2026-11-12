@@ -793,25 +793,8 @@ namespace Typedown.Core.ViewModels
                 // it must still be the one shown, at this path; its tab given another document since is noticed too.
                 var op = DocumentOperation.Of(TabsViewModel);
                 bool Gone() => disposables.IsDisposed || FilePath != path || !op.Shown;
-                // What we write must be what is on screen; a save the reader asked for keeps their own text where they
-                // did not edit, at any length (an automatic save does not: it comes while they type).
-                var flushed = await EditorViewModel.FlushContentAsync(keepSource: alert);
-                // Saved by hand, the page given longer once more (a long document, a busy PC).
-                if (!flushed && alert && !Gone())
-                    flushed = await EditorViewModel.FlushContentAsync(timeoutMs: 8000, keepSource: true);
-                // The page did not hand over its text (no answer in time, or the page going away): what the host has may
-                // be older than what is on screen, and its hash is as old - written, it was marked saved with the last
-                // words typed missing (R03). Nothing is written: a save by hand says so, an automatic one says it in the
-                // status bar and is tried again with the next change.
-                if (!flushed)
-                {
-                    Log.Debug($"save: the editor did not hand over its text (load {EditorViewModel.LoadId}); {path} not written");
-                    if (Gone()) return false;
-                    var reason = new TimeoutException("the editor did not hand over its latest text in time; nothing was written").Message;
-                    if (alert) await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), reason, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
-                    else EditorViewModel.AutoSaveHeldBack = string.Format(Locale.GetString("SaveState.WriteFailed"), reason);
-                    return false;
-                }
+                // What we write must be what is on screen (FlushForSaveAsync, as Save As has it).
+                if (!await FlushForSaveAsync(alert, Gone, path)) return false;
                 // The flush awaited, and a tab switch does not take this lock: if the active document changed
                 // under us the live buffer now belongs to another document, and writing it to this path would
                 // put one document's text into another. Check the tab reference too — two untitled tabs share a
@@ -876,17 +859,7 @@ namespace Typedown.Core.ViewModels
                 // Written. Marked saved only in the document it was written from, still shown: the path alone took another
                 // tab's document for it, when that tab had been given this path's file again meanwhile.
                 if (result && !Gone())
-                {
-                    EditorViewModel.FileHash = hash;
-                    DiskHash = hash;
-                    EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
-                    if (EditorViewModel.Saved)
-                    {
-                        AutoBackup.DeleteBackup(path);
-                        if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
-                    }
-                    _ = AccessHistory.RecordFileHistory(path);
-                }
+                    CommitWritten(path, hash, path, null);
                 return result && !Gone() && EditorViewModel.Saved;
             }
         }
@@ -945,6 +918,46 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// The page's text taken for a save, by hand or automatic, in place or as another file (the modularity audit's M02:
+        /// each wrote this out). By hand the page is given longer once more (a long document, a busy PC), and its own text
+        /// kept where it was not edited. False when nothing may be written: the document is <paramref name="gone"/> (not
+        /// said), or the page did not hand its text over - what the host has may be older than the screen, and written it
+        /// was marked saved with the last words typed missing (R03, A09); a save by hand says so, an automatic one says it in
+        /// the status bar and is tried again with the next change.
+        /// </summary>
+        private async Task<bool> FlushForSaveAsync(bool byHand, Func<bool> gone, string target)
+        {
+            var flushed = await EditorViewModel.FlushContentAsync(keepSource: byHand);
+            if (!flushed && byHand && !gone())
+                flushed = await EditorViewModel.FlushContentAsync(timeoutMs: 8000, keepSource: true);
+            if (gone()) return false;
+            if (flushed) return true;
+            Log.Debug($"save: the editor did not hand over its text (load {EditorViewModel.LoadId}); {target} not written");
+            var reason = new TimeoutException("the editor did not hand over its latest text in time; nothing was written").Message;
+            if (byHand) await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), reason, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+            else EditorViewModel.AutoSaveHeldBack = string.Format(Locale.GetString("SaveState.WriteFailed"), reason);
+            return false;
+        }
+
+        /// <summary>
+        /// A file written for the document shown, put in its state (the modularity audit's M02): its hash, the disk's, saved
+        /// if nothing was typed since the text was taken (CurrentHash tracks the live buffer; no O(n) compare per save), the
+        /// crash backup of <paramref name="backupPath"/> gone then, and the file among the recent ones.
+        /// </summary>
+        private void CommitWritten(string path, ulong hash, string backupPath, string documentId)
+        {
+            EditorViewModel.FileHash = hash;
+            DiskHash = hash;
+            EditorViewModel.Saved = EditorViewModel.CurrentHash == hash;
+            if (EditorViewModel.Saved)
+            {
+                AutoBackup.DeleteBackup(backupPath, documentId);
+                if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
+            }
+            _ = AccessHistory.RecordFileHistory(path);
+        }
+
         private async Task<string> SaveAsToCore(string targetPath, string originalPath, Models.DocumentTab originalTab)
         {
             try
@@ -959,44 +972,27 @@ namespace Typedown.Core.ViewModels
                     await AppContentDialog.Create(Locale.GetString("Error"), Locale.GetDialogString("SaveAsTargetOpen"), Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                     return null;
                 }
-                if (!disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
+                // The document saved (Services.DocumentOperation), from the start: two untitled documents both have no path,
+                // and a switch from one to the other during the write gave the other this file's path and hash (the audit's
+                // A07); a tab made a new document meanwhile (the last tab closed to the home page) is not this file (the
+                // 2026-11-11 recheck) - its identity was taken only after the flush.
+                var op = DocumentOperation.Of(TabsViewModel, originalTab);
+                bool Gone() => disposables.IsDisposed || FilePath != originalPath || !op.Shown;
+                if (!Gone())
                 {
-                    // As a save by hand: the page given longer once more, and nothing written if it still did not hand over
-                    // its text - the host's copy may be older than the screen, and was written and marked saved (the audit's A09).
-                    var flushed = await EditorViewModel.FlushContentAsync(keepSource: true);
-                    if (!flushed && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
-                        flushed = await EditorViewModel.FlushContentAsync(timeoutMs: 8000, keepSource: true);
-                    if (disposables.IsDisposed || FilePath != originalPath || TabsViewModel?.ActiveTab != originalTab)
-                        return null;
-                    if (!flushed)
-                    {
-                        Log.Debug($"save as: the editor did not hand over its text (load {EditorViewModel.LoadId}); {targetPath} not written");
-                        var reason = new TimeoutException("the editor did not hand over its latest text in time; nothing was written").Message;
-                        await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), reason, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
-                        return null;
-                    }
+                    // As a save by hand (FlushForSaveAsync): nothing written if the page did not hand over its text - the
+                    // host's copy may be older than the screen, and was written and marked saved (the audit's A09).
+                    if (!await FlushForSaveAsync(true, Gone, targetPath)) return null;
                     var markdown = EditorViewModel.Markdown;
                     var hash = Common.SimpleHash(markdown);
                     var imagesBefore = ImageBasePath;
-                    var documentId = originalTab?.DocumentId;
+                    var documentId = op.DocumentId;
                     var result = await WriteAllText(targetPath, markdown);
-                    // The tab too, not only the path: two untitled documents both have none, and a switch from one to the
-                    // other during the write gave the other this file's path and hash (the audit's A07). And the document
-                    // the tab holds: made a new one meanwhile (the last tab closed to the home page), it is not this file
-                    // (the 2026-11-11 recheck).
-                    if (result && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab && originalTab?.DocumentId == documentId)
+                    if (result && !Gone())
                     {
                         CopyPicturesAlong(markdown, imagesBefore, Path.GetDirectoryName(targetPath));
                         FilePath = targetPath;
-                        EditorViewModel.FileHash = hash;
-                        DiskHash = hash;
-                        EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
-                        if (EditorViewModel.Saved)
-                        {
-                            AutoBackup.DeleteBackup(originalPath, originalTab?.DocumentId);
-                            if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
-                        }
-                        _ = AccessHistory.RecordFileHistory(FilePath);
+                        CommitWritten(targetPath, hash, originalPath, documentId);
                         if (!string.Equals(originalPath, targetPath, StringComparison.OrdinalIgnoreCase))
                             EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, originalPath);
                         return EditorViewModel.Saved ? targetPath : null;
