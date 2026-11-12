@@ -197,10 +197,11 @@ internal static partial class Program
             await Case("SA02 Save As onto a file open in another tab is refused with a dialog: that file keeps its text, the document saved keeps its path, the file is open once", SA02);
             await Case("TD01 a tab dragged past the last with a real mouse and let go looks as the other tab not shown does, and as it did before the drag; the tab shown dragged to the start still looks as the tab shown, the others as they did; dragged again at once it moves; a new tab after goes beside the others with the + after it", TD01);
             await Case("TD02 a tab dragged out of the strip and let go over the document, the status bar or the title bar opens no dialog and keeps the tabs", TD02);
+            await Case("FE01 a file's Open File Location and Copy as Path the same from its tab, its folder tree row, its Open Recent entry and its home page entry, clicked with a real mouse; a recent file that is gone shows its folder", FE01);
             await Case("MM01 a long document with formulas and footnotes switched between visual and source mode 70 times, then two documents swapped 40 times: after the first 10 switches, and after the first 10 swaps, the private memory of the host and its WebView2 grows by less than 80 MB", MM01);
             await Case("SE01 the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it", SE01);
             await Case("RC01 two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root", RC01);
-            await Case("RC02 a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders", RC02);
+            await Case("RC02 a recent file deleted stays in the list greyed out and its menu's Remove from list removes it; Clear recent files leaves the recent folders", RC02);
             await Case("RC03 with \"Remember recently opened files\" off a file opened is not listed; Clear recent on the settings page empties files and folders", RC03);
             await Case("FN01 the folder pane's up arrow, the folder above chosen in its root menu and \"Set as root\" on a folder each move the tree; the open documents stay as they were", FN01);
             await Case("FT02 a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth", FT02);
@@ -3305,6 +3306,22 @@ internal static partial class Program
     [DllImport("user32.dll")] private static extern IntPtr GetClipboardData(uint format);
     [DllImport("kernel32.dll")] private static extern IntPtr GlobalLock(IntPtr memory);
     [DllImport("kernel32.dll")] private static extern bool GlobalUnlock(IntPtr memory);
+    /// <summary>The clipboard's text set (CF_UNICODETEXT): a known value before a copy, so a copy that did nothing shows.</summary>
+    private static void SetClipboardText(string text)
+    {
+        for (var i = 0; i < 10 && !OpenClipboard(IntPtr.Zero); i++) Thread.Sleep(50);
+        try
+        {
+            EmptyClipboard();
+            var bytes = (text.Length + 1) * 2;
+            var memory = GlobalAlloc(0x0002, (UIntPtr)bytes);
+            var pointer = GlobalLock(memory);
+            try { Marshal.Copy((text + "\0").ToCharArray(), 0, pointer, text.Length + 1); }
+            finally { GlobalUnlock(memory); }
+            SetClipboardData(13, memory);
+        }
+        finally { CloseClipboard(); }
+    }
 
     // A reader's document as it was when Word showed blank frames: pictures written as absolute file:/// addresses (as an
     // image inserted from a browser cache is), a file name and an alt text with brackets, a graphviz SVG sized in pt.

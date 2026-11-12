@@ -230,10 +230,11 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SA02 | Save As onto a file open in another tab is refused with a dialog: that file keeps its text, the document saved keeps its path, the file is open once |
 | TD01 | a tab dragged past the last with a real mouse and let go looks as the other tab not shown does, and as it did before the drag; the tab shown dragged to the start still looks as the tab shown, the others as they did; dragged again at once it moves; a new tab after goes beside the others with the + after it |
 | TD02 | a tab dragged out of the strip and let go over the document, the status bar or the title bar opens no dialog and keeps the tabs |
+| FE01 | a file's Open File Location and Copy as Path the same from its tab, its folder tree row, its Open Recent entry and its home page entry, clicked with a real mouse; a recent file that is gone shows its folder |
 | MM01 | a long document with formulas and footnotes switched between visual and source mode 70 times, then two documents swapped 40 times: after the first 10 switches, and after the first 10 swaps, the private memory of the host and its WebView2 grows by less than 80 MB |
 | SE01 | the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it |
 | RC01 | two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root |
-| RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
+| RC02 | a recent file deleted stays in the list greyed out and its menu's Remove from list removes it; Clear recent files leaves the recent folders |
 | RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
 | FN01 | the folder pane's up arrow, the folder above chosen in its root menu and "Set as root" on a folder each move the tree; the open documents stay as they were |
 | FT02 | a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth |

@@ -499,11 +499,10 @@ namespace Typedown.Core.Controls
         {
             var flyout = (MenuFlyout)sender;
             menuTab = (flyout.Target as FrameworkElement)?.DataContext as DocumentTab;
-            var path = menuTab?.FilePath;
+            menuEntry = new Services.FileEntry(menuTab?.FilePath, false);
             var tabs = Tabs?.Tabs;
             var index = tabs?.IndexOf(menuTab) ?? -1;
-            var store = Services.Favorites.Shared;
-            var isFavorite = !string.IsNullOrEmpty(path) && store.Contains(path);
+            var (isFavorite, canFavorite) = Services.FileEntryActions.FavoriteState(menuEntry);
             foreach (var item in flyout.Items.OfType<MenuFlyoutItem>())
             {
                 switch (item.Tag as string)
@@ -511,14 +510,17 @@ namespace Typedown.Core.Controls
                     case "Close": item.IsEnabled = index >= 0; break;
                     case "CloseOthers": item.IsEnabled = index >= 0 && tabs.Count > 1; break;
                     case "CloseToTheRight": item.IsEnabled = index >= 0 && index < tabs.Count - 1; break;
-                    case "File": item.IsEnabled = !string.IsNullOrEmpty(path); break;
+                    case "File": item.IsEnabled = Services.FileEntryActions.CanShowLocation(menuEntry); break;
                     case "Favorite":
                         item.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
-                        item.IsEnabled = !string.IsNullOrEmpty(path) && (isFavorite || store.Items.Count < Services.FavoritesStore.MaxCount);
+                        item.IsEnabled = canFavorite;
                         break;
                 }
             }
         }
+
+        // The tab's file as the menu opened on it (Services.FileEntryActions: what every file menu does with one).
+        private Services.FileEntry menuEntry;
 
         // The closes go the way the ×'s does (TabsViewModel.CloseTab: shown, asked about saving); a cancelled question stops
         // the rest.
@@ -540,19 +542,11 @@ namespace Typedown.Core.Controls
             if (menuTab != null && Tabs != null) await Tabs.CloseToTheRight(menuTab);
         }
 
-        private void OnTabCopyPathClick(object sender, RoutedEventArgs e)
-        {
-            var path = menuTab?.FilePath;
-            if (string.IsNullOrEmpty(path)) return;
-            try { this.GetService<Interfaces.IClipboard>()?.SetText(path); }
-            catch (Exception ex) { Log.Debug($"tab menu: copy path: {ex.Message}"); }
-        }
+        private void OnTabCopyPathClick(object sender, RoutedEventArgs e) =>
+            Services.FileEntryActions.Report(XamlRoot, Services.FileEntryActions.CopyPath(menuEntry, this.GetService<Interfaces.IClipboard>()));
 
-        private void OnTabOpenLocationClick(object sender, RoutedEventArgs e)
-        {
-            var path = menuTab?.FilePath;
-            if (!string.IsNullOrEmpty(path)) Common.OpenFileLocation(path);
-        }
+        private void OnTabOpenLocationClick(object sender, RoutedEventArgs e) =>
+            Services.FileEntryActions.Report(XamlRoot, Services.FileEntryActions.ShowLocation(menuEntry));
 
         // The tab shown first, then found in the tree as the Files page's "show the current file's folder" does.
         private async void OnTabShowInSideBarClick(object sender, RoutedEventArgs e)
@@ -563,13 +557,7 @@ namespace Typedown.Core.Controls
             if (tab == Tabs.ActiveTab) ViewModel?.UIViewModel.RevealActiveFileInFolderTree();
         }
 
-        private void OnTabFavoriteClick(object sender, RoutedEventArgs e)
-        {
-            var path = menuTab?.FilePath;
-            if (string.IsNullOrEmpty(path)) return;
-            var store = Services.Favorites.Shared;
-            if (!store.Remove(path)) store.Add(path, folder: false);
-        }
+        private void OnTabFavoriteClick(object sender, RoutedEventArgs e) => Services.FileEntryActions.ToggleFavorite(menuEntry);
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {

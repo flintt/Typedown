@@ -196,16 +196,18 @@ internal static partial class Program
             Check(menu.Any(e => SamePath(e.Path, gone) && e.Missing), "a deleted recent file stays in the list, greyed out");
             Check(menu.Any(e => SamePath(e.Path, kept) && !e.Missing), "a file still there is not greyed out");
 
-            // Removed with a right-click on its entry, the menu open.
+            // Removed from its entry's menu (a right-click opens it; it took the entry out at once before the M08 menu).
             var index = menu.Where(e => e.Kind == "file").ToList().FindIndex(e => SamePath(e.Path, gone));
             var entry = await MenuEntry(window, "MenuBarFileItem", "OpenRecentSubMenu", "RecentFile-" + index);
             Check(SamePath(entry.Current.HelpText, gone), $"RecentFile-{index} is rc02-gone.md ({entry.Current.HelpText})");
             await RightClickInPopup(entry);
             await Task.Delay(800);
+            await ClickInPopup(window, await MenuEntry(window, "RecentRemoveItem"));
+            await Task.Delay(800);
             await CloseMenus();
             var removed = await Eventually(async () => !(menu = await RecentMenu(c, windowId)).Any(e => SamePath(e.Path, gone)), 4000);
-            notes.Add("after the right-click: " + Show(menu));
-            Check(removed, "a right-click on the entry removes it from the list");
+            notes.Add("after Remove from list: " + Show(menu));
+            Check(removed, "its menu's Remove from list takes it out of the list");
 
             // Clear recent files: the folders stay.
             var clear = await MenuEntry(window, "MenuBarFileItem", "OpenRecentSubMenu", "ClearRecentFilesItem");

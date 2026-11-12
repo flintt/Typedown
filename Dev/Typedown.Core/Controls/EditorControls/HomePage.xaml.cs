@@ -263,6 +263,9 @@ namespace Typedown.Core.Controls
 
         private static PathItem ItemOf(object sender) => (sender as FrameworkElement)?.DataContext as PathItem;
 
+        // The entry as every file menu acts on it (Services.FileEntryActions).
+        private static FileEntry EntryOf(object sender) => ItemOf(sender) is { } item ? new FileEntry(item.Path, item.Folder) : null;
+
         // The entry's menu, worded for it: into or out of the favourites.
         private void OnEntryFlyoutOpening(object sender, object e)
         {
@@ -270,36 +273,26 @@ namespace Typedown.Core.Controls
             var item = (flyout.Target as FrameworkElement)?.DataContext as PathItem;
             var favorite = flyout.Items.OfType<MenuFlyoutItem>().FirstOrDefault(x => "Favorite".Equals(x.Tag));
             if (item == null || favorite == null) return;
-            var store = Favorites.Shared;
-            var isFavorite = store.Contains(item.Path);
+            var (isFavorite, canToggle) = FileEntryActions.FavoriteState(new FileEntry(item.Path, item.Folder));
             favorite.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
-            favorite.IsEnabled = isFavorite || store.Items.Count < FavoritesStore.MaxCount;
+            favorite.IsEnabled = canToggle;
         }
 
-        private void OnToggleFavoriteClick(object sender, RoutedEventArgs e)
-        {
-            if (ItemOf(sender) is not { } item) return;
-            var store = Favorites.Shared;
-            if (!store.Remove(item.Path)) store.Add(item.Path, item.Folder);
-        }
+        private void OnToggleFavoriteClick(object sender, RoutedEventArgs e) => FileEntryActions.ToggleFavorite(EntryOf(sender));
 
         private void OnRemoveFavoriteClick(object sender, RoutedEventArgs e)
         {
             if (ItemOf(sender) is { } item) Favorites.Shared.Remove(item.Path);
         }
 
-        private void OnRemoveRecentClick(object sender, RoutedEventArgs e)
-        {
-            if (ItemOf(sender) is not { } item) return;
-            var history = this.GetService<AccessHistory>();
-            if (history == null) return;
-            _ = item.Folder ? history.RemoveFolderHistory(item.Path) : history.RemoveFileHistory(item.Path);
-        }
+        private void OnRemoveRecentClick(object sender, RoutedEventArgs e) =>
+            _ = FileEntryActions.RemoveFromRecent(EntryOf(sender), this.GetService<AccessHistory>());
 
-        private void OnLocationClick(object sender, RoutedEventArgs e)
-        {
-            if (ItemOf(sender) is { } item) Common.OpenFileLocation(item.Path);
-        }
+        private void OnLocationClick(object sender, RoutedEventArgs e) => FileEntryActions.Report(XamlRoot, FileEntryActions.ShowLocation(EntryOf(sender)));
+
+        // Copy as path, as the tab strip, the folder tree and Open Recent have it (it was missing here).
+        private void OnCopyPathClick(object sender, RoutedEventArgs e) =>
+            FileEntryActions.Report(XamlRoot, FileEntryActions.CopyPath(EntryOf(sender), this.GetService<IClipboard>()));
 
         /// <summary>What the page shows now (the automation test host): each list's paths and which are dimmed.</summary>
         public IReadOnlyDictionary<string, IReadOnlyList<(string Path, bool Missing, string Modified)>> Lists() => new Dictionary<string, IReadOnlyList<(string, bool, string)>>
