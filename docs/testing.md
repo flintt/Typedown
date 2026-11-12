@@ -225,6 +225,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TC03 | a long document's tab closed and another file opened right after: the file opened is the one shown |
 | TM01 | a tab's menu: Close Tabs to the Right on the second of four leaves the first two, the second shown; Close Others on the first leaves it alone, shown; a file's tab offers Copy as Path, Open File Location and Show in Side Bar |
 | XM01 | the editor's context menu after a real right-click on a paragraph, a link (its address copied), a code block, a display formula and a table cell, in source mode and in reading mode, and on an Open Recent entry: the items each place has and the ones it must not |
+| XM02 | File > Open Recent, an entry's menu, Remove from list with a real right-click and click, twice in a row: each time the entry right-clicked is gone and the others stay |
 | SA02 | Save As onto a file open in another tab is refused with a dialog: that file keeps its text, the document saved keeps its path, the file is open once |
 | TD01 | a tab dragged past the last with a real mouse and let go looks as the other tab not shown does, and as it did before the drag; the tab shown dragged to the start still looks as the tab shown, the others as they did; dragged again at once it moves; a new tab after goes beside the others with the + after it |
 | TD02 | a tab dragged out of the strip and let go over the document, the status bar or the title bar opens no dialog and keeps the tabs |

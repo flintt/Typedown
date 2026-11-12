@@ -17,6 +17,61 @@ using System.Threading.Tasks;
 /// </summary>
 internal static partial class Program
 {
+    /// <summary>
+    /// XM02: File > Open Recent, an entry's menu, Remove from list - with a real right-click and click, twice in a row:
+    /// each time the entry right-clicked is the one gone, the others stay, and the menus open again for the next (the
+    /// user, 2026-11-12: it took out another entry than the one clicked, and a second could not be taken out).
+    /// </summary>
+    private static async Task XM02(List<string> notes)
+    {
+        var folder = FixtureFolder("xm02");
+        var paths = Enumerable.Range(1, 4).Select(i => Path.Combine(folder, $"xm02-{i}.md")).ToList();
+        foreach (var p in paths) File.WriteAllText(p, "# " + Path.GetFileNameWithoutExtension(p) + "\n");
+        using var c = await Session("e2e XM02");
+        var keep = await Open(c, paths[0]);
+        var windowId = await WindowIdOf(c, keep);
+        var window = await WindowOf(windowId, c);
+        try
+        {
+            await c.Call("test.recent.clear", new { windowId });
+            // Each opened and closed: the recent list, the last first.
+            foreach (var p in paths.Skip(1))
+            {
+                var id = await Open(c, p);
+                await Task.Delay(300);
+                await c.Call("document.close", new { documentId = id });
+                await Task.Delay(300);
+            }
+            List<string> Files(List<RecentEntry> entries) => entries.Where(e => e.Kind == "file").Select(e => e.Path).ToList();
+            var before = Files(await RecentMenu(c, windowId));
+            notes.Add("recent: " + string.Join(", ", before.Select(Path.GetFileName)));
+            Check(before.Count >= 3, $"at least three recent files ({before.Count})");
+            foreach (var (round, index) in new[] { (1, 1), (2, 0) })
+            {
+                var entry = await MenuEntry(window, "MenuBarFileItem", "OpenRecentSubMenu", $"RecentFile-{index}");
+                var target = entry.Current.HelpText;
+                notes.Add($"round {round}: right-click on {entry.Current.Name} ({Path.GetFileName(target)})");
+                await Click(window, entry, Mouse.Right);
+                await Task.Delay(600);
+                var remove = await MenuEntry(window, "RecentRemoveItem");
+                await Click(window, remove, Mouse.Left);
+                await Task.Delay(1000);
+                var after = Files(await RecentMenu(c, windowId));
+                notes.Add($"round {round}: recent now {string.Join(", ", after.Select(Path.GetFileName))}");
+                Check(!after.Any(p => SamePath(p, target)), $"round {round}: the entry right-clicked ({Path.GetFileName(target)}) is gone");
+                var others = before.Where(p => !SamePath(p, target)).ToList();
+                Check(others.All(p => after.Any(a => SamePath(a, p))), $"round {round}: the others stay ({string.Join(", ", others.Select(Path.GetFileName))} against {string.Join(", ", after.Select(Path.GetFileName))})");
+                before = after;
+                await CloseMenus();
+            }
+        }
+        finally
+        {
+            await CloseMenus();
+            try { await c.Call("document.close", new { documentId = keep }); } catch { }
+        }
+    }
+
     private static async Task XM01(List<string> notes)
     {
         var folder = FixtureFolder("xm01");
