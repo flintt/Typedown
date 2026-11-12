@@ -184,7 +184,7 @@ namespace Typedown.Core.Utilities
                 foreach (var line in File.ReadLines(path))
                 {
                     token.ThrowIfCancellationRequested();
-                    var index = line.IndexOf(query, StringComparison.OrdinalIgnoreCase);
+                    var index = IndexOutsidePictures(line, query);
                     if (index < 0) continue;
                     var start = Math.Max(0, index - 40);
                     return (start > 0 ? "…" : "") + line.Substring(start, Math.Min(line.Length - start, 120)).Trim();
@@ -193,6 +193,21 @@ namespace Typedown.Core.Utilities
             catch (OperationCanceledException) { throw; }
             catch (Exception) { }
             return null;
+        }
+
+        private static readonly System.Text.RegularExpressions.Regex picturePayload =
+            new(@"data:image/[\w.+-]+(?:;[\w.+-]+=[^;,)\s]*)*;base64,(?<data>[A-Za-z0-9+/=]+)", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+        // The first place of the query in a line, not inside a picture's base64 (#52): a word found there is noise, and a
+        // file with a screenshot in it matched nearly any short query.
+        internal static int IndexOutsidePictures(string line, string query)
+        {
+            var index = line.IndexOf(query, StringComparison.OrdinalIgnoreCase);
+            if (index < 0 || !line.Contains("data:image/", StringComparison.OrdinalIgnoreCase)) return index;
+            var payloads = picturePayload.Matches(line).Select(m => (Start: m.Groups["data"].Index, End: m.Groups["data"].Index + m.Groups["data"].Length)).ToList();
+            while (index >= 0 && payloads.Any(p => index < p.End && index + query.Length > p.Start))
+                index = line.IndexOf(query, index + 1, StringComparison.OrdinalIgnoreCase);
+            return index;
         }
 
         private static string Relative(string root, string shownFrom, string path)

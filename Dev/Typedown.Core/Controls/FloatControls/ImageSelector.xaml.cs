@@ -26,6 +26,11 @@ namespace Typedown.Core.Controls.FloatControls
 
         private static string currentSrc;
 
+        // A picture kept in the document (a data: address): shown in the box as a short label, and put back as it was
+        // when the label is left alone. Hundreds of KB in a text box was slow, and decoding it as a URL turned every +
+        // of the base64 into a space - an OK without a change broke the picture.
+        private string embeddedSrc, embeddedLabel;
+
         private Rect rect;
 
         // The other files of a multi-file pick: inserted after this image, each in a paragraph of its own.
@@ -43,7 +48,10 @@ namespace Typedown.Core.Controls.FloatControls
         public void Open(Rect rect, JToken imageInfo)
         {
             this.rect = rect;
-            TextBoxSrc.Text = HttpUtility.UrlDecode(imageInfo?["src"]?.ToString() ?? "");
+            var src = imageInfo?["src"]?.ToString() ?? "";
+            embeddedLabel = ImageData.ShortLabel(src);
+            embeddedSrc = embeddedLabel == null ? null : src;
+            TextBoxSrc.Text = embeddedLabel ?? HttpUtility.UrlDecode(src);
             TextBoxAlt.Text = imageInfo?["alt"]?.ToString() ?? "";
             TextBoxTitle.Text = imageInfo?["title"]?.ToString() ?? "";
             flyout.Content = this;
@@ -93,6 +101,8 @@ namespace Typedown.Core.Controls.FloatControls
 
         private async Task SaveImageSrc(string src, string title = null, string alt = null)
         {
+            if (embeddedSrc != null && src == embeddedLabel)
+                src = currentSrc = embeddedSrc;
             if (src != currentSrc)
             {
                 var imageAction = this.GetService<ImageAction>();

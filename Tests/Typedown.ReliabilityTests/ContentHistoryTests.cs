@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Typedown.Core.Models;
 
@@ -279,6 +279,33 @@ namespace Typedown.ReliabilityTests
             Report(h, "hello", ContentHistory.EditKind.Unknown);
             Report(h, "hello!", ContentHistory.EditKind.Unknown);
             Assert.AreEqual("# T\n\n", h.Undo()?.Text);
+        }
+
+        // A picture embedded as base64 (#52): every step of the undo history was a whole copy of the text, the picture's
+        // 300 KB in each. Now held once for all the steps; each step comes back whole and exact.
+        [TestMethod]
+        public void AnEmbeddedPictureIsHeldOnceForTheWholeHistory()
+        {
+            var picture = "data:image/png;base64," + new string('A', 200_000) + "B+/=";
+            var h = new ContentHistory();
+            h.InitHistory("# T\n\n![p](" + picture + ")\n");
+            var texts = new System.Collections.Generic.List<string> { "# T\n\n![p](" + picture + ")\n" };
+            // Each change its own step (Other closes it at once), the picture in every one.
+            for (var n = 1; n <= 20; n++)
+            {
+                var text = "# T\n\n![p](" + picture + ")\n\nStep " + n + "\n";
+                h.ContentChange(text, ContentHistory.EditKind.Other);
+                h.CursorChange(Caret(4, 6));
+                texts.Add(text);
+            }
+            Assert.IsTrue(h.HeldChars < 2 * 200_000, $"held {h.HeldChars} chars for 21 steps of a 200,000-character picture");
+            for (var n = texts.Count - 2; n >= 0; n--)
+                Assert.AreEqual(texts[n], h.Undo()?.Text, $"undo to step {n}");
+            for (var n = 1; n < texts.Count; n++)
+                Assert.AreEqual(texts[n], h.Redo()?.Text, $"redo to step {n}");
+            // A new edit after undoing drops the steps after it, and a history cleared holds nothing.
+            h.ClearHistory();
+            Assert.AreEqual(0, h.HeldChars);
         }
     }
 }

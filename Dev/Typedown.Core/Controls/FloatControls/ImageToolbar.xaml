@@ -18,7 +18,7 @@
     </Flyout.FlyoutPresenterStyle>
     <Grid>
         <StackPanel Orientation="Horizontal">
-            <Button Grid.Column="2" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Click="EditClick" controls:ToolTip.TextResource="Edit">
+            <Button x:Name="EditButton" AutomationProperties.AutomationId="ImageEditButton" Grid.Column="2" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Click="EditClick" controls:ToolTip.TextResource="Edit">
                 <FontIcon FontSize="14" Glyph="&#xE70F;"/>
             </Button>
             <AppBarSeparator/>

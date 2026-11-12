@@ -109,6 +109,25 @@ namespace Typedown.Core.Utilities
             return bytes.Length > 0;
         }
 
+        /// <summary>
+        /// A data: address as a reader is shown it where the whole would not fit: its start, then its kind and size -
+        /// "data:image/png;base64,iVBORw0K…[PNG · 3 KB]", as source mode folds it (services/dataUriFold). Null for anything
+        /// else.
+        /// </summary>
+        public static string ShortLabel(string uri)
+        {
+            if (!IsDataUri(uri) || !TryParseDataUri(uri, out var bytes, out var extension)) return null;
+            var comma = uri.IndexOf(',');
+            var start = uri.Substring(0, Math.Min(uri.Length, comma + 1 + 8));
+            var kind = extension == "jpg" ? "JPEG" : extension.ToUpperInvariant();
+            return $"{start}…[{kind} · {SizeLabel(bytes.Length)}]";
+        }
+
+        public static string SizeLabel(long bytes) =>
+            bytes < 1024 ? $"{bytes} B"
+            : bytes < 1024 * 1024 ? $"{Math.Round(bytes / 1024.0, MidpointRounding.AwayFromZero)} KB"
+            : $"{bytes / 1024.0 / 1024.0:0.0} MB";
+
         /// <summary>The address is a picture written into the document (data:image/...).</summary>
         public static bool IsDataUri(string uri) => uri != null && uri.TrimStart().StartsWith("data:image/", StringComparison.OrdinalIgnoreCase);
     }

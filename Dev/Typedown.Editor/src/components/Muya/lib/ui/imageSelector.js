@@ -13,6 +13,9 @@ class ImageSelector {
         const boundingClientRect = reference.getBoundingClientRect()
         this.imageInfo = imageInfo;
         let { alt, src, title } = imageInfo.token;
+        // A picture kept in the document (base64, #52): no address to edit - the box came up as large as the encoding.
+        // It is saved as a file or replaced from the editor menu's Image.
+        if (/^\s*data:image\//i.test(src || '')) return
         if (src && /^file:\/\//.test(src)) {
           let protocolLen = 7
           if (isWin && /^file:\/\/\//.test(src)) {
