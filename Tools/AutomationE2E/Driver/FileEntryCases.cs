@@ -97,7 +97,7 @@ internal static partial class Program
                     if (home == null) return null;
                     // The path as the list has it (its case may not be the fixture's), or the name.
                     return home.FindAll(TreeScope.Descendants, Condition.TrueCondition).Cast<AutomationElement>()
-                        .FirstOrDefault(x => SamePath(x.Current.HelpText, file) || x.Current.Name.Contains("fe01-entry", StringComparison.OrdinalIgnoreCase));
+                        .FirstOrDefault(x => (!string.IsNullOrEmpty(x.Current.HelpText) && SamePath(x.Current.HelpText, file)) || x.Current.Name.Contains("fe01-entry", StringComparison.OrdinalIgnoreCase));
                 }
                 await Eventually(() => Task.FromResult((row = Find()) != null), 5000);
                 if (row == null)
