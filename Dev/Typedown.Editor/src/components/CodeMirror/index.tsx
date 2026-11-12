@@ -1,4 +1,5 @@
-﻿import React, { useCallback, useEffect, useRef, useState } from "react";
+﻿import { toStandard, toStandardIfOut } from 'services/reveal'
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import transport from "services/transport";
 import { setScroller } from "services/scrollbar";
 import { matchString, trySearch } from 'services/common'
@@ -76,7 +77,6 @@ interface ICodeMirrorEditor {
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
 
-const STANDAR_Y = 320
 
 const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     const { onStateChange } = props
@@ -132,19 +132,13 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         }
         const anchor = document.querySelector(selector)
         if (anchor) {
-            const { y } = anchor.getBoundingClientRect()
-            relativeScroll(y - STANDAR_Y)
+            relativeScroll(toStandard(anchor.getBoundingClientRect().y))
         }
     }, [editor, relativeScroll])
 
     const scrollToElementIfInvisible = useCallback((selector) => {
         const anchor = document.querySelector(selector)
-        if (anchor) {
-            const { y } = anchor.getBoundingClientRect()
-            if (y < 0 || y > window.innerHeight) {
-                scrollToElement(selector)
-            }
-        }
+        if (anchor && toStandardIfOut(anchor.getBoundingClientRect().y, window.innerHeight)) scrollToElement(selector)
     }, [scrollToElement])
 
     const setMatchSelection = useCallback((match) => {
