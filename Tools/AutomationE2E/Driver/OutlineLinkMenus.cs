@@ -54,13 +54,12 @@ internal static partial class Program
             Check(await Eventually(() => Task.FromResult(Row("Gamma") != null), 3000, 150), "Expand all opens it again");
 
             // Edit link: the address chosen, typed over.
-            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const a = [...document.querySelectorAll('#ag-editor-id a, #ag-editor-id span')].find(e => e.textContent === 'the site'); if (!a) return null; a.scrollIntoView({ block: 'center' }); const r = a.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
-            Check(at.Type == JTokenType.Object, "the link is drawn in the editor");
-            await Task.Delay(300);
-            var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
-            GetWindowRect(window, out var rc);
-            await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top, Mouse.Right);
-            await MenuEntry("EditLinkItem", "Edit link");
+            // Right-clicked as the other menu cases do it (ContextMenuAt: the keyboard back in the editor first).
+            var menu = await ContextMenuAt(c, windowId, window, "#ag-editor-id a[href]", "EditLinkItem");
+            notes.Add("link's menu: " + string.Join(", ", menu.Keys.OrderBy(k => k)));
+            Check(menu.TryGetValue("EditLinkItem", out var edit), "the menu has Edit link");
+            await ClickInPopup(window, edit!);
+            await Task.Delay(500);
             await Task.Delay(300);
             Send("https://example.org/new".SelectMany(ch => new[]
             {
