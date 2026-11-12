@@ -129,6 +129,12 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                     ShowEntryMenu(item, e.TryGetPosition(item, out var at) ? at : new Windows.Foundation.Point(item.ActualWidth / 2, item.ActualHeight / 2),
                         EntryMenu(menu, item, path, open, remove), () => RemoveEntry(menu, item, path, remove));
                 };
+                // The entry the mouse goes over takes the keyboard, as in the system's menus: it is drawn highlighted, and
+                // Delete took out the first entry, where the keyboard had stayed (the user, 2026-11-12).
+                item.PointerEntered += (s, e) =>
+                {
+                    if (entryPopup?.IsOpen != true) item.Focus(FocusState.Pointer);
+                };
                 item.AddHandler(KeyDownEvent, new Microsoft.UI.Xaml.Input.KeyEventHandler((s, e) =>
                 {
                     if (e.Key != Windows.System.VirtualKey.Delete) return;
@@ -184,9 +190,10 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             var presenter = new MenuFlyoutPresenter();
             UiLanguage.Set(presenter);
             // A menu's presenter draws no background of its own: a flyout puts the system's acrylic behind it. A popup does
-            // not, and this menu came up see-through (the user, 2026-11-12): the same backdrop, in the window's theme.
-            if (root.Content is FrameworkElement content) presenter.RequestedTheme = content.ActualTheme;
-            var popup = new Popup { XamlRoot = root, Child = presenter, IsLightDismissEnabled = true, ShouldConstrainToRootBounds = false, SystemBackdrop = new DesktopAcrylicBackdrop() };
+            // not, and this menu came up see-through (the user, 2026-11-12): the menus' acrylic in the app's theme
+            // (AppBackdrop - the system's DesktopAcrylicBackdrop took Windows' theme, not the app's).
+            presenter.RequestedTheme = (root.Content as FrameworkElement)?.ActualTheme ?? ElementTheme.Default;
+            var popup = new Popup { XamlRoot = root, Child = presenter, IsLightDismissEnabled = true, ShouldConstrainToRootBounds = false, SystemBackdrop = AppBackdrop.MenuFor(root) };
             foreach (var x in items)
             {
                 presenter.Items.Add(x);
