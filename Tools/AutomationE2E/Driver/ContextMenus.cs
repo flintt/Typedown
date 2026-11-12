@@ -18,6 +18,20 @@ using System.Threading.Tasks;
 internal static partial class Program
 {
     /// <summary>
+    /// File clicked once, as a reader does: the menu comes, its Open Recent entry returned. Not clicked again if it does
+    /// not: a menu bar that takes its menu for open after an entry's menu (a click then closes it) is what this finds.
+    /// </summary>
+    private static async Task<System.Windows.Automation.AutomationElement> FileMenuByClick(IntPtr window)
+    {
+        var file = FindIn(window, "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
+        await Click(window, file);
+        System.Windows.Automation.AutomationElement? recent = null;
+        if (!await Eventually(() => Task.FromResult((recent = FindAnywhereInHost(window, "OpenRecentSubMenu")) is { } x && !x.Current.IsOffscreen), 2000, 100))
+            throw new CaseFailed("a click on File opened no menu");
+        return recent!;
+    }
+
+    /// <summary>
     /// XM03: Open Recent's entry menu looks as the menus do, in the app's light, dark and black themes, the system's, and
     /// dark with a custom theme:
     /// the colour of its background (beside its last item's text) against the Open Recent submenu's (beside the Folders
@@ -65,10 +79,7 @@ internal static partial class Program
                 await c.Call("test.settings.set", new { windowId, name = "AppTheme", value = theme });
                 await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = custom });
                 await Task.Delay(1500);
-                var file = FindIn(window, "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
-                await Click(window, file);
-                await Task.Delay(500);
-                var recent = FindAnywhereInHost(window, "OpenRecentSubMenu") ?? throw new CaseFailed("no Open Recent");
+                var recent = await FileMenuByClick(window);
                 var r = CenterOf(recent);
                 SetCursorPos(r.Item1, r.Item2);
                 bool Shown() => FindAnywhereInHost(window, "RecentFile-0") is { } x && !x.Current.IsOffscreen;
@@ -139,9 +150,7 @@ internal static partial class Program
             {
                 // The File menu opened with a click, as a reader opens it (opened through automation, a menu bar left taking
                 // its menu for open would not be seen).
-                var file = FindIn(window, "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
-                await Click(window, file);
-                await Task.Delay(500);
+                await FileMenuByClick(window);
                 var entry = await MenuEntry(window, "OpenRecentSubMenu", $"RecentFile-{index}");
                 var target = entry.Current.HelpText;
                 notes.Add($"round {round}: right-click on {entry.Current.Name} ({Path.GetFileName(target)})");
@@ -161,7 +170,8 @@ internal static partial class Program
 
             // Delete with an entry's menu open, the mouse gone over another entry on the way: the entry right-clicked goes.
             {
-                var entry = await MenuEntry(window, "MenuBarFileItem", "OpenRecentSubMenu", "RecentFile-0");
+                await FileMenuByClick(window);
+                var entry = await MenuEntry(window, "OpenRecentSubMenu", "RecentFile-0");
                 var target = entry.Current.HelpText;
                 await Click(window, entry, Mouse.Right);
                 await Task.Delay(600);
@@ -193,10 +203,7 @@ internal static partial class Program
                 }
                 var list = Files(await RecentMenu(c, windowId));
                 notes.Add($"{how}: recent {string.Join(", ", list.Select(Path.GetFileName))}");
-                var file = FindIn(window, "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
-                await Click(window, file);
-                await Task.Delay(500);
-                var recent = FindAnywhereInHost(window, "OpenRecentSubMenu") ?? throw new CaseFailed("no Open Recent");
+                var recent = await FileMenuByClick(window);
                 var r = CenterOf(recent);
                 SetCursorPos(r.Item1, r.Item2);
                 // Open on the mouse resting there; clicked if it has not opened in 3 s.
