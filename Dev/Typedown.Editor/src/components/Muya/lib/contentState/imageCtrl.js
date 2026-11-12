@@ -1,5 +1,6 @@
 import { URL_REG, DATA_URL_REG } from '../config'
-import { correctImageSrc } from '../utils/getImageInfo'
+import { correctImageSrc, getImageInfo } from '../utils/getImageInfo'
+import { getImageInfo as getImageSrc } from '../utils'
 
 const imageCtrl = ContentState => {
   /**
@@ -243,6 +244,30 @@ const imageCtrl = ContentState => {
     }
 
     return this.singleRender(outMostBlock, true)
+  }
+
+  /**
+   * A picture put in as a placeholder (alt "loading-…", its own address) while the host makes it ready - copies it,
+   * uploads it - then given what the host made of it. A drop and a paste each did this, and one that failed kept
+   * "loading-…" as its text for good (the modularity audit's M08): failed, it keeps its own address with its name.
+   * Nothing when the placeholder is gone (deleted meanwhile, another document shown).
+   */
+  ContentState.prototype.settleImagePlaceholder = async function (id, path, name) {
+    let newSrc = null
+    try {
+      newSrc = await this.muya.options.imageAction(path, id, name)
+    } catch (error) {
+      console.error('Unexpected error on image action:', error)
+    }
+    const wrapper = this.muya.container.querySelector(`span[data-id=${id}]`)
+    if (!wrapper) return null
+    const alt = name || (/(?:\/|\\)?([^./\\]+)\.[a-z]+$/.exec(path) || [])[1] || ''
+    if (newSrc) {
+      const { src } = getImageSrc(path)
+      if (src) this.stateRender.urlMap.set(newSrc, src)
+    }
+    this.replaceImage(getImageInfo(wrapper), { alt, src: newSrc || path })
+    return newSrc
   }
 }
 

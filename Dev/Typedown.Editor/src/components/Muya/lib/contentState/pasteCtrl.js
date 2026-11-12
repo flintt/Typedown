@@ -1,6 +1,6 @@
 
 import { PARAGRAPH_TYPES, PREVIEW_DOMPURIFY_CONFIG, HAS_TEXT_BLOCK_REG, IMAGE_EXT_REG, URL_REG } from '../config'
-import { sanitize, getUniqueId, getImageInfo as getImageSrc } from '../utils'
+import { sanitize, getUniqueId } from '../utils'
 import { getImageInfo } from '../utils/getImageInfo'
 import { dedentPastedText } from '../utils/pastedText'
 import { getAllTableCells } from './tableDragBarCtrl'
@@ -167,29 +167,9 @@ const pasteCtrl = ContentState => {
         })
       }
 
-      let newSrc = null
-      try {
-        newSrc = await this.muya.options.imageAction(imagePath, id)
-      } catch (error) {
-        // TODO: Notify user about an error.
-        console.error('Unexpected error on image action:', error)
-        return null
-      }
-
-      const { src } = getImageSrc(imagePath)
-      if (src) {
-        this.stateRender.urlMap.set(newSrc, src)
-      }
-
-      const imageWrapper = this.muya.container.querySelector(`span[data-id=${id}]`)
-
-      if (imageWrapper) {
-        const imageInfo = getImageInfo(imageWrapper)
-        this.replaceImage(imageInfo, {
-          src: newSrc
-        })
-      }
-      return imagePath
+      // Made ready by the host and put in place of the placeholder (ContentState.settleImagePlaceholder).
+      const newSrc = await this.settleImagePlaceholder(id, imagePath)
+      return newSrc ? imagePath : null
     }
 
     const items = event?.clipboardData && event?.clipboardData.items

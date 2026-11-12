@@ -141,6 +141,7 @@ jobs:
           node plain-typography-check.js
           node inline-marks-edge-check.js
           node context-objects-check.js
+          node image-placeholder-check.js
           node export-mermaid-error-check.js
           node renderer-failure-check.js
           node spec-check.js
