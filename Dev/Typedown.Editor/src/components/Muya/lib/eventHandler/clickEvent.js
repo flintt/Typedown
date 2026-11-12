@@ -2,7 +2,7 @@ import { operateClassName } from '../utils/domManipulate'
 import { getImageInfo } from '../utils/getImageInfo'
 import { CLASS_OR_ID } from '../config'
 import selection from '../selection'
-import remote from 'services/remote/common'
+import { followLink } from 'services/linkActions'
 import Slugger from '../parser/marked/slugger'
 import { getHeadingPlainText } from '../utils'
 import { keyBinding, matchesClick } from '../utils/keyBinding'
@@ -322,11 +322,8 @@ class ClickEvent {
       if (!href) return
       event.preventDefault()
       event.stopPropagation()
-      if (href.startsWith('#')) {
-        this.scrollToAnchor(href)
-      } else {
-        remote.openNewWindow(href)
-      }
+      // As the context menu's Open link does it (services/linkActions).
+      followLink(this.muya, href)
     }
     eventCenter.attachDOMEvent(container, 'mousedown', linkMousedownHandler)
     eventCenter.attachDOMEvent(window, 'mouseup', mouseupHandler)

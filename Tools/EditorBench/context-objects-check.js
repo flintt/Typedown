@@ -47,6 +47,13 @@ const doc = '# Objects\n\nA paragraph with a [link to the site](https://example.
     const onTable = await rightClick('#ag-editor-id figure[data-role="TABLE"] tbody td');
     check(onTable && onTable.table === true, 'in a table cell: table', JSON.stringify(onTable));
 
+    // Open Link: the address asked of the host, as a Ctrl+click asks it (services/linkActions; the menu checked the link's
+    // place in the text first, an editing check, and opened nothing when that failed).
+    await rightClick('#ag-editor-id a[href]');
+    calls = await act('openLink');
+    const opened = calls.filter(c => /open/i.test(c.name)).map(c => JSON.stringify(c.args));
+    check(opened.some(a => a.includes('https://example.com/page')), 'Open Link: the address opened', calls.map(c => c.name).join(','));
+
     // Remove Link: the link's text stays, its address goes.
     await rightClick('#ag-editor-id a[href]');
     await act('removeLink');
