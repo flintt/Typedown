@@ -129,25 +129,15 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                     ShowEntryMenu(item, e.TryGetPosition(item, out var at) ? at : new Windows.Foundation.Point(item.ActualWidth / 2, item.ActualHeight / 2),
                         EntryMenu(menu, item, path, open, remove), () => RemoveEntry(menu, item, path, remove));
                 };
-                // The entry the mouse goes over takes the keyboard, as in the system's menus: it is drawn highlighted, and
-                // Delete took out the first entry, where the keyboard had stayed (the user, 2026-11-12).
-                item.PointerEntered += (s, e) =>
-                {
-                    if (entryPopup?.IsOpen != true) item.Focus(FocusState.Pointer);
-                };
-                item.AddHandler(KeyDownEvent, new Microsoft.UI.Xaml.Input.KeyEventHandler((s, e) =>
-                {
-                    if (e.Key != Windows.System.VirtualKey.Delete) return;
-                    e.Handled = true;
-                    // The entry whose menu is open, not the one the keyboard is on (see ShowEntryMenu).
-                    if (entryPopup?.IsOpen == true && removeEntryShown is Action shown)
-                    {
-                        entryPopup.IsOpen = false;
-                        shown();
-                        return;
-                    }
-                    RemoveEntry(menu, item, path, remove);
-                }), true);
+                // The entry drawn highlighted - the mouse over it, or the keys on it - is the one Delete takes out (see
+                // OnRecentKey): it took out the first entry, where the keyboard had stayed (the user, 2026-11-12).
+                Action removeThis = () => RemoveEntry(menu, item, path, remove);
+                item.PointerEntered += (s, e) => { highlightedEntry = (item, removeThis); WatchRecentKeys(); };
+                item.GotFocus += (s, e) => highlightedEntry = (item, removeThis);
+                // Gone as soon as it is not drawn highlighted: a Delete typed in the document must reach the document.
+                item.PointerExited += (s, e) => { if (highlightedEntry.Item == item) highlightedEntry = default; };
+                item.LostFocus += (s, e) => { if (highlightedEntry.Item == item) highlightedEntry = default; };
+                item.Unloaded += (s, e) => { if (highlightedEntry.Item == item) highlightedEntry = default; };
                 menu.Items.Insert(1, item);
                 made.Insert(0, item);
             }
@@ -181,6 +171,44 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         // on the entry the mouse last went over, and that one went (the user, 2026-11-12).
         private Popup entryPopup;
         private Action removeEntryShown;
+        // The entry drawn highlighted in the list, and how it goes (set by its pointer and focus).
+        private (MenuFlyoutItem Item, Action Remove) highlightedEntry;
+        private bool entryMenuOpen;
+        private IDisposable recentKeys;
+
+        // Delete and Esc for the list and the entry's menu, from the window's keyboard hook: the entry's menu is a window of
+        // its own, which the keyboard does not always reach (XM02: Delete went nowhere, and an Esc left it open over the
+        // next click on File). Delete takes out the entry whose menu is open, else the entry highlighted; Esc closes the
+        // entry's menu alone. Other keys, and these with no list open, are left alone.
+        private void WatchRecentKeys()
+        {
+            if (recentKeys != null) return;
+            var keys = this.GetService<IKeyboardAccelerator>();
+            if (keys == null) return;
+            recentKeys = keys.RegisterGlobal((s, e) =>
+            {
+                if (e.Modifiers != Windows.System.VirtualKeyModifiers.None) return;
+                if (e.Key != Windows.System.VirtualKey.Delete && e.Key != Windows.System.VirtualKey.Escape) return;
+                // Plain fields, kept on the window's thread: the hook may call from another.
+                var popup = entryPopup;
+                var open = popup != null && entryMenuOpen;
+                if (e.Key == Windows.System.VirtualKey.Escape)
+                {
+                    if (!open) return;
+                    e.Handled = true;
+                    DispatcherQueue.TryEnqueueSafe(() => popup.IsOpen = false);
+                    return;
+                }
+                var remove = open ? removeEntryShown : highlightedEntry.Remove;
+                if (remove == null) return;
+                e.Handled = true;
+                DispatcherQueue.TryEnqueueSafe(() =>
+                {
+                    if (open) popup.IsOpen = false;
+                    remove();
+                });
+            });
+        }
 
         private void ShowEntryMenu(MenuFlyoutItem item, Windows.Foundation.Point at, List<MenuFlyoutItemBase> items, Action removeThis)
         {
@@ -203,14 +231,6 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                     if (AutomationProperties.GetAutomationId(choice) != "RecentRemoveItem") CloseMenus();
                 };
             }
-            // Delete before the menu's items take the key (they mark it handled: XM02 saw it reach nothing).
-            presenter.PreviewKeyDown += (s, e) =>
-            {
-                if (e.Key != Windows.System.VirtualKey.Delete) return;
-                e.Handled = true;
-                popup.IsOpen = false;
-                removeThis();
-            };
             presenter.KeyDown += (s, e) =>
             {
                 if (e.Key != Windows.System.VirtualKey.Escape) return;
@@ -221,9 +241,12 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             popup.Closed += (s, e) =>
             {
                 if (entryPopup != popup) return;
+                entryMenuOpen = false;
                 entryPopup = null;
                 removeEntryShown = null;
             };
+            WatchRecentKeys();
+            entryMenuOpen = true;
             entryPopup = popup;
             removeEntryShown = removeThis;
             var point = item.TransformToVisual(null).TransformPoint(at);
@@ -321,6 +344,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             Bindings?.StopTracking();
+            recentKeys?.Dispose();
+            recentKeys = null;
         }
     }
 }
