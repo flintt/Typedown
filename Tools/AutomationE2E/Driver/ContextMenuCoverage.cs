@@ -22,13 +22,13 @@ internal static partial class Program
         var folder = FixtureFolder("xm09");
         var chapter = Directory.CreateDirectory(Path.Combine(folder, "chapter")).FullName;
         var picture = Path.Combine(folder, "dot.png");
-        using (var bitmap = new System.Drawing.Bitmap(60, 40))
+        using (var bitmap = new System.Drawing.Bitmap(200, 120))
         {
             using (var g = System.Drawing.Graphics.FromImage(bitmap)) g.Clear(System.Drawing.Color.SteelBlue);
             bitmap.Save(picture, System.Drawing.Imaging.ImageFormat.Png);
         }
         var path = Path.Combine(folder, "xm09.md");
-        File.WriteAllText(path, "# A heading here\n\nA plain paragraph with words.\n\n- first item in the list\n- second item\n\n![dot](dot.png)\n\nAfter.\n");
+        File.WriteAllText(path, "# A heading here\n\nA plain paragraph with words.\n\n- first item in the list\n- second item\n\n![](dot.png)\n\nAfter.\n");
         var text = Path.Combine(folder, "xm09.txt");
         File.WriteAllText(text, "Plain text lines\nanother line\n");
         using var c = await Session("e2e XM09");
@@ -81,6 +81,8 @@ internal static partial class Program
             // Its middle, clicked and right-clicked as IU05 does it (20 px in is its status icon's place).
             await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
             await Task.Delay(400);
+            var chosen = (string?)(await c.Call("test.editor.eval", new { windowId, script = "(() => { const s = window.__typedownMuya && window.__typedownMuya.contentState.selectedImage; const w = document.querySelector('#ag-editor-id .ag-inline-image'); const r = w ? w.getBoundingClientRect() : null; return 'selected ' + !!s + ', box ' + (r ? Math.round(r.left) + ',' + Math.round(r.top) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height) : 'none') + ', class ' + (w ? w.className : '') })()" }))["result"];
+            notes.Add($"picture clicked at {(int)at["x"]!},{(int)at["y"]!}: {chosen} {Screenshot("XM09-picture-clicked")}");
             await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top, Mouse.Right);
             AutomationElement? imageItem = null;
             var hasImage = await Eventually(() => Task.FromResult((imageItem = FindAnywhereInHost(window, "MenuImageItem")) != null), 4000, 150);
