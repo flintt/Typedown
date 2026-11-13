@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 /// "2026-11-10 Partner Center Memory failures"). A long document with formulas and footnotes switched between visual
 /// and source mode 70 times, then two documents swapped 40 times; the private memory of the host and everything it
 /// started (WebView2) and the page's JS heap read every 10 rounds. After the first 10 (the warm-up: caches filling,
-/// code compiled) the private memory may not grow by more than 80 MB: each switch left a footnote tool and about
+/// code compiled) the private memory left once the web view has given back its caches (garbage collected, a critical memory
+/// pressure, the memory target low) may not grow by more than 80 MB: each switch left a footnote tool and about
 /// 4.7 MB of heap behind before 34a8341e, 280 MB over 60 rounds. The numbers go into the notes either way.
 /// </summary>
 internal static partial class Program
@@ -114,6 +115,7 @@ internal static partial class Program
                 await SetMode(true);
                 await SetMode(false);
                 if (round % 10 == 0) await Sample(round);
+                if (round == 10 || round == 70) await Purged(round);
             }
             // The second document opened (its own page state, measured on its own), then the two swapped 40 times: after the
             // first 10 swaps no more growth either. 20 swaps measured once came to +295 MB against round 70 with the
@@ -128,19 +130,24 @@ internal static partial class Program
                 if (swap % 10 == 0) await Sample(70 + swap);
                 if (swap == 10 || swap == 40) await Purged(70 + swap);
             }
+            // Judged on the memory left once purged: the raw numbers have up to a gigabyte of cache the web view gives back
+            // under pressure in them, and swung by hundreds of megabytes from run to run (swaps 10 -> 40 raw: hp +214, -47;
+            // w10 +278 - purged -12 and +53, the page's nodes and listeners the same before and after; jobs 489, 492, 493).
             var warm = samples.First(s => s.round == 10);
             var last = samples.First(s => s.round == 70);
-            var growth = last.priv - warm.priv;
-            notes.Add($"mode switches 10 -> 70: private +{growth:F0} MB, JS heap {warm.js:F1} -> {last.js:F1} MB");
-            Check(growth < 80, $"60 mode switches after the warm-up add less than 80 MB of private memory (+{growth:F0} MB)");
+            notes.Add($"mode switches 10 -> 70 raw: private {last.priv - warm.priv:+0;-0} MB");
+            Check(purged.ContainsKey(10) && purged.ContainsKey(70), "the memory measured once purged after 10 and 70 mode switches");
+            var growth = purged[70] - purged[10];
+            notes.Add($"mode switches 10 -> 70 once purged: {growth:+0;-0} MB ({purged[10]:F0} -> {purged[70]:F0})");
+            Check(growth < 80, $"60 mode switches after the warm-up leave less than 80 MB more private memory once purged ({growth:+0;-0} MB)");
             var opened = samples.First(s => s.round == 71);
             var swapWarm = samples.First(s => s.round == 80);
             var swapLast = samples.First(s => s.round == 110);
-            var swapGrowth = swapLast.priv - swapWarm.priv;
-            notes.Add($"second document opened: private {opened.priv - last.priv:+0;-0} MB; swaps 10 -> 40: {swapGrowth:+0;-0} MB, JS heap {swapWarm.js:F1} -> {swapLast.js:F1} MB");
-            if (purged.TryGetValue(80, out var p80) && purged.TryGetValue(110, out var p110))
-                notes.Add($"swaps 10 -> 40 once purged: {p110 - p80:+0;-0} MB ({p80:F0} -> {p110:F0})");
-            Check(swapGrowth < 80, $"30 document swaps after the first 10 add less than 80 MB of private memory ({swapGrowth:+0;-0} MB)");
+            notes.Add($"second document opened: private {opened.priv - last.priv:+0;-0} MB; swaps 10 -> 40 raw: {swapLast.priv - swapWarm.priv:+0;-0} MB");
+            Check(purged.ContainsKey(80) && purged.ContainsKey(110), "the memory measured once purged after 10 and 40 swaps");
+            var swapGrowth = purged[110] - purged[80];
+            notes.Add($"swaps 10 -> 40 once purged: {swapGrowth:+0;-0} MB ({purged[80]:F0} -> {purged[110]:F0})");
+            Check(swapGrowth < 80, $"30 document swaps after the first 10 leave less than 80 MB more private memory once purged ({swapGrowth:+0;-0} MB)");
         }
         finally
         {
