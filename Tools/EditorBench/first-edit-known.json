@@ -124,11 +124,8 @@
     "reasons": []
   },
   "commonmark-31": {
-    "pendingNormalization": "unsafe",
-    "reasons": [
-      "html-lost",
-      "word-lost"
-    ]
+    "pendingNormalization": "none",
+    "reasons": []
   },
   "commonmark-41": {
     "pendingNormalization": "none",
