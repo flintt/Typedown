@@ -980,9 +980,38 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // (EditorViewModel.ContextMenuInTable). The page keeps the element for Copy table (ContentState.copyTableAtMenu).
     useEffect(() => {
         if (!editor) return
+        let rightDown = 0
         const down = (event: MouseEvent) => {
             if (event.button !== 2) return
-            const target = event.target as Element | null
+            rightDown = Date.now()
+            report(event.target as Element | null)
+        }
+        // The keyboard's menu key or Shift+F10 (the 2026-11-11 menu report; XM09): a contextmenu with no right button
+        // down before it. The host opens its menu only for a right-click; told here, it opens it at the caret, the caret's
+        // element taken as what the menu is for.
+        const keyboardMenu = (event: MouseEvent) => {
+            if (Date.now() - rightDown < 1000) return
+            // Source mode (and a plain text file): CodeMirror's caret, in its hidden text box - no selection to read.
+            const cmHost = (document.activeElement as Element | null)?.closest?.('.CodeMirror') as any
+            if (cmHost?.CodeMirror) {
+                event.preventDefault()
+                const at = cmHost.CodeMirror.cursorCoords(true, 'window')
+                transport.postMessage('KeyboardContextMenu', { x: Math.round(at.left), y: Math.round(at.bottom) })
+                return
+            }
+            const selection = window.getSelection()
+            const node = selection && selection.rangeCount ? selection.getRangeAt(0).startContainer : null
+            const target = (node && (node.nodeType === 1 ? node : node.parentElement)) as Element | null
+            if (!target || !target.closest('#ag-editor-id')) return
+            event.preventDefault()
+            report(target)
+            const range = selection!.getRangeAt(0).cloneRange()
+            range.collapse(true)
+            let rect = range.getBoundingClientRect()
+            if (!rect.height) rect = target.getBoundingClientRect()
+            transport.postMessage('KeyboardContextMenu', { x: Math.round(rect.left), y: Math.round(rect.bottom) })
+        }
+        const report = (target: Element | null) => {
             const contentState = (editor as any).contentState
             if (contentState) contentState.contextMenuTarget = target
             // What the menu's items act on, kept by what stays: the right-click moves the caret and the block it is in is
@@ -1002,7 +1031,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             const link = target?.closest?.('#ag-editor-id a[href]') as HTMLAnchorElement | null
             const figure = target?.closest?.('#ag-editor-id figure[data-role]') as HTMLElement | null
             const role = figure?.dataset?.role || ''
-            const report = {
+            const found = {
                 table: !!target?.closest?.('#ag-editor-id figure[data-role="TABLE"]'),
                 link: link ? link.getAttribute('href') : null,
                 code: !figure && !!target?.closest?.('#ag-editor-id pre[data-role="fencecode"], #ag-editor-id pre[data-role="indentcode"]'),
@@ -1010,11 +1039,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 // Review mode: the revision under the pointer, and whether it is a deleted block drawn where it was.
                 review: reviewAtTarget(target),
             };
-            (window as any).__typedownContextMenuTarget = report
-            transport.postMessage('ContextMenuTarget', report)
+            (window as any).__typedownContextMenuTarget = found
+            transport.postMessage('ContextMenuTarget', found)
         }
         document.addEventListener('mousedown', down, true)
-        return () => document.removeEventListener('mousedown', down, true)
+        document.addEventListener('contextmenu', keyboardMenu, true)
+        return () => {
+            document.removeEventListener('mousedown', down, true)
+            document.removeEventListener('contextmenu', keyboardMenu, true)
+        }
     }, [editor]);
 
     useEffect(() => transport.addListener<any>('Cut', arg => {
