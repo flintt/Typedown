@@ -13,6 +13,7 @@ const remote = {
     // answer went nowhere and OK resized nothing).
     resizeTable: remoteFunction<{ rows: number, columns: number }, { rows: number, columns: number } | null>('ResizeTable', 0),
     loadImage: remoteFunction<{ url: string, width: number, height: number }, { url: string }>('LoadImage'),
+    getPlantUmlPng: remoteFunction<string, string | null>('GetPlantUmlPng'),
     // No time limit: at start-up the host may wait on a dialog (recover a backup?) before it answers; after 30 s the
     // page gave up and the editor stayed blank.
     getSettings: remoteFunction<undefined, unknown>('GetSettings', 0),

@@ -181,6 +181,8 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
             // no path for getImageInfo to resolve; leave it without a source instead of crashing the editor.
             if (!src) continue
             const imageInfo = getImageInfo(src)
+            if ((window.localImageEndpoint && imageInfo.src.startsWith(window.localImageEndpoint + '?')) ||
+                (window.httpImageEndpoint && imageInfo.src.startsWith(window.httpImageEndpoint + '?'))) img.setAttribute('crossorigin', 'anonymous')
             img.setAttribute('src', imageInfo.src)
           }
 
