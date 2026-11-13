@@ -73,6 +73,37 @@ internal static partial class Program
             notes.Add($"round {round}: private {tree.privateMb:F0} MB in {tree.processes} processes, JS heap {js:F1} MB");
             // Which process it is (the host or one of WebView2's), by process id across the rounds.
             notes.Add($"round {round} by process: " + string.Join(", ", TreeMemoryEach(hostPid).Select(p => $"{p.Name}#{p.Pid} {p.PrivateMb:F0}")));
+            notes.Add($"round {round} page: {await PageCounters()}");
+        }
+        // What the page holds (DevTools): nodes, documents and listeners - a switch leaving its page behind shows here - and
+        // the JS heap exactly (performance.memory gives 9.5 MB rounded, every round).
+        async Task<string> PageCounters()
+        {
+            try
+            {
+                var dom = (await c.Call("test.webview.cdp", new { windowId, method = "Memory.getDOMCounters" }))["result"]!;
+                var heap = (await c.Call("test.webview.cdp", new { windowId, method = "Runtime.getHeapUsage" }))["result"]!;
+                return $"nodes {dom["nodes"]}, documents {dom["documents"]}, listeners {dom["jsEventListeners"]}, JS heap {(double)heap["usedSize"]! / 1048576:F1} of {(double)heap["totalSize"]! / 1048576:F1} MB";
+            }
+            catch (Exception e) { return "no counters: " + e.Message.Split('\n')[0]; }
+        }
+        // The private memory once the page and the web view have given back what they can: garbage collected, a critical
+        // memory pressure, the memory target low (then normal again). What is left is held, not cache.
+        var purged = new Dictionary<int, double>();
+        async Task Purged(int round)
+        {
+            try
+            {
+                await c.Call("test.webview.cdp", new { windowId, method = "HeapProfiler.collectGarbage" });
+                await c.Call("test.webview.cdp", new { windowId, method = "Memory.simulatePressureNotification", @params = "{\"level\":\"critical\"}" });
+                await c.Call("test.webview.memoryTarget", new { windowId, level = "low" });
+                await Task.Delay(4000);
+                var tree = TreeMemory(hostPid);
+                purged[round] = tree.privateMb;
+                notes.Add($"round {round} purged: private {tree.privateMb:F0} MB; " + string.Join(", ", TreeMemoryEach(hostPid).Select(p => $"{p.Name}#{p.Pid} {p.PrivateMb:F0}")) + $"; page {await PageCounters()}");
+            }
+            catch (Exception e) { notes.Add($"round {round} not purged: " + e.Message.Split('\n')[0]); }
+            finally { try { await c.Call("test.webview.memoryTarget", new { windowId, level = "normal" }); } catch { } }
         }
         try
         {
@@ -95,6 +126,7 @@ internal static partial class Program
                 await c.Call("document.focus", new { documentId = swap % 2 == 1 ? idA : idB });
                 await Task.Delay(700);
                 if (swap % 10 == 0) await Sample(70 + swap);
+                if (swap == 10 || swap == 40) await Purged(70 + swap);
             }
             var warm = samples.First(s => s.round == 10);
             var last = samples.First(s => s.round == 70);
@@ -106,6 +138,8 @@ internal static partial class Program
             var swapLast = samples.First(s => s.round == 110);
             var swapGrowth = swapLast.priv - swapWarm.priv;
             notes.Add($"second document opened: private {opened.priv - last.priv:+0;-0} MB; swaps 10 -> 40: {swapGrowth:+0;-0} MB, JS heap {swapWarm.js:F1} -> {swapLast.js:F1} MB");
+            if (purged.TryGetValue(80, out var p80) && purged.TryGetValue(110, out var p110))
+                notes.Add($"swaps 10 -> 40 once purged: {p110 - p80:+0;-0} MB ({p80:F0} -> {p110:F0})");
             Check(swapGrowth < 80, $"30 document swaps after the first 10 add less than 80 MB of private memory ({swapGrowth:+0;-0} MB)");
         }
         finally
