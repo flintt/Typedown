@@ -174,6 +174,27 @@ namespace Typedown.Services.Automation
                     var json = await editor.CoreWebView2.ExecuteScriptAsync(c.Params.RequiredString("script"));
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["result"] = Newtonsoft.Json.Linq.JToken.Parse(json) };
                 })));
+            // A DevTools protocol call on the window's editor page (Memory.getDOMCounters, HeapProfiler.collectGarbage,
+            // Memory.simulatePressureNotification, Runtime.getHeapUsage): for MM01 to tell what a growth is made of.
+            methods.Add(new MethodDescriptor("test.webview.cdp", null, "test.webview.cdp/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    var editor = app.MarkdownEditor as Typedown.Controls.MarkdownEditor
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
+                    var json = await editor.CoreWebView2.CallDevToolsProtocolMethodAsync(c.Params.RequiredString("method"), c.Params.OptionalString("params") ?? "{}");
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["result"] = Newtonsoft.Json.Linq.JToken.Parse(json) };
+                })));
+            // The web view's memory target (WebView2's MemoryUsageTargetLevel): low asks it to give back what it can.
+            methods.Add(new MethodDescriptor("test.webview.memoryTarget", null, "test.webview.memoryTarget/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var editor = app.MarkdownEditor as Typedown.Controls.MarkdownEditor
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
+                    editor.CoreWebView2.MemoryUsageTargetLevel = c.Params.RequiredString("level") == "low"
+                        ? Microsoft.Web.WebView2.Core.CoreWebView2MemoryUsageTargetLevel.Low
+                        : Microsoft.Web.WebView2.Core.CoreWebView2MemoryUsageTargetLevel.Normal;
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["level"] = editor.CoreWebView2.MemoryUsageTargetLevel.ToString() };
+                })));
             // The XHTML the editor renders for another format (RenderXhtml with diagrams as pictures and maths as TeX), for a
             // test to check what such an export receives.
             methods.Add(new MethodDescriptor("test.editor.xhtml", null, "test.editor.xhtml/1", async (c, ct) =>
