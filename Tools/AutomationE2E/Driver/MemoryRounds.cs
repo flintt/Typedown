@@ -95,13 +95,21 @@ internal static partial class Program
         {
             try
             {
-                await c.Call("test.webview.cdp", new { windowId, method = "HeapProfiler.collectGarbage" });
-                await c.Call("test.webview.cdp", new { windowId, method = "Memory.simulatePressureNotification", @params = "{\"level\":\"critical\"}" });
+                // The web view gives memory back in its own time: once was not enough (w10 job 495: 914 MB after 70 mode
+                // switches, 677 MB ten swaps later with the larger document open, the page's nodes and listeners the same).
+                // Asked again until two readings are within 15 MB, four times at most; the lowest kept.
                 await c.Call("test.webview.memoryTarget", new { windowId, level = "low" });
-                await Task.Delay(4000);
-                var tree = TreeMemory(hostPid);
-                purged[round] = tree.privateMb;
-                notes.Add($"round {round} purged: private {tree.privateMb:F0} MB; " + string.Join(", ", TreeMemoryEach(hostPid).Select(p => $"{p.Name}#{p.Pid} {p.PrivateMb:F0}")) + $"; page {await PageCounters()}");
+                var readings = new List<double>();
+                for (var attempt = 0; attempt < 4; attempt++)
+                {
+                    await c.Call("test.webview.cdp", new { windowId, method = "HeapProfiler.collectGarbage" });
+                    await c.Call("test.webview.cdp", new { windowId, method = "Memory.simulatePressureNotification", @params = "{\"level\":\"critical\"}" });
+                    await Task.Delay(3000);
+                    readings.Add(TreeMemory(hostPid).privateMb);
+                    if (readings.Count >= 2 && Math.Abs(readings[^1] - readings[^2]) < 15) break;
+                }
+                purged[round] = readings.Min();
+                notes.Add($"round {round} purged: private {purged[round]:F0} MB (readings {string.Join(", ", readings.Select(r => r.ToString("F0")))}); " + string.Join(", ", TreeMemoryEach(hostPid).Select(p => $"{p.Name}#{p.Pid} {p.PrivateMb:F0}")) + $"; page {await PageCounters()}");
             }
             catch (Exception e) { notes.Add($"round {round} not purged: " + e.Message.Split('\n')[0]); }
             finally { try { await c.Call("test.webview.memoryTarget", new { windowId, level = "normal" }); } catch { } }
