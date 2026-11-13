@@ -123,7 +123,9 @@ internal static partial class Program
                 await SetMode(true);
                 await SetMode(false);
                 if (round % 10 == 0) await Sample(round);
-                if (round == 10 || round == 70) await Purged(round);
+                // 30 and 50 too: whether what stays after purging grows with the switches or stops (w10: +217, +227 MB at 70,
+                // given back once the other document was opened).
+                if (round == 10 || round == 30 || round == 50 || round == 70) await Purged(round);
             }
             // The second document opened (its own page state, measured on its own), then the two swapped 40 times: after the
             // first 10 swaps no more growth either. 20 swaps measured once came to +295 MB against round 70 with the
