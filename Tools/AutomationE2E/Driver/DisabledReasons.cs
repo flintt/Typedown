@@ -59,8 +59,11 @@ internal static partial class Program
             await c.Call("test.favorites.clear");
 
             // Unsaved changes: Reopen with encoding says to save first.
-            await c.Call("document.select", new { documentId = id });
-            await Task.Delay(600);
+            // Its tab clicked, as a person goes back to it.
+            AutomationElement? own = null;
+            await Eventually(() => Task.FromResult((own = Tabs().FirstOrDefault(t => t.Current.Name.Contains("xm06"))) != null), 5000);
+            await Click(window, own ?? throw new CaseFailed("no tab for xm06.md"));
+            await Task.Delay(800);
             await ClickEditorText(c, windowId, window, "Some words");
             TypeChar('Q');
             await Eventually(async () => !(bool)(await Get(c, id))["saved"]!, 5000, 200);

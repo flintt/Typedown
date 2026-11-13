@@ -3056,7 +3056,13 @@ internal static partial class Program
                 Check(!menu.ContainsKey(editing), $"no {editing} in reading mode");
             Check(menu.TryGetValue("CopyItem", out var copy) && copy.Current.IsEnabled, "Copy is there and enabled");
             Check(menu.TryGetValue("SelectAllItem", out _), "Select all is there");
-            Check(menu.TryGetValue("CopyAsPlainTextItem", out var plain) && plain.Current.IsEnabled, "Copy as plain text is there and enabled");
+            // In the Copy As submenu since 2026-11-11 (the menu report's M06): opened to reach it.
+            Check(menu.TryGetValue("CopyAsSubItem", out var copyAs), "Copy As is there");
+            if (copyAs!.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var expand))
+                ((System.Windows.Automation.ExpandCollapsePattern)expand).Expand();
+            System.Windows.Automation.AutomationElement? plain = null;
+            await Eventually(() => Task.FromResult((plain = FindAnywhereInHost(window, "CopyAsPlainTextItem")) != null), 3000, 100);
+            Check(plain != null && plain.Current.IsEnabled, "Copy as plain text is there and enabled");
             ((System.Windows.Automation.InvokePattern)plain!.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
             string? clip = null;
             for (var i = 0; i < 30 && clip?.Contains("Alpha") != true; i++) { await Task.Delay(100); clip = ClipboardText(); }
