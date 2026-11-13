@@ -65,7 +65,15 @@ internal static partial class Program
             Editing(item, "a list item", true);
             Check(!objects.Any(item.ContainsKey), "a list item: no object's items");
 
-            // A picture, chosen first.
+            // A picture, chosen first - once it is drawn (a click on its box before was a click on nothing).
+            var state = "";
+            var drawn = await Eventually(async () =>
+            {
+                state = (string?)(await c.Call("test.editor.eval", new { windowId, script = "(() => { const i = document.querySelector('#ag-editor-id img'); const w = document.querySelector('#ag-editor-id .ag-inline-image'); if (w) w.scrollIntoView({ block: 'center' }); return (w ? w.className : 'no picture') + ' ' + (i ? i.naturalWidth + 'x' + i.naturalHeight + ' ' + i.getAttribute('src') : 'no img') })()" }))["result"] ?? "";
+                return state.Contains("ag-image-success") && !state.Contains(" 0x0");
+            }, 8000, 300);
+            notes.Add($"picture: {state}");
+            Check(drawn, "the picture is drawn");
             var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const i = document.querySelector('#ag-editor-id img'); if (!i) return null; i.scrollIntoView({ block: 'center' }); const r = i.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
             Check(at.Type == Newtonsoft.Json.Linq.JTokenType.Object, "the picture is drawn");
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
