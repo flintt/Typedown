@@ -62,6 +62,16 @@ internal static partial class Program
             notes.Add("menu: " + menu);
             await Task.Delay(1500);
             found.AddRange(await Texts("main window", true));
+            // Its editor's context menu, by a real right-click: built with the page, it stayed in Chinese until a new
+            // window (the user, 2026-11-13); the main page is built again on the change now (RootControl.ReloadMainPage).
+            var context = await ContextMenuAt(c, windowId, window, "#ag-editor-id p");
+            var contextNames = context.Values.Select(e => e.Current.Name).ToList();
+            notes.Add("context menu after the switch: " + string.Join(", ", contextNames));
+            found.AddRange(contextNames.Where(n => cjk.IsMatch(n)).Select(n => $"context menu: \"{n}\""));
+            Send(Key(0x1B, false), Key(0x1B, true));
+            await Task.Delay(500);
+            // And the document as it was: open, its text whole.
+            Check(((string)(await Get(c, id))["text"]!).Contains("Some text."), "the document is as it was after the page was built again");
 
             await ClickInPopup(window, await MenuEntry(window, "MenuBarFileItem", "HomeMenuItem"));
             Check(await HomeShown(c, windowId, true), "File > Home shows the home page");
