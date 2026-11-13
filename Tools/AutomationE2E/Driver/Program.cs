@@ -3102,7 +3102,7 @@ internal static partial class Program
             await Task.Delay(800);
             var visual = await ContextMenuAt(c, windowId, window, "#ag-editor-id p");
             notes.Add("visual mode menu: " + string.Join(", ", visual.Keys));
-            Check(visual.ContainsKey("UndoItem") && visual.ContainsKey("CutItem") && visual.ContainsKey("PasteItem") && visual.ContainsKey("CopyAsPlainTextItem"), "the visual editor's menu has undo, cut, paste and copy as plain text");
+            Check(visual.ContainsKey("UndoItem") && visual.ContainsKey("CutItem") && visual.ContainsKey("PasteItem") && visual.ContainsKey("CopyAsSubItem"), "the visual editor's menu has undo, cut, paste and Copy As (plain text in it since 2026-11-11)");
             Send(Key(0x1B, false), Key(0x1B, true));
             await Task.Delay(300);
 
