@@ -45,7 +45,8 @@ internal static partial class Program
             int At(Func<(string Name, string Id), bool> match) => entries.FindIndex(x => match(x));
             var open = At(x => x.Name == "Open");
             var newWindow = At(x => x.Name.Contains("new window", StringComparison.OrdinalIgnoreCase));
-            var favorite = At(x => x.Name.Contains("favorite", StringComparison.OrdinalIgnoreCase));
+            // "favourites" (the app's English) or "favorites".
+            var favorite = At(x => x.Name.Contains("favour", StringComparison.OrdinalIgnoreCase) || x.Name.Contains("favor", StringComparison.OrdinalIgnoreCase));
             var location = At(x => x.Id == locationId);
             var copy = At(x => x.Id == copyId);
             notes.Add($"{where}: {string.Join(", ", entries.Select(x => x.Name))}");
