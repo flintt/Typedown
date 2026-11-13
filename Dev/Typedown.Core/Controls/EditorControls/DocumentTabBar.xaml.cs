@@ -297,7 +297,6 @@ namespace Typedown.Core.Controls
             if (grid == null || grid.ColumnDefinitions.Count < 3 || list == null || add == null || add == watchedAdd) return;
             watchedAdd = add;
             var column = grid.ColumnDefinitions[1];
-            tabsColumn = column;
             var shift = new TranslateTransform();
             add.RenderTransform = shift;
             double? autoRoom = null;
@@ -318,12 +317,6 @@ namespace Typedown.Core.Controls
         }
 
         private Button watchedAdd;
-
-        // The TabView's tabs column (TabContainerGrid's second): fixed by the TabView after a press, a drag or a close.
-        private ColumnDefinition tabsColumn;
-
-        // The tabs the strip has had (weakly: a closed tab goes with its document).
-        private readonly System.Runtime.CompilerServices.ConditionalWeakTable<DocumentTab, object> seenTabs = new();
 
         private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
         {
@@ -378,21 +371,6 @@ namespace Typedown.Core.Controls
         private void OnTabItemsChanged(muxc.TabView sender, Windows.Foundation.Collections.IVectorChangedEventArgs args)
         {
             Log.Debug($"tabs: strip items {args.CollectionChange} at {args.Index}");
-            // A tab added while the TabView still holds its tabs column at the width it had (after a drag or a press, until
-            // the pointer leaves the strip): squeezed into that width, the new tab went over the one before it (4 px on hp,
-            // TD01; the user, 2026-11-12). The column back to Auto: room for it. Only for a tab the strip has not had - a
-            // drag takes a tab out and puts the same one back (and a move within the strip raises no drag event to tell by).
-            if (args.CollectionChange == Windows.Foundation.Collections.CollectionChange.ItemInserted && Tabs != null
-                && (int)args.Index < Tabs.Tabs.Count && Tabs.Tabs[(int)args.Index] is { } inserted)
-            {
-                var isNew = !seenTabs.TryGetValue(inserted, out _);
-                if (isNew) seenTabs.Add(inserted, null);
-                if (isNew && tabsColumn != null && !tabsColumn.Width.IsAuto)
-                {
-                    Log.Debug($"tabs: a tab added with the tabs column held at {tabsColumn.Width.Value:0}; back to Auto");
-                    tabsColumn.Width = GridLength.Auto;
-                }
-            }
             if (args.CollectionChange == Windows.Foundation.Collections.CollectionChange.ItemInserted && Tabs != null
                 && (int)args.Index < Tabs.Tabs.Count && Tabs.Tabs[(int)args.Index] == Tabs.ActiveTab)
             {
