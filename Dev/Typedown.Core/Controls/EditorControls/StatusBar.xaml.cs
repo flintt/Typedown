@@ -207,7 +207,9 @@ namespace Typedown.Core.Controls
         {
             if (lastSaved is not { } when) return;
             LastSavedText.Text = string.Format(Locale.GetString("SaveState.LastSaved"), RecentTime.Format(when, DateTime.Now, Locale.Culture));
-            ToolTipService.SetToolTip(LastSavedText, when.ToString("F", Locale.Culture));
+            var full = when.ToString("F", Locale.Culture);
+            ToolTipService.SetToolTip(LastSavedText, full);
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetHelpText(LastSavedText, full);
         }
 
         /// <summary>

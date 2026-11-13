@@ -6,7 +6,8 @@ using System.Windows.Automation;
 
 /// <summary>
 /// SB09 (the user, 2026-11-13): the status bar says when the file was last saved and has the editor's zoom.
-/// - a file last written long ago: its date and time ("Last saved ..." with the year, its hour and minute);
+/// - a file last written long ago: its date ("Last saved 3/4/2025", as the home page dates a file older than a week), the
+///   time in the tip (its help text);
 /// - typed in and saved from the bar: the time now (no longer that year);
 /// - the zoom's percent 100%; its + a step up (110%, the font size with it), its - back, the percent back to 100%;
 /// - both among the items a right-click chooses.
@@ -35,8 +36,9 @@ internal static partial class Program
             // Last saved: the file's time on disk.
             var shown = "";
             await Eventually(() => Task.FromResult((shown = LastSaved()).Length > 0), 5000, 200);
-            notes.Add($"opened (written {old:yyyy-MM-dd HH:mm}): \"{shown}\"");
-            Check(shown.Contains("2025") && shown.Contains("10:07"), "a file last written long ago: its date and time");
+            var tip = Find("StatusBarLastSaved")?.Current.HelpText ?? "";
+            notes.Add($"opened (written {old:yyyy-MM-dd HH:mm}): \"{shown}\", tip \"{tip}\"");
+            Check(shown.Contains("2025") && tip.Contains("2025") && tip.Contains("10:07"), "a file last written long ago: its date, the time in the tip");
 
             // Typed in and saved from the bar: the time now.
             await TypeInto(c, id, " more");
