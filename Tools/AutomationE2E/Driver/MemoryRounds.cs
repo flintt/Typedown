@@ -31,6 +31,18 @@ internal static partial class Program
         File.WriteAllText(a, Document("mm01 A", 500));
         File.WriteAllText(b, Document("mm01 B", 200));
         using var c = await Session("e2e MM01");
+        // What the cases before left (the host is one process for the run): memory, windows and documents open, before
+        // this case opens anything - round 0 came after its own document and had the run's history in it (1070-1190 MB in
+        // a full run against 656 MB after two cases; the user asked, 2026-11-14).
+        {
+            var entry = TreeMemory(hostPid);
+            var windows = (Newtonsoft.Json.Linq.JArray)(await c.Call("window.list"))["windows"]!;
+            var documents = 0;
+            foreach (var w in windows)
+                documents += ((Newtonsoft.Json.Linq.JArray)(await c.Call("document.list", new { windowId = (string)w["windowId"]! }))["documents"]!).Count;
+            notes.Add($"before the case: private {entry.privateMb:F0} MB in {entry.processes} processes; {windows.Count} window(s), {documents} document(s) open");
+            notes.Add("before the case by process: " + string.Join(", ", TreeMemoryEach(hostPid).Select(p => $"{p.Name}#{p.Pid} {p.PrivateMb:F0}")));
+        }
         var idA = await Open(c, a);
         var windowId = await WindowIdOf(c, idA);
         string? idB = null;
