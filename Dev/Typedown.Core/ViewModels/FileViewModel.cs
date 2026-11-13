@@ -1406,7 +1406,7 @@ namespace Typedown.Core.ViewModels
             // when the settings want it. Before the recovery question, which a recovered document then answers.
             Home?.ShowIfWanted();
             await RecoverUntitledBackupsAsync();
-            await RestoreSessionTabs(session);
+            RestoreSessionTabs(session);
         }
 
         private static bool untitledRecoveryDone;
@@ -1487,7 +1487,7 @@ namespace Typedown.Core.ViewModels
         /// ones came after the files), and the tab the reader closed on shown - an untitled one is named by its document id,
         /// having no file in the list.
         /// </summary>
-        private async Task RestoreSessionTabs(SessionMemory.Session session)
+        private void RestoreSessionTabs(SessionMemory.Session session)
         {
             var tabs = TabsViewModel;
             if (session == null || tabs == null) return;
@@ -1506,9 +1506,29 @@ namespace Typedown.Core.ViewModels
             }
             if (session.ActiveDocumentId is string id && tabs.Tabs.FirstOrDefault(t => t.DocumentId == id) is { } shown && shown != tabs.ActiveTab)
             {
-                Log.Debug("RestoreSession: back on the untitled document the session was closed on");
-                await tabs.SwitchTo(shown);
+                // Not switched here: this is the startup the page waits for (GetSettings), so the page has no document yet
+                // and could not hand one over - the switch was given up and the start showed the first file (SR03 on hp,
+                // whose page comes later than w10's, 2026-11-14). Switched once the page has taken its document; part of
+                // the session's loading, which automation waits for.
+                var from = tabs.ActiveTab;
+                sessionLoading = Task.WhenAll(sessionLoading, SwitchOnceShownAsync(tabs, from, shown));
             }
+        }
+
+        // The session's untitled document shown once the page has the startup one (its load confirmed), unless the reader
+        // has gone to another tab meanwhile.
+        private async Task SwitchOnceShownAsync(TabsViewModel tabs, DocumentTab from, DocumentTab to)
+        {
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            while (EditorViewModel.ConfirmedLoadId < EditorViewModel.LoadId && clock.ElapsedMilliseconds < 15000)
+                await Task.Delay(50);
+            if (tabs.ActiveTab != from || !tabs.Tabs.Contains(to))
+            {
+                Log.Debug("RestoreSession: another tab shown meanwhile; not back on the untitled document");
+                return;
+            }
+            Log.Debug($"RestoreSession: back on the untitled document the session was closed on ({clock.ElapsedMilliseconds} ms after the start's)");
+            await tabs.SwitchTo(to);
         }
 
         /// <summary>
