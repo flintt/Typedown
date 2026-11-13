@@ -30,10 +30,10 @@
              (Services.FileEntryActions) - a folder's own opening (the root, new entries) in the place of a file's - then the
              tree's own. -->
         <MenuFlyout x:Key="ItemContextFlyout" Opening="OnItemContextFlyoutOpening" Opened="OnItemContextFlyoutOpened" Closed="OnItemContextFlyoutClosed">
-            <MenuFlyoutItem Tag="File" Text="{u:LocaleString Key=Open}" Click="OnOpenClick"/>
-            <MenuFlyoutItem Tag="File" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
+            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TreeOpenItem" Text="{u:LocaleString Key=Open}" Click="OnOpenClick"/>
+            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TreeOpenInNewWindowItem" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
             <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=FolderPane.SetAsRoot}" AutomationProperties.AutomationId="FolderSetAsRoot" Click="OnSetAsRootClick"/>
-            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFile}" Click="OnNewFileClick"/>
+            <MenuFlyoutItem Tag="Folder" AutomationProperties.AutomationId="TreeNewFileItem" Text="{u:LocaleString Key=NewFile}" Click="OnNewFileClick"/>
             <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFolder}" Click="OnNewFolderClick"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TreeFavoriteItem" Text="{u:LocaleString Key=Favorites.Add}" Click="OnToggleFavoriteClick"/>

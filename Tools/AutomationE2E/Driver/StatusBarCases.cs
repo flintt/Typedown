@@ -159,9 +159,10 @@ internal static partial class Program
             var saved = await State();
             notes.Add($"plain file, typed into: '{saved.Replace("\n", " | ")}'");
             Check(Disk(Path.Combine(fixtures, "sb03-plain.md")).Contains('Z'), "auto-save wrote the plain file");
-            // The tip: the state, then (since 2026-11-13) when the file was last saved - no reason from the other tab.
+            // The tip: the state, then (since 2026-11-13) when the file was last saved, a line with the year in it - no
+            // reason from the other tab (in any language: hp's interface is Chinese).
             var lines = saved.Split('\n');
-            Check(!saved.Contains("UTF-8") && (lines.Length == 1 || (lines.Length == 2 && lines[1].StartsWith("Last saved"))), "the status bar shows it saved, with no reason left over from the other tab");
+            Check(!saved.Contains("UTF-8") && (lines.Length == 1 || (lines.Length == 2 && lines[1].Contains(DateTime.Now.Year.ToString()))), "the status bar shows it saved, with no reason left over from the other tab");
         }
         finally
         {
