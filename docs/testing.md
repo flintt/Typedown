@@ -221,6 +221,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | IU02 | File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text |
 | IU04 | pictures saved and uploaded under the right names: a pasted screenshot goes up as image.png, a second different picture of the same name is copied as "name (2)" and the document says so, a new upload configuration starts enabled |
 | IU05 | pictures embedded in the document (base64): a pasted screenshot as a PNG or, chosen, a JPEG; an inserted picture file with its own bytes; its right-click menu saves it into the image folder and embeds it again |
+| IU06 | a picture kept in the document is not shown as its base64 in the visual editor: switched from source mode with the caret below it, and the caret moved up onto it |
 | IN01 | several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step |
 | VI01 | Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves |
 | VI02 | Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page |
