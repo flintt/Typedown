@@ -87,20 +87,27 @@ internal static partial class Program
         finally
         {
             // The untitled one saved as a file and the documents closed: left kept, every later start would bring it back.
+            // So too the untitled documents of earlier cases the restarts brought back from their backups (4 recovered,
+            // 2 of them not this case's): left open with Keep unsaved changes off again, the next cold start asked whether
+            // to recover them and the page waited for its settings behind the question for a minute (SR01 on w10,
+            // 2026-11-14).
             try
             {
                 windowId = (string)((JArray)(await c.Call("window.list"))["windows"]!).First()["windowId"]!;
+                var leftover = 0;
                 foreach (var d in (JArray)(await c.Call("document.list", new { windowId }))["documents"]!)
                 {
                     if (d["path"] == null || d["path"]!.Type == JTokenType.Null)
                     {
                         var text = ((string?)(await Get(c, (string)d["documentId"]!))["text"]) ?? "";
-                        if (!text.Contains("SR03 untitled")) continue;
+                        if (!text.Contains("SR03 untitled") && (bool?)d["saved"] == true && text.Trim().Length == 0) continue;
                         await c.Call("document.focus", new { documentId = (string)d["documentId"]! });
                         await Task.Delay(500);
-                        await c.Call("test.file.saveAs", new { windowId, path = Path.Combine(Path.GetDirectoryName(a)!, text.Contains("untitled 1") ? "sr03-untitled-1.md" : "sr03-untitled-2.md") });
+                        var name = text.Contains("SR03 untitled") ? (text.Contains("untitled 1") ? "sr03-untitled-1.md" : "sr03-untitled-2.md") : $"sr03-leftover-{++leftover}.md";
+                        await c.Call("test.file.saveAs", new { windowId, path = Path.Combine(Path.GetDirectoryName(a)!, name) });
                     }
                 }
+                if (leftover > 0) notes.Add($"untitled documents of earlier cases brought back by the restarts, saved and closed: {leftover}");
                 foreach (var d in (JArray)(await c.Call("document.list", new { windowId }))["documents"]!)
                     if (((string?)d["path"] ?? "").Contains("sr03-")) try { await c.Call("document.close", new { documentId = (string)d["documentId"]! }); } catch { }
                 await c.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = keepBefore ?? false });
