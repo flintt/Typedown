@@ -24,7 +24,9 @@ internal static partial class Program
         var window = await WindowOf(windowId, c);
         string? untitled = null;
         await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = true });
-        // Wide, the status bar on: its encoding item not squeezed into "...".
+        // Wide, the status bar on and its encoding item shown (hidden by default), not squeezed into "...".
+        var hidden = (string?)(await c.Call("test.settings.get", new { windowId, name = "StatusBarHiddenItems" }))["value"] ?? "format";
+        await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = "" });
         await c.Call("window.setView", new { windowId, statusBar = true, bounds = new { x = 40, y = 40, width = 1400, height = 800 } });
         List<AutomationElement> Tabs() => Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>().ToList();
         async Task RightClickTab(Func<AutomationElement, bool> which, string what)
@@ -84,6 +86,7 @@ internal static partial class Program
             try { await c.Call("document.close", new { documentId = id }); } catch { }
             if (untitled != null) try { await c.Call("document.close", new { documentId = untitled }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = hidden }); } catch { }
         }
     }
 }
