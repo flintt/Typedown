@@ -159,7 +159,9 @@ internal static partial class Program
             var saved = await State();
             notes.Add($"plain file, typed into: '{saved.Replace("\n", " | ")}'");
             Check(Disk(Path.Combine(fixtures, "sb03-plain.md")).Contains('Z'), "auto-save wrote the plain file");
-            Check(!saved.Contains('\n') && !saved.Contains("UTF-8"), "the status bar shows it saved, with no reason left over from the other tab");
+            // The tip: the state, then (since 2026-11-13) when the file was last saved - no reason from the other tab.
+            var lines = saved.Split('\n');
+            Check(!saved.Contains("UTF-8") && (lines.Length == 1 || (lines.Length == 2 && lines[1].StartsWith("Last saved"))), "the status bar shows it saved, with no reason left over from the other tab");
         }
         finally
         {
