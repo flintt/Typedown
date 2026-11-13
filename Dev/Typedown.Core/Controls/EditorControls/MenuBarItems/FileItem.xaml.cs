@@ -156,6 +156,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         private List<MenuFlyoutItemBase> EntryMenu(MenuFlyoutSubItem menu, MenuFlyoutItem item, string path, System.Windows.Input.ICommand open, Action<string> remove)
         {
             var openItem = new MenuFlyoutItem { Text = Locale.GetString("Open") };
+            AutomationProperties.SetAutomationId(openItem, "RecentOpenItem");
             openItem.Click += (s, e) => open.Execute(path);
             // What every file menu does with an entry (Services.FileEntryActions).
             var entry = new FileEntry(path, menu == OpenRecentFoldersSubMenu);

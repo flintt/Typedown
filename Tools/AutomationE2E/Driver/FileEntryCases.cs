@@ -38,15 +38,15 @@ internal static partial class Program
                 .Where(x => !x.Current.IsOffscreen).OrderBy(x => x.Current.BoundingRectangle.Top).Select(x => (x.Current.Name, x.Current.AutomationId)).ToList();
         }
         // Every file menu's core, in one order (the user, 2026-11-13): Open, Open in New Window | the favourite, Open File
-        // Location, Copy as Path. A tab has no Open (it is open).
+        // Location, Copy as Path. A tab has no Open (it is open). Known by their automation ids, in any language (hp's
+        // interface is Chinese): ...OpenItem, ...NewWindow..., ...FavoriteItem, and the menu's own location and copy ids.
         var order = new List<string>();
         void SameCore(string where, List<(string Name, string Id)> entries, string locationId, string copyId, bool opens)
         {
             int At(Func<(string Name, string Id), bool> match) => entries.FindIndex(x => match(x));
-            var open = At(x => x.Name == "Open");
-            var newWindow = At(x => x.Name.Contains("new window", StringComparison.OrdinalIgnoreCase));
-            // "favourites" (the app's English) or "favorites".
-            var favorite = At(x => x.Name.Contains("favour", StringComparison.OrdinalIgnoreCase) || x.Name.Contains("favor", StringComparison.OrdinalIgnoreCase));
+            var open = At(x => x.Id.EndsWith("OpenItem") && !x.Id.Contains("NewWindow"));
+            var newWindow = At(x => x.Id.Contains("NewWindow"));
+            var favorite = At(x => x.Id.EndsWith("FavoriteItem"));
             var location = At(x => x.Id == locationId);
             var copy = At(x => x.Id == copyId);
             notes.Add($"{where}: {string.Join(", ", entries.Select(x => x.Name))}");

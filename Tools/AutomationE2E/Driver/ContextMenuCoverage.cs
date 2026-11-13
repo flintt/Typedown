@@ -117,11 +117,11 @@ internal static partial class Program
             Check(row != null, "the folder is in the tree");
             await Click(window, row!, Mouse.Right);
             await Task.Delay(700);
+            // By their automation ids, in any language.
+            bool On(string id) => FindAnywhereInHost(window, id) is { } e && !e.Current.IsOffscreen;
             var setRoot = FindAnywhereInHost(window, "FolderSetAsRoot");
-            var names = MenuNamesBeside(setRoot);
-            notes.Add("tree folder: " + string.Join(", ", names));
-            Check(setRoot != null && names.Any(n => n.Contains("New", StringComparison.OrdinalIgnoreCase)) && !names.Any(n => n.Contains("New Window", StringComparison.OrdinalIgnoreCase)),
-                "a folder in the tree: Set as root and New file, no Open in New Window");
+            notes.Add("tree folder: " + string.Join(", ", MenuNamesBeside(setRoot)));
+            Check(On("FolderSetAsRoot") && On("TreeNewFileItem") && !On("TreeOpenInNewWindowItem"), "a folder in the tree: Set as root and New file, no Open in New Window");
             await CloseMenus();
 
             // A folder among the home page's recent folders.
@@ -135,9 +135,8 @@ internal static partial class Program
             Check(recent != null, "the folder is among the home page's recent folders");
             await Click(window, recent!, Mouse.Right);
             await Task.Delay(700);
-            var homeNames = ShownMenuNames(window);
-            notes.Add("home recent folder: " + string.Join(", ", homeNames));
-            Check(homeNames.Contains("Open") && homeNames.Any(n => n.Contains("File Location")) && homeNames.Any(n => n.Contains("Copy as Path")) && !homeNames.Any(n => n.Contains("New Window")),
+            notes.Add("home recent folder: " + string.Join(", ", ShownMenuNames(window)));
+            Check(On("HomeFolderOpenItem") && On("HomeFolderLocationItem") && On("HomeFolderCopyPathItem") && !On("HomeOpenInNewWindowItem"),
                 "a recent folder on the home page: Open, Open File Location, Copy as Path, no Open in New Window");
             await CloseMenus();
         }
