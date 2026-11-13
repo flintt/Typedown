@@ -75,6 +75,15 @@ internal static partial class Program
         return (priv / 1048576, ws / 1048576, n);
     }
 
+    /// <summary>Each process of the tree: its id, name and private memory (which one grows, not only that the sum does).</summary>
+    private static List<(int Pid, string Name, double PrivateMb)> TreeMemoryEach(int root)
+    {
+        var each = new List<(int, string, double)>();
+        foreach (var pid in ProcessTree(root))
+            try { using var p = Process.GetProcessById(pid); each.Add((pid, p.ProcessName, p.PrivateMemorySize64 / 1048576.0)); } catch (ArgumentException) { } catch (InvalidOperationException) { }
+        return each;
+    }
+
     private static async Task<bool> PageShows(Client c, string windowId, string marker)
     {
         try { return (bool?)(await c.Call("test.editor.eval", new { windowId, script = $"document.body.textContent.includes({Newtonsoft.Json.JsonConvert.ToString(marker)})" }))["result"] == true; }

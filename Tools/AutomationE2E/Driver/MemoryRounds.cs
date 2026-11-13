@@ -59,6 +59,8 @@ internal static partial class Program
             var js = await JsHeapMb();
             samples.Add((round, tree.privateMb, js));
             notes.Add($"round {round}: private {tree.privateMb:F0} MB in {tree.processes} processes, JS heap {js:F1} MB");
+            // Which process it is (the host or one of WebView2's), by process id across the rounds.
+            notes.Add($"round {round} by process: " + string.Join(", ", TreeMemoryEach(hostPid).Select(p => $"{p.Name}#{p.Pid} {p.PrivateMb:F0}")));
         }
         try
         {
