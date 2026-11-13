@@ -279,6 +279,21 @@ internal static partial class Program
                 List<(string name, System.Windows.Rect r)> AllTabs() => Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>()
                     .Select(t => (name: t.Current.Name, r: t.Current.BoundingRectangle)).Where(t => !t.r.IsEmpty && t.r.Width > 0).OrderBy(t => t.r.Left).ToList();
                 var countBefore = AllTabs().Count;
+                // The tab shown's reach measured again here, on the one shown now: measured at the start, hp's came to 0 px
+                // every run while its new tab, shown, reached 4 px over the one before it as w10's does (its foot; TD01
+                // failed on hp alone, 2026-11-14).
+                var strip = Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>()
+                    .Where(t => !t.Current.BoundingRectangle.IsEmpty && t.Current.BoundingRectangle.Width > 0).OrderBy(t => t.Current.BoundingRectangle.Left).ToList();
+                var selected = strip.FindIndex(t => t.TryGetCurrentPattern(SelectionItemPattern.Pattern, out var p) && ((SelectionItemPattern)p).Current.IsSelected);
+                if (selected >= 0)
+                {
+                    // Over the tab before it, or the one after when it is the first.
+                    var r = strip[selected].Current.BoundingRectangle;
+                    var reach = Math.Max(0, Math.Max(selected > 0 ? strip[selected - 1].Current.BoundingRectangle.Right - r.Left : 0,
+                        selected + 1 < strip.Count ? r.Right - strip[selected + 1].Current.BoundingRectangle.Left : 0));
+                    notes.Add($"before +: the tab shown ({strip[selected].Current.Name}, {selected + 1} of {strip.Count}) reaches {reach:0} px over its neighbour");
+                    shownOver = Math.Max(shownOver, reach);
+                }
                 Invoke(addButton);
                 await Task.Delay(1500);
                 var all = AllTabs();
