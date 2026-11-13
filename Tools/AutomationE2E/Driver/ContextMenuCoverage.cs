@@ -66,15 +66,19 @@ internal static partial class Program
             Check(!objects.Any(item.ContainsKey), "a list item: no object's items");
 
             // A picture, chosen first.
-            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const i = document.querySelector('#ag-editor-id img'); if (!i) return null; i.scrollIntoView({ block: 'center' }); const r = i.getBoundingClientRect(); return { x: Math.round(r.left + 20), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const i = document.querySelector('#ag-editor-id img'); if (!i) return null; i.scrollIntoView({ block: 'center' }); const r = i.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
             Check(at.Type == Newtonsoft.Json.Linq.JTokenType.Object, "the picture is drawn");
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
             GetWindowRect(window, out var rc);
+            // Its middle, clicked and right-clicked as IU05 does it (20 px in is its status icon's place).
             await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
             await Task.Delay(400);
-            var image = await MenuAt("picture", "#ag-editor-id img", "MenuImageItem");
+            await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top, Mouse.Right);
+            AutomationElement? imageItem = null;
+            var hasImage = await Eventually(() => Task.FromResult((imageItem = FindAnywhereInHost(window, "MenuImageItem")) != null), 4000, 150);
+            notes.Add($"picture: Image submenu {(hasImage ? "there" : "missing")}");
             Close(); await Task.Delay(300);
-            Check(image.ContainsKey("MenuImageItem"), "a picture: the Image submenu");
+            Check(hasImage, "a picture: the Image submenu");
 
             // The keyboard's menu key and Shift+F10, the caret in a paragraph.
             foreach (var (name, press) in new (string, Action)[] { ("the menu key", () => Send(Key(0x5D, false), Key(0x5D, true))), ("Shift+F10", () => Chord("Shift+F10")) })
