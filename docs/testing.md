@@ -361,6 +361,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | KU01 | Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question |
 | PS01 | the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again |
 | XM04 | the outline's and a link's menus by real right-clicks: Copy link to heading copies [Beta](#beta), Collapse all and Expand all fold and open the outline, Edit link chooses the address and typing replaces it |
+| XM09 | context menus by real right-clicks where XM01 and TM01 do not reach: a heading, a list item, a picture, a plain text file, a folder in the tree, a recent folder on the home page, and the menu key and Shift+F10 in a paragraph |
 | XM07 | the editor's context menu in German, French, Russian and Portuguese against English: its width, its longest entry and a screenshot each; no wider than half the screen |
 | XM06 | a greyed menu item says why: a tab of a document not saved yet, Add to favourites with the list full (how many it holds), Reopen with encoding with changes not saved |
 | XM05 | the context menu's format buttons show the format right-clicked: Bold pressed in bold text, Italic in italic, none in plain text; Bold pressed there takes the bold off and shows off after |
