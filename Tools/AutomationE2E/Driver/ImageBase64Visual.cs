@@ -30,49 +30,64 @@ internal static partial class Program
             bitmap.Save(shot, System.Drawing.Imaging.ImageFormat.Png);
         }
         var address = "data:image/png;base64," + Convert.ToBase64String(File.ReadAllBytes(shot));
-        var doc = Path.Combine(folder, "iu06.md");
-        File.WriteAllText(doc, $"# IU06\n\n![]({address})\n\nNext line\n");
-        var id = await Open(c, doc);
-        var windowId = await WindowIdOf(c, id);
-        var window = await WindowOf(windowId, c);
-        // What the reader sees of the picture's paragraph, and of the whole editor.
-        async Task<JToken> Seen() => (await c.Call("test.editor.eval", new { windowId, script = "(() => { const e = document.getElementById('ag-editor-id'); const i = e && e.querySelector('.ag-inline-image'); const p = i && i.closest('p'); return { paragraph: p ? p.innerText.length : -1, sample: p ? p.innerText.slice(0, 60) : '', editor: e ? e.innerText.length : -1, classes: i ? i.className : '' } })()" }))["result"]!;
-        void Shown(JToken seen, string when)
+        // Markdown's own picture, and the user's document as it was (2026-11-13): an HTML <img> with the attributes
+        // another editor writes, blank lines around it, CRLF.
+        foreach (var (name, text, below) in new[]
         {
-            notes.Add($"{when}: {seen.ToString(Formatting.None)} {Screenshot("IU06-" + when.Replace(' ', '-'))}");
-            Check((int)seen["paragraph"]! >= 0 && (int)seen["paragraph"]! < 200 && (int)seen["editor"]! < 400, $"{when}: the encoding is not shown ({(int)seen["paragraph"]!} characters in the picture's paragraph)");
+            ("markdown", $"# IU06\n\n![]({address})\n\nNext line\n", 3),
+            ("html", $"\r\n\r\n\r\n\r\n<img title=\"\" src=\"{address}\" alt=\"\" style=\"zoom:100%;\">\r\n\r\n\r\n\r\n\r\nNext line\r\n", 5),
+        })
+        {
+            var doc = Path.Combine(folder, $"iu06-{name}.md");
+            File.WriteAllText(doc, text);
+            await Run(name, doc, below);
         }
-        try
-        {
-            await c.Call("window.setView", new { windowId, mode = "visual", bounds = new { x = 40, y = 40, width = 1200, height = 800 } });
-            foreach (var by in new[] { "setView", "shortcut" })
-            {
-                // Source mode, the caret on the line below the picture (the blank line), then back to visual.
-                await c.Call("window.setView", new { windowId, mode = "source" });
-                await Task.Delay(600);
-                await Activate(window);
-                await c.Call("test.editor.eval", new { windowId, script = "(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; cm.focus(); cm.setCursor({ line: 3, ch: 0 }); return cm.getCursor().line })()" });
-                await Task.Delay(300);
-                if (by == "setView") await c.Call("window.setView", new { windowId, mode = "visual" });
-                else Chord("Ctrl+Slash");
-                await Task.Delay(1200);
-                Shown(await Seen(), $"{by} source to visual");
 
-                // The caret moved up onto the picture, from the line below it.
-                await ClickEditorText(c, windowId, window, "Next line");
-                Chord("Home");
-                await Task.Delay(200);
-                Chord("Up");
-                await Task.Delay(500);
-                Shown(await Seen(), $"{by} up once");
-                Chord("Up");
-                await Task.Delay(500);
-                Shown(await Seen(), $"{by} up twice");
-            }
-        }
-        finally
+        async Task Run(string name, string doc, int below)
         {
-            try { await c.Call("document.close", new { documentId = id }); } catch { }
+            var id = await Open(c, doc);
+            var windowId = await WindowIdOf(c, id);
+            var window = await WindowOf(windowId, c);
+            // What the reader sees of the picture's paragraph, and of the whole editor.
+            async Task<JToken> Seen() => (await c.Call("test.editor.eval", new { windowId, script = "(() => { const e = document.getElementById('ag-editor-id'); const i = e && e.querySelector('.ag-inline-image'); const p = i && i.closest('p'); return { paragraph: p ? p.innerText.length : -1, sample: p ? p.innerText.slice(0, 60) : '', editor: e ? e.innerText.length : -1, classes: i ? i.className : '' } })()" }))["result"]!;
+            void Shown(JToken seen, string when)
+            {
+                when = name + " " + when;
+                notes.Add($"{when}: {seen.ToString(Formatting.None)} {Screenshot("IU06-" + when.Replace(' ', '-'))}");
+                Check((int)seen["paragraph"]! >= 0 && (int)seen["paragraph"]! < 200 && (int)seen["editor"]! < 400, $"{when}: the encoding is not shown ({(int)seen["paragraph"]!} characters in the picture's paragraph)");
+            }
+            try
+            {
+                await c.Call("window.setView", new { windowId, mode = "visual", bounds = new { x = 40, y = 40, width = 1200, height = 800 } });
+                foreach (var by in new[] { "setView", "shortcut" })
+                {
+                    // Source mode, the caret on the line below the picture (the blank line), then back to visual.
+                    await c.Call("window.setView", new { windowId, mode = "source" });
+                    await Task.Delay(600);
+                    await Activate(window);
+                    await c.Call("test.editor.eval", new { windowId, script = "(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; cm.focus(); cm.setCursor({ line: " + below + ", ch: 0 }); return cm.getCursor().line })()" });
+                    await Task.Delay(300);
+                    if (by == "setView") await c.Call("window.setView", new { windowId, mode = "visual" });
+                    else Chord("Ctrl+Slash");
+                    await Task.Delay(1200);
+                    Shown(await Seen(), $"{by} source to visual");
+
+                    // The caret moved up onto the picture, from the line below it.
+                    await ClickEditorText(c, windowId, window, "Next line");
+                    Chord("Home");
+                    await Task.Delay(200);
+                    Chord("Up");
+                    await Task.Delay(500);
+                    Shown(await Seen(), $"{by} up once");
+                    Chord("Up");
+                    await Task.Delay(500);
+                    Shown(await Seen(), $"{by} up twice");
+                }
+            }
+            finally
+            {
+                try { await c.Call("document.close", new { documentId = id }); } catch { }
+            }
         }
     }
 }
