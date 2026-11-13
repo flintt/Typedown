@@ -3719,7 +3719,10 @@ internal static partial class Program
     {
         using var c = await Session("e2e F02");
         // CommonMark example 31: Muya rewrites the entity in this HTML block on the first visual edit.
-        var id = await Open(c, Fixture("f02.md", "<a href=\"&ouml;&ouml;.html\">\n\nEDITHERE\n"));
+        // A source the editor still writes another way on an edit: an indented code fence (its indent and the code's
+        // spaces change). Raw HTML with entities was the sample; it is kept as written now (2026-11-11, E03 and the
+        // keeping of the source), so it showed no card - not a fault, the sample's (hp and w10 full runs, 2026-11-14).
+        var id = await Open(c, Fixture("f02.md", UnsafeSample));
         var windowId = await WindowIdOf(c, id);
         // The window's own card (FirstEditNotice, like the export's), not anything in the page: the page works it out a
         // frame after the document is on the screen and tells the host, for the load it is about.
@@ -3752,12 +3755,16 @@ internal static partial class Program
     // The card was shown for a document with no HTML in it (a list numbered 8, 10 written 8, 9, taken for a word lost),
     // and its "Don't show again" asked whether it was for this document (the user, 2026-11-07): it is, by the file's path,
     // following a rename and a save as; the setting is for every document.
+    // A document the visual editor still rewrites on its first edit, unsafely (services/normalization: the code's spaces
+    // change), for the first-edit card's cases.
+    private const string UnsafeSample = "  ```\n   aaa\n  ```\n\nEDITHERE\n";
+
     private static async Task F03(List<string> notes)
     {
         using var c = await Session("e2e F03");
         // New names each run: the mutes are kept by path in the app's data (first-edit-mutes.json) across runs.
         var run = Guid.NewGuid().ToString("N").Substring(0, 8);
-        const string unsafeHtml = "<a href=\"&ouml;&ouml;.html\">\n\nEDITHERE\n";
+        const string unsafeHtml = UnsafeSample;
         var list = await Open(c, Fixture($"f03-list-{run}.md", "# F03\n\n8. eight\n10. ten\n\nEDITHERE\n"));
         var windowId = await WindowIdOf(c, list);
         async Task<JToken> Card() => await c.Call("test.editor.firstEditNotice", new { windowId });
