@@ -24,6 +24,8 @@ internal static partial class Program
         var window = await WindowOf(windowId, c);
         string? untitled = null;
         await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = true });
+        // Wide, the status bar on: its encoding item not squeezed into "...".
+        await c.Call("window.setView", new { windowId, statusBar = true, bounds = new { x = 40, y = 40, width = 1400, height = 800 } });
         List<AutomationElement> Tabs() => Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>().ToList();
         async Task RightClickTab(Func<AutomationElement, bool> which, string what)
         {
