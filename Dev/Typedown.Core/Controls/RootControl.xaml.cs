@@ -43,7 +43,10 @@ namespace Typedown.Core.Controls
             // everything else built from {u:LocaleString} are evaluated again in the new language. What does
             // not catch up is anything a view model holds as a finished string — the view models outlive the
             // navigation — which is why UIViewModel rebuilds the window title on a language change.
-            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => ReloadSettingsPage()));
+            // A window showing its main page when the language changes elsewhere (another window's settings, the
+            // automation API) never leaves it: its main page is built again too (ReloadMainPage) - its context menu
+            // stayed in the old language until a new window (the user, 2026-11-13).
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => { ReloadSettingsPage(); ReloadMainPage(); }));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
             // The controls' accent (settings, dialogs) in the custom theme's, as the editor and the side pane have it.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme))
@@ -115,6 +118,30 @@ namespace Typedown.Core.Controls
                 catch (Exception ex)
                 {
                     Utilities.Log.Debug($"reload settings after language change: {ex.Message}");
+                }
+            });
+        }
+
+        /// <summary>
+        /// The main page built again where it is shown, as leaving the settings builds it: in place, no transition, no
+        /// entry left on the way back. The documents, the editor's page and the view models stay as they are.
+        /// </summary>
+        private void ReloadMainPage()
+        {
+            if (Frame.SourcePageType != typeof(MainPage)) return;
+            _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                try
+                {
+                    if (Frame.SourcePageType != typeof(MainPage)) return;
+                    var depth = Frame.BackStackDepth;
+                    Frame.Navigate(typeof(MainPage), null, new SuppressNavigationTransitionInfo());
+                    while (Frame.BackStackDepth > depth && Frame.BackStack.Count > 0)
+                        Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
+                }
+                catch (Exception ex)
+                {
+                    Utilities.Log.Debug($"reload main page after language change: {ex.Message}");
                 }
             });
         }
