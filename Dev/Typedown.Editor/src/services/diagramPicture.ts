@@ -1,4 +1,5 @@
 import ExportHtml from './exportHtml'
+import { remote } from './remote'
 
 const SVG = 'http://www.w3.org/2000/svg'
 
@@ -201,6 +202,9 @@ export const diagramPicture = async (markdown: string, options: any): Promise<st
     if (src.startsWith('data:image/png;base64,')) return src.slice('data:image/png;base64,'.length)
     if (/^https?:/.test(src)) {
         try {
+            // A configured server need not grant browser CORS access. The Windows host fetches only a PNG diagram
+            // from that configured server, with PlantUML still required to be enabled; never a general URL proxy.
+            if ((window as any).localImageEndpoint) return await remote.getPlantUmlPng(src)
             const response = await fetch(src)
             const blob = response.ok ? await response.blob() : null
             if (blob && blob.type === 'image/png') return await blobBase64(blob)

@@ -191,6 +191,8 @@ namespace Typedown.Core.ViewModels
             RemoteInvoke.Handle("GetSettings", GetSettings);
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
             RemoteInvoke.Handle<JToken, bool>("CopyBlock", OnCopyBlock);
+            RemoteInvoke.Handle<string, string>("GetPlantUmlPng", address =>
+                PlantUmlImage.GetPngAsync(address, Settings.PlantUmlServer, Settings.RenderPlantUml));
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
             // A selection belongs to the mode it was made in: the next mode reports its own.
             Settings.WhenPropertyChanged(nameof(Settings.ReadOnly)).Subscribe(_ => TextSelected = Selected = false);

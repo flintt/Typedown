@@ -1,4 +1,5 @@
 import { CLASS_OR_ID } from '../../../config'
+import { hostedImageSource } from 'services/localPaths'
 import { getImageInfo } from '../../../utils'
 
 // The icons are spans, not anchors: a picture inside a link ([![alt](src)](url)) put them in an <a> of their own inside
@@ -114,7 +115,7 @@ export default function image(h, cursor, block, token, outerClass) {
     
     const renderImage = () => {
       const data = {
-        props: { alt: alt.replace(/[`*{}[\]()#+\-.!_>~:|<>$]/g, ''), src: domsrc, title, style }
+        props: { ...(hostedImageSource(domsrc) ? { crossOrigin: 'anonymous' } : {}), alt: alt.replace(/[`*{}[\]()#+\-.!_>~:|<>$]/g, ''), src: domsrc, title, style }
       }
 
       if (typeof width === 'number') {

@@ -1,4 +1,5 @@
 import { toHTML, h } from './snabbdom'
+import { httpImageUrl } from 'services/localPaths'
 
 export const PLANTUML_URL = 'https://www.plantuml.com/plantuml'
 
@@ -32,7 +33,7 @@ export default class Diagram {
     return '~h' + [...new TextEncoder().encode(value)].map(b => b.toString(16).padStart(2, '0')).join('')
   }
 
-  insertImgElement (container, server, format = 'svg') {
+  insertImgElement (container, server, format = 'svg', display = false) {
     const div = typeof container === 'string'
       ? document.getElementById(container)
       : container
@@ -40,7 +41,8 @@ export default class Diagram {
       throw new Error('Invalid container: ' + container)
     }
     const src = `${plantUmlServer(server)}/${format}/${this.encodedInput}`
-    const node = h('img', { attrs: { src } })
+    const hosted = display && httpImageUrl(src)
+    const node = h('img', { attrs: { ...(hosted ? { crossorigin: 'anonymous' } : {}), src: hosted || src } })
     div.innerHTML = toHTML(node)
   }
 }

@@ -8,8 +8,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Typedown.Core.Controls;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Services;
@@ -486,7 +486,7 @@ namespace Typedown.Controls
                     WebViewController = webViewController;
                     UpdateBackdrop();
                     ShowPage(false);
-                    OnCoreWebView2Initialized();
+                    await OnCoreWebView2Initialized();
                 }
                 catch
                 {
@@ -509,6 +509,8 @@ namespace Typedown.Controls
         }
 
         private bool released;
+        private static readonly SemaphoreSlim imageReads = new(4);
+        private CancellationTokenSource imageReadLifetime;
 
         /// <summary>
         /// The window is closing: its web view is closed now, while the window is still there, and none is made again.
@@ -530,6 +532,9 @@ namespace Typedown.Controls
 
         private void DropWebView()
         {
+            imageReadLifetime?.Cancel();
+            imageReadLifetime?.Dispose();
+            imageReadLifetime = null;
             var old = WebViewController;
             WebViewController = null;
             old?.Dispose();
@@ -557,8 +562,9 @@ namespace Typedown.Controls
             }
         }
 
-        private void OnCoreWebView2Initialized()
+        private async Task OnCoreWebView2Initialized()
         {
+            imageReadLifetime = new CancellationTokenSource();
             CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
             CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
             CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
@@ -572,6 +578,7 @@ namespace Typedown.Controls
             CoreWebView2.ScriptDialogOpening += OnScriptDialogOpening;
             CoreWebView2.WebMessageReceived += OnWebMessageReceived;
             CoreWebView2.NewWindowRequested += OnNewWindowRequested;
+            CoreWebView2.FrameNavigationStarting += (_, args) => args.Cancel = true;
             // The editor page is loaded again (leaving the settings page, a page error, a crashed web process): until
             // the new page confirms a load, what the host knows the old page confirmed says nothing about it.
             // Anywhere else, never: a link whose click the page did not take for itself (raw HTML in reading mode) took
@@ -605,60 +612,96 @@ namespace Typedown.Controls
                 else if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessUnresponsive)
                     _ = DispatcherQueue.RunIdleAsync(_ => { try { CoreWebView2?.Reload(); } catch (Exception ex) { Core.Utilities.Log.Debug($"editor: reload after process failure failed: {ex.Message}"); } });
             };
-#if DEBUG
-            CoreWebView2.AddWebResourceRequestedFilter("http://local-file-access/*", CoreWebView2WebResourceContext.All);
+#if !DEBUG
+            var staticsFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics");
+            CoreWebView2.SetVirtualHostNameToFolderMapping(LocalImageResource.Host, staticsFolder,
+                CoreWebView2HostResourceAccessKind.Deny);
+#endif
+            CoreWebView2.AddWebResourceRequestedFilter(LocalImageEndpoint + "*", CoreWebView2WebResourceContext.All);
+            CoreWebView2.AddWebResourceRequestedFilter(HttpImageResource.Endpoint + "*", CoreWebView2WebResourceContext.All);
             CoreWebView2.WebResourceRequested += OnWebResourceRequested;
+            await CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+                "window.localImageEndpoint = " + JsonConvert.SerializeObject(LocalImageEndpoint) + ";" +
+                "window.httpImageEndpoint = " + JsonConvert.SerializeObject(HttpImageResource.Endpoint) + ";");
+#if DEBUG
             CoreWebView2.OpenDevToolsWindow();
 #endif
         }
 
-        private static bool IsEditorPage(string uri)
-        {
+        private static string EditorPageAddress =>
 #if DEBUG
-            if (uri != null && uri.StartsWith("http://localhost:3000", StringComparison.OrdinalIgnoreCase)) return true;
+            "http://localhost:3000/";
+#else
+            LocalImageResource.EditorAddress;
 #endif
-            var index = new Uri(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics", "index.html")).AbsoluteUri;
-            return uri != null && uri.StartsWith(index, StringComparison.OrdinalIgnoreCase);
-        }
+
+        // WebView2 resolves a mapped host inside the browser, without raising WebResourceRequested. Keep images on
+        // their own unmapped origin; only image responses may be read by the editor's anonymous image requests.
+        private static string LocalImageEndpoint => LocalImageResource.ImageEndpoint;
+
+        private static bool IsEditorPage(string uri) => WebViewPagePolicy.Matches(uri, EditorPageAddress);
 
         private void LoadStaticResources()
         {
             // At once, not only when the web view raises NavigationStarting a moment later: a read in between would
             // still trust the page this navigation replaces.
             AppViewModel.EditorViewModel.OnEditorPageNavigating();
-# if DEBUG
-            WebViewController.CoreWebView2.Navigate("http://localhost:3000");
-            // var staticsFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics");
-            // WebViewController.CoreWebView2.Navigate($"file:///{staticsFolder}/index.html");
-#else
-            var staticsFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics");
-            var htmlPath = System.IO.Path.Combine(staticsFolder, "index.html");
             Core.Utilities.StartupTiming.Reached("page navigate");
             WebViewController.CoreWebView2.NavigationCompleted += (_, _) => Core.Utilities.StartupTiming.Reached("page navigated");
-            WebViewController.CoreWebView2.Navigate(new Uri(htmlPath).AbsoluteUri);
-#endif
+            WebViewController.CoreWebView2.Navigate(EditorPageAddress);
         }
 
         private async void OnWebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs args)
         {
             var deferral = args.GetDeferral();
+            var view = sender as CoreWebView2 ?? CoreWebView2;
+            var entered = false;
             try
             {
-                var uri = new Uri(args.Request.Uri);
-                var query = HttpUtility.ParseQueryString(uri.Query);
-                var src = HttpUtility.UrlDecode(query["src"]);
-                UriHelper.TryGetLocalPath(src, out var path);
-                path = System.IO.Path.Combine(AppViewModel.FileViewModel.ImageBasePath, path);
-                var stream = await Task.Run(() => new MemoryStream(File.ReadAllBytes(path)));
-                args.Response = CoreWebView2.Environment.CreateWebResourceResponse(stream.AsRandomAccessStream(), 200, "OK", null);
+                if (!IsEditorPage(view?.Source) || args.Request.Method != "GET" || args.ResourceContext != CoreWebView2WebResourceContext.Image)
+                {
+                    args.Response = view.Environment.CreateWebResourceResponse(null, 403, "Forbidden", null);
+                    return;
+                }
+                using var timeout = CancellationTokenSource.CreateLinkedTokenSource(imageReadLifetime.Token);
+                timeout.CancelAfter(TimeSpan.FromSeconds(30));
+                await imageReads.WaitAsync(timeout.Token);
+                entered = true;
+                MemoryStream stream;
+                string contentType;
+                var requestUri = new Uri(args.Request.Uri);
+                if (WebViewPagePolicy.Matches(requestUri.GetLeftPart(UriPartial.Path), HttpImageResource.Endpoint))
+                {
+                    var addresses = System.Web.HttpUtility.ParseQueryString(requestUri.Query).GetValues("src");
+                    var image = addresses?.Length == 1 ? await HttpImageResource.ReadAsync(addresses[0], cancellationToken: timeout.Token) : null;
+                    if (!image.HasValue) { args.Response = view.Environment.CreateWebResourceResponse(null, 404, "Not found", null); return; }
+                    stream = new MemoryStream(image.Value.Bytes);
+                    contentType = image.Value.ContentType;
+                }
+                else
+                {
+                    if (!LocalImageResource.TryResolve(args.Request.Uri, LocalImageEndpoint, args.Request.Method, true, out var path, out contentType))
+                    { args.Response = view.Environment.CreateWebResourceResponse(null, 403, "Forbidden", null); return; }
+                    var bytes = await LocalImageResource.ReadAsync(path, timeout.Token);
+                    if (bytes == null) { args.Response = view.Environment.CreateWebResourceResponse(null, 413, "Image too large", null); return; }
+                    stream = new MemoryStream(bytes);
+                }
+                timeout.Token.ThrowIfCancellationRequested();
+                args.Response = view.Environment.CreateWebResourceResponse(stream.AsRandomAccessStream(), 200, "OK",
+                    "Content-Type: " + contentType + "\r\nX-Content-Type-Options: nosniff\r\nCache-Control: no-store\r\n" +
+                    "Access-Control-Allow-Origin: " + new Uri(EditorPageAddress).GetLeftPart(UriPartial.Authority) + "\r\n" +
+                    "Content-Security-Policy: sandbox; default-src 'none'");
             }
             catch (Exception)
             {
-                args.Response = CoreWebView2.Environment.CreateWebResourceResponse(null, 404, "Not found", null);
+                // The window/browser may have closed while the file was read. Never let a late async event callback
+                // escape into the dispatcher, including failure to supply the error response or finish the deferral.
+                try { args.Response = view?.Environment.CreateWebResourceResponse(null, 404, "Not found", null); } catch { }
             }
             finally
             {
-                deferral.Complete();
+                if (entered) imageReads.Release();
+                try { deferral.Complete(); } catch { }
             }
         }
 
@@ -689,13 +732,23 @@ namespace Typedown.Controls
 
         private void OnWebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
-            Transport.EmitWebViewMessage(this, e.TryGetWebMessageAsString());
+            // Check the sender before decoding or dispatching a native operation. Also refuse messages while an
+            // unexpected document is active, including a message queued by the page that navigation replaced.
+            try
+            {
+                if (!WebViewPagePolicy.CanReceiveMessage(e.Source, CoreWebView2?.Source, EditorPageAddress)) return;
+                Transport.EmitWebViewMessage(this, e.TryGetWebMessageAsString());
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"editor message refused: {ex.GetType().Name}");
+            }
         }
 
         private void OnNewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs args)
         {
             args.Handled = true;
-            if (PInvoke.GetIsKeyDown(VirtualKey.Control))
+            if (args.IsUserInitiated && IsEditorPage(CoreWebView2?.Source) && PInvoke.GetIsKeyDown(VirtualKey.Control))
                 Core.Utilities.Common.OpenUrl(args.Uri);
         }
 

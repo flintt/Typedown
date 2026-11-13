@@ -24,6 +24,10 @@
     <Compile Include="../../Dev/Typedown.Core/Models/RuntimeModels/CursorState.cs" Link="Production/CursorState.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/ThemeDesignerPage.cs" Link="Production/ThemeDesignerPage.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/WebView2Runtime.cs" Link="Production/WebView2Runtime.cs" />
+    <Compile Include="../../Dev/Typedown.Core/Utilities/WebViewPagePolicy.cs" Link="Production/WebViewPagePolicy.cs" />
+    <Compile Include="../../Dev/Typedown.Core/Utilities/LocalImageResource.cs" Link="Production/LocalImageResource.cs" />
+    <Compile Include="../../Dev/Typedown.Core/Utilities/PlantUmlImage.cs" Link="Production/PlantUmlImage.cs" />
+    <Compile Include="../../Dev/Typedown.Core/Utilities/HttpImageResource.cs" Link="Production/HttpImageResource.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/StartupTiming.cs" Link="Production/StartupTiming.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/LogText.cs" Link="Production/LogText.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/DiskConflict.cs" Link="Production/DiskConflict.cs" />

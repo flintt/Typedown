@@ -22,6 +22,61 @@ export const resolveLocalPath = (basePath, src) => {
   return prefix + path.resolve(base, toPosix(src))
 }
 
+// The Windows host supplies this endpoint before loading the editor. Other hosts and ordinary browser tests keep
+// their existing paths. The query carries an absolute path, so a late request cannot resolve against another tab.
+export const localImageUrl = (src, basePath = window.basePath) => {
+  if (!window.localImageEndpoint || !src || /^(?:https?:|data:|blob:)/i.test(src)) return null
+  let local = src
+  if (/^file:/i.test(src)) {
+    try {
+      const file = new URL(src)
+      local = decodeURIComponent(file.pathname)
+      if (file.hostname) local = '//' + file.hostname + local
+      else if (/^\/[a-z]:\//i.test(local)) local = local.slice(1)
+    } catch { return null }
+  } else {
+    if (!/^[a-z]:[\\/]/i.test(src) && /^[a-z][a-z0-9+.-]*:/i.test(src)) return null
+    local = src.split('?')[0]
+    try { local = decodeURIComponent(local) } catch { /* a literal percent sign in a filename */ }
+  }
+  if (!/^(?:[\\/]|[a-z]:[\\/])/i.test(local)) {
+    if (!basePath) return null
+    local = resolveLocalPath(basePath, local)
+  }
+  const url = new URL(window.localImageEndpoint, window.location.href)
+  url.searchParams.set('src', local)
+  return url.href
+}
+
+export const localImageSource = src => {
+  if (!window.localImageEndpoint || !src) return null
+  try {
+    const url = new URL(src, window.location.href)
+    const endpoint = new URL(window.localImageEndpoint, window.location.href)
+    return url.origin === endpoint.origin && url.pathname === endpoint.pathname && !url.username && !url.password
+      ? url.searchParams.get('src') : null
+  } catch { return null }
+}
+
+export const httpImageUrl = src => {
+  if (!window.httpImageEndpoint || !/^http:\/\//i.test(src)) return null
+  const url = new URL(window.httpImageEndpoint)
+  url.searchParams.set('src', src)
+  return url.href
+}
+
+export const httpImageSource = src => {
+  if (!window.httpImageEndpoint || !src) return null
+  try {
+    const url = new URL(src, window.location.href)
+    const endpoint = new URL(window.httpImageEndpoint)
+    return url.origin === endpoint.origin && url.pathname === endpoint.pathname && !url.username && !url.password
+      ? url.searchParams.get('src') : null
+  } catch { return null }
+}
+
+export const hostedImageSource = src => localImageSource(src) || httpImageSource(src)
+
 /**
  * An absolute local path as a file address for Word: "C:\\notes\\流程 图.png" is file:///C:/notes/流程 图.png. The
  * characters stay as they are: Word does not decode %E6%B5%81... back into the name, and showed an empty frame for
@@ -29,7 +84,7 @@ export const resolveLocalPath = (basePath, src) => {
  * path. A UNC path is file://server/...
  */
 const toFileUrl = absolute => {
-  const posix = absolute.replace(/\\/g, '/').replace(/#/g, '%23').replace(/\?/g, '%3F')
+  const posix = absolute.replace(/\\/g, '/').replace(/%/g, '%25').replace(/#/g, '%23').replace(/\?/g, '%3F')
   if (posix.startsWith('//')) return 'file:' + posix
   return 'file://' + (posix.startsWith('/') ? '' : '/') + posix
 }
@@ -45,7 +100,11 @@ export const absoluteImageUrls = (html, basePath = window.basePath) => {
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
   for (const img of Array.from(wrapper.querySelectorAll('img'))) {
-    const src = img.getAttribute('src') || ''
+    const original = img.getAttribute('src') || ''
+    const resource = localImageSource(original)
+    const http = httpImageSource(original)
+    const src = resource ? toFileUrl(resource) : http || original
+    if (resource || http) { img.setAttribute('src', src); continue }
     const drive = /^[a-zA-Z]:[\\/]/.test(src)
     // A file address written encoded (file:///C:/%E5%9B%BE...) goes as the path it names: Word does not decode it.
     if (/^file:\/\//i.test(src)) {
@@ -113,7 +172,15 @@ export const svgImagesAsPng = (html, page = document) => {
   if (!html || !/\.svg/i.test(html)) return html
   const drawn = Array.from(page.querySelectorAll('#ag-editor-id img'))
   // The page loads a local picture with a ?msec= cache key; the copy has the address as written.
-  const key = src => { const bare = src.replace(/[?#].*$/, ''); try { return decodeURI(bare).replace(/\\/g, '/').toLowerCase() } catch { return bare.toLowerCase() } }
+  const key = src => {
+    const local = localImageSource(src)
+    const http = httpImageSource(src) || (/^https?:/i.test(src) ? src : null)
+    if (!local && http) {
+      try { const url = new URL(http); url.hash = ''; return url.href } catch { return http }
+    }
+    const bare = (local ? toFileUrl(local) : src).replace(/[?#].*$/, '')
+    try { return decodeURI(bare).replace(/\\/g, '/').toLowerCase() } catch { return bare.toLowerCase() }
+  }
   const wrapper = page.createElement('div')
   wrapper.innerHTML = html
   for (const img of Array.from(wrapper.querySelectorAll('img'))) {
