@@ -58,6 +58,15 @@ namespace Typedown.Core.Controls
                 .Subscribe(x => UpdateFindReplaceState(x, true)));
             disposables.Add(Editor.EventCenter.GetObservable<EditorEventArgs>("OnScroll")
                 .Subscribe(x => ScrollState = x.Args.ToObject<ScrollState>()));
+            // The keyboard's menu key or Shift+F10 in the editor (the page's KeyboardContextMenu): the same menu a
+            // right-click opens, at the caret - WinUI opens the presenter's ContextFlyout for the mouse only, the keys
+            // reach the page (XM09).
+            disposables.Add(Editor.EventCenter.GetObservable<EditorEventArgs>("KeyboardContextMenu")
+                .Subscribe(x => DispatcherQueue.TryEnqueueSafe(() =>
+                {
+                    var at = new Windows.Foundation.Point((double?)x.Args?["x"] ?? 0, (double?)x.Args?["y"] ?? 0);
+                    Flyout.ShowAt(MarkdownEditorPresenter, new Microsoft.UI.Xaml.Controls.Primitives.FlyoutShowOptions { Position = at });
+                })));
             UpdateFindReplaceState(Float.FindReplaceDialogOpen, false);
             // The home page reads its words when it is built ({u:LocaleString}, its dates): after the language changed from
             // another window or the automation API it stayed in the old one. A new one takes its place, as it was.
