@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Yhdistä kappaleen rivit lukutilassa</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>$- ja $$-merkkien lisäksi LaTeXin \( … \) ja \[ … \] luetaan myös kaavoiksi editorissa ja vienneissä; tiedosto säilyttää kirjoitusasunsa.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) ja \[ \] kaavan erottimina</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Lukutilassa kappaleen sisäinen yksittäinen rivinvaihto näytetään välilyöntinä, kuten Markdown määrää ja viennit jo tekevät (ei välilyöntiä kiinalaisten tai japanilaisten merkkien väliin). Säilytä rivinvaihto päättämällä rivi kahteen välilyöntiin tai kenoviivaan</value>
   </data>

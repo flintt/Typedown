@@ -144,6 +144,12 @@ namespace Typedown.Core.ViewModels
         /// only. Asked for by markdown-linewrap and a Store review ("wraps lines on single line breaks").
         /// </summary>
         public bool JoinSoftBreaks { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// LaTeX's \( ... \) and \[ ... \] read as formulas, besides $ and $$ - in the editor and the exports - and written
+        /// back as they were (the file keeps its delimiters). Off by default: \( and \[ are then escaped brackets, as in
+        /// CommonMark. Asked for by the user, 2026-11-14 (formulas pasted with these delimiters showed as text).
+        /// </summary>
+        public bool BracketMath { get => GetSettingValue(false); set => SetSettingValue(value); }
 
         /// <summary>The notice that the first visual edit may rewrite part of a document (off: never shown, for every document).</summary>
         public bool WarnFirstEditRewrite { get => GetSettingValue(true); set => SetSettingValue(value); }
@@ -422,6 +428,7 @@ namespace Typedown.Core.ViewModels
             "TableColumnWidths",
             "ShowBlankLines",
             "JoinSoftBreaks",
+            "BracketMath",
             "CodeBlockLineNumbers",
             "ScrollPastEnd",
             "SelectAllInSteps",

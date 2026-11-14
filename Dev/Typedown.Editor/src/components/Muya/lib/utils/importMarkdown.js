@@ -34,6 +34,7 @@ const importRegister = ContentState => {
       footnote,
       isGitlabCompatibilityEnabled,
       superSubScript,
+      bracketMath,
       trimUnnecessaryCodeBlockEmptyLines
     } = this.muya.options
 
@@ -41,7 +42,8 @@ const importRegister = ContentState => {
       disableInline: true,
       footnote,
       isGitlabCompatibilityEnabled,
-      superSubScript
+      superSubScript,
+      bracketMath
     }).lex(markdown)
 
     let token

@@ -50,7 +50,7 @@ function InlineLexer (links, footnotes, options) {
 InlineLexer.prototype.output = function (src) {
   // src = src
   // .replace(/\u00a0/g, ' ')
-  const { disableInline, emoji, math, superSubScript, footnote } = this.options
+  const { disableInline, emoji, math, superSubScript, footnote, bracketMath } = this.options
   if (disableInline) {
     return escape(src)
   }
@@ -65,6 +65,17 @@ InlineLexer.prototype.output = function (src) {
   let lastChar = ''
 
   while (src) {
+    // \( ... \) (Settings > Editor): before the escape, which would take \( for a bracket.
+    if (math && bracketMath) {
+      cap = this.rules.bracketMath.exec(src)
+      if (cap) {
+        src = src.substring(cap[0].length)
+        lastChar = ')'
+        out += this.renderer.inlineMath(cap[1])
+        continue
+      }
+    }
+
     // escape
     cap = this.rules.escape.exec(src)
     if (cap) {

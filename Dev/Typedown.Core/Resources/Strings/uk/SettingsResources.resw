@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Об’єднувати рядки абзацу в режимі читання</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Окрім $ і $$, формулами вважаються також \( … \) і \[ … \] з LaTeX — у редакторі та під час експорту; запис у файлі не змінюється.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) і \[ \] як роздільники формул</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>У режимі читання одиночний перенос рядка всередині абзацу показується як пробіл, як вимагає Markdown і як уже роблять експорти (між китайськими чи японськими символами пробіл не ставиться). Щоб зберегти перенос, завершіть рядок двома пробілами або зворотною скісною рискою</value>
   </data>

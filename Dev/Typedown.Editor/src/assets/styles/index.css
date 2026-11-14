@@ -850,6 +850,15 @@ pre.ag-active.ag-multiple-math::after {
   content: '$$';
 }
 
+/* Written with LaTeX's \[ \] (Settings > Editor > \( \) and \[ \] as formula delimiters). */
+figure[data-mathstyle^="bracket"] pre.ag-active.ag-multiple-math::before {
+  content: '\\[';
+}
+
+figure[data-mathstyle^="bracket"] pre.ag-active.ag-multiple-math::after {
+  content: '\\]';
+}
+
 pre.ag-active[data-role="mermaid"]::before {
   content: '``` mermaid';
 }

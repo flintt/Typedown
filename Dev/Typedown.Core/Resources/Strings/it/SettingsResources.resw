@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Unisci le righe di un paragrafo in modalità lettura</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Oltre a $ e $$, anche \( … \) e \[ … \] di LaTeX vengono letti come formule, nell'editor e nelle esportazioni; il file mantiene la sua scrittura.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) e \[ \] come delimitatori di formule</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>In modalità lettura, un singolo a capo all’interno di un paragrafo viene mostrato come uno spazio, come prevede Markdown e come fanno già le esportazioni (nessuno spazio tra caratteri cinesi o giapponesi). Per mantenere un a capo, termina la riga con due spazi o una barra rovesciata</value>
   </data>

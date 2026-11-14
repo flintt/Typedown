@@ -41,6 +41,8 @@ const inline = {
 
   // TODO: make math optional GH#740
   math: /^\$(?!\s)([^$]*?[^\s$\\])\$(?![\d$])/,
+  // LaTeX's inline delimiters, with the bracketMath option.
+  bracketMath: /^\\\(([\s\S]+?)\\\)/,
 
   // superscript and subScript
   superscript: /^(\^)((?:[^\^\s]|(?<=\\)\1|(?<=\\) )+?)(?<!\\)\1(?!\1)/,

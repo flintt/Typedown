@@ -156,7 +156,8 @@ Lexer.prototype.token = function (src, top, container) {
     footnote,
     frontMatter,
     isGitlabCompatibilityEnabled,
-    math
+    math,
+    bracketMath
   } = this.options
 
   // 移除首行缩进
@@ -312,6 +313,31 @@ Lexer.prototype.token = function (src, top, container) {
           mathStyle: 'singleline'
         })
         continue
+      }
+
+      // LaTeX's \[ \] (Settings > Editor): written back as they came (exportMarkdown, mathStyle 'bracket' or
+      // 'bracketline').
+      if (bracketMath) {
+        cap = this.rules.multiplemathBracket.exec(src)
+        if (cap) {
+          src = src.substring(cap[0].length)
+          this.tokens.push({
+            type: 'multiplemath',
+            text: cap[1],
+            mathStyle: 'bracket'
+          })
+          continue
+        }
+        cap = this.rules.multiplemathBracketSingleLine.exec(src)
+        if (cap) {
+          src = src.substring(cap[0].length)
+          this.tokens.push({
+            type: 'multiplemath',
+            text: cap[1].trim(),
+            mathStyle: 'bracketline'
+          })
+          continue
+        }
       }
 
       // match GitLab display math blocks (```math)

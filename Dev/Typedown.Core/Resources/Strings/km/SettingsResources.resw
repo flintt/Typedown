@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>ភ្ជាប់បន្ទាត់នៃកថាខណ្ឌក្នុងរបៀបអាន</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>ក្រៅពី $ និង $$ សញ្ញា \( … \) និង \[ … \] របស់ LaTeX ក៏ត្រូវបានអានជារូបមន្តដែរ ក្នុងកម្មវិធីកែសម្រួល និងការនាំចេញ; ឯកសាររក្សាការសរសេររបស់វា។</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) និង \[ \] ជាសញ្ញាកំណត់រូបមន្ត</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>ក្នុងរបៀបអាន ការចុះបន្ទាត់តែមួយនៅក្នុងកថាខណ្ឌត្រូវបានបង្ហាញជាដកឃ្លា ដូចដែល Markdown កំណត់ និងដូចដែលការនាំចេញធ្វើរួចហើយ (គ្មានដកឃ្លារវាងតួអក្សរចិន ឬជប៉ុន)។ ដើម្បីរក្សាការចុះបន្ទាត់ សូមបញ្ចប់បន្ទាត់ដោយដកឃ្លាពីរ ឬសញ្ញាខ្វែងថយក្រោយ</value>
   </data>

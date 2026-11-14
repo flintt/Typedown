@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Ceangail línte míre sa mhód léitheoireachta</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Chomh maith le $ agus $$, léitear \( … \) agus \[ … \] LaTeX mar fhoirmlí freisin, san eagarthóir agus in easpórtálacha; coinníonn an comhad a scríbhneoireacht.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) agus \[ \] mar theorannóirí foirmlí</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Sa mhód léitheoireachta, taispeántar briseadh líne aonair laistigh de mhír mar spás, mar a shonraíonn Markdown agus mar a dhéanann na heaspórtálacha cheana (gan spás idir carachtair Shíneacha nó Sheapánacha). Chun briseadh a choinneáil, críochnaigh an líne le dhá spás nó le cúlslais</value>
   </data>

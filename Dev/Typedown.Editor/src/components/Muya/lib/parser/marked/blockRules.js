@@ -49,6 +49,9 @@ export const block = {
   // A whole line of the form `$$ ... $$` is display math too (Typora/Obsidian/KaTeX behaviour, upstream #26).
   multiplemathSingleLine: /^\$\$([^\n$]+?)\$\$ *(?=\n+|$)/,
   multiplemathGitlab: /^ {0,3}(`{3,})math\n(?:(|[\s\S]*?)\n)(?: {0,3}\1`* *(?=\n+|$)|$)/, // Math inside a code block (GitLab display math)
+  // LaTeX's display delimiters (with the bracketMath option): \[ and \] on lines of their own, or a whole line \[ ... \].
+  multiplemathBracket: /^ {0,3}\\\[ *\n([\s\S]+?)\n {0,3}\\\] *(?=\n+|$)/,
+  multiplemathBracketSingleLine: /^ {0,3}\\\[([^\n]+?)\\\] *(?=\n+|$)/,
   // A definition ends at a blank line, at the next `[^id]:` definition (they are usually written back to
   // back without a blank line, which used to swallow every following definition into the first one), or at EOF.
   footnote: /^\[\^([^\^\[\]\s]+?)(?<!\\)\]:[\s\S]+?(?=\n *\n {0,3}[^ ]+|\n {0,3}\[\^[^\^\[\]\s]+?(?<!\\)\]:|$)/

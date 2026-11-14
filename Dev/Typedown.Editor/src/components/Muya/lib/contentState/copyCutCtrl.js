@@ -338,7 +338,8 @@ const copyCutCtrl = ContentState => {
           type: 'text/plain', data: getSanitizeHtml(text, {
             superSubScript: this.muya.options.superSubScript,
             footnote: this.muya.options.footnote,
-            isGitlabCompatibilityEnabled: this.muya.options.isGitlabCompatibilityEnabled
+            isGitlabCompatibilityEnabled: this.muya.options.isGitlabCompatibilityEnabled,
+            bracketMath: this.muya.options.bracketMath
           })
         })
         break

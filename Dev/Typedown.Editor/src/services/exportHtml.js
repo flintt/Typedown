@@ -354,6 +354,8 @@ class ExportHtml {
       // when rendering for HTML and PDF exports and for other formats; otherwise [^id] stays literal Markdown there.
       footnote: this.options?.footnote ?? true,
       isGitlabCompatibilityEnabled: this.options?.isGitlabCompatibilityEnabled ?? false,
+      // Settings > Editor > \( \) and \[ \] as formula delimiters: the exports draw them as the editor does.
+      bracketMath: !!this.options?.bracketMath,
       baseUrl: this.options?.baseUrl,
       showBlankLines: !!this.options?.showBlankLines,
       // Settings > Editor > Table column widths: the delimiter rows' widths kept in the export (HTML, PDF, Word).

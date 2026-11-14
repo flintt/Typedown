@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Gabungkan baris paragraf dalam mode baca</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Selain $ dan $$, \( … \) dan \[ … \] milik LaTeX juga dibaca sebagai rumus, di editor dan saat ekspor; penulisan di berkas tetap.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) dan \[ \] sebagai pembatas rumus</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Dalam mode baca, satu jeda baris di dalam paragraf ditampilkan sebagai spasi, sebagaimana ditetapkan Markdown dan sebagaimana sudah dilakukan ekspor (tanpa spasi di antara karakter Tionghoa atau Jepang). Untuk mempertahankan jeda baris, akhiri baris dengan dua spasi atau garis miring terbalik</value>
   </data>

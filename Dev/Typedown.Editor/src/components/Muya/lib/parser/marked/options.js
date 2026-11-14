@@ -28,6 +28,8 @@ export default {
   // User need to enable them in the user setting.
   emoji: true,
   math: true,
+  // \( \) and \[ \] read as formulas too (Settings > Editor).
+  bracketMath: false,
   frontMatter: true,
   superSubScript: false,
   footnote: false,

@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Apvienot rindkopas rindas lasīšanas režīmā</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Papildus $ un $$ arī LaTeX \( … \) un \[ … \] tiek lasīti kā formulas redaktorā un eksportā; fails saglabā savu pierakstu.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) un \[ \] kā formulu norobežotāji</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Lasīšanas režīmā viena rindiņas pāreja rindkopā tiek rādīta kā atstarpe, kā to nosaka Markdown un kā to jau dara eksports (starp ķīniešu vai japāņu rakstzīmēm atstarpe netiek likta). Lai saglabātu pāreju, beidziet rindu ar divām atstarpēm vai apgriezto slīpsvītru</value>
   </data>

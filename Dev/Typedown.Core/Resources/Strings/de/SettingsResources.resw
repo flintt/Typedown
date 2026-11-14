@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Zeilen eines Absatzes im Lesemodus verbinden</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Neben $ und $$ werden auch LaTeX' \( … \) und \[ … \] als Formeln gelesen, im Editor und beim Export; die Datei behält ihre Schreibweise.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) und \[ \] als Formelbegrenzer</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Im Lesemodus wird ein einzelner Zeilenumbruch innerhalb eines Absatzes als Leerzeichen angezeigt, wie es Markdown vorsieht und die Exporte bereits tun (kein Leerzeichen zwischen chinesischen oder japanischen Zeichen). Um einen Umbruch zu behalten, beenden Sie die Zeile mit zwei Leerzeichen oder einem Backslash</value>
   </data>

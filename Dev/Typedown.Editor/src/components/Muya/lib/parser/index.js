@@ -54,7 +54,7 @@ const tokenizerFac = (src, beginRules, inlineRules, pos = 0, top, labels, option
   const tokens = []
   let pending = ''
   let pendingStartPos = pos
-  const { disableHtml, superSubScript, footnote } = options
+  const { disableHtml, superSubScript, footnote, bracketMath } = options
   const pushPending = () => {
     if (pending) {
       tokens.push({
@@ -126,6 +126,29 @@ const tokenizerFac = (src, beginRules, inlineRules, pos = 0, top, labels, option
   }
 
   while (src.length) {
+    // \( ... \) (Settings > Editor): before the backslash, which would take \( for a bracket. An inline formula like
+    // $ ... $, its markers \( and \) (the same length, as the renderer takes them).
+    if (bracketMath) {
+      const to = inlineRules.bracket_inline_math.exec(src)
+      if (to) {
+        pushPending()
+        tokens.push({
+          type: 'inline_math',
+          raw: to[0],
+          range: {
+            start: pos,
+            end: pos + to[0].length
+          },
+          marker: to[1],
+          parent: tokens,
+          content: to[2],
+          backlash: ''
+        })
+        src = src.substring(to[0].length)
+        pos = pos + to[0].length
+        continue
+      }
+    }
     // backlash
     const backTo = inlineRules.backlash.exec(src)
     if (backTo) {

@@ -323,11 +323,19 @@ class ExportMarkdown {
       startToken = '```math'
       endToken = '```'
     }
+    // LaTeX's \[ \] stay as written (Settings > Editor > \( \) and \[ \] as formula delimiters).
+    if (block.mathStyle === 'bracket' || block.mathStyle === 'bracketline') {
+      startToken = '\\['
+      endToken = '\\]'
+    }
 
     const lines = block.children[0].children[0].children
     // Keep the author's single-line `$$ ... $$` form as long as the formula still fits on one line.
     if (block.mathStyle === 'singleline' && lines.length === 1 && !lines[0].text.includes('$')) {
       return `${indent}$$${lines[0].text}$$\n`
+    }
+    if (block.mathStyle === 'bracketline' && lines.length === 1 && !lines[0].text.includes('\\]')) {
+      return `${indent}\\[${lines[0].text}\\]\n`
     }
 
     const result = []

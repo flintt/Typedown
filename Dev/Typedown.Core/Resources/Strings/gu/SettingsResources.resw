@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>વાંચન મોડમાં ફકરાની લાઇનો જોડો</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>$ અને $$ ઉપરાંત LaTeX ના \( … \) અને \[ … \] પણ સંપાદકમાં અને નિકાસમાં સૂત્ર તરીકે વંચાય છે; ફાઇલનું લખાણ બદલાતું નથી.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) અને \[ \] સૂત્ર સીમાચિહ્નો તરીકે</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>વાંચન મોડમાં ફકરાની અંદરનો એકલ લાઇન બ્રેક જગ્યા તરીકે દેખાય છે, જેમ Markdown નક્કી કરે છે અને નિકાસ પહેલેથી કરે છે (ચાઇનીઝ કે જાપાનીઝ અક્ષરો વચ્ચે જગ્યા નહીં). લાઇન બ્રેક રાખવા માટે લાઇનના અંતે બે જગ્યા અથવા બેકસ્લેશ મૂકો</value>
   </data>

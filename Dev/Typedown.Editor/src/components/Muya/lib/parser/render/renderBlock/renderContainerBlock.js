@@ -218,6 +218,11 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
       }
     }
 
+    // A formula written with \[ \] shows those when active (index.css), not $$. As data-mathstyle: this snabbdom
+    // writes a dataset key as it is, not as data-math-style.
+    if (functionType === 'multiplemath' && block.mathStyle) {
+      Object.assign(data.dataset, { mathstyle: block.mathStyle })
+    }
     if (
       /html|multiplemath|flowchart|mermaid|sequence|plantuml|vega-lite/.test(functionType)
     ) {

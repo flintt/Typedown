@@ -936,6 +936,7 @@
         "VimMode",
         "ShowBlankLines",
         "JoinSoftBreaks",
+        "BracketMath",
         "WarnFirstEditRewrite",
         "CodeBlockLineNumbers",
         "ScrollPastEnd",

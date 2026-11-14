@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Għaqqad il-linji ta’ paragrafu fil-modalità tal-qari</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Minbarra $ u $$, anke \( … \) u \[ … \] ta' LaTeX jinqraw bħala formuli, fl-editur u fl-esportazzjonijiet; il-fajl iżomm il-kitba tiegħu.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) u \[ \] bħala delimitaturi tal-formuli</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Fil-modalità tal-qari, qabża waħda ta’ linja ġewwa paragrafu tidher bħala spazju, kif jistabbilixxi Markdown u kif diġà jagħmlu l-esportazzjonijiet (l-ebda spazju bejn karattri Ċiniżi jew Ġappuniżi). Biex iżżomm qabża, temm il-linja b’żewġ spazji jew backslash</value>
   </data>

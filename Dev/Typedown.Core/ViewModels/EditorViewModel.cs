@@ -333,6 +333,7 @@ namespace Typedown.Core.ViewModels
                 Settings.TableColumnWidths,
                 Settings.ShowBlankLines,
                 Settings.JoinSoftBreaks,
+                Settings.BracketMath,
                 Settings.CodeBlockLineNumbers,
                 Settings.ScrollPastEnd,
                 Settings.SelectAllInSteps,

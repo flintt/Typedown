@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Объединять строки абзаца в режиме чтения</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Помимо $ и $$, формулами считаются и \( … \) и \[ … \] из LaTeX — в редакторе и при экспорте; запись в файле не меняется.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) и \[ \] как разделители формул</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>В режиме чтения одиночный перенос строки внутри абзаца отображается как пробел, как требует Markdown и как это уже делают экспорты (между китайскими или японскими символами пробел не ставится). Чтобы сохранить перенос, закончите строку двумя пробелами или обратной косой чертой</value>
   </data>

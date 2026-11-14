@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Joindre les lignes d’un paragraphe en mode lecture</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>En plus de $ et $$, les \( … \) et \[ … \] de LaTeX sont aussi lus comme des formules, dans l'éditeur et à l'export ; le fichier garde son écriture.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) et \[ \] comme délimiteurs de formules</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>En mode lecture, un simple saut de ligne dans un paragraphe s’affiche comme une espace, comme le prévoit Markdown et comme le font déjà les exportations (aucune espace entre caractères chinois ou japonais). Pour garder un saut, terminez la ligne par deux espaces ou une barre oblique inverse</value>
   </data>

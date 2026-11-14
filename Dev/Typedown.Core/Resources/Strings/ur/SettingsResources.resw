@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>پڑھنے کے موڈ میں پیراگراف کی سطریں جوڑیں</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>$ اور $$ کے علاوہ LaTeX کے \( … \) اور \[ … \] بھی ایڈیٹر اور برآمد میں فارمولے کے طور پر پڑھے جاتے ہیں؛ فائل کی تحریر نہیں بدلتی۔</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) اور \[ \] بطور فارمولا حد بندی</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>پڑھنے کے موڈ میں پیراگراف کے اندر ایک واحد لائن بریک وقفے کے طور پر دکھائی دیتی ہے، جیسا کہ Markdown بتاتا ہے اور ایکسپورٹ پہلے سے کرتے ہیں (چینی یا جاپانی حروف کے درمیان وقفہ نہیں ڈالا جاتا)۔ لائن بریک برقرار رکھنے کے لیے سطر کو دو وقفوں یا بیک سلیش پر ختم کریں</value>
   </data>
