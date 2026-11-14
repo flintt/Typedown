@@ -151,13 +151,28 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             return made;
         }
 
-        // A recent entry's own menu: open it, where it is, its path, and out of the list.
+        // A recent entry's own menu: every file menu's core (Services.FileEntryActions) - open it, a file in a new window too |
+        // the favourite, where it is, its path - and out of the list.
         private List<MenuFlyoutItemBase> EntryMenu(MenuFlyoutSubItem menu, MenuFlyoutItem item, string path, System.Windows.Input.ICommand open, Action<string> remove)
         {
             var openItem = new MenuFlyoutItem { Text = Locale.GetString("Open") };
             openItem.Click += (s, e) => open.Execute(path);
             // What every file menu does with an entry (Services.FileEntryActions).
             var entry = new FileEntry(path, menu == OpenRecentFoldersSubMenu);
+            var items = new List<MenuFlyoutItemBase> { openItem };
+            if (FileEntryActions.CanOpenInNewWindow(entry))
+            {
+                var newWindow = new MenuFlyoutItem { Text = Locale.GetString("OpenInNewWindow") };
+                AutomationProperties.SetAutomationId(newWindow, "RecentOpenInNewWindowItem");
+                newWindow.Click += (s, e) => FileEntryActions.OpenInNewWindow(entry, File);
+                items.Add(newWindow);
+            }
+            items.Add(new MenuFlyoutSeparator());
+            var (isFavorite, canToggle) = FileEntryActions.FavoriteState(entry);
+            var favorite = new MenuFlyoutItem { Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add"), IsEnabled = canToggle };
+            AutomationProperties.SetAutomationId(favorite, "RecentFavoriteItem");
+            favorite.Click += (s, e) => FileEntryActions.ToggleFavorite(entry);
+            items.Add(favorite);
             var location = new MenuFlyoutItem { Text = Locale.GetString("OpenFileLocation") };
             AutomationProperties.SetAutomationId(location, "RecentLocationItem");
             location.Click += (s, e) => FileEntryActions.Report(XamlRoot, FileEntryActions.ShowLocation(entry));
@@ -167,7 +182,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             var removeItem = new MenuFlyoutItem { Text = Locale.GetString("HomePage.RemoveFromList") };
             AutomationProperties.SetAutomationId(removeItem, "RecentRemoveItem");
             removeItem.Click += (s, e) => RemoveEntry(menu, item, path, remove);
-            return new List<MenuFlyoutItemBase> { openItem, location, copy, new MenuFlyoutSeparator(), removeItem };
+            items.AddRange(new MenuFlyoutItemBase[] { location, copy, new MenuFlyoutSeparator(), removeItem });
+            return items;
         }
 
         // The entry's menu over the menus, which stay open until one of its items is chosen (the user, 2026-11-11: the

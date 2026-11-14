@@ -19,11 +19,11 @@
             <MenuFlyoutItem Tag="CloseOthers" AutomationProperties.AutomationId="TabCloseOthersItem" Text="{u:LocaleString Key=Tab.CloseOthers}" Click="OnTabCloseOthersClick"/>
             <MenuFlyoutItem Tag="CloseToTheRight" AutomationProperties.AutomationId="TabCloseToTheRightItem" Text="{u:LocaleString Key=Tab.CloseToTheRight}" Click="OnTabCloseToTheRightClick"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabCopyPathItem" Text="{u:LocaleString Key=CopyAsPath}" Click="OnTabCopyPathClick"/>
-            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabOpenLocationItem" Text="{u:LocaleString Key=OpenFileLocation}" Click="OnTabOpenLocationClick"/>
-            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabShowInSideBarItem" Text="{u:LocaleString Key=Tab.ShowInSideBar}" Click="OnTabShowInSideBarClick"/>
-            <MenuFlyoutSeparator/>
+            <!-- Every file menu's core, in its order (Services.FileEntryActions), then the tab's own. -->
             <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TabFavoriteItem" Text="Favorite" Click="OnTabFavoriteClick"/>
+            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabOpenLocationItem" Text="{u:LocaleString Key=OpenFileLocation}" Click="OnTabOpenLocationClick"/>
+            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabCopyPathItem" Text="{u:LocaleString Key=CopyAsPath}" Click="OnTabCopyPathClick"/>
+            <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabShowInSideBarItem" Text="{u:LocaleString Key=Tab.ShowInSideBar}" Click="OnTabShowInSideBarClick"/>
         </MenuFlyout>
     </UserControl.Resources>
     <muxc:TabView

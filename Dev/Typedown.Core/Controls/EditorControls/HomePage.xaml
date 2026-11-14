@@ -15,19 +15,31 @@
     <!-- The home page over the editor of a blank tab (HomeViewModel). Native, not part of the editor page; the editor
          keeps the keyboard under it, so typing goes into the document and hides it. -->
     <UserControl.Resources>
+        <!-- Every file menu's core, in its order (Services.FileEntryActions): Open, Open in New Window (a file) | the
+             favourite, Open File Location, Copy as Path | the entry's own. -->
         <MenuFlyout x:Key="RecentFileFlyout" Opening="OnEntryFlyoutOpening">
+            <MenuFlyoutItem AutomationProperties.AutomationId="HomeOpenItem" Text="{u:LocaleString Key=Open}" Click="OnOpenEntryClick"/>
+            <MenuFlyoutItem Tag="NewWindow" AutomationProperties.AutomationId="HomeOpenInNewWindowItem" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
+            <MenuFlyoutSeparator/>
             <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="HomeFavoriteItem" Text="{u:LocaleString Key=Favorites.Add}" Click="OnToggleFavoriteClick"/>
-            <MenuFlyoutItem Tag="RemoveRecent" AutomationProperties.AutomationId="HomeRemoveRecentItem" Text="{u:LocaleString Key=HomePage.RemoveFromList}" Click="OnRemoveRecentClick"/>
             <MenuFlyoutItem AutomationProperties.AutomationId="HomeLocationItem" Text="{u:LocaleString Key=OpenFileLocation}" Click="OnLocationClick"/>
             <MenuFlyoutItem AutomationProperties.AutomationId="HomeCopyPathItem" Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyPathClick"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Tag="RemoveRecent" AutomationProperties.AutomationId="HomeRemoveRecentItem" Text="{u:LocaleString Key=HomePage.RemoveFromList}" Click="OnRemoveRecentClick"/>
         </MenuFlyout>
         <MenuFlyout x:Key="RecentFolderFlyout" Opening="OnEntryFlyoutOpening">
+            <MenuFlyoutItem Text="{u:LocaleString Key=Open}" Click="OnOpenEntryClick"/>
+            <MenuFlyoutSeparator/>
             <MenuFlyoutItem Tag="Favorite" Text="{u:LocaleString Key=Favorites.Add}" Click="OnToggleFavoriteClick"/>
-            <MenuFlyoutItem Tag="RemoveRecent" Text="{u:LocaleString Key=HomePage.RemoveFromList}" Click="OnRemoveRecentClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnLocationClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyPathClick"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Tag="RemoveRecent" Text="{u:LocaleString Key=HomePage.RemoveFromList}" Click="OnRemoveRecentClick"/>
         </MenuFlyout>
-        <MenuFlyout x:Key="FavoriteFlyout">
+        <MenuFlyout x:Key="FavoriteFlyout" Opening="OnEntryFlyoutOpening">
+            <MenuFlyoutItem AutomationProperties.AutomationId="HomeFavoriteOpenItem" Text="{u:LocaleString Key=Open}" Click="OnOpenEntryClick"/>
+            <MenuFlyoutItem Tag="NewWindow" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
+            <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Favorites.Remove}" Click="OnRemoveFavoriteClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnLocationClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyPathClick"/>

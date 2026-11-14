@@ -316,23 +316,22 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnFavoriteFlyoutOpening(object sender, object e)
         {
             if (sender is not MenuFlyout flyout) return;
+            // Open for both (a folder: the root, as a click on it does); a new window for a file only.
             var file = (flyout.Target?.DataContext as PathItem) is { Folder: false };
             foreach (var entry in flyout.Items)
-            {
-                var opens = entry is MenuFlyoutSeparator || Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(entry) is "FavoriteOpenItem" or "FavoriteOpenInNewWindowItem";
-                if (opens) entry.Visibility = file ? Visibility.Visible : Visibility.Collapsed;
-            }
+                if (Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(entry) is "FavoriteOpenInNewWindowItem")
+                    entry.Visibility = file ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private async void OnFavoriteOpenClick(object sender, RoutedEventArgs e)
-        {
-            if ((sender as FrameworkElement)?.DataContext is PathItem { Folder: false } item && FileViewModel != null) await FileViewModel.OpenFile(item.Path);
-        }
+        private static Services.FileEntry FavoriteEntryOf(object sender) =>
+            (sender as FrameworkElement)?.DataContext is PathItem item ? new Services.FileEntry(item.Path, item.Folder) : null;
 
-        private void OnFavoriteOpenInNewWindowClick(object sender, RoutedEventArgs e)
-        {
-            if ((sender as FrameworkElement)?.DataContext is PathItem { Folder: false } item) FileViewModel?.NewWindowCommand.Execute(item.Path);
-        }
+        private async void OnFavoriteOpenClick(object sender, RoutedEventArgs e) => await Services.FileEntryActions.Open(FavoriteEntryOf(sender), FileViewModel);
+
+        private void OnFavoriteOpenInNewWindowClick(object sender, RoutedEventArgs e) => Services.FileEntryActions.OpenInNewWindow(FavoriteEntryOf(sender), FileViewModel);
+
+        private void OnFavoriteCopyPathClick(object sender, RoutedEventArgs e) =>
+            Services.FileEntryActions.Report(XamlRoot, Services.FileEntryActions.CopyPath(FavoriteEntryOf(sender), Clipboard));
 
         private void OnRemoveFavoriteClick(object sender, RoutedEventArgs e)
         {
