@@ -2,6 +2,7 @@ import { getUniqueId, loadImage } from '../../../utils'
 import { insertAfter, operateClassName } from '../../../utils/domManipulate'
 import { CLASS_OR_ID } from '../../../config'
 import { hostedImageSource } from 'services/localPaths'
+import { screenZoomStyle, screenPixelRatio } from 'services/imageZoom'
 
 export default function loadImageAsync (imageInfo, attrs, className, imageClass) {
   const { src } = imageInfo
@@ -42,7 +43,10 @@ export default function loadImageAsync (imageInfo, attrs, className, imageClass)
         img.src = domsrc
         if (attrs.alt) img.alt = attrs.alt.replace(/[`*{}[\]()#+\-.!_>~:|<>$]/g, '')
         if (attrs.title) img.setAttribute('title', attrs.title)
-        if (attrs.style) img.setAttribute('style', attrs.style)
+        // Its zoom as drawn on this screen, as image.js draws it (services/imageZoom): with the file's zoom as it is, a
+        // screenshot at 100% came back large from source mode at 150% display scaling, until re-rendered (the user,
+        // 2026-11-13).
+        if (attrs.style) img.setAttribute('style', screenZoomStyle(attrs.style, screenPixelRatio()))
         if (attrs.width && typeof attrs.width === 'number') {
           img.setAttribute('width', attrs.width)
         }

@@ -183,6 +183,7 @@ jobs:
           node heading-click-check.js
           node fold-check.js
           node block-buttons-check.js
+          node image-zoom-check.js
           node table-widths-check.js
           node data-uri-html-check.js
           node paste-lines-check.js
