@@ -132,6 +132,8 @@ namespace Typedown
             Services.Automation.AutomationService.Initialize();
             // New from Clipboard from other programs: registered only when Settings > General has it on.
             Services.GlobalShortcut.Initialize(window.DispatcherQueue);
+            // The daily look for a newer release, where Settings > About has it on and the edition has a feed.
+            _ = Core.Services.UpdateCheck.CheckAutomaticallyAsync(window.AppViewModel);
         }
 
         private static async void ListenPipe(DispatcherQueue dispatcher)

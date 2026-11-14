@@ -886,7 +886,8 @@
       "reason": "internal: migration or database flags",
       "windows": [
         "FileExportDatabaseInitialized",
-        "ImageUploadDatabaseInitialized"
+        "ImageUploadDatabaseInitialized",
+        "LastUpdateCheck"
       ]
     },
     {
@@ -919,6 +920,7 @@
         "TabWheelWraps",
         "ReleaseMemoryWhenMinimized",
         "GlobalNewFromClipboard",
+        "CheckForUpdatesAutomatically",
         "MermaidRenderer",
         "AutoSave",
         "AutoReload",

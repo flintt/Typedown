@@ -65,6 +65,58 @@ namespace Typedown.Core.Controls
             Utilities.Common.OpenUrl(Typedown.Automation.Brand.FeedbackUrl);
         }
 
+        private string updatePage;
+
+        private void ShowUpdatePanel()
+        {
+            UpdatePanel.Visibility = Services.UpdateCheck.Available ? Visibility.Visible : Visibility.Collapsed;
+            var settings = this.GetService<ViewModels.SettingsViewModel>();
+            if (settings != null) AutoUpdateCheck.IsChecked = settings.CheckForUpdatesAutomatically;
+        }
+
+        private void AutoUpdateCheck_Changed(object sender, RoutedEventArgs e)
+        {
+            var settings = this.GetService<ViewModels.SettingsViewModel>();
+            if (settings != null && settings.CheckForUpdatesAutomatically != (AutoUpdateCheck.IsChecked == true))
+                settings.CheckForUpdatesAutomatically = AutoUpdateCheck.IsChecked == true;
+        }
+
+        private async void CheckForUpdatesButton_Click(object sender, RoutedEventArgs e)
+        {
+            CheckForUpdatesButton.IsEnabled = false;
+            UpdatePageLink.Visibility = Visibility.Collapsed;
+            UpdateProgress.Visibility = Visibility.Visible;
+            UpdateProgress.IsActive = true;
+            UpdateStatus.Text = Locale.GetString("About.CheckingForUpdates");
+            try
+            {
+                var info = await Services.UpdateCheck.CheckAsync();
+                updatePage = info.PageUrl;
+                if (info.IsNewer)
+                {
+                    UpdateStatus.Text = string.Format(Locale.GetString("About.UpdateFound"), info.Latest.ToString(3));
+                    UpdatePageLink.Visibility = Visibility.Visible;
+                }
+                else UpdateStatus.Text = string.Format(Locale.GetString("About.UpToDate"), info.Current.ToString(3));
+            }
+            catch (System.Exception ex)
+            {
+                Utilities.Log.Debug($"updates: the check asked for failed: {ex.Message}");
+                UpdateStatus.Text = string.Format(Locale.GetString("About.UpdateCheckFailed"), ex.Message.Split('\n')[0]);
+            }
+            finally
+            {
+                UpdateProgress.IsActive = false;
+                UpdateProgress.Visibility = Visibility.Collapsed;
+                CheckForUpdatesButton.IsEnabled = true;
+            }
+        }
+
+        private void UpdatePageLink_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(updatePage)) Utilities.Common.OpenUrl(updatePage);
+        }
+
         private void OpenLogFolderButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             try
@@ -122,6 +174,7 @@ namespace Typedown.Core.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            ShowUpdatePanel();
             try
             {
                 EditionSectionPresenter.Content = EditionSection?.Invoke();

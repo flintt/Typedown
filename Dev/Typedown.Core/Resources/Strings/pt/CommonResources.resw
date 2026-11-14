@@ -575,6 +575,18 @@
     <value>Novo da área de transferência</value>
     <comment>新建/从剪贴板新建</comment>
   </data>
+  <data name="UpdateCard.Available" xml:space="preserve">
+    <value>A versão {0} está disponível (você tem a {1}).</value>
+    <comment>更新提示卡片/有新版本 {0}，当前 {1}</comment>
+  </data>
+  <data name="UpdateCard.Download" xml:space="preserve">
+    <value>Baixar</value>
+    <comment>更新提示卡片/下载</comment>
+  </data>
+  <data name="UpdateCard.Later" xml:space="preserve">
+    <value>Mais tarde</value>
+    <comment>更新提示卡片/以后再说</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>Nenhuma ação</value>
     <comment>自动操作/无操作</comment>

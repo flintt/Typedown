@@ -25,6 +25,18 @@
             <TextBlock Text="{u:LocaleString Key=About.Introduction}"/>
         </StackPanel>
 
+        <!-- Check for updates (Services.UpdateCheck): only where the edition has a release feed and the Store does not
+             update the app. -->
+        <StackPanel x:Name="UpdatePanel" Margin="0,4,0,0" Spacing="6" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button x:Name="CheckForUpdatesButton" AutomationProperties.AutomationId="CheckForUpdatesButton" MinWidth="100" Content="{u:LocaleString Key=About.CheckForUpdates}" Click="CheckForUpdatesButton_Click"/>
+                <ProgressRing x:Name="UpdateProgress" Width="16" Height="16" IsActive="False" Visibility="Collapsed"/>
+                <TextBlock x:Name="UpdateStatus" AutomationProperties.AutomationId="UpdateStatus" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                <HyperlinkButton x:Name="UpdatePageLink" AutomationProperties.AutomationId="UpdatePageLink" Content="{u:LocaleString Key=About.OpenReleasePage}" Visibility="Collapsed" Click="UpdatePageLink_Click"/>
+            </StackPanel>
+            <CheckBox x:Name="AutoUpdateCheck" AutomationProperties.AutomationId="AutoUpdateCheck" Content="{u:LocaleString Key=About.AutoCheckUpdates}" Checked="AutoUpdateCheck_Changed" Unchecked="AutoUpdateCheck_Changed"/>
+        </StackPanel>
+
         <StackPanel Margin="-12,8,0,0">
             <!-- A fork: the original app's store page and credits site are not ours. The link is the edition's own
                  (Typedown.Automation.Brand): where this build is developed, or what it is built on. -->

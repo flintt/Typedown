@@ -899,6 +899,34 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Åpne loggmappen</value>
   </data>
+  <data name="About.CheckForUpdates" xml:space="preserve">
+    <value>Se etter oppdateringer</value>
+    <comment>关于/检查更新</comment>
+  </data>
+  <data name="About.CheckingForUpdates" xml:space="preserve">
+    <value>Sjekker …</value>
+    <comment>关于/正在检查更新</comment>
+  </data>
+  <data name="About.UpToDate" xml:space="preserve">
+    <value>Du har nyeste versjon ({0}).</value>
+    <comment>关于/已是最新版本，{0} 是版本号</comment>
+  </data>
+  <data name="About.UpdateFound" xml:space="preserve">
+    <value>Versjon {0} er tilgjengelig.</value>
+    <comment>关于/有新版本，{0} 是版本号</comment>
+  </data>
+  <data name="About.UpdateCheckFailed" xml:space="preserve">
+    <value>Kunne ikke se etter oppdateringer: {0}</value>
+    <comment>关于/检查更新失败，{0} 是原因</comment>
+  </data>
+  <data name="About.OpenReleasePage" xml:space="preserve">
+    <value>Åpne nedlastingssiden</value>
+    <comment>关于/打开新版本的下载页</comment>
+  </data>
+  <data name="About.AutoCheckUpdates" xml:space="preserve">
+    <value>Se etter oppdateringer automatisk (én gang om dagen)</value>
+    <comment>关于/每天自动检查一次更新</comment>
+  </data>
   <data name="Export.AfterExport.Title" xml:space="preserve">
     <value>Etter eksport</value>
   </data>
