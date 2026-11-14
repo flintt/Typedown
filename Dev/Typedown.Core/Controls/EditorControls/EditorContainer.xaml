@@ -158,5 +158,7 @@
             x:Name="FindReplaceDialog" 
             x:Load="{x:Bind IsFindReplaceLoad, Mode=OneWay}"
             RenderTransform="{StaticResource FindReplaceTransform}"/>
+        <!-- An edition's page over all of it (EditionHooks.ShowOverlay): the writing timeline. -->
+        <ContentPresenter x:Name="EditionOverlayHost" Visibility="Collapsed"/>
     </Grid>
 </UserControl>

@@ -125,6 +125,42 @@ namespace Typedown.Core.Utilities
 
         internal static event Action<AppViewModel> SidePanelChanged;
 
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<AppViewModel, EditorOverlay> overlays = new();
+
+        /// <summary>
+        /// An edition's page over the editor area of one window (one at a time), above the home page, the scroll bars and
+        /// Find: the document stays underneath, as it was. It goes when <see cref="CloseOverlay"/> is called, or another
+        /// tab or file is shown in the window (the reader went back to the writing); it stays while the window does (back
+        /// from the settings page, it is there again).
+        /// </summary>
+        public static void ShowOverlay(AppViewModel app, EditorOverlay overlay)
+        {
+            if (app == null || overlay == null) return;
+            if (overlays.TryGetValue(app, out var shown) && shown != overlay)
+            {
+                overlays.Remove(app);
+                try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionOverlay", ex.ToString()); }
+            }
+            overlays.AddOrUpdate(app, overlay);
+            OverlayChanged?.Invoke(app);
+        }
+
+        /// <summary>The window's overlay taken away, if it is the one with this id (null: whichever); its <see cref="EditorOverlay.Closed"/> is called.</summary>
+        public static void CloseOverlay(AppViewModel app, string id = null)
+        {
+            if (app == null || !overlays.TryGetValue(app, out var shown) || (id != null && shown.Id != id)) return;
+            overlays.Remove(app);
+            OverlayChanged?.Invoke(app);
+            try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionOverlay", ex.ToString()); }
+        }
+
+        /// <summary>The id of the overlay shown in the window, or null.</summary>
+        public static string OverlayShown(AppViewModel app) => app != null && overlays.TryGetValue(app, out var shown) ? shown.Id : null;
+
+        internal static EditorOverlay OverlayOf(AppViewModel app) => app != null && overlays.TryGetValue(app, out var shown) ? shown : null;
+
+        internal static event Action<AppViewModel> OverlayChanged;
+
         private static readonly List<Func<AppViewModel, IEnumerable<HomeSection>>> homeSections = new();
 
         /// <summary>
@@ -483,6 +519,15 @@ namespace Typedown.Core.Utilities
         public string SessionId { get; set; }
         /// <summary>The document was the one shown (its page marked the edit itself), not a tab in the background.</summary>
         public bool Active { get; set; }
+    }
+
+    /// <summary>An edition's page over the editor area (<see cref="EditionHooks.ShowOverlay"/>).</summary>
+    public sealed class EditorOverlay
+    {
+        public string Id { get; init; }
+        public Microsoft.UI.Xaml.UIElement Content { get; init; }
+        /// <summary>Called when it is closed or another takes its place.</summary>
+        public Action Closed { get; init; }
     }
 
     /// <summary>An edition's panel beside the document (<see cref="EditionHooks.ShowSidePanel"/>).</summary>

@@ -63,6 +63,40 @@ namespace Typedown.Core.Controls
             // another window or the automation API it stayed in the old one. A new one takes its place, as it was.
             disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ =>
                 _ = DispatcherQueue.RunIdleAsync(_ => RebuildHome())));
+            // An edition's page over the editor; gone when another tab or file is shown (back to the writing).
+            EditionHooks.OverlayChanged += OnOverlayChanged;
+            disposables.Add(Disposable.Create(() => EditionHooks.OverlayChanged -= OnOverlayChanged));
+            if (ViewModel?.TabsViewModel is { } tabs)
+                disposables.Add(tabs.WhenPropertyChanged(nameof(TabsViewModel.ActiveTab)).Subscribe(_ => EditionHooks.CloseOverlay(ViewModel)));
+            if (Editor != null)
+                disposables.Add(ViewModel.FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FilePath)).Subscribe(_ => EditionHooks.CloseOverlay(ViewModel)));
+            ShowOverlay();
+        }
+
+        private void OnOverlayChanged(AppViewModel app)
+        {
+            if (app != ViewModel) return;
+            if (DispatcherQueue.HasThreadAccess) ShowOverlay();
+            else DispatcherQueue.TryEnqueue(ShowOverlay);
+        }
+
+        // Which container's host holds an overlay's content now: the one before this (left for the settings) lets it go.
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<object, ContentPresenter> overlayHosts = new();
+
+        private void ShowOverlay()
+        {
+            var overlay = EditionHooks.OverlayOf(ViewModel);
+            if (overlay?.Content == null)
+            {
+                EditionOverlayHost.Content = null;
+                EditionOverlayHost.Visibility = Visibility.Collapsed;
+                return;
+            }
+            if (overlayHosts.TryGetValue(overlay.Content, out var held) && held != EditionOverlayHost && held.Content == overlay.Content) held.Content = null;
+            else if ((overlay.Content as FrameworkElement)?.Parent is ContentPresenter owner && owner != EditionOverlayHost) owner.Content = null;
+            overlayHosts.AddOrUpdate(overlay.Content, EditionOverlayHost);
+            EditionOverlayHost.Content = overlay.Content;
+            EditionOverlayHost.Visibility = Visibility.Visible;
         }
 
         private void RebuildHome()
@@ -81,6 +115,7 @@ namespace Typedown.Core.Controls
         {
             if (Editor != null) Editor.EditorDetached = true;
             MarkdownEditorPresenter.Content = null;
+            EditionOverlayHost.Content = null;
             disposables.Clear();
             Bindings?.StopTracking();
         }
