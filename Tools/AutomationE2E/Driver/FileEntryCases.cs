@@ -29,11 +29,36 @@ internal static partial class Program
         async Task<List<string>> Locations() =>
             ((JArray)(await c.Call("test.links.opened"))["links"]!).Select(x => (string)x!).Where(x => x.StartsWith("location:")).Select(x => x["location:".Length..]).ToList();
         var results = new List<string>();
-        // One menu: its Open File Location (the place asked of Explorer) and its Copy as Path (the clipboard after).
-        async Task Both(string where, Func<Task> openMenu, string locationId, string copyId)
+        // The menu's entries top to bottom, as shown (the menu holding the given entry).
+        async Task<List<(string Name, string Id)>> Entries(string anyId)
+        {
+            var anchor = await MenuEntry(window, anyId);
+            var menu = TreeWalker.ControlViewWalker.GetParent(anchor);
+            return menu.FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.MenuItem)).Cast<AutomationElement>()
+                .Where(x => !x.Current.IsOffscreen).OrderBy(x => x.Current.BoundingRectangle.Top).Select(x => (x.Current.Name, x.Current.AutomationId)).ToList();
+        }
+        // Every file menu's core, in one order (the user, 2026-11-13): Open, Open in New Window | the favourite, Open File
+        // Location, Copy as Path. A tab has no Open (it is open).
+        var order = new List<string>();
+        void SameCore(string where, List<(string Name, string Id)> entries, string locationId, string copyId, bool opens)
+        {
+            int At(Func<(string Name, string Id), bool> match) => entries.FindIndex(x => match(x));
+            var open = At(x => x.Name == "Open");
+            var newWindow = At(x => x.Name.Contains("new window", StringComparison.OrdinalIgnoreCase));
+            var favorite = At(x => x.Name.Contains("favorite", StringComparison.OrdinalIgnoreCase));
+            var location = At(x => x.Id == locationId);
+            var copy = At(x => x.Id == copyId);
+            notes.Add($"{where}: {string.Join(", ", entries.Select(x => x.Name))}");
+            var core = opens ? new[] { open, newWindow, favorite, location, copy } : new[] { favorite, location, copy };
+            if (core.Any(i => i < 0) || core.Zip(core.Skip(1)).Any(p => p.First >= p.Second))
+                order.Add($"{where}: {string.Join(", ", entries.Select(x => x.Name))}");
+        }
+        // One menu: its core (above), its Open File Location (the place asked of Explorer) and its Copy as Path (the clipboard after).
+        async Task Both(string where, Func<Task> openMenu, string locationId, string copyId, bool opens = true)
         {
             var before = (await Locations()).Count;
             await openMenu();
+            SameCore(where, await Entries(locationId), locationId, copyId, opens);
             await ClickInPopup(window, await MenuEntry(window, locationId));
             await Task.Delay(600);
             var after = await Locations();
@@ -62,7 +87,7 @@ internal static partial class Program
                 await Eventually(() => Task.FromResult((tab = Tabs().FirstOrDefault(t => t.Current.Name.Contains("fe01-entry"))) != null), 5000);
                 await Click(window, tab!, Mouse.Right);
                 await Task.Delay(600);
-            }, "TabOpenLocationItem", "TabCopyPathItem");
+            }, "TabOpenLocationItem", "TabCopyPathItem", opens: false);
 
             // Its row in the folder tree.
             await Both("folder tree", async () =>
@@ -86,7 +111,7 @@ internal static partial class Program
             await ClickInPopup(window, await MenuEntry(window, "MenuBarFileItem", "HomeMenuItem"));
             Check(await HomeShown(c, windowId, true), "File > Home shows the home page");
             blank = await ActiveOf(c, windowId);
-            await Both("home page", async () =>
+            async Task RightClickHomeEntry()
             {
                 // In the home page's recent files only (a search of the whole window found the file's tab by its name, and right-clicked
                 // it; the page itself is a UserControl, not in the automation tree).
@@ -112,9 +137,17 @@ internal static partial class Program
                 notes.Add($"home page entry: {row.Current.ControlType.ProgrammaticName} '{row.Current.Name}'");
                 await Click(window, row, Mouse.Right);
                 await Task.Delay(600);
-            }, "HomeLocationItem", "HomeCopyPathItem");
+            }
+            await Both("home page", RightClickHomeEntry, "HomeLocationItem", "HomeCopyPathItem");
 
             Check(results.Count == 0, "Open File Location and Copy as Path give the file in all four menus" + (results.Count == 0 ? "" : ": " + string.Join("; ", results)));
+            Check(order.Count == 0, "every file menu has Open, Open in New Window, the favourite, Open File Location and Copy as Path in that order" + (order.Count == 0 ? "" : ": " + string.Join("; ", order)));
+
+            // The home page entry's Open (new there): the file's document shown - it is open in a tab, so that tab.
+            await RightClickHomeEntry();
+            await ClickInPopup(window, await MenuEntry(window, "HomeOpenItem"));
+            var opened = await Eventually(async () => await ActiveOf(c, windowId) == id, 5000, 200);
+            Check(opened, "the home page entry's Open shows the file");
 
             // A recent file that is gone: its place is its folder.
             var goneId = await Open(c, gone);

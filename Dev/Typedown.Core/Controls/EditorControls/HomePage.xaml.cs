@@ -256,9 +256,7 @@ namespace Typedown.Core.Controls
         // A file opens in this tab (it is blank, so it is taken over); a folder becomes the folder pane's root.
         private async void OnEntryClick(object sender, ItemClickEventArgs e)
         {
-            if (e.ClickedItem is not PathItem item || ViewModel?.FileViewModel is not { } file) return;
-            if (item.Folder) await file.OpenFolder(item.Path);
-            else await file.OpenFile(item.Path);
+            if (e.ClickedItem is PathItem item) await FileEntryActions.Open(new FileEntry(item.Path, item.Folder), ViewModel?.FileViewModel);
         }
 
         private static PathItem ItemOf(object sender) => (sender as FrameworkElement)?.DataContext as PathItem;
@@ -266,17 +264,25 @@ namespace Typedown.Core.Controls
         // The entry as every file menu acts on it (Services.FileEntryActions).
         private static FileEntry EntryOf(object sender) => ItemOf(sender) is { } item ? new FileEntry(item.Path, item.Folder) : null;
 
-        // The entry's menu, worded for it: into or out of the favourites.
+        // The entry's menu, worded for it: into or out of the favourites; a new window for a file only.
         private void OnEntryFlyoutOpening(object sender, object e)
         {
             var flyout = (MenuFlyout)sender;
             var item = (flyout.Target as FrameworkElement)?.DataContext as PathItem;
+            if (item == null) return;
+            var entry = new FileEntry(item.Path, item.Folder);
+            foreach (var newWindow in flyout.Items.OfType<MenuFlyoutItem>().Where(x => "NewWindow".Equals(x.Tag)))
+                newWindow.Visibility = FileEntryActions.CanOpenInNewWindow(entry) ? Visibility.Visible : Visibility.Collapsed;
             var favorite = flyout.Items.OfType<MenuFlyoutItem>().FirstOrDefault(x => "Favorite".Equals(x.Tag));
-            if (item == null || favorite == null) return;
-            var (isFavorite, canToggle) = FileEntryActions.FavoriteState(new FileEntry(item.Path, item.Folder));
+            if (favorite == null) return;
+            var (isFavorite, canToggle) = FileEntryActions.FavoriteState(entry);
             favorite.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
             favorite.IsEnabled = canToggle;
         }
+
+        private async void OnOpenEntryClick(object sender, RoutedEventArgs e) => await FileEntryActions.Open(EntryOf(sender), ViewModel?.FileViewModel);
+
+        private void OnOpenInNewWindowClick(object sender, RoutedEventArgs e) => FileEntryActions.OpenInNewWindow(EntryOf(sender), ViewModel?.FileViewModel);
 
         private void OnToggleFavoriteClick(object sender, RoutedEventArgs e) => FileEntryActions.ToggleFavorite(EntryOf(sender));
 

@@ -22,11 +22,29 @@ namespace Typedown.Core.Services
     /// What the home page, the tab strip, the folder tree and File > Open Recent do with an entry: show its place, copy its
     /// path, make it a favourite or not, take it out of the recent lists. Each did it its own way - the place shown for a
     /// path that is gone or for none, a copy that failed said or not, a tab's favourite always a file, a removal nobody
-    /// heard fail (the modularity audit's M05, 2026-11-12). The menus keep what is theirs: which items they have, their
-    /// order, which menus close after.
+    /// heard fail (the modularity audit's M05, 2026-11-12). The same file had different items in each of those menus (the
+    /// user, 2026-11-13; the menu report's M09): each has the same core now, in this order - Open, Open in New Window (a
+    /// file) | the favourite, Open File Location, Copy as Path | what is its own (out of the list, a tab's closing, the
+    /// tree's file operations). Which menus close after stays each menu's.
     /// </summary>
     public static class FileEntryActions
     {
+        /// <summary>A file into this window's editor; a folder the folder pane's root - as a click on the entry does.</summary>
+        public static async Task Open(FileEntry entry, ViewModels.FileViewModel file)
+        {
+            if (!CanShowLocation(entry) || file == null) return;
+            if (entry.IsFolder) await file.OpenFolder(entry.Path);
+            else await file.OpenFile(entry.Path);
+        }
+
+        /// <summary>A file only: a folder has no window of its own.</summary>
+        public static bool CanOpenInNewWindow(FileEntry entry) => CanShowLocation(entry) && !entry.IsFolder;
+
+        public static void OpenInNewWindow(FileEntry entry, ViewModels.FileViewModel file)
+        {
+            if (CanOpenInNewWindow(entry)) file?.NewWindowCommand.Execute(entry.Path);
+        }
+
         public static bool CanShowLocation(FileEntry entry) => entry?.HasPath == true;
 
         /// <summary>
