@@ -11,7 +11,7 @@ using Typedown.Core.Services;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Typedown.Windows;
-using Windows.System;
+using VirtualKeyModifiers = Windows.System.VirtualKeyModifiers;
 
 namespace Typedown.Services
 {
