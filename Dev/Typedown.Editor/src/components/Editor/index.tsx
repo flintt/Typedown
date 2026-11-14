@@ -121,6 +121,9 @@ const Editor: React.FC = () => {
     const fileLoadPending = useRef<{ armed: boolean, timer?: number }>()
     // The text the host last put in the editor (a load, or text from its history) - what FileLoaded compares with.
     const givenTextRef = useRef<string>()
+    // The text the page held when the host last put one in: a report of it during the load is the editor going (see
+    // onMarkdownChange).
+    const leftTextRef = useRef<string>()
 
     // What is typed while a tab's document is on its way (services/inputHold.ts), and the hold the document shown was for.
     const holdRef = useRef<InputHold>()
@@ -315,6 +318,10 @@ const Editor: React.FC = () => {
         if (pending) {
             // Before the new text is applied any report still describes the previous document: drop it.
             if (!pending.armed) return
+            // So does one after it, with the very text the page held before the load (and not the text given): the
+            // editor going reporting late. It went to the host as the new load's text - a long plain text's whole
+            // 488,879 characters under the Markdown file's load number (the audit's E08; the host's retry put it right).
+            if (markdown !== givenTextRef.current && markdown === leftTextRef.current) return
             markdownRef.current = markdown
             resetUserIntent()
             flushFileLoaded()
@@ -389,6 +396,7 @@ const Editor: React.FC = () => {
     const setContentFromHost = useCallback((markdown: string, cursor?: any, scrollTop?: number | null, local = false, scrollAnchor: ScrollAnchor | null = null) => {
         localChangeRef.current = local
         scrollAnchorRef.current = scrollAnchor
+        if (!local) leftTextRef.current = markdownRef.current
         markdownRef.current = markdown
         // An automation edit is not a load: it has no FileLoaded, and a load is refused while one is applied.
         if (!local) givenTextRef.current = markdown
