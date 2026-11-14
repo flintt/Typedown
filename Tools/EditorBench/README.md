@@ -317,3 +317,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   more than it and a little; in the visual editor each mark where its text is (a deletion never inside a hidden mark);
   reject all gives the baseline back, accept all makes it the text; nothing of the marks in the text. Prints a table
   (with the ways the diff took: lines paired, taken whole, groups unpaired, comparisons given up) and the page's errors.
+- `stacked-format-check.js` — a word with several formats at once (`***x***`, `**_x_**`, `_**x**_`, `<u>**x**</u>`,
+  `**<u>x</u>**`, `~~**x**~~`, `***<u>x</u>***`, `~~***x***~~` ...) and a format pressed there (`Format`, as the context
+  menu, the Format menu and the shortcuts send it): that format comes off, the inner one as well as the outer, with the
+  caret in the word (it stays after the same letter) or the word selected (it stays selected, and a second press puts the
+  format back); the others stay; the host has the text; Clear format takes them all off. Only the outermost came off
+  before (the user, 2026-11-14), and `_**x**_` was not drawn as formatted.
