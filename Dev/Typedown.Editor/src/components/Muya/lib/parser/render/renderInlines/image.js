@@ -1,5 +1,6 @@
 import { CLASS_OR_ID } from '../../../config'
 import { getImageInfo } from '../../../utils'
+import { screenZoomStyle, screenPixelRatio } from 'services/imageZoom'
 
 // The icons are spans, not anchors: a picture inside a link ([![alt](src)](url)) put them in an <a> of their own inside
 // the link's <a>, and the page built from the HTML closed the link at the first of them - the picture's box came out
@@ -114,7 +115,7 @@ export default function image(h, cursor, block, token, outerClass) {
     
     const renderImage = () => {
       const data = {
-        props: { alt: alt.replace(/[`*{}[\]()#+\-.!_>~:|<>$]/g, ''), src: domsrc, title, style }
+        props: { alt: alt.replace(/[`*{}[\]()#+\-.!_>~:|<>$]/g, ''), src: domsrc, title, style: screenZoomStyle(style, screenPixelRatio()) }
       }
 
       if (typeof width === 'number') {
