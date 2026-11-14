@@ -38,6 +38,17 @@
     
     <Thickness x:Key="EllipsisIconButtonBorderThemeThickness">0</Thickness>
 
+    <!-- EllipsisIconButtonStyle's look for a button with a state (Controls.StateToggleButton): flat until checked, then the
+         accent fill a checked toggle button has. -->
+    <Style x:Key="EllipsisIconToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource DefaultToggleButtonStyle}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
+    </Style>
+
     <Style x:Key="EllipsisIconButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{ThemeResource EllipsisIconButtonBackground}" />
         <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
