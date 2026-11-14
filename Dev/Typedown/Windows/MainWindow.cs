@@ -509,7 +509,9 @@ namespace Typedown.Windows
             if (args.DidPresenterChange || args.DidSizeChange) ScheduleEditorLayoutCheck();
             if (args.DidPositionChange || args.DidSizeChange) CloseOpenMenus();
             if (args.DidPositionChange || args.DidSizeChange) UpdateMinimumSize();
-            if (args.DidPresenterChange) UpdateWebViewMemoryTarget();
+            // Any change, not only the presenter's: minimizing raises DidPresenterChange, restoring from the taskbar only
+            // a size change, and the low target stayed (MM02, w10 job 501).
+            UpdateWebViewMemoryTarget();
         }
 
         private bool webViewMemoryLow;
