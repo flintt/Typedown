@@ -24,6 +24,20 @@ namespace Typedown.Core.Utilities
             };
         }
 
+        /// <summary>
+        /// Whether to delete the configuration, asked naming it: its page's Delete button deleted it at once, and said
+        /// nothing of which one (the user, 2026-11-13; the menu report's M12). Cancel is the default.
+        /// </summary>
+        public static async Task<bool> ConfirmDeleteAsync(XamlRoot root, string name)
+        {
+            if (root == null) return false;
+            var shown = string.IsNullOrWhiteSpace(name) ? Locale.GetString("Untitled") : name.Trim();
+            var dialog = AppContentDialog.Create(Locale.GetString("ImageUpload.DeleteConfig"), string.Format(Locale.GetDialogString("DeleteConfigConfirm"), shown),
+                Locale.GetString("Cancel"), Locale.GetDialogString("Delete"));
+            dialog.DefaultButton = Microsoft.UI.Xaml.Controls.ContentDialogButton.Close;
+            return await dialog.ShowAsync(root) == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
+        }
+
         /// <summary>The configuration, or null when it could not be read (logged as <paramref name="what"/>).</summary>
         public static async Task<T> LoadAsync<T>(Func<Task<T>> load, string what) where T : class
         {

@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Sábháilte go deireanach {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Tá na ceanáin lán ({0} ar a mhéad)</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Níor sábháladh i gcomhad fós é</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Luann an comhad a ionchódú féin</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Sábháil na hathruithe ar dtús</value>
+  </data>
 </root>

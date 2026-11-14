@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>ຮູບນີ້ມີ {0} KB ເກີນ {1} KB ທີ່ຕັ້ງໄວ້ສຳລັບການຝັງ (ການຕັ້ງຄ່າ &gt; ຮູບ) ຈຶ່ງແຊກແບບບໍ່ຝັງ.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>ລຶບ "{0}"? ບໍ່ສາມາດຍົກເລີກໄດ້.</value>
+  </data>
 </root>

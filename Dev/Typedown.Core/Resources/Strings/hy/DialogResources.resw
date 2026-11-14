@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Այս պատկերը {0} ԿԲ է, ավելին, քան ներդրման համար սահմանված {1} ԿԲ-ն (Կարգավորումներ &gt; Պատկեր), ուստի տեղադրվեց առանց ներդրման։</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Ջնջե՞լ «{0}»-ը։ Սա հնարավոր չէ հետարկել։</value>
+  </data>
 </root>

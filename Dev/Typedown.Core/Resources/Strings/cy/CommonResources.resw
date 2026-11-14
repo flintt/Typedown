@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Cadwyd ddiwethaf {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Ffefrynnau’n llawn ({0} ar y mwyaf)</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Heb ei gadw mewn ffeil eto</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Mae’r ffeil yn enwi ei hamgodiad ei hun</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Cadwch y newidiadau yn gyntaf</value>
+  </data>
 </root>

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Ova slika ima {0} KB, više od {1} KB postavljenih za ugradnju (Postavke &gt; Slika), pa je umetnuta bez ugradnje.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Izbrisati „{0}“? Ovo se ne može poništiti.</value>
+  </data>
 </root>

@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Последно зачувано {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Омилените се полни (најмногу {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Сè уште не е зачувано во датотека</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Датотеката сама го наведува своето кодирање</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Прво зачувајте ги промените</value>
+  </data>
 </root>

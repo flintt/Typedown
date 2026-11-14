@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Бұл сурет {0} КБ, ендіруге белгіленген {1} КБ-тан артық (Параметрлер &gt; Сурет), сондықтан ендірусіз қойылды.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>«{0}» жойылсын ба? Мұны болдырмау мүмкін емес.</value>
+  </data>
 </root>

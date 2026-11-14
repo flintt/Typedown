@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>این تصویر {0} KB است، بیشتر از {1} KB تعیین شده برای جاسازی (تنظیمات &gt; تصویر)، بنابراین بدون جاسازی درج شد.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>«{0}» حذف شود؟ این کار برگشت‌پذیر نیست.</value>
+  </data>
 </root>

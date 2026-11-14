@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Billedet er {0} KB, mere end de {1} KB, der er sat til indlejring (Indstillinger &gt; Billede), så det blev indsat uden indlejring.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Slet "{0}"? Det kan ikke fortrydes.</value>
+  </data>
 </root>

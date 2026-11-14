@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Bildet er {0} kB, mer enn de {1} kB som er satt for innbygging (Innstillinger &gt; Bilde), så det ble satt inn uten innbygging.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Slette «{0}»? Dette kan ikke angres.</value>
+  </data>
 </root>

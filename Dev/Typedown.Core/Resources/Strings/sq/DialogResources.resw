@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Kjo figurë është {0} KB, më shumë se {1} KB të caktuar për ngulitje (Cilësimet &gt; Figura), ndaj u fut pa ngulitje.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Të fshihet "{0}"? Kjo nuk mund të zhbëhet.</value>
+  </data>
 </root>

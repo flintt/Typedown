@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>শেষবাৰ সংৰক্ষিত {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>প্ৰিয়সমূহ পূৰ্ণ (সৰ্বাধিক {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>এতিয়াও ফাইল হিচাপে সংৰক্ষিত হোৱা নাই</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>ফাইলটোৱে নিজৰ এনক’ডিং উল্লেখ কৰে</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>প্ৰথমে সালসলনিসমূহ সংৰক্ষণ কৰক</value>
+  </data>
 </root>

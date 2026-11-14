@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>हे चित्र {0} KB आहे, एम्बेडसाठी ठरवलेल्या {1} KB (सेटिंग्ज &gt; चित्र) पेक्षा जास्त, म्हणून ते एम्बेड न करता घातले.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" हटवायचे? हे पूर्ववत करता येणार नाही.</value>
+  </data>
 </root>

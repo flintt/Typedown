@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Utoljára mentve: {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>A kedvencek megteltek (legfeljebb {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Még nincs fájlba mentve</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>A fájl maga adja meg a kódolását</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Előbb mentse a módosításokat</value>
+  </data>
 </root>

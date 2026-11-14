@@ -19,7 +19,9 @@
             <MenuFlyoutItem Tag="CloseOthers" AutomationProperties.AutomationId="TabCloseOthersItem" Text="{u:LocaleString Key=Tab.CloseOthers}" Click="OnTabCloseOthersClick"/>
             <MenuFlyoutItem Tag="CloseToTheRight" AutomationProperties.AutomationId="TabCloseToTheRightItem" Text="{u:LocaleString Key=Tab.CloseToTheRight}" Click="OnTabCloseToTheRightClick"/>
             <MenuFlyoutSeparator/>
-            <!-- Every file menu's core, in its order (Services.FileEntryActions), then the tab's own. -->
+            <!-- Every file menu's core, in its order (Services.FileEntryActions), then the tab's own; above them, for a
+                 document not saved yet, why they are off. -->
+            <MenuFlyoutItem Tag="NotOnDisk" AutomationProperties.AutomationId="TabNotSavedYetItem" Text="{u:LocaleString Key=Tab.NotSavedYet}" IsEnabled="False"/>
             <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TabFavoriteItem" Text="Favorite" Click="OnTabFavoriteClick"/>
             <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabOpenLocationItem" Text="{u:LocaleString Key=OpenFileLocation}" Click="OnTabOpenLocationClick"/>
             <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TabCopyPathItem" Text="{u:LocaleString Key=CopyAsPath}" Click="OnTabCopyPathClick"/>

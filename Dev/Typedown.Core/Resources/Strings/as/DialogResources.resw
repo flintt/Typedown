@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>এই ছবিখন {0} KB, এম্বেডৰ বাবে নিৰ্ধাৰিত {1} KB (ছেটিংছ &gt; ছবি)তকৈ বেছি, গতিকে এম্বেড নকৰাকৈ সুমুৱা হ’ল।</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" মচিবনে? এইটো পূৰ্বাৱস্থালৈ আনিব নোৱাৰি।</value>
+  </data>
 </root>

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>இந்தப் படம் {0} KB, உட்பொதிக்க அமைத்த {1} KB-ஐ (அமைப்புகள் &gt; படம்) விட அதிகம், எனவே உட்பொதிக்காமல் செருகப்பட்டது.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" ஐ நீக்கவா? இதைச் செயல்தவிர்க்க முடியாது.</value>
+  </data>
 </root>

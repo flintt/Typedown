@@ -369,4 +369,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>这张图片有 {0} KB，超过了嵌入上限 {1} KB（设置 &gt; 图片），已按不嵌入的方式插入。</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>删除“{0}”？删除后不能恢复。</value>
+  </data>
 </root>

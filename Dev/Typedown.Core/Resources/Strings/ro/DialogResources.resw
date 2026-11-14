@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Imaginea are {0} KB, mai mult decât cei {1} KB setați pentru încorporare (Setări &gt; Imagine), așa că a fost inserată fără încorporare.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Ștergeți „{0}”? Acțiunea nu poate fi anulată.</value>
+  </data>
 </root>

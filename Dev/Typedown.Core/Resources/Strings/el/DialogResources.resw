@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Η εικόνα είναι {0} KB, περισσότερο από τα {1} KB που ορίστηκαν για ενσωμάτωση (Ρυθμίσεις &gt; Εικόνα), οπότε εισήχθη χωρίς ενσωμάτωση.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Διαγραφή του «{0}»; Δεν μπορεί να αναιρεθεί.</value>
+  </data>
 </root>

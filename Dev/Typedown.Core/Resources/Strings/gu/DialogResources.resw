@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>આ છબી {0} KB છે, એમ્બેડ માટે નક્કી {1} KB (સેટિંગ્સ &gt; છબી) કરતાં વધુ, તેથી એમ્બેડ કર્યા વગર દાખલ કરી.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" કાઢી નાખવું? આ પૂર્વવત્ કરી શકાતું નથી.</value>
+  </data>
 </root>

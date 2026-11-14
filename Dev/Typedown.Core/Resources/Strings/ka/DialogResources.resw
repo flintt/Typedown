@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>ეს სურათი {0} KB-ია, ჩაშენებისთვის დაწესებულ {1} KB-ზე მეტი (პარამეტრები &gt; სურათი), ამიტომ ჩაისვა ჩაშენების გარეშე.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>წაიშალოს „{0}“? ამის გაუქმება შეუძლებელია.</value>
+  </data>
 </root>

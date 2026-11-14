@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Kuva on {0} kt, enemmän kuin upotukselle asetettu {1} kt (Asetukset &gt; Kuva), joten se lisättiin upottamatta.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Poistetaanko ”{0}”? Toimintoa ei voi kumota.</value>
+  </data>
 </root>

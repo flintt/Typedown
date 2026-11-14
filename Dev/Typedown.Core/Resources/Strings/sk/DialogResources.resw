@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Tento obrázok má {0} kB, viac než {1} kB nastavených na vkladanie (Nastavenia &gt; Obrázok), preto bol vložený bez vloženia do dokumentu.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Odstrániť „{0}“? Túto akciu nie je možné vrátiť.</value>
+  </data>
 </root>

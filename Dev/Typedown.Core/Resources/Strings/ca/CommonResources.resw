@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Desat per última vegada {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Preferits plens ({0} com a màxim)</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Encara no s'ha desat en un fitxer</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>El fitxer indica la seva pròpia codificació</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Deseu primer els canvis</value>
+  </data>
 </root>

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Din l-istampa hija {0} KB, aktar mill-{1} KB issettjati għad-daħħil (Settings &gt; Stampa), għalhekk iddaħħlet mingħajr ma ġiet inkorporata.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Tħassar "{0}"? Dan ma jistax jitreġġa’ lura.</value>
+  </data>
 </root>

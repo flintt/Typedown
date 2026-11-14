@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Gambar ini {0} KB, lebih daripada {1} KB yang ditetapkan untuk dibenamkan (Tetapan &gt; Gambar), jadi ia disisipkan tanpa dibenamkan.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Padam "{0}"? Ini tidak boleh dibuat asal.</value>
+  </data>
 </root>

@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>છેલ્લે સાચવ્યું {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>મનપસંદ ભરાઈ ગયા (વધુમાં વધુ {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>હજી ફાઇલમાં સાચવ્યું નથી</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>ફાઇલ પોતાનું એન્કોડિંગ જણાવે છે</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>પહેલા ફેરફારો સાચવો</value>
+  </data>
 </root>

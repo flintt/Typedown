@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Tá an pictiúr seo {0} KB, níos mó ná an {1} KB atá socraithe le haghaidh leabaithe (Socruithe &gt; Íomhá), mar sin cuireadh isteach é gan leabú.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Scrios "{0}"? Ní féidir é seo a chealú.</value>
+  </data>
 </root>

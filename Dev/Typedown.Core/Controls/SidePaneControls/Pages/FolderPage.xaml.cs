@@ -352,9 +352,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var item = GetExplorerItemFromMenuFlyout(flyout);
             var entry = flyout.Items.OfType<MenuFlyoutItem>().FirstOrDefault(x => "Favorite".Equals(x.Tag));
             if (entry == null || item == null) return;
-            var (isFavorite, canToggle) = Services.FileEntryActions.FavoriteState(EntryOf(item));
-            entry.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
-            entry.IsEnabled = canToggle;
+            (entry.Text, entry.IsEnabled) = Services.FileEntryActions.FavoriteItem(EntryOf(item));
         }
 
         private void OnToggleFavoriteClick(object sender, RoutedEventArgs e)

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Bu resim {0} KB; gömme için ayarlanan {1} KB’den büyük (Ayarlar &gt; Resim), bu yüzden gömülmeden eklendi.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" silinsin mi? Bu işlem geri alınamaz.</value>
+  </data>
 </root>

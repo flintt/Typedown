@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Lưu lần cuối {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Mục yêu thích đã đầy (tối đa {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Chưa được lưu thành tệp</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Tệp tự ghi rõ bảng mã của nó</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Hãy lưu các thay đổi trước</value>
+  </data>
 </root>

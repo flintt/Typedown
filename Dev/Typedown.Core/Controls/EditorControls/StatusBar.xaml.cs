@@ -134,6 +134,15 @@ namespace Typedown.Core.Controls
                 reopen.Items.Add(item);
             }
             items.Add(reopen);
+            // Off: why (the menu report's M12) - not on disk yet, the file names its own encoding, or a reading would lose
+            // what is not saved.
+            var why = file.FilePath == null ? "Tab.NotSavedYet" : format.HasByteOrderMark ? "Encoding.ReopenHasBom" : Editor?.Saved != true ? "Encoding.ReopenUnsaved" : null;
+            if (why != null)
+            {
+                var reason = new MenuFlyoutItem { Text = Locale.GetString(why), IsEnabled = false };
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(reason, "ReopenWithEncodingWhyOff");
+                items.Add(reason);
+            }
         }
 
         // Saved; not saved yet; auto-save held back (the file would have been damaged, or writing it failed).

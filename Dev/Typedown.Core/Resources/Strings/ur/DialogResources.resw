@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>یہ تصویر {0} KB کی ہے، جو شامل کرنے کی حد {1} KB (ترتیبات &gt; تصویر) سے زیادہ ہے، اس لیے اسے شامل کیے بغیر داخل کیا گیا۔</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" حذف کریں؟ اسے کالعدم نہیں کیا جا سکتا۔</value>
+  </data>
 </root>

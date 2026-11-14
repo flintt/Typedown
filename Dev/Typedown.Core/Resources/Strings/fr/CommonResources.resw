@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Dernier enregistrement {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Favoris pleins ({0} au maximum)</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Pas encore enregistré dans un fichier</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Le fichier indique lui-même son encodage</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Enregistrez d’abord les modifications</value>
+  </data>
 </root>

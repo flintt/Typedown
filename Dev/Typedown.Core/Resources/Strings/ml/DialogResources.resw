@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>ഈ ചിത്രം {0} KB ആണ്, ഉൾച്ചേർക്കാൻ നിശ്ചയിച്ച {1} KB (ക്രമീകരണങ്ങൾ &gt; ചിത്രം) യിലും കൂടുതൽ, അതിനാൽ ഉൾച്ചേർക്കാതെ ചേർത്തു.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" ഇല്ലാതാക്കണോ? ഇത് പഴയപടിയാക്കാനാകില്ല.</value>
+  </data>
 </root>

@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>I tiakina whakamutunga {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Kua kī ngā makau ({0} te mōrahi)</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Kāore anō kia tiakina ki tētahi kōnae</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Ka whakahua te kōnae i tōna ake whakawaehere</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Tiakina ngā panonitanga i te tuatahi</value>
+  </data>
 </root>

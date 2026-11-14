@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>آخرین ذخیره {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>علاقه‌مندی‌ها پر است (حداکثر {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>هنوز در فایل ذخیره نشده است</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>فایل رمزگذاری خود را مشخص می‌کند</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>ابتدا تغییرات را ذخیره کنید</value>
+  </data>
 </root>

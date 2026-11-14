@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Picha hii ni KB {0}, zaidi ya KB {1} zilizowekwa kwa kupachika (Mipangilio &gt; Picha), kwa hivyo imeingizwa bila kupachikwa.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Futa "{0}"? Hili haliwezi kutenduliwa.</value>
+  </data>
 </root>

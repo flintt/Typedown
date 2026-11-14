@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>ਆਖਰੀ ਵਾਰ ਸੰਭਾਲਿਆ {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>ਮਨਪਸੰਦ ਭਰ ਗਏ (ਵੱਧ ਤੋਂ ਵੱਧ {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>ਹਾਲੇ ਫ਼ਾਈਲ ਵਿੱਚ ਸੰਭਾਲਿਆ ਨਹੀਂ ਗਿਆ</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>ਫ਼ਾਈਲ ਆਪਣੀ ਐਨਕੋਡਿੰਗ ਖੁਦ ਦੱਸਦੀ ਹੈ</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>ਪਹਿਲਾਂ ਤਬਦੀਲੀਆਂ ਸੰਭਾਲੋ</value>
+  </data>
 </root>

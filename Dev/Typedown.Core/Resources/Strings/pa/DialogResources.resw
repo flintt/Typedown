@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>ਇਹ ਤਸਵੀਰ {0} KB ਹੈ, ਜੋੜਨ ਲਈ ਮਿੱਥੇ {1} KB (ਸੈਟਿੰਗਾਂ &gt; ਤਸਵੀਰ) ਤੋਂ ਵੱਧ, ਇਸ ਲਈ ਇਹ ਬਿਨਾਂ ਜੋੜੇ ਪਾਈ ਗਈ।</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" ਮਿਟਾਉਣਾ ਹੈ? ਇਸਨੂੰ ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।</value>
+  </data>
 </root>

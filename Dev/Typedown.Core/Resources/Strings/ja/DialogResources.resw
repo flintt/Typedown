@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>この画像は {0} KB で、埋め込みの上限 {1} KB（設定 &gt; 画像）を超えているため、埋め込まずに挿入しました。</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>「{0}」を削除しますか？元に戻せません。</value>
+  </data>
 </root>

@@ -502,7 +502,8 @@ namespace Typedown.Core.Controls
             menuEntry = new Services.FileEntry(menuTab?.FilePath, false);
             var tabs = Tabs?.Tabs;
             var index = tabs?.IndexOf(menuTab) ?? -1;
-            var (isFavorite, canFavorite) = Services.FileEntryActions.FavoriteState(menuEntry);
+            var (favoriteText, canFavorite) = Services.FileEntryActions.FavoriteItem(menuEntry);
+            var onDisk = Services.FileEntryActions.CanShowLocation(menuEntry);
             foreach (var item in flyout.Items.OfType<MenuFlyoutItem>())
             {
                 switch (item.Tag as string)
@@ -510,11 +511,13 @@ namespace Typedown.Core.Controls
                     case "Close": item.IsEnabled = index >= 0; break;
                     case "CloseOthers": item.IsEnabled = index >= 0 && tabs.Count > 1; break;
                     case "CloseToTheRight": item.IsEnabled = index >= 0 && index < tabs.Count - 1; break;
-                    case "File": item.IsEnabled = Services.FileEntryActions.CanShowLocation(menuEntry); break;
+                    case "File": item.IsEnabled = onDisk; break;
                     case "Favorite":
-                        item.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
-                        item.IsEnabled = canFavorite;
+                        item.Text = favoriteText;
+                        item.IsEnabled = canFavorite && onDisk;
                         break;
+                    // Why the file's items are off for a document not saved yet (the menu report's M12).
+                    case "NotOnDisk": item.Visibility = onDisk ? Visibility.Collapsed : Visibility.Visible; break;
                 }
             }
         }

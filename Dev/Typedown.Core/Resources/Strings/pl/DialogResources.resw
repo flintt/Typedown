@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Ten obraz ma {0} KB, więcej niż {1} KB ustawione dla osadzania (Ustawienia &gt; Obraz), więc wstawiono go bez osadzania.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Usunąć „{0}”? Tej operacji nie można cofnąć.</value>
+  </data>
 </root>

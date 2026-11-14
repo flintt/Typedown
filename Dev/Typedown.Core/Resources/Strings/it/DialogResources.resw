@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Questa immagine è di {0} KB, più dei {1} KB impostati per incorporare (Impostazioni &gt; Immagine), quindi è stata inserita senza incorporarla.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Eliminare «{0}»? L’operazione non può essere annullata.</value>
+  </data>
 </root>

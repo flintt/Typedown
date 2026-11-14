@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>បានរក្សាទុកចុងក្រោយ {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>ចំណូលចិត្តពេញហើយ (អតិបរមា {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>មិនទាន់រក្សាទុកជាឯកសារនៅឡើយ</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>ឯកសារបញ្ជាក់ការអ៊ិនកូដរបស់វាផ្ទាល់</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>សូមរក្សាទុកការផ្លាស់ប្ដូរជាមុនសិន</value>
+  </data>
 </root>

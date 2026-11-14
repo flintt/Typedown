@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>התמונה הזו היא {0} KB, יותר מ-{1} KB שהוגדרו להטמעה (הגדרות &gt; תמונה), ולכן הוכנסה בלי הטמעה.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>למחוק את "{0}"? לא ניתן לבטל פעולה זו.</value>
+  </data>
 </root>

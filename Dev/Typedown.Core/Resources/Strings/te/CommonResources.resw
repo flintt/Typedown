@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>చివరిగా సేవ్ చేయబడింది {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>ఇష్టమైనవి నిండాయి (గరిష్ఠంగా {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>ఇంకా ఫైల్‌గా సేవ్ చేయలేదు</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>ఫైల్ తన ఎన్‌కోడింగ్‌ను తానే చెబుతుంది</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>ముందుగా మార్పులను సేవ్ చేయండి</value>
+  </data>
 </root>
