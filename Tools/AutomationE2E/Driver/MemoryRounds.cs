@@ -6,8 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 /// <summary>
-/// MM01: memory over many mode and document switches on Windows (the store's two Memory failures on 1.3.9.0; todo
-/// "2026-11-10 Partner Center Memory failures"). A long document with formulas and footnotes switched between visual
+/// MM01: memory over many mode and document switches on Windows (the store's two Memory failures on 1.3.9.0). A long document with formulas and footnotes switched between visual
 /// and source mode 70 times, then two documents swapped 40 times; the private memory of the host and everything it
 /// started (WebView2) and the page's JS heap read every 10 rounds. After the first 10 (the warm-up: caches filling,
 /// code compiled) the private memory left once the web view has given back its caches (garbage collected, a critical memory
