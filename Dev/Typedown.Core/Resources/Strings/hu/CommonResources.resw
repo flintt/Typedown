@@ -1391,9 +1391,6 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Oszlopok igazítása a tartalomhoz</value>
   </data>
-  <data name="StatusBarItem.LastSaved" xml:space="preserve">
-    <value>Utolsó mentés ideje</value>
-  </data>
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Utoljára mentve: {0}</value>
   </data>
