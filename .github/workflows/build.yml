@@ -347,7 +347,7 @@ jobs:
           -p:AppxBundle=Never
           -p:UapAppxPackageBuildMode=StoreUpload
           -p:WindowsAppSDKSelfContained=false
-          -p:IntermediateOutputPath=obj\StoreUpload\
+          -p:IntermediateOutputPath=obj/StoreUpload/
           -p:AppxPackageSigningEnabled=false
           -p:AppxSymbolPackageEnabled=false
           -p:AppxPackageDir=${{ github.workspace }}\StoreUpload\
