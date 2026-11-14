@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.UI.Dispatching;
 using Typedown.Core;
-using Typedown.Core.Controls.DialogControls;
+using Typedown.Core.Controls;
 using Typedown.Core.Models;
 using Typedown.Core.Services;
 using Typedown.Core.Utilities;
