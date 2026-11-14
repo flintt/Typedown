@@ -405,6 +405,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.webview.state` | `windowId` | The web view as the app sees it: whether WinUI counts it visible, suspended, its size, the window's state. | TestHostHooks.cs |
 | `test.editor.eval` | `windowId`, `script` | Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds (caret, Muya's state) when a check fails in the real window and not in the page harness. | TestHostHooks.cs |
 | `test.webview.cdp` | `windowId`, `method`, `params?` | A DevTools protocol call on the window's editor page (Memory.getDOMCounters, HeapProfiler.collectGarbage, Memory.simulatePressureNotification, Runtime.getHeapUsage): for MM01 to tell what a growth is made of. | TestHostHooks.cs |
+| `test.globalShortcut` | - | The key the global shortcut has now (Services.GlobalShortcut), or null: off, no key, or another program has it. | TestHostHooks.cs |
 | `test.updates.feed` | `json?` | The release feed's JSON instead of the edition's feed (null: the edition's again), for Check for updates. | TestHostHooks.cs |
 | `test.updates.autoCheck` | `windowId` | The daily check made now in a window (as at a start a day after the last), and the card it left, if any. | TestHostHooks.cs |
 | `test.webview.memoryTarget` | `windowId`, `level` | The web view's memory target (WebView2's MemoryUsageTargetLevel): low asks it to give back what it can. | TestHostHooks.cs |
