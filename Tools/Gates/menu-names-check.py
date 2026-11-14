@@ -17,9 +17,9 @@ ROOT = os.path.join(os.path.dirname(__file__), '..', '..', 'Dev', 'Typedown.Core
 # The context menu's "Copy as" submenu says "Plain text", "Markdown", "HTML": the menu bar's flat items say "Copy as
 # plain text"... - the submenu's name says the rest.
 SHORTER_IN_SUBMENU = {'CopyAsPlainTextItem', 'CopyAsMarkdownItem', 'CopyAsHTMLCodeItem'}
-# The menu bar's Delete has no shortcut registered (the window would take the Delete key from every text box); the
-# context menu's hint shows Del. To go with the context menu's Delete (todo: the context menu report, item 7).
-KNOWN = {('DeleteItem', 'shortcut')}
+# Items known to differ, with why: none now (the context menu's Delete, whose hint the menu bar did not have, went with
+# the menu report's item 7, 2026-11-13).
+KNOWN = set()
 
 ITEM = re.compile(r'<(?:Toggle)?MenuFlyout(?:Sub)?Item\b[^>]*?>|<controls:StateToggleButton\b[^>]*?>|<Button\b[^>]*?>', re.S)
 

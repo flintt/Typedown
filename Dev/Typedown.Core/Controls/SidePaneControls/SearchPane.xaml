@@ -15,8 +15,16 @@
     <UserControl.Resources>
         <!-- One row: a folder or a file, its path under the root, the line that matched, and the marker of a name match
              whose content matches too. Each row's automation id and name are set as it is shown (OnResultContainerChanging). -->
+        <MenuFlyout x:Key="ResultFlyout" Opening="OnResultFlyoutOpening">
+            <MenuFlyoutItem AutomationProperties.AutomationId="SearchResultOpenItem" Text="{u:LocaleString Key=Open}" Click="OnResultOpenClick"/>
+            <MenuFlyoutItem Tag="NewWindow" AutomationProperties.AutomationId="SearchResultNewWindowItem" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnResultOpenInNewWindowClick"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="SearchResultFavoriteItem" Text="{u:LocaleString Key=Favorites.Add}" Click="OnResultFavoriteClick"/>
+            <MenuFlyoutItem AutomationProperties.AutomationId="SearchResultLocationItem" Text="{u:LocaleString Key=OpenFileLocation}" Click="OnResultLocationClick"/>
+            <MenuFlyoutItem AutomationProperties.AutomationId="SearchResultCopyPathItem" Text="{u:LocaleString Key=CopyAsPath}" Click="OnResultCopyPathClick"/>
+        </MenuFlyout>
         <DataTemplate x:Key="ResultTemplate" x:DataType="u:FolderSearchHit">
-            <Grid Padding="0,6" ColumnSpacing="8">
+            <Grid Padding="0,6" ColumnSpacing="8" Background="Transparent" ContextFlyout="{StaticResource ResultFlyout}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>

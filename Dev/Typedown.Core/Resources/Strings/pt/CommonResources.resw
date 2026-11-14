@@ -180,7 +180,7 @@
     <comment>复制内容</comment>
   </data>
   <data name="CopyImageTo" xml:space="preserve">
-    <value>Copiar imagem para...</value>
+    <value>Copiar e atualizar a referência...</value>
     <comment>复制图片到...</comment>
   </data>
   <data name="CopyPasteAs" xml:space="preserve">
@@ -232,7 +232,7 @@
     <comment>删除</comment>
   </data>
   <data name="DeleteImageFile" xml:space="preserve">
-    <value>Excluir arquivo de imagem</value>
+    <value>Excluir arquivo de imagem...</value>
     <comment>删除图片文件</comment>
   </data>
   <data name="DeleteTable" xml:space="preserve">
@@ -544,7 +544,7 @@
     <comment>更多选项</comment>
   </data>
   <data name="MoveImageTo" xml:space="preserve">
-    <value>Mover imagem para...</value>
+    <value>Mover e atualizar a referência...</value>
     <comment>移动图片到...</comment>
   </data>
   <data name="Name" xml:space="preserve">

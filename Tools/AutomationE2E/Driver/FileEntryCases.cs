@@ -108,6 +108,25 @@ internal static partial class Program
                 await Task.Delay(600);
             }, "RecentLocationItem", "RecentCopyPathItem");
 
+            // Its row in the folder search's results (they had no menu: the 2026-11-11 menu report).
+            await Both("search results", async () =>
+            {
+                AutomationElement? row = null;
+                if (FindIn(window, "SearchName:fe01-entry.md") == null)
+                {
+                    await Activate(window);
+                    Chord("Ctrl+Shift+F");
+                    await Task.Delay(800);
+                    TypeText("fe01-entry");
+                }
+                await Eventually(() => Task.FromResult((row = FindIn(window, "SearchName:fe01-entry.md")) != null), 8000);
+                if (row == null) throw new CaseFailed("the folder search did not find fe01-entry.md");
+                await Click(window, row, Mouse.Right);
+                await Task.Delay(600);
+            }, "SearchResultLocationItem", "SearchResultCopyPathItem");
+            Chord("Esc");
+            await Task.Delay(300);
+
             // Its home page entry.
             await ClickInPopup(window, await MenuEntry(window, "MenuBarFileItem", "HomeMenuItem"));
             Check(await HomeShown(c, windowId, true), "File > Home shows the home page");
@@ -141,7 +160,7 @@ internal static partial class Program
             }
             await Both("home page", RightClickHomeEntry, "HomeLocationItem", "HomeCopyPathItem");
 
-            Check(results.Count == 0, "Open File Location and Copy as Path give the file in all four menus" + (results.Count == 0 ? "" : ": " + string.Join("; ", results)));
+            Check(results.Count == 0, "Open File Location and Copy as Path give the file in all five menus" + (results.Count == 0 ? "" : ": " + string.Join("; ", results)));
             Check(order.Count == 0, "every file menu has Open, Open in New Window, the favourite, Open File Location and Copy as Path in that order" + (order.Count == 0 ? "" : ": " + string.Join("; ", order)));
 
             // The home page entry's Open (new there): the file's document shown - it is open in a tab, so that tab.
