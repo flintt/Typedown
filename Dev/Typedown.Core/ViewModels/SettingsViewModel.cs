@@ -323,7 +323,7 @@ namespace Typedown.Core.ViewModels
         public bool KeepRun { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>
         /// Settings > General: New from Clipboard's shortcut works in other programs too (RegisterHotKey,
-        /// Services.GlobalShortcut) - Typeleaf comes to the front with the clipboard's text in a new tab. Off unless chosen:
+        /// Services.GlobalShortcut) - the app comes to the front with the clipboard's text in a new tab. Off unless chosen:
         /// it takes the key from every other program.
         /// </summary>
         public bool GlobalNewFromClipboard { get => GetSettingValue(false); set => SetSettingValue(value); }
