@@ -2,7 +2,7 @@
 // its column takes - one column `| -------------------- |`, the next `| ------------------------------ |` is 20% and 30%,
 // the table half the page. Together 100 or more, the table is as wide as the page and they are its columns' shares (so
 // a row of large counts written by hand still means its proportions). Other editors show the table as they always do;
-// Typeleaf draws the columns so. (The table's own width is kept so that dragging one column's edge changes that column
+// this editor draws the columns so. (The table's own width is kept so that dragging one column's edge changes that column
 // and the next only: the user, 2026-11-13 - a table narrower than the page jumped to the page's width, every column
 // with it.)
 //

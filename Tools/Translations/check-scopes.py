@@ -16,7 +16,7 @@ bad = []
 for path in sorted(glob.glob(os.path.join(root, 'Dev', '**', '*.resw'), recursive=True)):
     if os.sep + 'obj' + os.sep in path or os.sep + 'bin' + os.sep in path:
         continue
-    # The edition's texts are read as XML beside the app (EditionStrings), not through the resource index.
+    # An edition's own texts (Dev/Edition) are read as XML beside the app, not through the resource index.
     if os.path.relpath(path, root).startswith(os.path.join('Dev', 'Edition') + os.sep):
         continue
     names = set(re.findall(r'<data name="([^"]+)"', open(path, encoding='utf-8-sig').read()))
