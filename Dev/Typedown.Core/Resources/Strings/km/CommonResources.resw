@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>សម្រួលជួរឈរតាមខ្លឹមសារ</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>ពេលវេលារក្សាទុកចុងក្រោយ</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>បានរក្សាទុកចុងក្រោយ {0}</value>
+  </data>
 </root>

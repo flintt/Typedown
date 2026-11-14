@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Sobita veerud sisuga</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Viimase salvestamise aeg</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>Viimati salvestatud {0}</value>
+  </data>
 </root>

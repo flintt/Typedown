@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>स्तंभ सामग्री के अनुसार करें</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>अंतिम बार सहेजने का समय</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>अंतिम बार सहेजा गया {0}</value>
+  </data>
 </root>

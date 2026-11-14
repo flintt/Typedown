@@ -219,7 +219,7 @@ namespace Typedown.Core.Controls
             if (e.KeyModifiers.HasFlag(Windows.System.VirtualKeyModifiers.Control))
             {
                 var delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
-                Settings.FontSize = Math.Max(8, Math.Min(48, Math.Round(Settings.FontSize * (1 + delta / 1200d), 1)));
+                Settings.ZoomBy(1 + delta / 1200d);
             }
         }
 

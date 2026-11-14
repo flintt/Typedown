@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Бағандарды мазмұнға сәйкестендіру</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Соңғы сақталған уақыт</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>Соңғы рет сақталды {0}</value>
+  </data>
 </root>

@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Sovita sarakkeet sisältöön</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Viimeisimmän tallennuksen aika</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>Tallennettu viimeksi {0}</value>
+  </data>
 </root>

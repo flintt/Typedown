@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>התאמת עמודות לתוכן</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>שעת השמירה האחרונה</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>נשמר לאחרונה {0}</value>
+  </data>
 </root>

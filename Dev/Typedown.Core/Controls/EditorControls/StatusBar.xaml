@@ -172,6 +172,48 @@
                     <TextBlock FontSize="12" Text="{x:Bind SaveStateText(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}"/>
                 </StackPanel>
             </Button>
+            <!-- When the file was last saved (its time on disk), the whole date in the tip; none for a file not on disk. -->
+            <TextBlock
+                x:Name="LastSavedText"
+                Visibility="Collapsed"
+                VerticalAlignment="Center"
+                Padding="2,0,2,0"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                AutomationProperties.AutomationId="StatusBarLastSaved"/>
+            <!-- The editor's zoom: smaller, the percent (a click: back to 100%), larger - as View > Zoom. -->
+            <StackPanel x:Name="ZoomItems" Orientation="Horizontal" AutomationProperties.AutomationId="StatusBarZoom">
+                <Button
+                    x:Name="ZoomOutButton"
+                    Padding="6,2,6,2"
+                    BorderThickness="0"
+                    VerticalAlignment="Stretch"
+                    Click="OnZoomOutClick"
+                    AutomationProperties.AutomationId="StatusBarZoomOut"
+                    AutomationProperties.Name="{u:LocaleString Key=ZoomOut}">
+                    <FontIcon Glyph="&#xE738;" FontSize="10"/>
+                </Button>
+                <Button
+                    x:Name="ZoomResetButton"
+                    Padding="4,2,4,2"
+                    MinWidth="44"
+                    BorderThickness="0"
+                    VerticalAlignment="Stretch"
+                    Click="OnZoomResetClick"
+                    AutomationProperties.AutomationId="StatusBarZoomReset"
+                    AutomationProperties.Name="{u:LocaleString Key=ResetZoom}">
+                    <TextBlock FontSize="12" Text="{x:Bind ZoomText(Settings.FontSize), Mode=OneWay}"/>
+                </Button>
+                <Button
+                    x:Name="ZoomInButton"
+                    Padding="6,2,6,2"
+                    BorderThickness="0"
+                    VerticalAlignment="Stretch"
+                    Click="OnZoomInClick"
+                    AutomationProperties.AutomationId="StatusBarZoomIn"
+                    AutomationProperties.Name="{u:LocaleString Key=ZoomIn}">
+                    <FontIcon Glyph="&#xE710;" FontSize="10"/>
+                </Button>
+            </StackPanel>
             <!-- The count the reader chose (characters or words); a click shows all the document's numbers. -->
             <Button
                 x:Name="WordCountButton"

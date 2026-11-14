@@ -100,6 +100,20 @@ namespace Typedown.Core.ViewModels
         public bool SidePaneFilesCollapsed { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool SidePaneOutlineCollapsed { get => GetSettingValue(false); set => SetSettingValue(value); }
         public double FontSize { get => GetSettingValue(16d); set => SetSettingValue(value); }
+
+        /// <summary>The font size the editor's zoom is 100% at.</summary>
+        public const double DefaultFontSize = 16;
+
+        /// <summary>
+        /// The editor's zoom - its font size - times a factor, in steps of a tenth, within 8 to 48: one rule for View > Zoom,
+        /// Ctrl+wheel and the status bar's buttons (each had its own copy).
+        /// </summary>
+        public void ZoomBy(double factor) => FontSize = Math.Max(8, Math.Min(48, Math.Round(FontSize * factor, 1)));
+
+        public void ResetZoom() => FontSize = DefaultFontSize;
+
+        /// <summary>The zoom as a percent of the default font size ("100%").</summary>
+        public static int ZoomPercent(double fontSize) => (int)Math.Round(fontSize / DefaultFontSize * 100);
         public double LineHeight { get => GetSettingValue(1.6d); set => SetSettingValue(value); }
         public bool AutoPairBracket { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoPairQuote { get => GetSettingValue(true); set => SetSettingValue(value); }

@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Anpassa kolumner efter innehåll</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Tid för senaste sparning</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>Senast sparad {0}</value>
+  </data>
 </root>

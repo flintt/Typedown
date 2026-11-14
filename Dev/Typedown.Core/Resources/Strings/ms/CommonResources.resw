@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Muatkan lajur dengan kandungan</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Masa terakhir disimpan</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>Terakhir disimpan {0}</value>
+  </data>
 </root>

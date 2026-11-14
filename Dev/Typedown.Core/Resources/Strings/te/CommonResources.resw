@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>నిలువు వరుసలను కంటెంట్‌కు సరిపెట్టు</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>చివరిగా సేవ్ చేసిన సమయం</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>చివరిగా సేవ్ చేయబడింది {0}</value>
+  </data>
 </root>

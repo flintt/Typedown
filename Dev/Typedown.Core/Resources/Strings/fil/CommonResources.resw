@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Iangkop ang mga column sa nilalaman</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Oras ng huling pag-save</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>Huling na-save {0}</value>
+  </data>
 </root>

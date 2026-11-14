@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Linganisha safu wima na maudhui</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Muda wa kuhifadhi mwisho</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>Ilihifadhiwa mwisho {0}</value>
+  </data>
 </root>
