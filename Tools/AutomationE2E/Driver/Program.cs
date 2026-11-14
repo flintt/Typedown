@@ -434,6 +434,9 @@ internal static partial class Program
         catch (Exception) { /* no test host yet, or one without the hook */ }
         var front = await TakeForeground();
         if (front != null) notes.Add(front);
+        // What the host holds before the case and after it (CaseFootprint.cs): what the cases before left, and what this one
+        // leaves.
+        var before = await TakeFootprint();
         var watch = Stopwatch.StartNew();
         try
         {
@@ -446,7 +449,9 @@ internal static partial class Program
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             QueuedWorkThatThrew(notes);
-            results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
+            var ms = watch.ElapsedMilliseconds;
+            var footprint = NoteFootprint(before, await TakeFootprint(), notes);
+            results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = ms, ["notes"] = new JArray(notes), ["footprint"] = footprint });
         }
         catch (Exception e)
         {
@@ -464,7 +469,9 @@ internal static partial class Program
                 try { await DiagnoseWebViews(notes); } catch (Exception d) { notes.Add("no web view diagnosis: " + d.Message.Split('\n')[0]); }
             }
             QueuedWorkThatThrew(notes);
-            results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
+            var ms = watch.ElapsedMilliseconds;
+            var footprint = NoteFootprint(before, await TakeFootprint(), notes);
+            results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = ms, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes), ["footprint"] = footprint });
         }
     }
 
