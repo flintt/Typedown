@@ -1197,6 +1197,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>沒有結果</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>運算式太慢</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>第 {0} 個，共 {1} 個</value>
   </data>

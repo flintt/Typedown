@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>نتیجه‌ای یافت نشد</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>الگو بیش از حد کند است</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} از {1}</value>
   </data>

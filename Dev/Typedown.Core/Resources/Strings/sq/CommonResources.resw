@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Asnjë rezultat</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Modeli është shumë i ngadaltë</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} nga {1}</value>
   </data>

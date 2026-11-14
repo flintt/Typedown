@@ -93,7 +93,7 @@
                     <TextBox PlaceholderText="{u:LocaleString Key=Find}" x:Name="TextBoxSearch" KeyDown="OnTextBoxSearchKeyDown" Text="{x:Bind ViewModel.EditorViewModel.SearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <!-- Where the bar is among the matches ("3 of 85"), as the page reports it (FindState). -->
                     <TextBlock Grid.Column="1" x:Name="FindCount" AutomationProperties.AutomationId="FindCount" VerticalAlignment="Center" Opacity="0.7" FontSize="12"
-                               Text="{x:Bind local:FindReplace.PositionText(ViewModel.EditorViewModel.FindResults.Current, ViewModel.EditorViewModel.FindResults.Total, ViewModel.EditorViewModel.SearchValue), Mode=OneWay}"/>
+                               Text="{x:Bind local:FindReplace.PositionText(ViewModel.EditorViewModel.FindResults.Current, ViewModel.EditorViewModel.FindResults.Total, ViewModel.EditorViewModel.SearchValue, ViewModel.EditorViewModel.FindResults.GivenUp), Mode=OneWay}"/>
                     <Button Grid.Column="2" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Command="{x:Bind ViewModel.EditorViewModel.FindCommand}" CommandParameter="next" controls:ToolTip.TextResource="FindNext">
                         <FontIcon FontSize="14" Glyph="&#xE74B;"/>
                     </Button>

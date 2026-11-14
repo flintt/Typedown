@@ -130,6 +130,18 @@ namespace Typedown.Automation.Tests
             Assert.Equal(expected, FindResultsList.PositionText("{0} of {1}", "No results", searching, current, total));
         }
 
+        // A regular expression given up on (too slow) found nothing because it was not run: the bar says that, not "No results".
+        [Fact]
+        public void A_search_given_up_on_says_so()
+        {
+            var results = new FindResultsList();
+            results.ApplyState(new JObject { ["total"] = 0, ["index"] = -1, ["givenUp"] = true });
+            Assert.True(results.GivenUp);
+            Assert.Equal("Pattern too slow", FindResultsList.PositionText("{0} of {1}", "No results", true, results.Current, results.Total, results.GivenUp ? "Pattern too slow" : null));
+            results.ApplyState(new JObject { ["total"] = 2, ["index"] = 0 });
+            Assert.False(results.GivenUp);
+        }
+
         [Fact]
         public void A_screen_reader_hears_the_place_and_the_line()
         {

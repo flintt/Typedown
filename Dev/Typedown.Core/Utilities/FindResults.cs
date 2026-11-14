@@ -106,10 +106,24 @@ namespace Typedown.Core.Utilities
             SetCurrent(current);
         }
 
-        /// <summary>The page's FindState message ({ total, index }).</summary>
+        /// <summary>
+        /// The search's regular expression was given up on, too slow on the document (the page's trySearch, over 2 s): it
+        /// found nothing because it was not run, and the bar says so.
+        /// </summary>
+        public bool GivenUp => givenUp;
+
+        private bool givenUp;
+
+        /// <summary>The page's FindState message ({ total, index, givenUp }).</summary>
         public void ApplyState(JToken args)
         {
             if (args is not JObject o) return;
+            var given = o.Value<bool?>("givenUp") ?? false;
+            if (givenUp != given)
+            {
+                givenUp = given;
+                Raise(nameof(GivenUp));
+            }
             SetState(o.Value<int?>("total") ?? 0, o.Value<int?>("index") ?? -1);
         }
 
@@ -170,10 +184,10 @@ namespace Typedown.Core.Utilities
 
         /// <summary>The bar's position text: "{0} of {1}" filled in (1-based), or <paramref name="none"/> when there is no
         /// match; empty when nothing is searched for.</summary>
-        public static string PositionText(string format, string none, bool searching, int current, int total)
+        public static string PositionText(string format, string none, bool searching, int current, int total, string givenUp = null)
         {
             if (!searching) return "";
-            if (total <= 0) return none ?? "";
+            if (total <= 0) return givenUp ?? none ?? "";
             return string.Format(format ?? "{0}/{1}", current >= 0 ? (current + 1).ToString() : "-", total);
         }
 

@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Κανένα αποτέλεσμα</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Πολύ αργή έκφραση</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} από {1}</value>
   </data>

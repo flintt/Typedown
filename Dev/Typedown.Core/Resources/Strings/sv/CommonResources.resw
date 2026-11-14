@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Inga resultat</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Mönstret är för långsamt</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} av {1}</value>
   </data>

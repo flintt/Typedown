@@ -1267,6 +1267,10 @@
     <value>No results</value>
     <comment>查找栏：没有匹配</comment>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Pattern too slow</value>
+    <comment>查找栏：正则表达式在这篇文档上超过 2 秒，已放弃（不是没有匹配）</comment>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} of {1}</value>
     <comment>查找栏：当前是第 {0} 个，共 {1} 个匹配（也用于结果列表的读屏名称）</comment>

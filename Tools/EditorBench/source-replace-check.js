@@ -79,10 +79,16 @@ const { openEditor } = require('./harness');
       await pause(2500);
       check(await answers(1000), `nor after it was given up (${name} mode)`, 'no answer in 1 s');
       check((await marks()) === 0, `a slow regular expression finds nothing (${name} mode)`, await marks());
+      // The bar is told it was given up on, not that there is nothing (it said "No results").
+      const state = () => page.evaluate(() => window.__last.FindState);
+      let told = await state();
+      check(told?.givenUp === true && told.total === 0, `the bar is told the expression was given up on (${name} mode)`, JSON.stringify(told));
       await send('Search', { value: `b?a{3}${source ? '' : '(?:)'}`, opt: regexp });
       await pause(400);
       const found = await marks();
       check(found > 0, `a quick one after it finds its matches (${name} mode)`, found);
+      told = await state();
+      check(told?.givenUp === false, `and the bar is no longer told so (${name} mode)`, JSON.stringify(told));
     }
 
     // The same expression through on a short text, then on one where it backtracks (the 2026-11-11 recheck: the

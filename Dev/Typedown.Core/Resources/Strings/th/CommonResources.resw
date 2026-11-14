@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>ไม่มีผลลัพธ์</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>รูปแบบช้าเกินไป</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} จาก {1}</value>
   </data>
