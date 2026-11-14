@@ -94,6 +94,11 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   default). An empty paragraph has a line's height while editing; reading mode and the HTML/PDF export collapsed it
   (`<p></p>`). With the setting on it keeps that height in reading mode and is exported as `<p><br></p>`; off, both are
   as before; the text handed back is the same either way. Before the setting the "on" half failed.
+- `bracket-math-check.js` — the "\( \) and \[ \] as formula delimiters" setting (Settings > Editor, `bracketMath`, off
+  by default). With it, `\(…\)` is an inline formula and `\[…\]` (its own lines, or a whole line) a formula block, in
+  the editor and in the HTML the exports render, and the text handed back keeps its delimiters; an escaped backslash
+  before `(` stays text. Off, they are escaped brackets and only `$`/`$$` are formulas. Turning it on or off with the
+  document shown takes it in again, its text unchanged.
 - `softbreaks-join-check.js` — the "join the lines of a paragraph in reading mode" setting (Settings > Editor,
   `joinSoftBreaks`, off by default; markdown-linewrap's samples). With it, reading mode shows a single line ending inside
   a paragraph or quotation as a space, and as nothing between two Chinese or Japanese characters (Korean keeps its
