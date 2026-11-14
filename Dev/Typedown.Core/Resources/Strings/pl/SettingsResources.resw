@@ -1032,4 +1032,10 @@
 • inne edytory mogą wolno otwierać plik;
 • historia cofania zajmuje więcej pamięci.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Pokazuj pliki i konspekt razem</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Panel boczny pokazuje pliki u góry i konspekt na dole, każdy zwijany do tytułu, zamiast dwóch kart.</value>
+  </data>
 </root>

@@ -1032,4 +1032,10 @@
 • outros editores podem abrir o arquivo devagar;
 • o histórico de desfazer usa mais memória.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Mostrar arquivos e estrutura juntos</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>O painel lateral mostra os arquivos em cima e a estrutura embaixo, cada um recolhível até o título, em vez de duas guias.</value>
+  </data>
 </root>

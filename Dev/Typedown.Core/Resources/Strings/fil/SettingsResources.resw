@@ -1032,4 +1032,10 @@
 • maaaring mabagal magbukas ang ibang editor;
 • mas maraming memorya ang kinakain ng undo history.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Ipakita nang sabay ang mga file at outline</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Ipinapakita ng side pane ang mga file sa itaas at ang outline sa ibaba, bawat isa ay natitiklop hanggang sa pamagat nito, sa halip na dalawang tab.</value>
+  </data>
 </root>

@@ -1032,4 +1032,10 @@
 • កម្មវិធីកែសម្រួលផ្សេងអាចបើកឯកសារយឺត៖
 • ប្រវត្តិមិនធ្វើវិញប្រើអង្គចងចាំច្រើនជាង។</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>បង្ហាញឯកសារ និងគ្រោងជាមួយគ្នា</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>ផ្ទាំងចំហៀងបង្ហាញឯកសារនៅខាងលើ និងគ្រោងនៅខាងក្រោម នីមួយៗអាចបត់ត្រឹមចំណងជើង ជំនួសឱ្យផ្ទាំងពីរ។</value>
+  </data>
 </root>

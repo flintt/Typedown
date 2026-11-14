@@ -1061,4 +1061,10 @@
 • 其他編輯器開啟可能變慢；
 • 復原記錄佔用更多記憶體。</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>同時顯示檔案和大綱</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>側邊欄上方顯示檔案、下方顯示大綱，各自可摺疊到標題列，不再使用兩個索引標籤。</value>
+  </data>
 </root>

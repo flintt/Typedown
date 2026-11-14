@@ -7,7 +7,8 @@ using System.Windows.Automation;
 using Newtonsoft.Json.Linq;
 
 /// <summary>
-/// PS02: the side pane shows the files above and the outline below (#46, 2026-11-12), not one at a time behind two tabs.
+/// PS02: with View > Show files and outline together on (#46, 2026-11-12; off by default, the pane then has its two tabs),
+/// the side pane shows the files above and the outline below, not one at a time.
 /// The bar between them dragged with the mouse moves the line between the blocks; a block's title row clicked folds it to
 /// that row and opens it again; both kept when the pane is closed and opened. A plain text without headings folds the
 /// outline by itself (not the reader's setting), and a click on its title opens it all the same.
@@ -42,9 +43,10 @@ internal static partial class Program
                 .Cast<AutomationElement>().Any(e => { var r = e.Current.BoundingRectangle; return r.Width > 0 && r.Height > 0 && pane.Contains(new System.Windows.Point(r.Left + r.Width / 2, r.Top + r.Height / 2)); });
         }
         var before = new Dictionary<string, JToken>();
-        foreach (var name in new[] { "SidePaneSplit", "SidePaneFilesCollapsed", "SidePaneOutlineCollapsed" }) before[name] = await Setting(name);
+        foreach (var name in new[] { "SidePaneStacked", "SidePaneSplit", "SidePaneFilesCollapsed", "SidePaneOutlineCollapsed" }) before[name] = await Setting(name);
         try
         {
+            await Set("SidePaneStacked", true);
             await Set("SidePaneSplit", 0.5);
             await Set("SidePaneFilesCollapsed", false);
             await Set("SidePaneOutlineCollapsed", false);
@@ -118,6 +120,13 @@ internal static partial class Program
             await c.Call("document.focus", new { documentId = md });
             Check(await Eventually(() => Task.FromResult(Status("Toc") == "expanded" && InPane("PS02 heading")), 5000, 200), "back to the .md: the outline open with its headings");
             Screenshot("PS02-end");
+
+            // The option off again: the two tabs side by side, as the pane has always been.
+            await Set("SidePaneStacked", false);
+            var tabs = false;
+            await Eventually(() => Task.FromResult(tabs = !Rect("Folder").IsEmpty && !Rect("Toc").IsEmpty && Math.Abs(Rect("Folder").Top - Rect("Toc").Top) < 4), 5000, 200);
+            notes.Add($"option off: files {Rect("Folder")}, outline {Rect("Toc")}");
+            Check(tabs, "with the option off, Files and Outline are two tabs again, side by side");
         }
         finally
         {

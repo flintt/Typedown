@@ -1032,4 +1032,10 @@
 • redaktorë të tjerë mund ta hapin skedarin ngadalë;
 • historiku i zhbërjes zë më shumë memorie.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Shfaq skedarët dhe skicën së bashku</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Paneli anësor shfaq skedarët sipër dhe skicën poshtë, secila e palosshme deri te titulli, në vend të dy skedave.</value>
+  </data>
 </root>

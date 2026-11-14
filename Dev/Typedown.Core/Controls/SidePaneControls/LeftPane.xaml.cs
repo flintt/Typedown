@@ -6,6 +6,8 @@ using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
+using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
 {
@@ -21,6 +23,13 @@ namespace Typedown.Core.Controls
         public static readonly DependencyProperty OutlineOpenProperty = DependencyProperty.Register(nameof(OutlineOpen), typeof(bool), typeof(LeftPane), new(true));
         /// <summary>The outline block is open (not folded to its title row): its page is made only then.</summary>
         public bool OutlineOpen { get => (bool)GetValue(OutlineOpenProperty); set => SetValue(OutlineOpenProperty, value); }
+
+        public static readonly DependencyProperty IsStackedProperty = DependencyProperty.Register(nameof(IsStacked), typeof(bool), typeof(LeftPane), new(false));
+        /// <summary>Files above and the outline below, both at once (View > Show files and outline together, #46); else two tabs.</summary>
+        public bool IsStacked { get => (bool)GetValue(IsStackedProperty); set => SetValue(IsStackedProperty, value); }
+
+        public static readonly DependencyProperty IsTabbedProperty = DependencyProperty.Register(nameof(IsTabbed), typeof(bool), typeof(LeftPane), new(true));
+        public bool IsTabbed { get => (bool)GetValue(IsTabbedProperty); set => SetValue(IsTabbedProperty, value); }
 
         /// <summary>Files/Outline are shown unless the folder search or the find bar's results list is over them.</summary>
         public static Visibility PageVisibility(bool searchPaneOpen, bool findResultsOpen) =>
@@ -44,21 +53,25 @@ namespace Typedown.Core.Controls
             // system blue whenever the mouse was over it): the same colour, a little lighter, as WinUI's own are.
             Application.Current.Resources[TreeAccentKey + "PointerOver"] = AccentPointerOverBrush;
             Application.Current.Resources[TreeAccentKey + "Pressed"] = AccentPressedBrush;
+            Resources[NavigationAccentKey] = AccentBrush;
             Root.ActualThemeChanged += (_, _) => UpdateAccent();
-            BlockSplitter.DragStarted += OnSplitterDragStarted;
-            BlockSplitter.Dragged += OnSplitterDragged;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             var uiViewModel = ViewModel.UIViewModel;
+            disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.SidePaneStacked))
+                .Cast<bool>()
+                .StartWith(Settings.SidePaneStacked)
+                .Subscribe(stacked => { IsStacked = stacked; IsTabbed = !stacked; }));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.SidePaneIndex))
+                .Cast<int>()
+                .Subscribe(UpdateSelectedItem));
             // What folds a block: the reader (remembered), or nothing to show in it - no folder, a plain text without
             // headings - until the reader opens it, or something asks for it (Open Folder, the status bar's heading).
             foreach (var name in new[] { nameof(SettingsViewModel.SidePaneFilesCollapsed), nameof(SettingsViewModel.SidePaneOutlineCollapsed),
                 nameof(SettingsViewModel.SidePaneSplit), nameof(SettingsViewModel.PlainTextShown) })
                 disposables.Add(Settings.WhenPropertyChanged(name).Subscribe(_ => UpdateBlocks()));
-            FilesPage.FolderShownChanged += OnFolderShownChanged;
-            disposables.Add(Disposable.Create(() => FilesPage.FolderShownChanged -= OnFolderShownChanged));
             var editor = ViewModel.EditorViewModel;
             editor.OutlineUpdated += OnOutlineUpdated;
             disposables.Add(Disposable.Create(() => editor.OutlineUpdated -= OnOutlineUpdated));
@@ -91,8 +104,10 @@ namespace Typedown.Core.Controls
             disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.Language))
                 .Subscribe(language => _ = DispatcherQueue.RunIdleAsync(args =>
                 {
-                    FilesTitle.Text = Locale.GetString("Files");
-                    OutlineTitle.Text = Locale.GetString("Outline");
+                    if (FilesTitle != null) FilesTitle.Text = Locale.GetString("Files");
+                    if (OutlineTitle != null) OutlineTitle.Text = Locale.GetString("Outline");
+                    if (Folder != null) Folder.Content = Locale.GetString("Files");
+                    if (Toc != null) Toc.Content = Locale.GetString("Outline");
                 })));
             disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme))
                 .StartWith(Settings.CustomTheme)
@@ -101,6 +116,33 @@ namespace Typedown.Core.Controls
             disposables.Add(uiSettings.GetColorValuesObservable()
                 .Subscribe(_ => DispatcherQueue.TryEnqueueSafe(UpdateAccent)));
             UpdateBlocks();
+        }
+
+        // The bar under the Files/Outline tabs, in the same accent as the trees' marks.
+        private const string NavigationAccentKey = "NavigationViewSelectionIndicatorForeground";
+
+        // ---- the two tabs (the pane unless files and outline are shown together) ----
+
+        private void OnTabsLoaded(object sender, RoutedEventArgs e) => UpdateSelectedItem(Settings?.SidePaneIndex ?? 0);
+
+        private void UpdateSelectedItem(int index)
+        {
+            if (NavigationView == null || index < 0 || index >= NavigationView.MenuItems.Count) return;
+            NavigationView.SelectedItem = NavigationView.MenuItems[index];
+        }
+
+        private void OnSelectionChanged(muxc.NavigationView sender, muxc.NavigationViewSelectionChangedEventArgs args)
+        {
+            var pageName = (args.SelectedItem as muxc.NavigationViewItem)?.Tag as string;
+            System.Type pageType = pageName == "Toc" ? typeof(SidePanelControls.Pages.TocPage) : typeof(SidePanelControls.Pages.FolderPage);
+            var animation = Settings.AnimationEnable && Frame.SourcePageType != null;
+            var transition = animation ? args.RecommendedNavigationTransitionInfo : new SuppressNavigationTransitionInfo();
+            Frame.Navigate(pageType, null, transition);
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (FrameClip != null && Frame != null) FrameClip.Rect = new(0, 0, Frame.ActualWidth, Frame.ActualHeight);
         }
 
         // The marks of what is chosen here - the pill beside the current heading in the outline and beside the open file
@@ -141,12 +183,35 @@ namespace Typedown.Core.Controls
         private bool OutlineEmptyPlainText =>
             Settings.PlainTextShown && (ViewModel?.EditorViewModel?.Toc?.Children?.Count ?? 0) == 0;
 
-        private bool FilesIsOpen => !Settings.SidePaneFilesCollapsed && (FilesPage.HasFolder || filesForced);
+        private bool FilesIsOpen => !Settings.SidePaneFilesCollapsed && (FilesPage?.HasFolder == true || filesForced);
 
         private bool OutlineIsOpen => !Settings.SidePaneOutlineCollapsed && (!OutlineEmptyPlainText || outlineForced);
 
+        // The blocks made (the option turned on, or the pane opened with it on): their parts hooked up once each.
+        private SidePanelControls.Pages.FolderPage hookedPage;
+
+        private RowSplitter hookedSplitter;
+
+        private void OnBlocksLoaded(object sender, RoutedEventArgs e)
+        {
+            if (hookedSplitter != BlockSplitter)
+            {
+                hookedSplitter = BlockSplitter;
+                BlockSplitter.DragStarted += OnSplitterDragStarted;
+                BlockSplitter.Dragged += OnSplitterDragged;
+            }
+            if (hookedPage != FilesPage)
+            {
+                if (hookedPage != null) hookedPage.FolderShownChanged -= OnFolderShownChanged;
+                hookedPage = FilesPage;
+                FilesPage.FolderShownChanged += OnFolderShownChanged;
+            }
+            UpdateBlocks();
+        }
+
         private void OnFolderShownChanged()
         {
+            if (FilesPage == null) return;
             if (FilesPage.HasFolder != filesHadFolder) filesForced = false;
             UpdateBlocks();
         }
@@ -155,7 +220,7 @@ namespace Typedown.Core.Controls
 
         private void UpdateBlocks()
         {
-            if (Settings == null) return;
+            if (Settings == null || Blocks == null || FilesPage == null) return;
             filesHadFolder = FilesPage.HasFolder;
             var files = FilesIsOpen;
             var outline = OutlineIsOpen;
@@ -171,8 +236,8 @@ namespace Typedown.Core.Controls
             FilesChevron.Glyph = files ? "" : "";
             OutlineChevron.Glyph = outline ? "" : "";
             // The title row says whether its block is open, for a screen reader (and the tests).
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetItemStatus(Folder, files ? "expanded" : "collapsed");
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetItemStatus(Toc, outline ? "expanded" : "collapsed");
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetItemStatus(FilesHeader, files ? "expanded" : "collapsed");
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetItemStatus(OutlineHeader, outline ? "expanded" : "collapsed");
         }
 
         private void OnFilesHeaderClick(object sender, RoutedEventArgs e)
@@ -229,6 +294,9 @@ namespace Typedown.Core.Controls
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            if (hookedPage != null) hookedPage.FolderShownChanged -= OnFolderShownChanged;
+            hookedPage = null;
+            hookedSplitter = null;
             disposables.Clear();
             Bindings?.StopTracking();
         }

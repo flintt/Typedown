@@ -8,13 +8,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Typedown.Core.Converters"
     xmlns:u="using:Typedown.Core.Utilities"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
+    SizeChanged="OnSizeChanged"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityReverseConverter" IsReverse="True"/>
+        <x:Double x:Key="TopNavigationViewPaneCustomContentMinWidth">0</x:Double>
         <!-- A block's title row: the whole row is the button that folds the block away and opens it out again. -->
         <Style x:Key="BlockHeaderButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
             <Setter Property="Background" Value="Transparent"/>
@@ -27,10 +30,43 @@
         </Style>
     </UserControl.Resources>
     <Grid x:Name="Root">
+        <!-- Files or the outline, one at a time behind two tabs: the pane as it has always been, unless View > Show files
+             and outline together is on (#46: an option, off by default). -->
+        <muxc:NavigationView
+            x:Name="NavigationView"
+            x:Load="{x:Bind IsTabbed, Mode=OneWay}"
+            Loaded="OnTabsLoaded"
+            Visibility="{x:Bind local:LeftPane.PageVisibility(IsSearchPaneOpen, IsFindResultsOpen), Mode=OneWay}"
+            IsBackButtonVisible="Collapsed"
+            SelectionChanged="OnSelectionChanged"
+            IsSettingsVisible="False"
+            PaneDisplayMode="Top">
+            <muxc:NavigationView.Resources>
+                <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"/>
+                <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="{ThemeResource CardStrokeColorDefault}"/>
+            </muxc:NavigationView.Resources>
+            <muxc:NavigationView.PaneFooter>
+                <Button Width="32" Height="32" Click="OnSearchButtonClick" Margin="0,0,4,0" Style="{ThemeResource EllipsisIconButtonStyle}" local:ToolTip.TextResource="SearchInFolder"
+                        AutomationProperties.AutomationId="SearchButton">
+                    <FontIcon FontSize="14" Glyph="&#xe721;"/>
+                </Button>
+            </muxc:NavigationView.PaneFooter>
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Content="{u:LocaleString Key=Files}" Tag="Folder" Name="Folder"/>
+                <muxc:NavigationViewItem Content="{u:LocaleString Key=Outline}" Tag="Toc" Name="Toc"/>
+            </muxc:NavigationView.MenuItems>
+        </muxc:NavigationView>
+        <Frame Margin="0,50,0,0" x:Load="{x:Bind IsTabbed, Mode=OneWay}" Visibility="{x:Bind local:LeftPane.PageVisibility(IsSearchPaneOpen, IsFindResultsOpen), Mode=OneWay}" x:Name="Frame">
+            <Frame.Clip>
+                <RectangleGeometry x:Name="FrameClip"/>
+            </Frame.Clip>
+        </Frame>
         <!-- Files above, the outline below, a bar between them to drag; each folds to its title row. The id is the one the
              tests measure the pane by (it was the Files/Outline tabs' NavigationView). -->
         <local:AutomationGrid
             x:Name="Blocks"
+            x:Load="{x:Bind IsStacked, Mode=OneWay}"
+            Loaded="OnBlocksLoaded"
             AutomationProperties.AutomationId="NavigationView"
             Visibility="{x:Bind local:LeftPane.PageVisibility(IsSearchPaneOpen, IsFindResultsOpen), Mode=OneWay}">
             <Grid.RowDefinitions>
@@ -41,20 +77,20 @@
                 <RowDefinition x:Name="OutlineRow" Height="*"/>
             </Grid.RowDefinitions>
             <Grid Height="32" Margin="4,4,4,0">
-                <Button x:Name="Folder" AutomationProperties.AutomationId="Folder" Style="{StaticResource BlockHeaderButtonStyle}" Click="OnFilesHeaderClick">
+                <Button x:Name="FilesHeader" AutomationProperties.AutomationId="Folder" Style="{StaticResource BlockHeaderButtonStyle}" Click="OnFilesHeaderClick">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <FontIcon x:Name="FilesChevron" FontSize="10" Glyph="&#xe70d;"/>
                         <TextBlock x:Name="FilesTitle" Text="{u:LocaleString Key=Files}" FontWeight="SemiBold"/>
                     </StackPanel>
                 </Button>
-                <Button Width="32" Height="32" x:Name="SearchButton" HorizontalAlignment="Right" Click="OnSearchButtonClick" Style="{ThemeResource EllipsisIconButtonStyle}" local:ToolTip.TextResource="SearchInFolder">
+                <Button Width="32" Height="32" AutomationProperties.AutomationId="SearchButton" HorizontalAlignment="Right" Click="OnSearchButtonClick" Style="{ThemeResource EllipsisIconButtonStyle}" local:ToolTip.TextResource="SearchInFolder">
                     <FontIcon FontSize="14" Glyph="&#xe721;"/>
                 </Button>
             </Grid>
             <pages:FolderPage x:Name="FilesPage" Grid.Row="1"/>
             <local:RowSplitter x:Name="BlockSplitter" Grid.Row="2" Canvas.ZIndex="1"/>
             <Border Grid.Row="3" Height="37" Padding="4,4,4,0" BorderThickness="0,1,0,0" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
-                <Button x:Name="Toc" AutomationProperties.AutomationId="Toc" Style="{StaticResource BlockHeaderButtonStyle}" Click="OnOutlineHeaderClick">
+                <Button x:Name="OutlineHeader" AutomationProperties.AutomationId="Toc" Style="{StaticResource BlockHeaderButtonStyle}" Click="OnOutlineHeaderClick">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <FontIcon x:Name="OutlineChevron" FontSize="10" Glyph="&#xe70d;"/>
                         <TextBlock x:Name="OutlineTitle" Text="{u:LocaleString Key=Outline}" FontWeight="SemiBold"/>

@@ -1032,4 +1032,10 @@
 • басқа редакторлар файлды баяу ашуы мүмкін;
 • болдырмау тарихы көбірек жад алады.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Файлдар мен құрылымды бірге көрсету</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Бүйірлік тақта жоғарыда файлдарды, төменде құрылымды көрсетеді, әрқайсысы тақырыбына дейін жиналады, екі қойындының орнына.</value>
+  </data>
 </root>

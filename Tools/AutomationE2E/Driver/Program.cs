@@ -319,7 +319,7 @@ internal static partial class Program
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
             await Case("PS01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", PS01);
-            await Case("PS02 the side pane shows the files above and the outline below: the bar between them dragged moves the line, a title clicked folds its block and opens it, both kept with the pane closed and opened; a plain text without headings folds the outline by itself", PS02);
+            await Case("PS02 with View > Show files and outline together on, the side pane shows the files above and the outline below: the bar between them dragged moves the line, a title clicked folds its block and opens it, both kept with the pane closed and opened; a plain text without headings folds the outline by itself", PS02);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
             EditionCases(editionCases);
@@ -778,28 +778,27 @@ internal static partial class Program
 
             // Its content laid out again for the new width, where it is drawn: in the pane, and a click on it lands (a
             // mirrored grid left the files and the outline where they were, out of the pane and not to be clicked).
-            // The outline block's title row (always there; the favourites header is not, with no favourites): in the pane,
-            // and a click on it lands - the outline folds away, and a second click opens it again with its heading in the
-            // pane. A picture of the window kept to see the pane drawn on the right.
+            // The side pane's Outline tab (always there; the favourites header is not, with no favourites): in the pane,
+            // and a click on it lands - the pane's page setting goes to the outline. A picture of the window kept to see
+            // the pane drawn on the right.
             Screenshot("PS01-widened");
             var wide = Find("NavigationView")?.Current.BoundingRectangle;
-            await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
+            await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "files" } });
             await Task.Delay(500);
             var outlineTab = wide == null ? null : Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.OrCondition(
                     // By its name in the XAML (Toc), in any interface language - "Outline" is hp's 大纲.
                     new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "Toc"),
                     new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "Outline")))
                 .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(e => { var r = e.Current.BoundingRectangle; return r.Width > 0 && r.Left >= wide.Value.Left - 1 && r.Right <= wide.Value.Right + 1; });
-            notes.Add($"widened: pane {wide}; its Outline title {outlineTab?.Current.BoundingRectangle}");
-            Check(outlineTab != null, "the pane's content is in the pane after the resize (its Outline title there)");
-            bool Listed() => Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "PS01 heading"))
+            notes.Add($"widened: pane {wide}; its Outline tab {outlineTab?.Current.BoundingRectangle}");
+            Check(outlineTab != null, "the pane's content is in the pane after the resize (its Outline tab there)");
+            await Click(window, outlineTab!);
+            await Task.Delay(800);
+            // Landed: the pane's page is the outline, its heading listed in the pane (the tab does not write the
+            // SidePaneIndex setting, which only says which page to open).
+            var listed = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "PS01 heading"))
                 .Cast<System.Windows.Automation.AutomationElement>().Any(e => { var r = e.Current.BoundingRectangle; return r.Width > 0 && r.Left >= wide!.Value.Left - 1 && r.Right <= wide.Value.Right + 1; });
-            await Click(window, outlineTab!);
-            await Task.Delay(800);
-            Check((bool)await Setting("SidePaneOutlineCollapsed") && !Listed(), "a click on it lands (the outline folds away)");
-            await Click(window, outlineTab!);
-            await Task.Delay(800);
-            Check(!(bool)await Setting("SidePaneOutlineCollapsed") && Listed(), "and a second click opens it, the heading in the pane");
+            Check(listed, "and a click on it lands (the pane shows the outline, the heading in it)");
 
             await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = false });
             await Task.Delay(1200);
@@ -2467,6 +2466,7 @@ internal static partial class Program
                 var marks = await Indicators(page, "dracula");
                 Check(marks.Any(x => x.Where == where), $"the {where} rows have selection pills ({marks.Count} indicators in all)");
                 Check(marks.Where(x => x.Where == where).All(x => x.Fill == Dracula), $"dracula: the {where} rows' pills are its accent");
+                Check(marks.Where(x => x.Where == "tabs").All(x => x.Fill == Dracula), "dracula: the bar under Files/Outline is its accent");
             }
             await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
             var plain = await Indicators("outline", "default");

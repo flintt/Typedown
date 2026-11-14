@@ -1032,4 +1032,10 @@
 • други редактори може да отварят файла бавно;
 • историята за отмяна заема повече памет.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Показване на файловете и структурата заедно</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Страничният панел показва файловете отгоре и структурата отдолу, всяко се свива до заглавието си, вместо два раздела.</value>
+  </data>
 </root>

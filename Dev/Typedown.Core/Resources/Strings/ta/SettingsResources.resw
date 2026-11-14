@@ -1032,4 +1032,10 @@
 • மற்ற திருத்திகள் கோப்பை மெதுவாகத் திறக்கலாம்;
 • செயல்தவிர் வரலாறு அதிக நினைவகம் எடுக்கும்.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>கோப்புகளையும் சுருக்கத்தையும் ஒன்றாகக் காட்டு</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>பக்கப் பலகம் மேலே கோப்புகளையும் கீழே சுருக்கத்தையும் காட்டும், ஒவ்வொன்றும் தன் தலைப்பு வரை மடிக்கலாம், இரண்டு தாவல்களுக்குப் பதிலாக.</value>
+  </data>
 </root>

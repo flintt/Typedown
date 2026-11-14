@@ -1032,4 +1032,10 @@
 • muut editorit voivat avata tiedoston hitaasti;
 • kumoamishistoria vie enemmän muistia.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Näytä tiedostot ja jäsennys yhdessä</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Sivupaneeli näyttää tiedostot ylhäällä ja jäsennyksen alhaalla, kumpikin kutistettavissa otsikkoonsa, kahden välilehden sijaan.</value>
+  </data>
 </root>

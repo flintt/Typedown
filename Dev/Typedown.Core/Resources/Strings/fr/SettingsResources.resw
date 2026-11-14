@@ -1032,4 +1032,10 @@
 • d’autres éditeurs peuvent ouvrir le fichier lentement ;
 • l’historique d’annulation prend plus de mémoire.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Afficher les fichiers et le plan ensemble</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Le volet latéral affiche les fichiers en haut et le plan en bas, chacun repliable sur son titre, au lieu de deux onglets.</value>
+  </data>
 </root>

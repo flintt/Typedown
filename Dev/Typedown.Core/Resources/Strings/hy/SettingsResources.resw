@@ -1032,4 +1032,10 @@
 • այլ խմբագրիչները կարող են դանդաղ բացել ֆայլը;
 • հետարկման պատմությունն ավելի շատ հիշողություն է զբաղեցնում։</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Ցույց տալ ֆայլերն ու ուրվագիծը միասին</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Կողային վահանակը վերևում ցույց է տալիս ֆայլերը, ներքևում՝ ուրվագիծը, յուրաքանչյուրը ծալվում է մինչև վերնագիրը, երկու ներդիրի փոխարեն։</value>
+  </data>
 </root>

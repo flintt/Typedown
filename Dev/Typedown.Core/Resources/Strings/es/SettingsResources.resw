@@ -1032,4 +1032,10 @@
 • otros editores pueden abrir el archivo despacio;
 • el historial de deshacer ocupa más memoria.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Mostrar archivos y esquema a la vez</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>El panel lateral muestra los archivos arriba y el esquema abajo, cada uno plegable hasta su título, en lugar de dos pestañas.</value>
+  </data>
 </root>

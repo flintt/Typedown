@@ -1032,4 +1032,10 @@
 • ویرایشگرهای دیگر شاید فایل را آهسته باز کنند؛
 • تاریخچهٔ لغو حافظهٔ بیشتر می‌گیرد.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>نمایش فایل‌ها و طرح کلی یکجا</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>پنل کناری فایل‌ها را در بالا و طرح کلی را در پایین نشان می‌دهد، هر کدام تا عنوانش جمع می‌شود، به جای دو زبانه.</value>
+  </data>
 </root>

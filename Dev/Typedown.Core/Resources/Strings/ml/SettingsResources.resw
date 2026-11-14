@@ -1032,4 +1032,10 @@
 • മറ്റ് എഡിറ്ററുകൾ ഫയൽ പതുക്കെ തുറന്നേക്കാം;
 • പഴയപടിയാക്കൽ ചരിത്രം കൂടുതൽ മെമ്മറി എടുക്കും.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ഫയലുകളും രൂപരേഖയും ഒരുമിച്ച് കാണിക്കുക</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>സൈഡ് പാളി മുകളിൽ ഫയലുകളും താഴെ രൂപരേഖയും കാണിക്കുന്നു, ഓരോന്നും അതിന്റെ തലക്കെട്ട് വരെ മടക്കാം, രണ്ട് ടാബുകൾക്ക് പകരം.</value>
+  </data>
 </root>

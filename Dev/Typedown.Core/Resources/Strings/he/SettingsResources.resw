@@ -1032,4 +1032,10 @@
 • עורכים אחרים עלולים לפתוח את הקובץ לאט;
 • היסטוריית הביטול תופסת יותר זיכרון.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>הצגת קבצים ומתאר יחד</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>החלונית הצדדית מציגה את הקבצים למעלה ואת המתאר למטה, כל אחד ניתן לקיפול עד הכותרת שלו, במקום שתי כרטיסיות.</value>
+  </data>
 </root>

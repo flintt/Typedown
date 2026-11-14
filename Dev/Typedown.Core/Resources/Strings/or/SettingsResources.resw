@@ -1032,4 +1032,10 @@
 • ଅନ୍ୟ ସମ୍ପାଦକ ଫାଇଲଟି ଧୀରେ ଖୋଲିପାରନ୍ତି;
 • ପୂର୍ବବତ୍ ଇତିହାସ ଅଧିକ ମେମୋରୀ ନିଏ।</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ଫାଇଲ ଓ ରୂପରେଖା ଏକାଠି ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>ପାର୍ଶ୍ୱ ପେନ୍ ଉପରେ ଫାଇଲ ଓ ତଳେ ରୂପରେଖା ଦେଖାଏ, ପ୍ରତ୍ୟେକ ନିଜ ଶୀର୍ଷକ ପର୍ଯ୍ୟନ୍ତ ସଙ୍କୁଚିତ ହୁଏ, ଦୁଇଟି ଟାବ୍ ବଦଳରେ।</value>
+  </data>
 </root>

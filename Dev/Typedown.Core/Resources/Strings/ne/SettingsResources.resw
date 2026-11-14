@@ -1032,4 +1032,10 @@
 • अन्य सम्पादकले फाइल बिस्तारै खोल्न सक्छन्;
 • पूर्ववत इतिहासले बढी मेमोरी लिन्छ।</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>फाइल र रूपरेखा सँगै देखाउनुहोस्</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>साइड प्यानले माथि फाइल र तल रूपरेखा देखाउँछ, प्रत्येक आफ्नो शीर्षकसम्म खुम्चिन्छ, दुई ट्याबको सट्टा।</value>
+  </data>
 </root>

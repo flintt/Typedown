@@ -1032,4 +1032,10 @@
 • andre editorer kan åbne filen langsomt;
 • fortrydelseshistorikken bruger mere hukommelse.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Vis filer og disposition samtidig</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Sideruden viser filerne øverst og dispositionen nederst, hver kan foldes sammen til titlen, i stedet for to faner.</value>
+  </data>
 </root>

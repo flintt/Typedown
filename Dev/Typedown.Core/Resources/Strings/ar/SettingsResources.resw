@@ -1038,4 +1038,10 @@
 • قد تفتح المحررات الأخرى الملف ببطء؛
 • يستهلك سجل التراجع ذاكرة أكبر.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>عرض الملفات والمخطط معًا</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>يعرض الجزء الجانبي الملفات في الأعلى والمخطط في الأسفل، ويمكن طي كلٍّ منهما إلى عنوانه، بدلاً من علامتي تبويب.</value>
+  </data>
 </root>

@@ -1032,4 +1032,10 @@
 • други уредници може бавно да ја отвораат датотеката;
 • историјата за враќање зафаќа повеќе меморија.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Прикажи датотеки и преглед заедно</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Страничниот панел прикажува датотеки горе и преглед долу, секој може да се собере до насловот, наместо две картички.</value>
+  </data>
 </root>

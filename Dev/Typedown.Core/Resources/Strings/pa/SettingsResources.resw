@@ -1032,4 +1032,10 @@
 • ਹੋਰ ਸੰਪਾਦਕ ਫ਼ਾਈਲ ਹੌਲੀ ਖੋਲ੍ਹ ਸਕਦੇ ਹਨ;
 • ਵਾਪਸ ਕਰੋ ਇਤਿਹਾਸ ਵੱਧ ਮੈਮਰੀ ਲੈਂਦਾ ਹੈ।</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ਫ਼ਾਈਲਾਂ ਅਤੇ ਰੂਪਰੇਖਾ ਇਕੱਠੇ ਦਿਖਾਓ</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>ਸਾਈਡ ਪੈਨ ਉੱਪਰ ਫ਼ਾਈਲਾਂ ਅਤੇ ਹੇਠਾਂ ਰੂਪਰੇਖਾ ਦਿਖਾਉਂਦਾ ਹੈ, ਹਰ ਇੱਕ ਆਪਣੇ ਸਿਰਲੇਖ ਤੱਕ ਸਮੇਟਿਆ ਜਾ ਸਕਦਾ ਹੈ, ਦੋ ਟੈਬਾਂ ਦੀ ਥਾਂ।</value>
+  </data>
 </root>

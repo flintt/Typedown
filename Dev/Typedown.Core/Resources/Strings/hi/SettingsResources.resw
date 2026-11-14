@@ -1032,4 +1032,10 @@
 • अन्य संपादक फ़ाइल धीरे खोल सकते हैं;
 • पूर्ववत इतिहास अधिक मेमोरी लेता है।</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>फ़ाइलें और रूपरेखा साथ दिखाएँ</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>साइड पैन ऊपर फ़ाइलें और नीचे रूपरेखा दिखाता है, हर एक अपने शीर्षक तक सिमट सकता है, दो टैब के बजाय।</value>
+  </data>
 </root>

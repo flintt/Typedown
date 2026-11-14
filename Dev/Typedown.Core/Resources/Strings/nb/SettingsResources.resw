@@ -1032,4 +1032,10 @@
 • andre redigeringsprogrammer kan åpne filen sakte;
 • angreloggen bruker mer minne.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Vis filer og disposisjon samtidig</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Sideruten viser filene øverst og disposisjonen nederst, hver kan felles sammen til tittelen, i stedet for to faner.</value>
+  </data>
 </root>

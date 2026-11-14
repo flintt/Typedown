@@ -1032,4 +1032,10 @@
 • jiné editory mohou soubor otevírat pomalu;
 • historie zpět zabere více paměti.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Zobrazit soubory a osnovu současně</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Boční panel zobrazí nahoře soubory a dole osnovu, každou lze sbalit na nadpis, místo dvou karet.</value>
+  </data>
 </root>

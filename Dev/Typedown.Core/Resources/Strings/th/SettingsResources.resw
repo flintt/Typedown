@@ -1032,4 +1032,10 @@
 • โปรแกรมแก้ไขอื่นอาจเปิดไฟล์ได้ช้า;
 • ประวัติการเลิกทำใช้หน่วยความจำมากขึ้น</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>แสดงไฟล์และเค้าโครงพร้อมกัน</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>บานหน้าต่างด้านข้างแสดงไฟล์ด้านบนและเค้าโครงด้านล่าง แต่ละส่วนพับเหลือแค่หัวข้อได้ แทนที่จะเป็นสองแท็บ</value>
+  </data>
 </root>

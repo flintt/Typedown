@@ -1032,4 +1032,10 @@
 • ሌሎች አርታዒዎች ፋይሉን በዝግታ ሊከፍቱ ይችላሉ፤
 • የመቀልበስ ታሪክ ብዙ ማህደረ ትውስታ ይይዛል።</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ፋይሎችንና ዝርዝሩን አብረው አሳይ</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>የጎን ፓነሉ ፋይሎችን ከላይ፣ ዝርዝሩን ከታች ያሳያል፤ እያንዳንዱ እስከ ርዕሱ ይታጠፋል፤ ከሁለት ትሮች ይልቅ።</value>
+  </data>
 </root>

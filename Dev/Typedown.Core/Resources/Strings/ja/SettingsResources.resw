@@ -1032,4 +1032,10 @@
 • 他のエディターで開くのが遅くなることがあります；
 • 元に戻す履歴のメモリ使用量が増えます。</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ファイルとアウトラインを同時に表示</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>サイドペインの上にファイル、下にアウトラインを表示し、それぞれ見出し行まで折りたためます（2 つのタブの代わり）。</value>
+  </data>
 </root>

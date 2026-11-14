@@ -1032,4 +1032,10 @@
 • editor lain mungkin membuka file dengan lambat;
 • riwayat urungkan memakai lebih banyak memori.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Tampilkan file dan kerangka bersamaan</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Panel samping menampilkan file di atas dan kerangka di bawah, masing-masing bisa dilipat hingga judulnya, alih-alih dua tab.</value>
+  </data>
 </root>
