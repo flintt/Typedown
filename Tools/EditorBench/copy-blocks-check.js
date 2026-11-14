@@ -8,7 +8,8 @@
 //   it (written compact, it stays compact) and HTML: a <table> with the header row as <th>, the rows and columns of the
 //   table, each column's alignment, bold, italic, code and links in the cells, a formula in a cell as its TeX;
 // - the button shows the check mark;
-// - while a formula's source or a table's cell is being edited (ag-active) the block has no copy button;
+// - while a formula's source is being edited (ag-active) it has no copy button; a table's cell being edited, the table has
+//   its copy button, as it has its fold button (the user, 2026-11-13);
 // - the menu's Copy table (the host's CopyTable message after a right-click in a table) copies the table right-clicked,
 //   and the right-click told the host whether it was in a table as the button went down (ContextMenuTarget, before the
 //   host's menu opens on the button's release: its Copy table shows by it);
@@ -266,7 +267,7 @@ const doc = '# Blocks\n\nFirst paragraph with $a+b$ inline.\n\n' + math + '\n\n'
     await pause(500);
     const tableEditing = await hover(tableSel);
     const tableActive = await page.evaluate(sel => document.querySelector(sel).classList.contains('ag-active'), tableSel);
-    check(tableActive && (tableEditing.display === 'none' || tableEditing.opacity === -1), `no copy button on a table while a cell is edited (active ${tableActive}, ${tableEditing.display})`);
+    check(tableActive && tableEditing.display !== 'none' && tableEditing.opacity >= 0.4 && Math.abs(tableEditing.right - tableEditing.tableRight) <= 3, `the copy button on a table while a cell is edited, at its right edge (active ${tableActive}, ${JSON.stringify(tableEditing)})`);
 
     // Back to a caret in the first paragraph, then reading mode.
     await page.mouse.click(at.x, at.y);

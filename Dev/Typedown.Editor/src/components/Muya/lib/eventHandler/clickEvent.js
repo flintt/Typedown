@@ -342,18 +342,38 @@ class ClickEvent {
     }
     eventCenter.attachDOMEvent(container, 'mousedown', linkMousedownHandler)
     eventCenter.attachDOMEvent(window, 'mouseup', mouseupHandler)
-    // A table's copy button (ContentState.copyBlockToClipboard) goes above the table's right edge, which a figure as wide as the page
-    // does not know: put there as the pointer comes over the table, before it shows. Within the figure for a table wider
-    // than it.
-    const tableCopyHandler = event => {
-      const figure = event.target.closest && event.target.closest('figure[data-role="TABLE"]')
-      const button = figure && figure.querySelector(':scope > .ag-diagram-copy')
-      const table = figure && figure.querySelector(':scope > table')
-      if (!button || !table) return
-      const right = Math.min(table.offsetLeft + table.offsetWidth, figure.clientWidth)
-      button.style.right = `${Math.max(0, figure.clientWidth - right)}px`
+    // A table's copy button (ContentState.copyBlockToClipboard) and fold button (services/blockFold) go side by side above
+    // the table's right edge, which a figure as wide as the page does not know: put there as the pointer comes over the
+    // table, and as the caret goes into it (both show then). Within the figure for a table wider than it; right of the
+    // tool bar of a table being edited (at the figure's left, above the table) for one narrower than that.
+    const placeTableButtons = figure => {
+      const copy = figure.querySelector(':scope > .ag-diagram-copy')
+      const fold = figure.querySelector(':scope > .ag-block-fold')
+      const table = figure.querySelector(':scope > table')
+      if (!table || (!copy && !fold)) return
+      const tools = figure.querySelector(':scope > .ag-tool-bar li:last-child')
+      const toolsEnd = tools ? tools.offsetLeft + tools.offsetWidth + 12 : table.offsetLeft + 160
+      const width = (copy ? 24 : 0) + (fold ? 24 : 0)
+      const edge = Math.max(Math.min(table.offsetLeft + table.offsetWidth, figure.clientWidth), Math.min(toolsEnd + width, figure.clientWidth))
+      const right = Math.max(0, figure.clientWidth - edge)
+      if (copy) copy.style.right = `${right}px`
+      if (fold) fold.style.right = `${right + (copy ? 24 : 0)}px`
     }
-    eventCenter.attachDOMEvent(container, 'mouseover', tableCopyHandler)
+    const tableButtonsHandler = event => {
+      const figure = event.target.closest && event.target.closest('figure[data-role="TABLE"]')
+      if (figure) placeTableButtons(figure)
+    }
+    let placing = 0
+    const activeTableHandler = () => {
+      if (placing) return
+      placing = requestAnimationFrame(() => {
+        placing = 0
+        const figure = container.querySelector('figure.ag-active[data-role="TABLE"]')
+        if (figure) placeTableButtons(figure)
+      })
+    }
+    eventCenter.attachDOMEvent(container, 'mouseover', tableButtonsHandler)
+    eventCenter.attachDOMEvent(document, 'selectionchange', activeTableHandler)
     eventCenter.attachDOMEvent(container, 'click', clickHandler)
     eventCenter.attachDOMEvent(container, 'contextmenu', clickHandler)
   }
