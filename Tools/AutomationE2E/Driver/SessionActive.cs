@@ -169,6 +169,12 @@ internal static partial class Program
     // The first window's active document: its path (null for an untitled one) and its text.
     private static async Task<(string? Path, string? Text)> ActiveDocument(Client c)
     {
+        // The start settled first: document.get waits for the window's session (its other tabs read, and the switch back
+        // to the untitled tab it was closed on), window.list does not - hp's page came later, and the shown tab was read
+        // before the switch (SR03 on hp, Typedown's run, 2026-11-14: the switch 1.6 s after the start's document).
+        var first = ((JArray)(await c.Call("window.list"))["windows"]!).First();
+        var anyDoc = ((JArray)(await c.Call("document.list", new { windowId = (string)first["windowId"]! }))["documents"]!).First();
+        await Get(c, (string)anyDoc["documentId"]!);
         var w = ((JArray)(await c.Call("window.list"))["windows"]!).First();
         var id = (string)w["activeDocumentId"]!;
         var doc = ((JArray)(await c.Call("document.list", new { windowId = (string)w["windowId"]! }))["documents"]!).First(d => (string?)d["documentId"] == id);
