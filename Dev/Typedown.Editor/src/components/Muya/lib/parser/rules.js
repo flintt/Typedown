@@ -13,7 +13,9 @@ export const beginRules = {
 
 export const inlineRules = {
   strong: /^(\*\*|__)(?=\S)([\s\S]*?[^\s\\])(\\*)\1(?!(\*|_))/, // can nest
-  em: /^(\*|_)(?=\S)([\s\S]*?[^\s\*\\])(\\*)\1(?!\1)/, // can nest
+  // A * italic's text may not end in "*"; a _ one's may: _**x**_ is italic around bold. The "*" was refused for _ too,
+  // and _**x**_ was drawn as its marks, with no format to show or take off (2026-11-14).
+  em: /^(\*|_)(?=\S)([\s\S]*?(?:(?!\1)[^\s\\]|_))(\\*)\1(?!\1)/, // can nest
   // CommonMark: the run of backticks it opens with, up to the next run of exactly as many (backticks of other lengths
   // inside it are its text). `.{2,}` took everything up to the line's last matching run: `` a`b `` and ``` a``b ``` in
   // one sentence came out as one code span.

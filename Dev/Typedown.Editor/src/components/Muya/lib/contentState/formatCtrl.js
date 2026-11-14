@@ -1,89 +1,56 @@
 import selection from '../selection'
-import { tokenizer, generator } from '../parser/'
+import { tokenizer } from '../parser/'
 import { FORMAT_MARKER_MAP, FORMAT_TYPES } from '../config'
 import { getImageInfo } from '../utils/getImageInfo'
 
-const getOffset = (offset, { range: { start, end }, type, tag, anchor, alt }) => {
-  const dis = offset - start
-  const len = end - start
+// The parts of the block's text a format token's marks take, [from, to) each: what taking the format off removes,
+// leaving what it holds - the text inside **, *, ~~ or <u></u>, a link's text, a picture's description, the code or
+// formula itself. The ranges are the token's own in the block's text, so a format inside another comes off as well as
+// one outside: the tokens were spliced out of their parent's children and the text put together again from the top
+// tokens' raw text, which an inner token's splice did not reach - only the outermost format ever came off (Italic in
+// ***x***, Bold in <u>**x**</u> or ~~**x**~~, the user, 2026-11-14).
+const markRanges = token => {
+  const { range: { start, end }, type, marker = '' } = token
   switch (type) {
     case 'strong':
     case 'del':
     case 'em':
+      return [[start, start + marker.length], [end - marker.length, end]]
+    case 'html_tag': { // underline, sub, sup, mark; an element without a close tag (<img>) goes whole
+      const open = token.openTag ? token.openTag.length : end - start
+      const close = token.closeTag ? token.closeTag.length : 0
+      return [[start, start + open], [end - close, end]]
+    }
+    case 'link':
+    case 'image':
     case 'inline_code':
     case 'inline_math': {
-      const MARKER_LEN = (type === 'strong' || type === 'del') ? 2 : 1
-      if (dis < 0) return 0
-      if (dis >= 0 && dis < MARKER_LEN) return -dis
-      if (dis >= MARKER_LEN && dis <= len - MARKER_LEN) return -MARKER_LEN
-      if (dis > len - MARKER_LEN && dis <= len) return len - dis - 2 * MARKER_LEN
-      if (dis > len) return -2 * MARKER_LEN
-      break
+      const kept = (type === 'link' ? token.anchor : type === 'image' ? token.alt : token.content) || ''
+      return [[start, start + marker.length], [start + marker.length + kept.length, end]]
     }
-    case 'html_tag': { // handle underline, sup, sub
-      const OPEN_MARKER_LEN = FORMAT_MARKER_MAP[tag].open.length
-      const CLOSE_MARKER_LEN = FORMAT_MARKER_MAP[tag].close.length
-      if (dis < 0) return 0
-      if (dis >= 0 && dis < OPEN_MARKER_LEN) return -dis
-      if (dis >= OPEN_MARKER_LEN && dis <= len - CLOSE_MARKER_LEN) return -OPEN_MARKER_LEN
-      if (dis > len - CLOSE_MARKER_LEN && dis <= len) return len - dis - OPEN_MARKER_LEN - CLOSE_MARKER_LEN
-      if (dis > len) return -OPEN_MARKER_LEN - CLOSE_MARKER_LEN
-      break
-    }
-    case 'link': {
-      const MARKER_LEN = 1
-      if (dis < MARKER_LEN) return 0
-      if (dis >= MARKER_LEN && dis <= MARKER_LEN + anchor.length) return -1
-      if (dis > MARKER_LEN + anchor.length) return anchor.length - dis
-      break
-    }
-    case 'image': {
-      const MARKER_LEN = 1
-      if (dis < MARKER_LEN) return 0
-      if (dis >= MARKER_LEN && dis < MARKER_LEN * 2) return -1
-      if (dis >= MARKER_LEN * 2 && dis <= MARKER_LEN * 2 + alt.length) return -2
-      if (dis > MARKER_LEN * 2 + alt.length) return alt.length - dis
-      break
-    }
+    default:
+      return []
   }
 }
 
-const clearFormat = (token, { start, end }) => {
-  if (start) {
-    const deltaStart = getOffset(start.offset, token)
-    start.delata += deltaStart
-  }
-  if (end) {
-    const delataEnd = getOffset(end.offset, token)
-    end.delata += delataEnd
-  }
-  switch (token.type) {
-    case 'strong':
-    case 'del':
-    case 'em':
-    case 'link':
-    case 'html_tag': { // underline, sub, sup
-      const { parent } = token
-      const index = parent.indexOf(token)
-      parent.splice(index, 1, ...token.children)
-      break
-    }
-    case 'image': {
-      token.type = 'text'
-      token.raw = token.alt
-      delete token.marker
-      delete token.src
-      break
-    }
-    case 'inline_math':
-    case 'inline_code': {
-      token.type = 'text'
-      token.raw = token.content
-      delete token.marker
-      break
-    }
-  }
+// Where an offset in the text goes once the marks are out: back by what was removed before it (into a removed part,
+// to its start).
+const offsetAfter = (offset, ranges) =>
+  ranges.reduce((moved, [from, to]) => moved - Math.min(Math.max(offset - from, 0), to - from), offset)
+
+const clearFormat = (token, { start, end }, removed) => {
+  const ranges = markRanges(token)
+  if (start) start.delata += offsetAfter(start.offset, ranges) - start.offset
+  if (end) end.delata += offsetAfter(end.offset, ranges) - end.offset
+  removed.push(...ranges)
 }
+
+// The text with the marks taken out (the ranges never overlap: a format's marks lie outside what it holds).
+const withoutMarks = (text, removed) =>
+  removed
+    .filter(([from, to]) => to > from)
+    .sort((a, b) => b[0] - a[0])
+    .reduce((t, [from, to]) => t.substring(0, from) + t.substring(to), text)
 
 const addFormat = (type, block, { start, end }) => {
   if (
@@ -191,14 +158,13 @@ const formatCtrl = ContentState => {
     }
     if (block.type === 'pre') return false
     const { key } = block
-    let tokens
     let neighbors
     if (start.key === end.key && start.key === key) {
-      ({ tokens, neighbors } = this.selectionFormats({ start, end }))
+      ({ neighbors } = this.selectionFormats({ start, end }))
     } else if (start.key !== end.key && start.key === key) {
-      ({ tokens, neighbors } = this.selectionFormats({ start, end: { key: start.key, offset: block.text.length } }))
+      ({ neighbors } = this.selectionFormats({ start, end: { key: start.key, offset: block.text.length } }))
     } else if (start.key !== end.key && end.key === key) {
-      ({ tokens, neighbors } = this.selectionFormats({
+      ({ neighbors } = this.selectionFormats({
         start: {
           key: end.key,
           offset: 0
@@ -206,7 +172,7 @@ const formatCtrl = ContentState => {
         end
       }))
     } else {
-      ({ tokens, neighbors } = this.selectionFormats({
+      ({ neighbors } = this.selectionFormats({
         start: {
           key,
           offset: 0
@@ -225,12 +191,13 @@ const formatCtrl = ContentState => {
       })
       : neighbors
 
+    const removed = []
     for (const neighbor of neighbors) {
-      clearFormat(neighbor, { start, end })
+      clearFormat(neighbor, { start, end }, removed)
     }
     start.offset += start.delata
     end.offset += end.delata
-    block.text = generator(tokens)
+    block.text = withoutMarks(block.text, removed)
   }
 
   ContentState.prototype.format = function (type) {
@@ -257,7 +224,8 @@ const formatCtrl = ContentState => {
     const endBlock = this.getBlock(end.key)
     start.delata = end.delata = 0
     if (start.key === end.key) {
-      const { formats, tokens, neighbors } = this.selectionFormats({ start, end })
+      const { formats, neighbors } = this.selectionFormats({ start, end })
+      const removed = []
       const currentFormats = formats.filter(format => {
         return format.type === type ||
           format.type === 'html_tag' && format.tag === type
@@ -269,27 +237,27 @@ const formatCtrl = ContentState => {
       // cache delata
       if (type === 'clear') {
         for (const neighbor of neighbors) {
-          clearFormat(neighbor, { start, end })
+          clearFormat(neighbor, { start, end }, removed)
         }
         start.offset += start.delata
         end.offset += end.delata
-        startBlock.text = generator(tokens)
+        startBlock.text = withoutMarks(startBlock.text, removed)
       } else if (currentFormats.length) {
         for (const token of currentFormats) {
-          clearFormat(token, { start, end })
+          clearFormat(token, { start, end }, removed)
         }
         start.offset += start.delata
         end.offset += end.delata
-        startBlock.text = generator(tokens)
+        startBlock.text = withoutMarks(startBlock.text, removed)
       } else {
         if (currentNeightbors.length) {
           for (const neighbor of currentNeightbors) {
-            clearFormat(neighbor, { start, end })
+            clearFormat(neighbor, { start, end }, removed)
           }
         }
         start.offset += start.delata
         end.offset += end.delata
-        startBlock.text = generator(tokens)
+        startBlock.text = withoutMarks(startBlock.text, removed)
         addFormat(type, startBlock, { start, end })
         if (type === 'image') {
           // Show image selector when create a inline image by menu/shortcut/or just input `![]()`
