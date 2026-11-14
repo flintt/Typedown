@@ -238,7 +238,7 @@
     <comment>复制内容</comment>
   </data>
   <data name="CopyImageTo" xml:space="preserve">
-    <value>यसमा छवि प्रतिलिपि बनाउनुहोस्...</value>
+    <value>प्रतिलिपि गर्नुहोस् र सन्दर्भ अद्यावधिक गर्नुहोस्...</value>
     <comment>复制图片到...</comment>
   </data>
   <data name="CopyPasteAs" xml:space="preserve">
@@ -290,7 +290,7 @@
     <comment>删除</comment>
   </data>
   <data name="DeleteImageFile" xml:space="preserve">
-    <value>छवि फाइल मेट्नुहोस्</value>
+    <value>छवि फाइल मेटाउनुहोस्...</value>
     <comment>删除图片文件</comment>
   </data>
   <data name="DeleteTable" xml:space="preserve">
@@ -602,7 +602,7 @@
     <comment>更多选项</comment>
   </data>
   <data name="MoveImageTo" xml:space="preserve">
-    <value>यसमा छवि सार्नुहोस्...</value>
+    <value>सार्नुहोस् र सन्दर्भ अद्यावधिक गर्नुहोस्...</value>
     <comment>移动图片到...</comment>
   </data>
   <data name="Name" xml:space="preserve">

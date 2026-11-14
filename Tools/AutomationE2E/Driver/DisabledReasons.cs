@@ -38,7 +38,8 @@ internal static partial class Program
             // A document not saved yet.
             untitled = (string)(await c.Call("document.create", new { text = "# not saved\n", reveal = "document" }))["documentId"]!;
             await Task.Delay(800);
-            await RightClickTab(t => !t.Current.Name.Contains("xm06"), "the new document");
+            // Its tab by its name (other cases may leave tabs of their own).
+            await RightClickTab(t => t.Current.Name.StartsWith("Untitled"), "the new document");
             var why = FindAnywhereInHost(window, "TabNotSavedYetItem");
             var copy = FindAnywhereInHost(window, "TabCopyPathItem");
             notes.Add($"untitled tab: '{why?.Current.Name}' shown {why != null && !why.Current.IsOffscreen}, copy path enabled {copy?.Current.IsEnabled}");

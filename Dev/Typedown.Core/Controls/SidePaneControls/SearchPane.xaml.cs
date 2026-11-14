@@ -187,9 +187,48 @@ namespace Typedown.Core.Controls
 
         public static string ShowAllText(int count) => string.Format(Locale.GetString("FolderSearch.ShowAll"), count);
 
-        private async void OnResultClick(object sender, ItemClickEventArgs e)
+        private void OnResultClick(object sender, ItemClickEventArgs e)
         {
-            if (e.ClickedItem is not FolderSearchHit hit || ViewModel == null) return;
+            if (e.ClickedItem is FolderSearchHit hit) OpenHit(hit);
+        }
+
+        // A result's own menu (the 2026-11-11 menu report: the results had none): every file menu's core, in its order
+        // (Services.FileEntryActions) - Open as a click does, a file in a new window too | the favourite, its place, its path.
+        private static FolderSearchHit HitOf(object sender) => (sender as FrameworkElement)?.DataContext as FolderSearchHit;
+
+        private static Services.FileEntry EntryOf(FolderSearchHit hit) => hit == null ? null : new Services.FileEntry(hit.FullPath, hit.IsFolder);
+
+        private void OnResultFlyoutOpening(object sender, object e)
+        {
+            var flyout = (MenuFlyout)sender;
+            var entry = EntryOf((flyout.Target as FrameworkElement)?.DataContext as FolderSearchHit);
+            if (entry == null) return;
+            foreach (var item in flyout.Items.OfType<MenuFlyoutItem>())
+            {
+                if ("NewWindow".Equals(item.Tag)) item.Visibility = Services.FileEntryActions.CanOpenInNewWindow(entry) ? Visibility.Visible : Visibility.Collapsed;
+                if ("Favorite".Equals(item.Tag)) (item.Text, item.IsEnabled) = Services.FileEntryActions.FavoriteItem(entry);
+            }
+        }
+
+        private void OnResultOpenClick(object sender, RoutedEventArgs e)
+        {
+            if (HitOf(sender) is { } hit) OpenHit(hit);
+        }
+
+        private void OnResultOpenInNewWindowClick(object sender, RoutedEventArgs e) => Services.FileEntryActions.OpenInNewWindow(EntryOf(HitOf(sender)), ViewModel?.FileViewModel);
+
+        private void OnResultFavoriteClick(object sender, RoutedEventArgs e) => Services.FileEntryActions.ToggleFavorite(EntryOf(HitOf(sender)));
+
+        private void OnResultLocationClick(object sender, RoutedEventArgs e) =>
+            Services.FileEntryActions.Report(XamlRoot, Services.FileEntryActions.ShowLocation(EntryOf(HitOf(sender))));
+
+        private void OnResultCopyPathClick(object sender, RoutedEventArgs e) =>
+            Services.FileEntryActions.Report(XamlRoot, Services.FileEntryActions.CopyPath(EntryOf(HitOf(sender)), this.GetService<Interfaces.IClipboard>()));
+
+        // A click on a result, or its menu's Open.
+        private async void OpenHit(FolderSearchHit hit)
+        {
+            if (hit == null || ViewModel == null) return;
             // A folder is shown in the tree (the pane closes for it); the root stays.
             if (hit.IsFolder)
             {
