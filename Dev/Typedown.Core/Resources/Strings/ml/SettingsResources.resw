@@ -365,6 +365,14 @@
     <value>ഓടുന്നത് തുടരുക</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>ഏത് പ്രോഗ്രാമിലും «ക്ലിപ്പ്ബോർഡിൽ നിന്ന് പുതിയത്»-ന്റെ കുറുക്കുവഴി അമർത്തുക: വിൻഡോ മുന്നിലേക്ക് വരും, ക്ലിപ്പ്ബോർഡിലെ ടെക്സ്റ്റ് പുതിയ ടാബിലായിരിക്കും. ആപ്പ് പ്രവർത്തിക്കുന്നുണ്ടാകണം; കീ കുറുക്കുവഴികളിൽ സജ്ജീകരിക്കാം, ഇത് ഓണായിരിക്കുമ്പോൾ മറ്റ് പ്രോഗ്രാമുകൾക്ക് അത് ലഭിക്കില്ല.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>മറ്റ് പ്രോഗ്രാമുകളിലും «ക്ലിപ്പ്ബോർഡിൽ നിന്ന് പുതിയത്»</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>വിൻഡോ ചെറുതാക്കുമ്പോൾ എഡിറ്റർ കഴിയുന്നത്ര മെമ്മറി തിരികെ നൽകും (നീണ്ട പ്രമാണത്തിൽ ഏകദേശം ഒരു ജിഗാബൈറ്റ്); വിൻഡോ തിരികെ കൊണ്ടുവരാൻ അൽപം കൂടുതൽ സമയമെടുത്തേക്കാം.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

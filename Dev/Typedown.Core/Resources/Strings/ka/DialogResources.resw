@@ -173,6 +173,14 @@
     <value>კარგი</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>ბუფერში ტექსტი არ არის.</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} უკვე სხვა პროგრამას უკავია. აირჩიეთ სხვა კლავიში „ახალი ბუფერიდან“-ისთვის პარამეტრები &gt; მალსახმობები განყოფილებაში.</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>გთხოვთ, დააჭიროთ ღილაკს კომბინაცია</value>
     <comment>请按下组合键</comment>

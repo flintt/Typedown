@@ -365,6 +365,14 @@
     <value>தொடர்ந்து இயங்குங்கள்</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>எந்த நிரலிலும் «கிளிப்போர்டிலிருந்து புதியது» குறுக்குவழியை அழுத்துங்கள்: சாளரம் முன்னால் வரும், கிளிப்போர்டின் உரை புதிய தாவலில் இருக்கும். பயன்பாடு இயங்கிக்கொண்டிருக்க வேண்டும்; விசை குறுக்குவழிகளில் அமைக்கப்படும், இது இயக்கத்தில் இருக்கும்வரை பிற நிரல்களுக்கு அது கிடைக்காது.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>பிற நிரல்களிலும் «கிளிப்போர்டிலிருந்து புதியது»</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>சாளரம் சிறிதாக்கப்படும்போது, திருத்தி முடிந்த நினைவகத்தைத் திருப்பித் தரும் (நீண்ட ஆவணத்தில் சுமார் ஒரு ஜிகாபைட்); சாளரத்தை மீட்டெடுக்கச் சற்று அதிக நேரம் ஆகலாம்.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

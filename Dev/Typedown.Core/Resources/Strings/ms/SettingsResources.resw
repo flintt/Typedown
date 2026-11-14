@@ -365,6 +365,14 @@
     <value>Teruskan berlari</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Tekan pintasan Baharu daripada Papan Klip dalam mana-mana program: tetingkap muncul ke hadapan dengan teks papan klip dalam tab baharu. Aplikasi mesti berjalan; kekunci ditetapkan dalam Pintasan, dan program lain tidak menerimanya selagi ini dihidupkan.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>Baharu daripada Papan Klip dalam program lain juga</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Apabila tetingkap diminimumkan, editor memulangkan memori yang boleh (kira-kira satu gigabait bagi dokumen panjang); memulihkan tetingkap mungkin mengambil masa sedikit lebih lama.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

@@ -365,6 +365,14 @@
     <value>Continue correndo</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Pressione o atalho de «Novo da área de transferência» em qualquer programa: a janela vem para a frente com o texto da área de transferência em uma nova guia. O aplicativo precisa estar em execução; a tecla é definida em Atalhos, e os outros programas não a recebem enquanto isto estiver ativado.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Novo da área de transferência» também em outros programas</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Quando uma janela é minimizada, o editor devolve a memória que pode (cerca de um gigabyte com um documento longo); restaurar a janela pode demorar um pouco mais.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

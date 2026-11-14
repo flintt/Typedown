@@ -365,6 +365,14 @@
     <value>Patuloy na tumakbo</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Pindutin ang shortcut ng Bago mula sa Clipboard sa kahit anong program: lalabas sa harap ang window na nasa bagong tab ang teksto ng clipboard. Kailangang tumatakbo ang app; itinatakda ang key sa Mga Shortcut, at hindi na ito natatanggap ng ibang program habang naka-on ito.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>Bago mula sa Clipboard sa ibang program din</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Kapag na-minimize ang window, ibinabalik ng editor ang memoryang kaya nito (mga isang gigabyte sa mahabang dokumento); maaaring medyo tumagal ang pagbalik ng window.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

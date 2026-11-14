@@ -365,6 +365,14 @@
     <value>চলতে থাকুন</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>যেকোনো প্রোগ্রামে «ক্লিপবোর্ড থেকে নতুন»-এর শর্টকাট চাপুন: উইন্ডো সামনে আসে, ক্লিপবোর্ডের লেখা নতুন ট্যাবে থাকে। অ্যাপটি চালু থাকতে হবে; কী শর্টকাটে সেট করা হয়, আর এটি চালু থাকলে অন্য প্রোগ্রাম সেটি পায় না।</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>অন্য প্রোগ্রামেও «ক্লিপবোর্ড থেকে নতুন»</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>উইন্ডো ছোট করলে সম্পাদক যতটা পারে মেমরি ফিরিয়ে দেয় (দীর্ঘ নথিতে প্রায় এক গিগাবাইট); উইন্ডো ফিরিয়ে আনতে একটু বেশি সময় লাগতে পারে।</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

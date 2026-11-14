@@ -365,6 +365,14 @@
     <value>Blijven draaien</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Druk in een willekeurig programma op de sneltoets van Nieuw van klembord: het venster komt naar voren met de tekst van het klembord in een nieuw tabblad. De app moet actief zijn; de toets stelt u in bij Sneltoetsen, en andere programma's krijgen hem niet meer zolang dit aan staat.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>Nieuw van klembord ook in andere programma's</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Als een venster wordt geminimaliseerd, geeft de editor het geheugen terug dat hij kan (ongeveer een gigabyte bij een lang document); het herstellen van het venster kan iets langer duren.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

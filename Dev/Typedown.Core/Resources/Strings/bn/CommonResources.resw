@@ -629,6 +629,10 @@
     <value>নতুন উইন্ডো</value>
     <comment>新建/新建窗口</comment>
   </data>
+  <data name="NewFromClipboard" xml:space="preserve">
+    <value>ক্লিপবোর্ড থেকে নতুন</value>
+    <comment>新建/从剪贴板新建</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>কোনও ক্রিয়া কলাপ নেই</value>
     <comment>自动操作/无操作</comment>

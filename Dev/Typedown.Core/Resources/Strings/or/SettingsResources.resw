@@ -365,6 +365,14 @@
     <value>ଚାଲୁ ରଖନ୍ତୁ</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>ଯେକୌଣସି ପ୍ରୋଗ୍ରାମରେ «କ୍ଲିପବୋର୍ଡରୁ ନୂଆ»ର ସର୍ଟକଟ ଦବାନ୍ତୁ: ୱିଣ୍ଡୋ ଆଗକୁ ଆସେ ଓ କ୍ଲିପବୋର୍ଡର ପାଠ୍ୟ ନୂଆ ଟ୍ୟାବରେ ଥାଏ। ଆପ ଚାଲୁଥିବା ଆବଶ୍ୟକ; କି ସର୍ଟକଟରେ ସେଟ ହୁଏ, ଏବଂ ଏହା ଚାଲୁ ଥିବା ପର୍ଯ୍ୟନ୍ତ ଅନ୍ୟ ପ୍ରୋଗ୍ରାମ ତାହା ପାଏ ନାହିଁ।</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>ଅନ୍ୟ ପ୍ରୋଗ୍ରାମରେ ମଧ୍ୟ «କ୍ଲିପବୋର୍ଡରୁ ନୂଆ»</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>ୱିଣ୍ଡୋ ଛୋଟ କଲେ ସମ୍ପାଦକ ଯେତିକି ପାରେ ମେମୋରୀ ଫେରାଇଦିଏ (ଲମ୍ବା ଡକ୍ୟୁମେଣ୍ଟରେ ପ୍ରାୟ ଏକ ଗିଗାବାଇଟ୍); ୱିଣ୍ଡୋ ଫେରାଇ ଆଣିବାକୁ ଟିକେ ଅଧିକ ସମୟ ଲାଗିପାରେ।</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

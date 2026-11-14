@@ -365,6 +365,14 @@
     <value>ሩጫችሁን ቀጥሉ</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>በማንኛውም ፕሮግራም ውስጥ የ«ከቅንጥብ ሰሌዳ አዲስ» አቋራጭን ይጫኑ፤ መስኮቱ ወደ ፊት ይመጣል፣ የቅንጥብ ሰሌዳው ጽሑፍ በአዲስ ትር ውስጥ ይሆናል። መተግበሪያው መሮጥ አለበት፤ ቁልፉ በአቋራጮች ይዘጋጃል፣ ይህ ሲበራ ሌሎች ፕሮግራሞች አያገኙትም።</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«ከቅንጥብ ሰሌዳ አዲስ» በሌሎች ፕሮግራሞችም</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>መስኮት ሲቀነስ አርታኢው የሚችለውን ማህደረ ትውስታ ይመልሳል (ረጅም ሰነድ ሲሆን አንድ ጊጋባይት ገደማ)፤ መስኮቱ ሲመለስ ትንሽ ሊዘገይ ይችላል።</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

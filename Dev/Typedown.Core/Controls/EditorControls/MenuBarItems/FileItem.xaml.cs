@@ -38,6 +38,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         {
             RegisterWindowShortcut(Settings.ShortcutNewFile, NewFileItem);
             RegisterWindowShortcut(Settings.ShortcutNewWindow, NewWindowItem);
+            RegisterWindowShortcut(Settings.ShortcutNewFromClipboard, NewFromClipboardItem);
             RegisterWindowShortcut(Settings.ShortcutHome, HomeItem);
             RegisterWindowShortcut(Settings.ShortcutOpenFile, OpenFileItem);
             RegisterWindowShortcut(Settings.ShortcutOpenFolder, OpenFolderItem);

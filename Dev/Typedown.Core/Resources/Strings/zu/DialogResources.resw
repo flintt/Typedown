@@ -173,6 +173,14 @@
     <value>KULUNGILE</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>Awukho umbhalo ebhodini lokunamathisela.</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>I-{0} isivele isetshenziswa olunye uhlelo. Khetha enye ikhiye ye-«Okusha kusuka ebhodini lokunamathisela» kokuthi Izilungiselelo &gt; Izinqamuleli.</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>Sicela ucindezele inhlanganisela yokhiye</value>
     <comment>请按下组合键</comment>

@@ -130,6 +130,8 @@ namespace Typedown
             ListenPipe(window.DispatcherQueue);
             // Local automation: nothing listens until the setting is turned on (docs/automation-api-spec.md, 5.1).
             Services.Automation.AutomationService.Initialize();
+            // New from Clipboard from other programs: registered only when Settings > General has it on.
+            Services.GlobalShortcut.Initialize(window.DispatcherQueue);
         }
 
         private static async void ListenPipe(DispatcherQueue dispatcher)

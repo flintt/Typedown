@@ -629,6 +629,10 @@
     <value>Nýr gluggi</value>
     <comment>新建/新建窗口</comment>
   </data>
+  <data name="NewFromClipboard" xml:space="preserve">
+    <value>Nýtt af klippiborði</value>
+    <comment>新建/从剪贴板新建</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>Engar aðgerðir</value>
     <comment>自动操作/无操作</comment>

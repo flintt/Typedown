@@ -365,6 +365,14 @@
     <value>Jatka juoksemista</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Paina toiminnon Uusi leikepöydältä pikanäppäintä missä tahansa ohjelmassa: ikkuna tulee eteen ja leikepöydän teksti on uudessa välilehdessä. Sovelluksen on oltava käynnissä; näppäin asetetaan kohdassa Pikanäppäimet, eivätkä muut ohjelmat saa sitä, kun tämä on käytössä.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>Uusi leikepöydältä myös muissa ohjelmissa</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Kun ikkuna pienennetään, editori palauttaa muistia minkä voi (pitkällä asiakirjalla noin gigatavun); ikkunan palauttaminen voi kestää hetken kauemmin.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

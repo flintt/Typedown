@@ -365,6 +365,14 @@
     <value>Segue funcionando</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Prema o atallo de «Novo desde o portapapeis» en calquera programa: a xanela pasa á fronte co texto do portapapeis nunha lapela nova. A aplicación debe estar en execución; a tecla defínese en Atallos, e os demais programas non a reciben mentres isto estea activado.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Novo desde o portapapeis» tamén noutros programas</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Ao minimizar unha xanela, o editor devolve a memoria que pode (arredor dun gigabyte cun documento longo); restaurar a xanela pode tardar un pouco máis.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

@@ -173,6 +173,14 @@
     <value>Լավ</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>Սեղմատախտակում տեքստ չկա։</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0}-ն արդեն օգտագործում է մեկ այլ ծրագիր։ Ընտրեք մեկ այլ ստեղն «Նոր սեղմատախտակից»-ի համար Կարգավորումներ &gt; Դյուրանցումներ բաժնում։</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>Խնդրում ենք սեղմել գլխավոր կոմբինեզոն</value>
     <comment>请按下组合键</comment>

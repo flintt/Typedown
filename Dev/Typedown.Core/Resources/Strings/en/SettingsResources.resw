@@ -415,6 +415,14 @@
     <value>Keep running</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Press New from Clipboard's shortcut in any program: the window comes to the front with the clipboard's text in a new tab. The app has to be running; the key is set in Shortcuts, and other programs no longer get it while this is on.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>New from Clipboard in other programs too</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>When a window is minimized, its editor gives back the memory it can (about a gigabyte with a long document); bringing the window back may take a moment longer.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

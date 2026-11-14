@@ -173,6 +173,14 @@
     <value>Në rregull</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>Nuk ka tekst në kujtesën e fragmenteve.</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} përdoret tashmë nga një program tjetër. Zgjidhni një tast tjetër për «I ri nga kujtesa e fragmenteve» te Cilësimet &gt; Shkurtoret.</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>Ju lutem shtypni kombinimin e çelësit</value>
     <comment>请按下组合键</comment>

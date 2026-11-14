@@ -629,6 +629,10 @@
     <value>Cửa sổ mới</value>
     <comment>新建/新建窗口</comment>
   </data>
+  <data name="NewFromClipboard" xml:space="preserve">
+    <value>Mới từ khay nhớ tạm</value>
+    <comment>新建/从剪贴板新建</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>Không có hành động</value>
     <comment>自动操作/无操作</comment>

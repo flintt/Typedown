@@ -365,6 +365,14 @@
     <value>به دویدن ادامه می دهد</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>میان‌بر «جدید از کلیپ‌بورد» را در هر برنامه‌ای فشار دهید: کلکین پیش می‌آید و متن کلیپ‌بورد در یک زبانهٔ تازه است. برنامه باید در حال اجرا باشد؛ کلید در میان‌برها تنظیم می‌شود و تا وقتی این روشن است برنامه‌های دیگر آن را نمی‌گیرند.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«جدید از کلیپ‌بورد» در برنامه‌های دیگر هم</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>وقتی کلکین کوچک می‌شود، ویرایشگر هر قدر حافظه که بتواند پس می‌دهد (با یک سند طولانی حدود یک گیگابایت)؛ بازگرداندن کلکین ممکن است کمی بیشتر وقت بگیرد.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

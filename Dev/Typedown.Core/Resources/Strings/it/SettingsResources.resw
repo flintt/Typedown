@@ -365,6 +365,14 @@
     <value>Mantieni in esecuzione</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Premi la scorciatoia di «Nuovo dagli appunti» in qualsiasi programma: la finestra passa in primo piano con il testo degli appunti in una nuova scheda. L'app deve essere in esecuzione; il tasto si imposta in Scorciatoie e gli altri programmi non lo ricevono finché questa opzione è attiva.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Nuovo dagli appunti» anche negli altri programmi</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Quando una finestra viene ridotta a icona, l'editor restituisce la memoria che può (circa un gigabyte con un documento lungo); il ripristino della finestra può richiedere un attimo in più.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

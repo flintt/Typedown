@@ -173,6 +173,14 @@
     <value>సరే</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>క్లిప్‌బోర్డ్‌లో వచనం లేదు.</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0}ని ఇప్పటికే మరొక ప్రోగ్రామ్ ఉపయోగిస్తోంది. సెట్టింగ్‌లు &gt; షార్ట్‌కట్‌లలో «క్లిప్‌బోర్డ్ నుండి కొత్తది»కి వేరే కీని ఎంచుకోండి.</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>దయచేసి కీ కాంబినేషన్ ప్రెస్ చేయండి</value>
     <comment>请按下组合键</comment>

@@ -365,6 +365,14 @@
     <value>Συνεχίστε να τρέχετε</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Πατήστε τη συντόμευση του «Νέο από το πρόχειρο» σε οποιοδήποτε πρόγραμμα: το παράθυρο έρχεται μπροστά με το κείμενο του πρόχειρου σε νέα καρτέλα. Η εφαρμογή πρέπει να εκτελείται· το πλήκτρο ορίζεται στις Συντομεύσεις και τα άλλα προγράμματα δεν το λαμβάνουν όσο αυτό είναι ενεργό.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Νέο από το πρόχειρο» και σε άλλα προγράμματα</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Όταν ένα παράθυρο ελαχιστοποιείται, ο επεξεργαστής επιστρέφει όση μνήμη μπορεί (περίπου ένα gigabyte με μεγάλο έγγραφο)· η επαναφορά του παραθύρου μπορεί να καθυστερήσει λίγο.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

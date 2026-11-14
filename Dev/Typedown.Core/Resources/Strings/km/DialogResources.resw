@@ -173,6 +173,14 @@
     <value>យល់ព្រម</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>គ្មានអត្ថបទនៅលើក្ដារតម្បៀតខ្ទាស់ទេ។</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} កំពុងត្រូវបានកម្មវិធីផ្សេងប្រើ។ សូមជ្រើសគ្រាប់ចុចផ្សេងសម្រាប់ «ថ្មីពីក្ដារតម្បៀតខ្ទាស់» ក្នុង ការកំណត់ &gt; ផ្លូវកាត់។</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>សូម ចុច បន្សំ គន្លឹះ</value>
     <comment>请按下组合键</comment>

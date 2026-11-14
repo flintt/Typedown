@@ -365,6 +365,14 @@
     <value>Endelea kukimbia</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Bonyeza njia ya mkato ya «Mpya kutoka ubao wa kunakili» katika programu yoyote: dirisha linakuja mbele na maandishi ya ubao wa kunakili katika kichupo kipya. Programu lazima iwe inaendeshwa; kitufe huwekwa katika Njia za mkato, na programu nyingine hazikipati wakati hiki kimewashwa.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Mpya kutoka ubao wa kunakili» katika programu nyingine pia</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Dirisha linapopunguzwa, kihariri hurudisha kumbukumbu kinachoweza (takriban gigabaiti moja kwa hati ndefu); kurejesha dirisha kunaweza kuchukua muda kidogo zaidi.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

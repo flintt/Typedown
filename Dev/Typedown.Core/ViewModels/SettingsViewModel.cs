@@ -322,6 +322,12 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public bool KeepRun { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>
+        /// Settings > General: New from Clipboard's shortcut works in other programs too (RegisterHotKey,
+        /// Services.GlobalShortcut) - Typeleaf comes to the front with the clipboard's text in a new tab. Off unless chosen:
+        /// it takes the key from every other program.
+        /// </summary>
+        public bool GlobalNewFromClipboard { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
         /// Settings > General > Release memory when minimized: a minimized window's web view gets the low memory target
         /// (WebView2's MemoryUsageTargetLevel), and gives back the caches it holds - up to a gigabyte with a long document
         /// (MM01: 1.5-1.8 GB down to 640-1000 MB) - and the normal one when the window comes back. Off unless chosen.

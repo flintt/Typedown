@@ -365,6 +365,14 @@
     <value>दौड़ते रहो</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>किसी भी प्रोग्राम में «क्लिपबोर्ड से नया» का शॉर्टकट दबाएँ: विंडो सामने आती है और क्लिपबोर्ड का टेक्स्ट नए टैब में होता है। ऐप चल रहा होना चाहिए; कुंजी शॉर्टकट में सेट होती है, और यह चालू रहने तक दूसरे प्रोग्रामों को वह नहीं मिलती।</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>दूसरे प्रोग्रामों में भी «क्लिपबोर्ड से नया»</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>विंडो छोटी करने पर संपादक जितनी हो सके मेमोरी लौटा देता है (लंबे दस्तावेज़ में लगभग एक गीगाबाइट); विंडो वापस लाने में थोड़ा अधिक समय लग सकता है।</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

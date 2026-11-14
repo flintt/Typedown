@@ -173,6 +173,14 @@
     <value>確定</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>剪貼簿裡沒有文字。</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} 已被其他程式佔用。請在 設定 &gt; 快速鍵 裡給「從剪貼簿新增」換一個鍵。</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>請按下組合鍵</value>
     <comment>请按下组合键</comment>
