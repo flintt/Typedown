@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Automation;
 
 /// <summary>
-/// SB09 (the user, 2026-11-13): the status bar says when the file was last saved and has the editor's zoom.
+/// SB09 (the user, 2026-11-13): the status bar's save state says when the file was last saved (one item: the user asked
+/// for the two to be one), and the bar has the editor's zoom.
 /// - a file last written long ago: its date ("Last saved 3/4/2025", as the home page dates a file older than a week), the
 ///   time in the tip (its help text);
 /// - typed in and saved from the bar: the time now (no longer that year);
@@ -25,7 +26,8 @@ internal static partial class Program
         var window = await WindowOf(windowId, c);
         AutomationElement? Find(string automationId) =>
             Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, automationId));
-        string LastSaved() => Find("StatusBarLastSaved") is { } e && !e.Current.IsOffscreen ? Deep.Name(e) : "";
+        // The save state with its time ("Saved · 3/4/2025"): nothing until the time is there.
+        string LastSaved() { var t = BarText(window, "StatusBarSaveState"); return t.Contains("\u00B7") ? t : ""; }
         async Task<double> FontSize() => (double)(await c.Call("test.settings.get", new { windowId, name = "FontSize" }))["value"]!;
         var fontSize = await FontSize();
         try
@@ -36,7 +38,7 @@ internal static partial class Program
             // Last saved: the file's time on disk.
             var shown = "";
             await Eventually(() => Task.FromResult((shown = LastSaved()).Length > 0), 5000, 200);
-            var tip = Find("StatusBarLastSaved")?.Current.HelpText ?? "";
+            var tip = Find("StatusBarSaveState")?.Current.HelpText ?? "";
             notes.Add($"opened (written {old:yyyy-MM-dd HH:mm}): \"{shown}\", tip \"{tip}\"");
             Check(shown.Contains("2025") && tip.Contains("2025") && tip.Contains("10:07"), "a file last written long ago: its date, the time in the tip");
 
@@ -76,7 +78,7 @@ internal static partial class Program
             // Both among the items a right-click chooses.
             await Click(window, Find("StatusBarWordCount") ?? throw new CaseFailed("no count"), Mouse.Right);
             await Task.Delay(700);
-            Check(Find("StatusItem-lastsaved") != null && Find("StatusItem-zoom") != null, "the right-click lists last saved and zoom");
+            Check(Find("StatusItem-save") != null && Find("StatusItem-zoom") != null && Find("StatusItem-lastsaved") == null, "the right-click lists the save state (with its time) and zoom, no item of its own for the time");
         }
         finally
         {

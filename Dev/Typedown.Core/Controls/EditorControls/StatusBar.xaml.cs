@@ -197,19 +197,23 @@ namespace Typedown.Core.Controls
                 catch (Exception ex) { Log.Debug($"status bar: last saved of {System.IO.Path.GetFileName(path)}: {ex.Message}"); }
             }
             // A later ask (another tab, another save) answered first wins.
-            if (asked != lastSavedAsked || LastSavedText == null) return;
+            if (asked != lastSavedAsked || SaveTimeText == null) return;
             lastSaved = when;
             ShowLastSaved();
             LayOutItemsSoon();
         }
 
+        // The save state's time (" · 14:32", the home page's RecentTime rule) and its tip: what the state means, then the
+        // whole date and time the file was last saved (one item: the user, 2026-11-13).
         private void ShowLastSaved()
         {
-            if (lastSaved is not { } when) return;
-            LastSavedText.Text = string.Format(Locale.GetString("SaveState.LastSaved"), RecentTime.Format(when, DateTime.Now, Locale.Culture));
-            var full = when.ToString("F", Locale.Culture);
-            ToolTipService.SetToolTip(LastSavedText, full);
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetHelpText(LastSavedText, full);
+            if (SaveTimeText == null || Editor == null) return;
+            SaveTimeText.Text = lastSaved is { } when ? "\u00B7 " + RecentTime.Format(when, DateTime.Now, Locale.Culture) : "";
+            SaveTimeText.Visibility = lastSaved != null ? Visibility.Visible : Visibility.Collapsed;
+            var tip = SaveStateTip(Editor.Saved, Editor.AutoSaveHeldBack);
+            if (lastSaved is { } saved) tip += "\n" + string.Format(Locale.GetString("SaveState.LastSaved"), saved.ToString("F", Locale.Culture));
+            ToolTipService.SetToolTip(SaveStateButton, tip);
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetHelpText(SaveStateButton, tip);
         }
 
         /// <summary>
@@ -321,10 +325,10 @@ namespace Typedown.Core.Controls
 
         // ---- which items show: the reader's choice (right-click), then what the width leaves room for ----
 
-        private static readonly string[] ItemNames = { "modes", "heading", "format", "save", "lastsaved", "zoom", "count" };
+        private static readonly string[] ItemNames = { "modes", "heading", "format", "save", "zoom", "count" };
 
         // The first to go when the bar is too narrow; the count stays. An edition's items go before all of these.
-        private static readonly string[] SqueezeOrder = { "heading", "lastsaved", "zoom", "format", "save", "modes" };
+        private static readonly string[] SqueezeOrder = { "heading", "zoom", "format", "save", "modes" };
 
         // An edition's items (EditionHooks.AddStatusBarItems), each in a slot of the bar's own left of the count: the
         // bar shows and hides the slot, the element's own Visibility stays the edition's.
@@ -365,7 +369,6 @@ namespace Typedown.Core.Controls
             "heading" => new FrameworkElement[] { HeadingButton },
             "format" => new FrameworkElement[] { FileFormatButton },
             "save" => new FrameworkElement[] { SaveStateButton },
-            "lastsaved" => new FrameworkElement[] { LastSavedText },
             "zoom" => new FrameworkElement[] { ZoomItems },
             "count" => new FrameworkElement[] { WordCountButton },
             _ => editionItems?.Where(x => x.Item.Id == item).Select(x => (FrameworkElement)x.Slot).ToArray() ?? new FrameworkElement[0],
@@ -375,8 +378,7 @@ namespace Typedown.Core.Controls
 
         private bool Chosen(string item) => !HiddenItems().Contains(item);
 
-        private bool Wanted(string item) => Chosen(item) && (item != "heading" || headingAvailable) && (item != "lastsaved" || lastSaved != null)
-            && (EditionItem(item) is not { } edition || Present(edition));
+        private bool Wanted(string item) => Chosen(item) && (item != "heading" || headingAvailable) && (EditionItem(item) is not { } edition || Present(edition));
 
         private StatusBarItem EditionItem(string id)
         {
@@ -408,6 +410,8 @@ namespace Typedown.Core.Controls
             // Saved (by hand, automatically, another tab shown saved) or another file: its time on disk read again.
             if (e.PropertyName is nameof(EditorViewModel.Saved) or nameof(FileViewModel.FilePath))
                 UpdateLastSaved();
+            if (e.PropertyName is nameof(EditorViewModel.Saved) or nameof(EditorViewModel.AutoSaveHeldBack))
+                ShowLastSaved();
             if (e.PropertyName is nameof(SettingsViewModel.ShortcutZoomIn) or nameof(SettingsViewModel.ShortcutZoomOut) or nameof(SettingsViewModel.ShortcutResetZoom))
                 UpdateZoomTips();
             if (e.PropertyName is nameof(SettingsViewModel.StatusBarHiddenItems) or nameof(SettingsViewModel.ReadOnly) or nameof(SettingsViewModel.WordCountMethod)
@@ -491,9 +495,7 @@ namespace Typedown.Core.Controls
                 OverflowMenu.Items.Add(modes);
             }
             if (squeezed.Contains("save") && Editor != null)
-                OverflowMenu.Items.Add(Entry("OverflowSave", SaveStateText(Editor.Saved, Editor.AutoSaveHeldBack), () => OnSaveStateClick(this, null)));
-            if (squeezed.Contains("lastsaved") && lastSaved != null)
-                OverflowMenu.Items.Add(new MenuFlyoutItem { Text = LastSavedText.Text, IsEnabled = false });
+                OverflowMenu.Items.Add(Entry("OverflowSave", SaveStateText(Editor.Saved, Editor.AutoSaveHeldBack) + (lastSaved != null ? " " + SaveTimeText.Text : ""), () => OnSaveStateClick(this, null)));
             if (squeezed.Contains("zoom") && Settings != null)
             {
                 var zoom = new MenuFlyoutSubItem { Text = $"{Locale.GetString("Zoom")} {ZoomText(Settings.FontSize)}" };
@@ -532,7 +534,7 @@ namespace Typedown.Core.Controls
         {
             ItemsMenu.Items.Clear();
             var entries = new[] { ("modes", Locale.GetString("View")), ("heading", Locale.GetString("StatusBarItem.CurrentHeading")), ("format", Locale.GetString("Encoding.Tip")), ("save", Locale.GetString("StatusBarItem.SaveState")),
-                ("lastsaved", Locale.GetString("StatusBarItem.LastSaved")), ("zoom", Locale.GetString("Zoom")) }.ToList();
+                ("zoom", Locale.GetString("Zoom")) }.ToList();
             // An edition's named items, where they are on the bar: before the count.
             foreach (var (edition, _) in EditionList)
                 if (edition.Name != null && Present(edition)) entries.Add((edition.Id, edition.Name));

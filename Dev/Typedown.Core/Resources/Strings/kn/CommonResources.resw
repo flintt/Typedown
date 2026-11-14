@@ -1391,9 +1391,6 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>ಕಾಲಮ್‌ಗಳನ್ನು ವಿಷಯಕ್ಕೆ ಹೊಂದಿಸಿ</value>
   </data>
-  <data name="StatusBarItem.LastSaved" xml:space="preserve">
-    <value>ಕೊನೆಯದಾಗಿ ಉಳಿಸಿದ ಸಮಯ</value>
-  </data>
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>ಕೊನೆಯದಾಗಿ ಉಳಿಸಲಾಗಿದೆ {0}</value>
   </data>

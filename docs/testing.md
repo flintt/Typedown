@@ -319,7 +319,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SB06 | the status bar names the heading the caret is under, and a click on it opens the outline |
 | SB07 | a narrow window puts the status bar items with no room into a "..." menu (the heading first, the count stays), and a right-click chooses which items show |
 | SB08 | a save by hand of a file whose encoding could not be read exactly asks first: Cancel (the default) leaves its bytes, Save as UTF-8 writes the text as shown; the API's save refuses with the reason, and the status bar marks the file |
-| SB09 | the status bar says when the file was last saved (its date and time on disk; the time now after a save from the bar) and has the zoom: + and - a step, a click on the percent back to 100%; both chosen by a right-click |
+| SB09 | the status bar's save state says when the file was last saved (its date on disk, the time in the tip; the time now after a save from the bar) and has the zoom: + and - a step, a click on the percent back to 100%; both chosen by a right-click |
 | AC01 | an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name and a rename, the page scrolled (not at every scroll event) |
 | KY01 | Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode |
 | UN01 | a paragraph typed, selected and Enter pressed over it: one Ctrl+Z gives the paragraph back whole, a second takes the typing away, Ctrl+Y goes forward through both, in the visual editor and in source mode |

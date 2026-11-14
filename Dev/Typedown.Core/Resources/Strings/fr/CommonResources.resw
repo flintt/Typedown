@@ -1391,9 +1391,6 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Ajuster les colonnes au contenu</value>
   </data>
-  <data name="StatusBarItem.LastSaved" xml:space="preserve">
-    <value>Heure du dernier enregistrement</value>
-  </data>
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Dernier enregistrement {0}</value>
   </data>

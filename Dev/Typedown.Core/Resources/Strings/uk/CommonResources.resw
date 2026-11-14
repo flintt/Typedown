@@ -1391,9 +1391,6 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Підігнати стовпці під вміст</value>
   </data>
-  <data name="StatusBarItem.LastSaved" xml:space="preserve">
-    <value>Час останнього збереження</value>
-  </data>
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Востаннє збережено {0}</value>
   </data>

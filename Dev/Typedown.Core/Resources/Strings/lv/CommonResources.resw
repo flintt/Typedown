@@ -1391,9 +1391,6 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Pielāgot kolonnas saturam</value>
   </data>
-  <data name="StatusBarItem.LastSaved" xml:space="preserve">
-    <value>Pēdējās saglabāšanas laiks</value>
-  </data>
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Pēdējo reizi saglabāts {0}</value>
   </data>

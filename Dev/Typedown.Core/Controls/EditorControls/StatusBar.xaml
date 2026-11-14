@@ -157,29 +157,21 @@
                     <MenuFlyout x:Name="FileFormatMenu" Placement="TopEdgeAlignedRight" Opening="OnFileFormatMenuOpening"/>
                 </Button.Flyout>
             </Button>
-            <!-- Whether the document is on disk, and when auto-save held it back, why (in the tip); a click saves it. -->
+            <!-- Whether the document is on disk, and when auto-save held it back, why (in the tip); when the file was last saved
+                 (its time on disk; the whole date in the tip); a click saves it. -->
             <Button
                 x:Name="SaveStateButton"
                 Padding="8,2,8,2"
                 BorderThickness="0"
                 VerticalAlignment="Stretch"
                 Click="OnSaveStateClick"
-                AutomationProperties.AutomationId="StatusBarSaveState"
-                AutomationProperties.HelpText="{x:Bind SaveStateTip(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}"
-                ToolTipService.ToolTip="{x:Bind SaveStateTip(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}">
+                AutomationProperties.AutomationId="StatusBarSaveState">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon Glyph="{x:Bind SaveStateGlyph(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}" FontSize="12"/>
                     <TextBlock FontSize="12" Text="{x:Bind SaveStateText(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}"/>
+                    <TextBlock x:Name="SaveTimeText" FontSize="12" Visibility="Collapsed" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 </StackPanel>
             </Button>
-            <!-- When the file was last saved (its time on disk), the whole date in the tip; none for a file not on disk. -->
-            <TextBlock
-                x:Name="LastSavedText"
-                Visibility="Collapsed"
-                VerticalAlignment="Center"
-                Padding="2,0,2,0"
-                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                AutomationProperties.AutomationId="StatusBarLastSaved"/>
             <!-- The editor's zoom: smaller, the percent (a click: back to 100%), larger - as View > Zoom. -->
             <StackPanel x:Name="ZoomItems" Orientation="Horizontal" AutomationProperties.AutomationId="StatusBarZoom">
                 <Button

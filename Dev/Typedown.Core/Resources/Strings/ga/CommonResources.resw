@@ -1391,9 +1391,6 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Oiriúnaigh colúin don ábhar</value>
   </data>
-  <data name="StatusBarItem.LastSaved" xml:space="preserve">
-    <value>Am an tsábhála dheireanaigh</value>
-  </data>
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Sábháilte go deireanach {0}</value>
   </data>
