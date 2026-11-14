@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Последнее сохранение {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Избранное заполнено (не больше {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Ещё не сохранено в файл</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Файл сам указывает свою кодировку</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Сначала сохраните изменения</value>
+  </data>
 </root>

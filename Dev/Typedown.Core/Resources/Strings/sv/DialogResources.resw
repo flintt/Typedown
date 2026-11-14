@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Bilden är {0} kB, mer än de {1} kB som är inställda för inbäddning (Inställningar &gt; Bild), så den infogades utan inbäddning.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Ta bort ”{0}”? Det går inte att ångra.</value>
+  </data>
 </root>

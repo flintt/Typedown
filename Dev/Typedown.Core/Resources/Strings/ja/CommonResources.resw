@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>最終保存 {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>お気に入りがいっぱいです（最大 {0} 件）</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>まだファイルに保存されていません</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>ファイル自身がエンコードを示しています</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>先に変更を保存してください</value>
+  </data>
 </root>

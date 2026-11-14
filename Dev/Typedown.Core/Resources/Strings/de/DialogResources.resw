@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Dieses Bild hat {0} KB, mehr als die {1} KB für das Einbetten (Einstellungen &gt; Bild); es wurde ohne Einbetten eingefügt.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>„{0}“ löschen? Das kann nicht rückgängig gemacht werden.</value>
+  </data>
 </root>

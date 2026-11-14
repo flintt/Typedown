@@ -1167,6 +1167,22 @@
     <value>Current heading</value>
     <comment>状态栏右键菜单：显示光标所在标题</comment>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Favourites full ({0} at most)</value>
+    <comment>文件右键菜单：收藏已满，“添加到收藏”不能点；{0} 是收藏上限</comment>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Not saved to a file yet</value>
+    <comment>标签页右键菜单、状态栏编码菜单：文档还没保存过，所以“复制路径”“打开所在位置”等不能点</comment>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>The file names its own encoding</value>
+    <comment>状态栏编码菜单：文件开头有字节顺序标记（BOM），已写明编码，所以不能换编码重新打开</comment>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Save the changes first</value>
+    <comment>状态栏编码菜单：有未保存的修改，换编码重新打开会丢掉它们，所以先保存</comment>
+  </data>
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Save status</value>
     <comment>状态栏右键菜单：显示保存状态</comment>

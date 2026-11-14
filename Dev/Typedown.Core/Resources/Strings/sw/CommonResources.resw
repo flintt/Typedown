@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Ilihifadhiwa mwisho {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Vipendwa vimejaa (kisichozidi {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Bado haijahifadhiwa kwenye faili</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Faili inataja usimbaji wake yenyewe</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Hifadhi mabadiliko kwanza</value>
+  </data>
 </root>

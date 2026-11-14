@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Irudi honek {0} KB ditu, txertatzeko ezarritako {1} KB baino gehiago (Ezarpenak &gt; Irudia); beraz, txertatu gabe sartu da.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" ezabatu? Ezin da desegin.</value>
+  </data>
 </root>

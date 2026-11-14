@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Šis paveikslėlis yra {0} KB, daugiau nei įterpimui nustatyti {1} KB (Parametrai &gt; Paveikslėlis), todėl įdėtas neįterpiant.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Ištrinti „{0}“? To negalima atšaukti.</value>
+  </data>
 </root>

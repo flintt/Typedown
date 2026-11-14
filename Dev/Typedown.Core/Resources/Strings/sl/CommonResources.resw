@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Nazadnje shranjeno {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Priljubljeni so polni (največ {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Še ni shranjeno v datoteko</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Datoteka sama navaja svoje kodiranje</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Najprej shranite spremembe</value>
+  </data>
 </root>

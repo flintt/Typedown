@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Sist lagret {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Favoritter er fulle (høyst {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Ikke lagret i en fil ennå</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Filen oppgir selv kodingen sin</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Lagre endringene først</value>
+  </data>
 </root>

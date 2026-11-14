@@ -115,6 +115,19 @@ namespace Typedown.Core.Services
             return (favorite, favorite || store.Items.Count < FavoritesStore.MaxCount);
         }
 
+        /// <summary>
+        /// The favourite item's words and whether it may be chosen: out of the favourites, into them, or - no room left -
+        /// why not ("Favourites full (20 at most)"; it was greyed and said nothing: the user, 2026-11-13, the menu
+        /// report's M12). One wording for every file menu.
+        /// </summary>
+        public static (string Text, bool Enabled) FavoriteItem(FileEntry entry)
+        {
+            var (isFavorite, canToggle) = FavoriteState(entry);
+            if (isFavorite) return (Locale.GetString("Favorites.Remove"), true);
+            if (CanShowLocation(entry) && !canToggle) return (string.Format(Locale.GetString("Favorites.Full"), FavoritesStore.MaxCount), false);
+            return (Locale.GetString("Favorites.Add"), canToggle);
+        }
+
         /// <summary>A favourite no more, or one now (as the folder or file it is). False when nothing changed.</summary>
         public static bool ToggleFavorite(FileEntry entry)
         {

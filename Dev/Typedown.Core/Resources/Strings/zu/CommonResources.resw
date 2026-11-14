@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Kulondolozwe okokugcina {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Izintandokazi zigcwele (ezingu-{0} kuphela)</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Akukagcinwa efayeleni</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Ifayela lisho ukufakwa kwalo kwekhodi</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Londoloza izinguquko kuqala</value>
+  </data>
 </root>

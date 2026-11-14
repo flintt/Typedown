@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>He {0} KB tēnei pikitia, nui ake i te {1} KB kua tautuhia mō te tāmau (Ngā Tautuhinga &gt; Pikitia), nō reira i kuhua kāore i tāmauhia.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Muku i "{0}"? Kāore e taea te wete.</value>
+  </data>
 </root>

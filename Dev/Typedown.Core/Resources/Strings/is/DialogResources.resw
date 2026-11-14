@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Þessi mynd er {0} KB, meira en {1} KB sem stillt er fyrir innfellingu (Stillingar &gt; Mynd), svo hún var sett inn án innfellingar.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Eyða „{0}“? Ekki er hægt að afturkalla þetta.</value>
+  </data>
 </root>

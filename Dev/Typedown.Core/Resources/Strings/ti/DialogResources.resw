@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>እዚ ስእሊ {0} KB እዩ፣ ንምእታው ካብ ዝተወሰነ {1} KB ይዓቢ (ቅጥዕታት &gt; ስእሊ)፣ ስለዚ ከይኣተወ ተወሲኹ።</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" ይደምሰስ? እዚ ክምለስ ኣይክእልን።</value>
+  </data>
 </root>

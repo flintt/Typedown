@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Azkenekoz gordea {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Gogokoak beteta (gehienez {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Oraindik ez da fitxategi batean gorde</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Fitxategiak bere kodeketa adierazten du</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Gorde lehenik aldaketak</value>
+  </data>
 </root>

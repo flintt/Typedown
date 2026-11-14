@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>حجم هذه الصورة {0} ك.ب، وهو أكبر من {1} ك.ب المحددة للتضمين (الإعدادات &gt; الصورة)، لذا أُدرجت دون تضمين.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>حذف "{0}"؟ لا يمكن التراجع عن ذلك.</value>
+  </data>
 </root>

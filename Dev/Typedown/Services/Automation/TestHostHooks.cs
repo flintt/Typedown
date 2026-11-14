@@ -1266,6 +1266,16 @@ namespace Typedown.Services.Automation
                 await store.FlushAsync();
                 return new Newtonsoft.Json.Linq.JObject();
             }));
+            // Favourites added as they are, without a menu (a case filling the list to its limit): how many were and are.
+            methods.Add(new MethodDescriptor("test.favorites.add", null, "test.favorites.add/1", async (c, ct) =>
+            {
+                var paths = c.Params.OptionalStringArray("paths") ?? throw Params.Invalid("paths", "required");
+                var store = Core.Services.Favorites.Shared;
+                await store.LoadAsync();
+                var added = paths.Count(p => store.Add(p, System.IO.Directory.Exists(p)));
+                await store.FlushAsync();
+                return new Newtonsoft.Json.Linq.JObject { ["added"] = added, ["count"] = store.Items.Count };
+            }));
             // The window's home page: whether it is asked for and shown (the view model and the page on screen), the active
             // tab's document and whether it is blank, the page's lists (favourites, recent files and folders: path,
             // dimmed, the last change shown) and the ids of an edition's sections shown on it (a collapsed one is not).

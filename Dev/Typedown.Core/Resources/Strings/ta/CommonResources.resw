@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>கடைசியாகச் சேமித்தது {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>பிடித்தவை நிரம்பின (அதிகபட்சம் {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>இன்னும் கோப்பாகச் சேமிக்கப்படவில்லை</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>கோப்பு தன் குறியாக்கத்தைத் தானே குறிப்பிடுகிறது</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>முதலில் மாற்றங்களைச் சேமிக்கவும்</value>
+  </data>
 </root>

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Ảnh này {0} KB, lớn hơn {1} KB đặt cho việc nhúng (Cài đặt &gt; Hình ảnh), nên đã được chèn mà không nhúng.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Xóa "{0}"? Không thể hoàn tác.</value>
+  </data>
 </root>

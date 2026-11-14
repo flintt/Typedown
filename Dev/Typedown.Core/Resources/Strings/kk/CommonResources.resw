@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Соңғы рет сақталды {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Таңдаулылар толы (ең көбі {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Әлі файлға сақталмаған</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Файл өз кодтауын өзі көрсетеді</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Алдымен өзгерістерді сақтаңыз</value>
+  </data>
 </root>

@@ -77,7 +77,8 @@ namespace Typedown.Core.Pages.SettingPages
 
         public async Task DeleteConfigAsync()
         {
-            if (ExportConfig != null)
+            // Asked first, naming it (ConfigEditor.ConfirmDeleteAsync).
+            if (ExportConfig != null && await ConfigEditor.ConfirmDeleteAsync(XamlRoot, ExportConfig.Name))
             {
                 var service = this.GetService<IFileExport>();
                 await service.RemoveExportConfig(ExportConfig.Id);

@@ -361,6 +361,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | KU01 | Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question |
 | PS01 | the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again |
 | XM04 | the outline's and a link's menus by real right-clicks: Copy link to heading copies [Beta](#beta), Collapse all and Expand all fold and open the outline, Edit link chooses the address and typing replaces it |
+| XM06 | a greyed menu item says why: a tab of a document not saved yet, Add to favourites with the list full (how many it holds), Reopen with encoding with changes not saved |
 | XM05 | the context menu's format buttons show the format right-clicked: Bold pressed in bold text, Italic in italic, none in plain text; Bold pressed there takes the bold off and shows off after |
 | DC01 | File > Check Document lists a picture and a linked file not there, a link to a heading the document lacks and a formula that cannot be drawn, nothing for what is fine; a row clicked finds its place; mended, nothing listed |
 | QO01 | File > Quick Open by Ctrl+P in the editor: letters of a name in order find files in the side pane folder's subfolders (not a hidden folder's), Down then Enter opens the second, Esc opens nothing |
@@ -448,6 +449,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.folder.menu` | `windowId` | The folder pane's root menu (its name's dropdown) as it would open now: each entry's automation id, text and path. | TestHostHooks.cs |
 | `test.favorites.state` | `windowId` | The favourites: what favorites.json holds (path, folder) and what the window's folder pane shows in its group (path, whether dimmed as missing; null when the pane is not shown). | TestHostHooks.cs |
 | `test.favorites.clear` | - | Every favourite taken out (a case starting from none). | TestHostHooks.cs |
+| `test.favorites.add` | `paths?` | Favourites added as they are, without a menu (a case filling the list to its limit): how many were and are. | TestHostHooks.cs |
 | `test.home.state` | `windowId` | The window's home page: whether it is asked for and shown (the view model and the page on screen), the active tab's document and whether it is blank, the page's lists (favourites, recent files and folders: path, dimmed, the last change shown) and the ids of an edition's sections shown on it (a collapsed one is not). | TestHostHooks.cs |
 | `test.settings.flush` | `windowId` | The settings written to Settings.json now (a case that restarts the host after test.settings.set). | TestHostHooks.cs |
 | `test.layout.contentTop` | `windowId` | Where the content starts below the window's top row, in the window's coordinates: the main page's menu bar row's bottom, or the top of the page the frame shows (the settings, under their caption). E2E CM01. | TestHostHooks.cs |

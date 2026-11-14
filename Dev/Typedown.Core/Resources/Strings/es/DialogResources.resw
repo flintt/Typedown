@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Esta imagen ocupa {0} KB, más que los {1} KB fijados para incrustar (Configuración &gt; Imagen), así que se insertó sin incrustar.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>¿Eliminar «{0}»? No se puede deshacer.</value>
+  </data>
 </root>

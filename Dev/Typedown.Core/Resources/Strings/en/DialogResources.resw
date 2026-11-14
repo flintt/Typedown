@@ -141,6 +141,10 @@
     <value>Failed to create new folder</value>
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Delete "{0}"? This cannot be undone.</value>
+    <comment>设置里删除导出配置或图片上传配置前确认；{0} 是配置的名字</comment>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
     <comment>恢复文件对话框/删除</comment>

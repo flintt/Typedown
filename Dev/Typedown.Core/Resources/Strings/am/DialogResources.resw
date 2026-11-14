@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>ይህ ምስል {0} KB ነው፣ ለማካተት ከተቀመጠው {1} KB ይበልጣል (ቅንብሮች &gt; ምስል)፣ ስለዚህ ሳይካተት ገብቷል።</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" ይሰረዝ? ይህ ሊቀለበስ አይችልም።</value>
+  </data>
 </root>

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>รูปนี้มีขนาด {0} KB เกิน {1} KB ที่ตั้งไว้สำหรับการฝัง (การตั้งค่า &gt; รูปภาพ) จึงแทรกแบบไม่ฝัง</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>ลบ "{0}" หรือไม่ ไม่สามารถเลิกทำได้</value>
+  </data>
 </root>

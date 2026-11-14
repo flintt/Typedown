@@ -275,9 +275,7 @@ namespace Typedown.Core.Controls
                 newWindow.Visibility = FileEntryActions.CanOpenInNewWindow(entry) ? Visibility.Visible : Visibility.Collapsed;
             var favorite = flyout.Items.OfType<MenuFlyoutItem>().FirstOrDefault(x => "Favorite".Equals(x.Tag));
             if (favorite == null) return;
-            var (isFavorite, canToggle) = FileEntryActions.FavoriteState(entry);
-            favorite.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
-            favorite.IsEnabled = canToggle;
+            (favorite.Text, favorite.IsEnabled) = FileEntryActions.FavoriteItem(entry);
         }
 
         private async void OnOpenEntryClick(object sender, RoutedEventArgs e) => await FileEntryActions.Open(EntryOf(sender), ViewModel?.FileViewModel);

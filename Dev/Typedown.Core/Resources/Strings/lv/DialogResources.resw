@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Šis attēls ir {0} KB, vairāk nekā iegulšanai iestatītie {1} KB (Iestatījumi &gt; Attēls), tāpēc tas ievietots bez iegulšanas.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Vai dzēst “{0}”? To nevar atsaukt.</value>
+  </data>
 </root>

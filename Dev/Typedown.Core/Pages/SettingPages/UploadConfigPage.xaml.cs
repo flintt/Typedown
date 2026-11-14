@@ -78,7 +78,8 @@ namespace Typedown.Core.Pages.SettingPages
 
         public async Task DeleteConfigAsync()
         {
-            if (ImageUploadConfig != null)
+            // Asked first, naming it (ConfigEditor.ConfirmDeleteAsync).
+            if (ImageUploadConfig != null && await ConfigEditor.ConfirmDeleteAsync(XamlRoot, ImageUploadConfig.Name))
             {
                 var service = this.GetService<ImageUpload>();
                 await service.RemoveImageUploadConfig(ImageUploadConfig.Id);

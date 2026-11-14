@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Gambar ini {0} KB, lebih dari {1} KB yang diatur untuk disematkan (Pengaturan &gt; Gambar), jadi disisipkan tanpa disematkan.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Hapus "{0}"? Tindakan ini tidak dapat dibatalkan.</value>
+  </data>
 </root>

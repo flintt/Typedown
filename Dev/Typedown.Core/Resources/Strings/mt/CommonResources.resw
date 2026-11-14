@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Salvat l-aħħar {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Il-favoriti mimlija (l-aktar {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Għadu mhux salvat f’fajl</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Il-fajl isemmi l-kodifikazzjoni tiegħu stess</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Issejvja l-bidliet l-ewwel</value>
+  </data>
 </root>

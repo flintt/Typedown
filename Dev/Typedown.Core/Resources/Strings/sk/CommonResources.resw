@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Naposledy uložené {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Obľúbené sú plné (najviac {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Zatiaľ neuložené do súboru</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Súbor uvádza vlastné kódovanie</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Najprv uložte zmeny</value>
+  </data>
 </root>

@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>마지막 저장 {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>즐겨찾기가 가득 찼습니다(최대 {0}개)</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>아직 파일로 저장되지 않음</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>파일이 자체 인코딩을 지정함</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>먼저 변경 내용을 저장하세요</value>
+  </data>
 </root>

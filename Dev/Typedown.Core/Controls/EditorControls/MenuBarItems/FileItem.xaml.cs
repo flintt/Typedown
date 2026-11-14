@@ -168,8 +168,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 items.Add(newWindow);
             }
             items.Add(new MenuFlyoutSeparator());
-            var (isFavorite, canToggle) = FileEntryActions.FavoriteState(entry);
-            var favorite = new MenuFlyoutItem { Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add"), IsEnabled = canToggle };
+            var (favoriteText, canToggle) = FileEntryActions.FavoriteItem(entry);
+            var favorite = new MenuFlyoutItem { Text = favoriteText, IsEnabled = canToggle };
             AutomationProperties.SetAutomationId(favorite, "RecentFavoriteItem");
             favorite.Click += (s, e) => FileEntryActions.ToggleFavorite(entry);
             items.Add(favorite);

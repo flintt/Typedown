@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>ఈ చిత్రం {0} KB, పొందుపరచడానికి పెట్టిన {1} KB (సెట్టింగ్‌లు &gt; చిత్రం) కంటే ఎక్కువ, కాబట్టి పొందుపరచకుండా చేర్చబడింది.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}"ని తొలగించాలా? దీన్ని రద్దు చేయలేరు.</value>
+  </data>
 </root>

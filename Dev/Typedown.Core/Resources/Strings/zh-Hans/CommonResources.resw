@@ -1410,4 +1410,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>上次保存 {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>收藏已满（最多 {0} 个）</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>还没有保存为文件</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>文件已写明自己的编码</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>请先保存修改</value>
+  </data>
 </root>

@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Viimati salvestatud {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Lemmikud on täis (kuni {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Pole veel faili salvestatud</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Fail ütleb ise oma kodeeringu</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Salvestage esmalt muudatused</value>
+  </data>
 </root>

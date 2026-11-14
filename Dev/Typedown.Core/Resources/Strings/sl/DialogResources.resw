@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Ta slika ima {0} KB, več od {1} KB, nastavljenih za vdelavo (Nastavitve &gt; Slika), zato je bila vstavljena brez vdelave.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Želite izbrisati »{0}«? Tega ni mogoče razveljaviti.</value>
+  </data>
 </root>

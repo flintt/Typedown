@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Salvat ultima dată {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Favoritele sunt pline (cel mult {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Încă nu a fost salvat într-un fișier</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Fișierul își indică singur codificarea</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Salvați mai întâi modificările</value>
+  </data>
 </root>

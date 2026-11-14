@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Deze afbeelding is {0} KB, meer dan de {1} KB die voor insluiten is ingesteld (Instellingen &gt; Afbeelding), dus is ze zonder insluiten ingevoegd.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" verwijderen? Dit kan niet ongedaan worden gemaakt.</value>
+  </data>
 </root>

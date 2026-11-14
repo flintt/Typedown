@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Это изображение весит {0} КБ — больше заданных для встраивания {1} КБ (Параметры &gt; Изображение), поэтому оно вставлено без встраивания.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Удалить «{0}»? Это действие нельзя отменить.</value>
+  </data>
 </root>

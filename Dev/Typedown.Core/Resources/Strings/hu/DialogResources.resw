@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>A kép {0} KB, több a beágyazáshoz beállított {1} KB-nál (Beállítások &gt; Kép), ezért beágyazás nélkül került be.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Törli: „{0}”? Ez nem vonható vissza.</value>
+  </data>
 </root>

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Hierdie prent is {0} KB, meer as die {1} KB wat vir inbedding gestel is (Instellings &gt; Prent), dus is dit sonder inbedding ingevoeg.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Skrap "{0}"? Dit kan nie ontdoen word nie.</value>
+  </data>
 </root>

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Сликата има {0} KB, повеќе од {1} KB поставени за вградување (Поставки &gt; Слика), па е вметната без вградување.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Да се избрише „{0}“? Ова не може да се врати.</value>
+  </data>
 </root>

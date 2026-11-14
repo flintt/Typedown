@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>ଏହି ଛବିଟି {0} KB, ଏମ୍ବେଡ୍ ପାଇଁ ସ୍ଥିର {1} KB (ସେଟିଂସ &gt; ଛବି) ଠାରୁ ଅଧିକ, ତେଣୁ ଏମ୍ବେଡ୍ ନକରି ଭରାଗଲା।</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>"{0}" ଡିଲିଟ୍ କରିବେ? ଏହାକୁ ପୂର୍ବାବସ୍ଥାକୁ ଫେରାଇ ହେବ ନାହିଁ।</value>
+  </data>
 </root>

@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>រូបភាពនេះមាន {0} KB ច្រើនជាង {1} KB ដែលកំណត់សម្រាប់ការបង្កប់ (ការកំណត់ &gt; រូបភាព) ដូច្នេះវាត្រូវបានបញ្ចូលដោយមិនបង្កប់។</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>លុប "{0}"? មិនអាចមិនធ្វើវិញបានទេ។</value>
+  </data>
 </root>

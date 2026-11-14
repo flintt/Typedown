@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>See pilt on {0} KB, rohkem kui manustamiseks seatud {1} KB (Sätted &gt; Pilt), seega lisati see manustamata.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Kas kustutada „{0}“? Seda ei saa tagasi võtta.</value>
+  </data>
 </root>

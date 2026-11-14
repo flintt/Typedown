@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Lesi sithombe singu-{0} KB, ngaphezu kuka-{1} KB osethelwe ukushumeka (Izilungiselelo &gt; Isithombe), ngakho sifakwe ngaphandle kokushumeka.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Susa "{0}"? Lokhu akukwazi ukuhlehliswa.</value>
+  </data>
 </root>

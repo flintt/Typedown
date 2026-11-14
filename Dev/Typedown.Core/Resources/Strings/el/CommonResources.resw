@@ -1394,4 +1394,16 @@
   <data name="SaveState.LastSaved" xml:space="preserve">
     <value>Τελευταία αποθήκευση {0}</value>
   </data>
+  <data name="Favorites.Full" xml:space="preserve">
+    <value>Τα αγαπημένα είναι πλήρη (έως {0})</value>
+  </data>
+  <data name="Tab.NotSavedYet" xml:space="preserve">
+    <value>Δεν έχει αποθηκευτεί ακόμη σε αρχείο</value>
+  </data>
+  <data name="Encoding.ReopenHasBom" xml:space="preserve">
+    <value>Το αρχείο δηλώνει τη δική του κωδικοποίηση</value>
+  </data>
+  <data name="Encoding.ReopenUnsaved" xml:space="preserve">
+    <value>Αποθηκεύστε πρώτα τις αλλαγές</value>
+  </data>
 </root>

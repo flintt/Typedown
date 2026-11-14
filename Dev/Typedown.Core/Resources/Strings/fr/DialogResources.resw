@@ -364,4 +364,7 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>Cette image fait {0} Ko, plus que les {1} Ko fixés pour l’intégration (Paramètres &gt; Image) ; elle a été insérée sans intégration.</value>
   </data>
+  <data name="DeleteConfigConfirm" xml:space="preserve">
+    <value>Supprimer « {0} » ? Cette action est irréversible.</value>
+  </data>
 </root>
