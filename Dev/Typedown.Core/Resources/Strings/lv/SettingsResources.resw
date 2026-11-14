@@ -365,6 +365,14 @@
     <value>Turpiniet skriet</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Nospiediet komandas “Jauns no starpliktuves” īsinājumtaustiņu jebkurā programmā: logs nonāk priekšplānā ar starpliktuves tekstu jaunā cilnē. Lietotnei jādarbojas; taustiņu iestata sadaļā Īsinājumtaustiņi, un citas programmas to nesaņem, kamēr šis ir ieslēgts.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>“Jauns no starpliktuves” arī citās programmās</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Kad logs tiek minimizēts, redaktors atdod atmiņu, ko var (garam dokumentam ap gigabaitu); loga atjaunošana var aizņemt mirkli ilgāk.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

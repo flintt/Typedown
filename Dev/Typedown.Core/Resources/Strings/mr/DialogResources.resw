@@ -173,6 +173,14 @@
     <value>ठीक आहे</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>क्लिपबोर्डवर कोणताही मजकूर नाही.</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} आधीच दुसरा प्रोग्राम वापरत आहे. सेटिंग्ज &gt; शॉर्टकटमध्ये «क्लिपबोर्डवरून नवीन» साठी दुसरी की निवडा.</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>कृपया मुख्य संयोजन दाबा</value>
     <comment>请按下组合键</comment>

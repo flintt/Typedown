@@ -365,6 +365,14 @@
     <value>Çalışmaya devam edin</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>«Panodan yeni» kısayoluna herhangi bir programda basın: pencere öne gelir ve panodaki metin yeni bir sekmede olur. Uygulamanın çalışıyor olması gerekir; tuş Kısayollar'da ayarlanır ve bu açıkken diğer programlar o tuşu almaz.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Panodan yeni» diğer programlarda da</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Bir pencere simge durumuna küçültüldüğünde düzenleyici bırakabildiği belleği geri verir (uzun bir belgede yaklaşık bir gigabayt); pencereyi geri getirmek biraz daha uzun sürebilir.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

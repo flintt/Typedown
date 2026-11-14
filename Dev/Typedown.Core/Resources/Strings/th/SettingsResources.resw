@@ -365,6 +365,14 @@
     <value>ทํางานต่อไป</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>กดทางลัดของ «สร้างใหม่จากคลิปบอร์ด» ในโปรแกรมใดก็ได้ หน้าต่างจะขึ้นมาด้านหน้าพร้อมข้อความจากคลิปบอร์ดในแท็บใหม่ แอปต้องทำงานอยู่ ตั้งปุ่มได้ในทางลัด และโปรแกรมอื่นจะไม่ได้รับปุ่มนั้นขณะที่เปิดสิ่งนี้</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«สร้างใหม่จากคลิปบอร์ด» ในโปรแกรมอื่นด้วย</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>เมื่อย่อหน้าต่าง ตัวแก้ไขจะคืนหน่วยความจำที่คืนได้ (ประมาณหนึ่งกิกะไบต์สำหรับเอกสารยาว) การคืนหน้าต่างอาจใช้เวลานานขึ้นเล็กน้อย</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

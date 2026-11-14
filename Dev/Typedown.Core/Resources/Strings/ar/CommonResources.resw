@@ -629,6 +629,10 @@
     <value>نافذة جديدة</value>
     <comment>新建/新建窗口</comment>
   </data>
+  <data name="NewFromClipboard" xml:space="preserve">
+    <value>جديد من الحافظة</value>
+    <comment>新建/从剪贴板新建</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>لا يوجد إجراء</value>
     <comment>自动操作/无操作</comment>

@@ -173,6 +173,14 @@
     <value>ശരി</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>ക്ലിപ്പ്ബോർഡിൽ ടെക്സ്റ്റ് ഇല്ല.</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} മറ്റൊരു പ്രോഗ്രാം ഇതിനകം ഉപയോഗിക്കുന്നു. ക്രമീകരണങ്ങൾ &gt; കുറുക്കുവഴികളിൽ «ക്ലിപ്പ്ബോർഡിൽ നിന്ന് പുതിയത്»-ന് മറ്റൊരു കീ തിരഞ്ഞെടുക്കുക.</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>കീ കോമ്പിനേഷൻ അമർത്തുക</value>
     <comment>请按下组合键</comment>

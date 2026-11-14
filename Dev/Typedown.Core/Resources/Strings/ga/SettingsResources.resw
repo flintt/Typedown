@@ -365,6 +365,14 @@
     <value>Coinnigh ort ag rith</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Brúigh aicearra Nua ón ngearrthaisce in aon ríomhchlár: tagann an fhuinneog chun tosaigh le téacs na gearrthaisce i gcluaisín nua. Caithfidh an aip a bheith ag rith; socraítear an eochair in Aicearraí, agus ní fhaigheann ríomhchláir eile í fad atá sé seo ar siúl.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>Nua ón ngearrthaisce i ríomhchláir eile freisin</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Nuair a íoslaghdaítear fuinneog, tugann an t-eagarthóir ar ais an chuimhne is féidir leis (thart ar ghigibheart le doiciméad fada); d'fhéadfadh sé nóiméad níos faide a thógáil an fhuinneog a athchóiriú.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

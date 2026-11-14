@@ -365,6 +365,14 @@
     <value>프로세스 유지</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>어느 프로그램에서든 '클립보드에서 새로 만들기' 바로 가기 키를 누르면 창이 앞으로 나오고 클립보드의 텍스트가 새 탭에 들어갑니다. 앱이 실행 중이어야 하며, 키는 바로 가기 키에서 설정합니다. 이 기능이 켜져 있는 동안 다른 프로그램은 이 키를 받지 못합니다.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>다른 프로그램에서도 '클립보드에서 새로 만들기'</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>창을 최소화하면 편집기가 돌려줄 수 있는 메모리를 반환합니다(긴 문서에서는 약 1GB). 창을 다시 여는 데 조금 더 걸릴 수 있습니다.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

@@ -365,6 +365,14 @@
     <value>Іске қосуды жалғастыру</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Кез келген бағдарламада «Алмасу буферінен жаңа» тіркесімін басыңыз: терезе алдыға шығады, буфер мәтіні жаңа қойындыда болады. Қолданба іске қосулы болуы керек; перне Пернелер тіркесімі бөлімінде орнатылады, бұл қосулы тұрғанда басқа бағдарламалар оны алмайды.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Алмасу буферінен жаңа» басқа бағдарламаларда да</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Терезе кішірейтілгенде, өңдегіш қайтара алатын жадты қайтарады (ұзын құжатта шамамен бір гигабайт); терезені қалпына келтіру сәл ұзағырақ болуы мүмкін.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

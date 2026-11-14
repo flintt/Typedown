@@ -365,6 +365,14 @@
     <value>Tiếp tục chạy</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Nhấn phím tắt của «Mới từ khay nhớ tạm» trong bất kỳ chương trình nào: cửa sổ hiện lên phía trước với văn bản của khay nhớ tạm trong một thẻ mới. Ứng dụng phải đang chạy; phím được đặt trong Phím tắt, và các chương trình khác sẽ không nhận được phím đó khi tùy chọn này đang bật.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Mới từ khay nhớ tạm» cả trong chương trình khác</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Khi thu nhỏ cửa sổ, trình soạn thảo trả lại bộ nhớ có thể trả (khoảng một gigabyte với tài liệu dài); khôi phục cửa sổ có thể lâu hơn một chút.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

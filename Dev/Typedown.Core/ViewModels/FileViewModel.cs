@@ -65,6 +65,8 @@ namespace Typedown.Core.ViewModels
         public string FileName => Path.GetFileName(FilePath);
 
         public Command<Unit> NewFileCommand { get; } = new();
+
+        public Command<Unit> NewFromClipboardCommand { get; } = new();
         public Command<string> NewWindowCommand { get; } = new();
         public Command<string> OpenFileCommand { get; } = new();
         public Command<string> OpenFolderCommand { get; } = new();
@@ -128,6 +130,7 @@ namespace Typedown.Core.ViewModels
                 if (SettingsViewModel.ShowHomeOnNewTab) Home?.Show(); else Home?.Hide();
                 MarkdownEditor?.FocusEditorInPlace();
             });
+            NewFromClipboardCommand.OnExecute.Subscribe(async _ => await NewFromClipboardAsync());
             OpenFileCommand.OnExecute.Subscribe(async x => await OpenFile(x));
             OpenFolderCommand.OnExecute.Subscribe(async x => await OpenFolder(x));
             SaveAsCommand.OnExecute.Subscribe(async _ => await SaveAs());
@@ -605,6 +608,34 @@ namespace Typedown.Core.ViewModels
         {
             await NewFileFun();
             Home?.Hide();
+        }
+
+        /// <summary>
+        /// File > New from Clipboard (Alt+Shift+N; from other programs too with Settings > General): a new tab, shown, with
+        /// what the clipboard holds pasted in as Ctrl+V pastes it - text as it is, a web page's formatting as Markdown. With
+        /// no text there, it says so and makes no tab.
+        /// </summary>
+        public async Task NewFromClipboardAsync()
+        {
+            var clipboard = EditorViewModel.Clipboard;
+            bool hasText;
+            try { hasText = clipboard != null && (clipboard.ContainsText(TextDataFormat.UnicodeText) || clipboard.ContainsText(TextDataFormat.Html)); }
+            catch (Exception ex) { Log.Debug($"new from clipboard: the clipboard could not be read: {ex.Message}"); hasText = false; }
+            if (!hasText)
+            {
+                Log.Debug("new from clipboard: no text on the clipboard; no tab made");
+                await AppContentDialog.Create(Locale.GetString("NewFromClipboard"), Locale.GetDialogString("NoClipboardText"), Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                return;
+            }
+            await NewFileFun();
+            Home?.Hide();
+            // Pasted once the page has the new document: before, the paste went into the page's previous one.
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            while (EditorViewModel.ConfirmedLoadId < EditorViewModel.LoadId && clock.ElapsedMilliseconds < 10000)
+                await Task.Delay(50);
+            Log.Debug($"new from clipboard: the new document in the page after {clock.ElapsedMilliseconds} ms; pasting");
+            EditorViewModel.Paste("normal");
+            MarkdownEditor?.FocusEditorInPlace();
         }
 
         /// <summary>

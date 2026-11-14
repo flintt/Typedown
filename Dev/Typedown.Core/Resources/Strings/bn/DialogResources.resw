@@ -173,6 +173,14 @@
     <value>ঠিক আছে</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>ক্লিপবোর্ডে কোনো লেখা নেই।</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} ইতিমধ্যে অন্য একটি প্রোগ্রাম ব্যবহার করছে। সেটিংস &gt; শর্টকাটে «ক্লিপবোর্ড থেকে নতুন»-এর জন্য অন্য কী বেছে নিন।</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>দয়া করে মূল সংমিশ্রণটি টিপুন</value>
     <comment>请按下组合键</comment>

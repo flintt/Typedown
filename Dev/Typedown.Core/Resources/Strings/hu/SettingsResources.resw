@@ -365,6 +365,14 @@
     <value>Folytasd a futást</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Nyomja meg az „Új a vágólapról” billentyűparancsát bármelyik programban: az ablak előre kerül, a vágólap szövege pedig egy új lapon lesz. Az alkalmazásnak futnia kell; a billentyű a Billentyűparancsoknál állítható be, és amíg ez be van kapcsolva, más programok nem kapják meg.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>„Új a vágólapról” más programokban is</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Ha egy ablakot kis méretre állít, a szerkesztő visszaadja a nélkülözhető memóriát (hosszú dokumentumnál kb. egy gigabájtot); az ablak visszaállítása kicsit tovább tarthat.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

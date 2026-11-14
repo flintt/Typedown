@@ -173,6 +173,14 @@
     <value>ÓKEI</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>Enginn texti er á klippiborðinu.</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} er þegar notað af öðru forriti. Veldu annan lykil fyrir Nýtt af klippiborði í Stillingar &gt; Flýtileiðir.</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>Vinsamlegast ýttu á lyklasamsetninguna</value>
     <comment>请按下组合键</comment>

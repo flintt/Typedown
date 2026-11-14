@@ -365,6 +365,14 @@
     <value>Seguir corrent</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Premeu la drecera de «Nou des del porta-retalls» en qualsevol programa: la finestra passa al davant amb el text del porta-retalls en una pestanya nova. L'aplicació ha d'estar en execució; la tecla es defineix a Dreceres, i els altres programes no la reben mentre això estigui activat.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Nou des del porta-retalls» també en altres programes</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Quan es minimitza una finestra, l'editor retorna la memòria que pot (prop d'un gigabyte amb un document llarg); restaurar la finestra pot trigar una mica més.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

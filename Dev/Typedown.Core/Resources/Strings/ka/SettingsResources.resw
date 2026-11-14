@@ -365,6 +365,14 @@
     <value>გააგრძელეთ სირბილი</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>დააჭირეთ „ახალი ბუფერიდან“-ის მალსახმობს ნებისმიერ პროგრამაში: ფანჯარა წინ გამოდის და ბუფერის ტექსტი ახალ ჩანართშია. აპი გაშვებული უნდა იყოს; კლავიში მალსახმობებში დგინდება და სანამ ეს ჩართულია, სხვა პროგრამები მას ვეღარ იღებენ.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>„ახალი ბუფერიდან“ სხვა პროგრამებშიც</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>ფანჯრის ჩაკეცვისას რედაქტორი აბრუნებს იმ მეხსიერებას, რაც შეუძლია (გრძელ დოკუმენტზე დაახლოებით ერთი გიგაბაიტი); ფანჯრის აღდგენას შეიძლება ცოტა მეტი დრო დასჭირდეს.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

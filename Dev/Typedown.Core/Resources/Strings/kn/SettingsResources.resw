@@ -365,6 +365,14 @@
     <value>ಚಲಿಸುತ್ತಲೇ ಇರಿ</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>ಯಾವುದೇ ಪ್ರೋಗ್ರಾಂನಲ್ಲಿ «ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ಹೊಸದು» ಶಾರ್ಟ್‌ಕಟ್ ಒತ್ತಿ: ವಿಂಡೋ ಮುಂದೆ ಬರುತ್ತದೆ, ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನ ಪಠ್ಯ ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿರುತ್ತದೆ. ಆ್ಯಪ್ ಚಾಲನೆಯಲ್ಲಿರಬೇಕು; ಕೀಯನ್ನು ಶಾರ್ಟ್‌ಕಟ್‌ಗಳಲ್ಲಿ ಹೊಂದಿಸಲಾಗುತ್ತದೆ, ಇದು ಆನ್ ಇರುವವರೆಗೆ ಬೇರೆ ಪ್ರೋಗ್ರಾಂಗಳಿಗೆ ಅದು ಸಿಗುವುದಿಲ್ಲ.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>ಬೇರೆ ಪ್ರೋಗ್ರಾಂಗಳಲ್ಲೂ «ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ಹೊಸದು»</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>ವಿಂಡೋ ಕಿರಿದಾಗಿಸಿದಾಗ ಸಂಪಾದಕ ಸಾಧ್ಯವಾದಷ್ಟು ಮೆಮೊರಿಯನ್ನು ಹಿಂದಿರುಗಿಸುತ್ತದೆ (ಉದ್ದ ದಾಖಲೆಯಲ್ಲಿ ಸುಮಾರು ಒಂದು ಗಿಗಾಬೈಟ್); ವಿಂಡೋ ಮರಳಿ ತರಲು ಸ್ವಲ್ಪ ಹೆಚ್ಚು ಸಮಯ ಹಿಡಿಯಬಹುದು.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

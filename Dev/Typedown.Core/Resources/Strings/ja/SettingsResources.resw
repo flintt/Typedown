@@ -365,6 +365,14 @@
     <value>起動し続ける</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>どのプログラムでも「クリップボードから新規作成」のショートカットを押すと、ウィンドウが前面に出て、クリップボードのテキストが新しいタブに入ります。アプリが実行中である必要があります。キーはショートカットで設定し、オンの間はほかのプログラムにそのキーが届かなくなります。</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>ほかのプログラムでも「クリップボードから新規作成」</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>ウィンドウを最小化すると、エディターが解放できるメモリを返します（長い文書では約 1 GB）。ウィンドウを元に戻すのに少し時間がかかることがあります。</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

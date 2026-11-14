@@ -14,6 +14,16 @@ namespace Typedown.Core.ViewModels
         [Locale("File", "NewWindow")]
         public ShortcutKey ShortcutNewWindow { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.N)); set => SetSettingValue(value); }
 
+        /// <summary>
+        /// Alt+Shift+N: free in the app and the editor page. Not Ctrl+Alt+N: Ctrl+Alt is AltGr on Polish and other
+        /// keyboards, where AltGr+N types a letter. Also the global shortcut's key (Services.GlobalShortcut), read from the
+        /// settings store where no window is open.
+        /// </summary>
+        public static readonly ShortcutKey DefaultShortcutNewFromClipboard = new(Mod.Menu | Mod.Shift, Key.N);
+
+        [Locale("File", "NewFromClipboard")]
+        public ShortcutKey ShortcutNewFromClipboard { get => GetSettingValue<ShortcutKey>(DefaultShortcutNewFromClipboard); set => SetSettingValue(value); }
+
         [Locale("File", "Open")]
         public ShortcutKey ShortcutOpenFile { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.O)); set => SetSettingValue(value); }
 

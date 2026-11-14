@@ -365,6 +365,14 @@
     <value>Mantener ejecución</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Pulse el atajo de «Nuevo desde el portapapeles» en cualquier programa: la ventana pasa al frente con el texto del portapapeles en una pestaña nueva. La aplicación debe estar abierta; la tecla se define en Atajos, y los demás programas no la reciben mientras esto esté activado.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«Nuevo desde el portapapeles» también en otros programas</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Al minimizar una ventana, el editor devuelve la memoria que puede (cerca de un gigabyte con un documento largo); restaurar la ventana puede tardar un poco más.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

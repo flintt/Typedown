@@ -365,6 +365,14 @@
     <value>Nastavi trčati</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Pritisnite prečac za „Novo iz međuspremnika” u bilo kojem programu: prozor dolazi naprijed s tekstom iz međuspremnika u novoj kartici. Aplikacija mora biti pokrenuta; tipka se postavlja u Prečacima, a drugi programi je ne primaju dok je ovo uključeno.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>„Novo iz međuspremnika” i u drugim programima</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Kad se prozor minimizira, uređivač vraća memoriju koju može (oko gigabajt uz dugi dokument); vraćanje prozora može potrajati trenutak dulje.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

@@ -365,6 +365,14 @@
     <value>Me haere tonu</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Pēhia te pokatata o Hou mai i te papatopenga i tētahi hōtaka: ka puta mai te matapihi ki mua me te kuputuhi o te papatopenga i tētahi ripa hou. Me rere te taupānga; ka tautuhia te pātuhi i Ngā Pokatata, ā, kāore e whiwhi ētahi atu hōtaka i taua pātuhi i te wā e whakakāngia ana tēnei.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>Hou mai i te papatopenga i ētahi atu hōtaka hoki</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Ina whakaitihia tētahi matapihi, ka whakahokia e te ētita te pūmahara ka taea (tata ki te kotahi gigapai mō tētahi tuhinga roa); ka roa ake pea te whakahoki mai i te matapihi.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

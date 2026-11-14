@@ -365,6 +365,14 @@
     <value>Bėgiokite toliau</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Paspauskite komandos „Naujas iš iškarpinės“ sparčiuosius klavišus bet kurioje programoje: langas iškyla į priekį su iškarpinės tekstu naujame skirtuke. Programėlė turi veikti; klavišas nustatomas Sparčiuosiuose klavišuose, o kitos programos jo negauna, kol tai įjungta.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>„Naujas iš iškarpinės“ ir kitose programose</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Sumažinus langą, rengyklė grąžina atmintį, kurią gali (ilgo dokumento atveju apie gigabaitą); lango atkūrimas gali užtrukti šiek tiek ilgiau.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

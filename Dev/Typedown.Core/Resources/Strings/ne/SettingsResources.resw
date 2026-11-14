@@ -365,6 +365,14 @@
     <value>दौडिरहनुहोस्</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>कुनै पनि प्रोग्राममा «क्लिपबोर्डबाट नयाँ» को सर्टकट थिच्नुहोस्: विन्डो अगाडि आउँछ र क्लिपबोर्डको पाठ नयाँ ट्याबमा हुन्छ। एप चलिरहेको हुनुपर्छ; कुञ्जी सर्टकटमा सेट हुन्छ, र यो खुला रहँदासम्म अन्य प्रोग्रामले त्यो पाउँदैनन्।</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>अन्य प्रोग्राममा पनि «क्लिपबोर्डबाट नयाँ»</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>विन्डो सानो पार्दा सम्पादकले सकेजति मेमोरी फिर्ता दिन्छ (लामो कागजातमा करिब एक गिगाबाइट); विन्डो फर्काउन अलि बढी समय लाग्न सक्छ।</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

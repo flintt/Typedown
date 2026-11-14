@@ -365,6 +365,14 @@
     <value>Vazhdo të vraposh</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Shtypni shkurtoren e «I ri nga kujtesa e fragmenteve» në çdo program: dritarja del përpara me tekstin e kujtesës në një skedë të re. Aplikacioni duhet të jetë në punë; tasti caktohet te Shkurtoret, dhe programet e tjera nuk e marrin ndërsa kjo është aktive.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>«I ri nga kujtesa e fragmenteve» edhe në programe të tjera</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Kur një dritare minimizohet, redaktuesi kthen memorien që mundet (rreth një gigabajt me një dokument të gjatë); rikthimi i dritares mund të zgjasë pak më shumë.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

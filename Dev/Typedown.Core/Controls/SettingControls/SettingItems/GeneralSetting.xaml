@@ -119,6 +119,12 @@
             </controls:NormalSettingItem.Icon>
             <ToggleSwitch IsOn="{x:Bind Settings.KeepRun, Mode=TwoWay}"/>
         </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=General.GlobalNewFromClipboard.Title}" Description="{u:LocaleString Key=General.GlobalNewFromClipboard.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe77f;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch AutomationProperties.AutomationId="GlobalNewFromClipboard" IsOn="{x:Bind Settings.GlobalNewFromClipboard, Mode=TwoWay}"/>
+        </controls:NormalSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=General.ReleaseMemoryWhenMinimized.Title}" Description="{u:LocaleString Key=General.ReleaseMemoryWhenMinimized.Description}">
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xe964;"/>

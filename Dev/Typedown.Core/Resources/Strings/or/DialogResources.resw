@@ -173,6 +173,14 @@
     <value>ଠିକ୍‌ ଅଛି</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡରେ କୌଣସି ପାଠ୍ୟ ନାହିଁ।</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} ଆଗରୁ ଅନ୍ୟ ଏକ ପ୍ରୋଗ୍ରାମ ବ୍ୟବହାର କରୁଛି। ସେଟିଂସ &gt; ସର୍ଟକଟରେ «କ୍ଲିପବୋର୍ଡରୁ ନୂଆ» ପାଇଁ ଅନ୍ୟ କି ବାଛନ୍ତୁ।</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>ଦୟାକରି ମୁଖ୍ୟ ମିଶ୍ରଣ ଦବାନ୍ତୁ</value>
     <comment>请按下组合键</comment>

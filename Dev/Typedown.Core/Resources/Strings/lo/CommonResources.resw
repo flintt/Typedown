@@ -629,6 +629,10 @@
     <value>ປ່ອງຢ້ຽມໃຫມ່</value>
     <comment>新建/新建窗口</comment>
   </data>
+  <data name="NewFromClipboard" xml:space="preserve">
+    <value>ໃໝ່ຈາກຄລິບບອດ</value>
+    <comment>新建/从剪贴板新建</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>ບໍ່ມີການກະທໍາ</value>
     <comment>自动操作/无操作</comment>

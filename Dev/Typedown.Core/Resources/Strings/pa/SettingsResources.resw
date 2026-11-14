@@ -365,6 +365,14 @@
     <value>ਚੱਲਦੇ ਰਹੋ</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>ਕਿਸੇ ਵੀ ਪ੍ਰੋਗਰਾਮ ਵਿੱਚ «ਕਲਿੱਪਬੋਰਡ ਤੋਂ ਨਵਾਂ» ਦਾ ਸ਼ਾਰਟਕੱਟ ਦਬਾਓ: ਵਿੰਡੋ ਅੱਗੇ ਆਉਂਦੀ ਹੈ ਅਤੇ ਕਲਿੱਪਬੋਰਡ ਦੀ ਲਿਖਤ ਨਵੀਂ ਟੈਬ ਵਿੱਚ ਹੁੰਦੀ ਹੈ। ਐਪ ਚੱਲ ਰਹੀ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ; ਕੁੰਜੀ ਸ਼ਾਰਟਕੱਟ ਵਿੱਚ ਸੈੱਟ ਹੁੰਦੀ ਹੈ, ਅਤੇ ਇਹ ਚਾਲੂ ਰਹਿਣ ਤੱਕ ਹੋਰ ਪ੍ਰੋਗਰਾਮਾਂ ਨੂੰ ਉਹ ਨਹੀਂ ਮਿਲਦੀ।</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>ਹੋਰ ਪ੍ਰੋਗਰਾਮਾਂ ਵਿੱਚ ਵੀ «ਕਲਿੱਪਬੋਰਡ ਤੋਂ ਨਵਾਂ»</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>ਵਿੰਡੋ ਛੋਟੀ ਕਰਨ 'ਤੇ ਸੰਪਾਦਕ ਜਿੰਨੀ ਹੋ ਸਕੇ ਮੈਮੋਰੀ ਵਾਪਸ ਕਰਦਾ ਹੈ (ਲੰਬੇ ਦਸਤਾਵੇਜ਼ ਵਿੱਚ ਲਗਭਗ ਇੱਕ ਗੀਗਾਬਾਈਟ); ਵਿੰਡੋ ਵਾਪਸ ਲਿਆਉਣ ਵਿੱਚ ਥੋੜ੍ਹਾ ਵੱਧ ਸਮਾਂ ਲੱਗ ਸਕਦਾ ਹੈ।</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

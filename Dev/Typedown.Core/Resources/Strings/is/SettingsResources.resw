@@ -365,6 +365,14 @@
     <value>Haltu áfram að hlaupa</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Ýttu á flýtileið Nýtt af klippiborði í hvaða forriti sem er: glugginn kemur fram með texta klippiborðsins í nýjum flipa. Forritið þarf að vera í gangi; lykillinn er stilltur í Flýtileiðum og önnur forrit fá hann ekki á meðan kveikt er á þessu.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>Nýtt af klippiborði líka í öðrum forritum</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Þegar gluggi er lágmarkaður skilar ritillinn því minni sem hann getur (um gígabæti með löngu skjali); það getur tekið aðeins lengri tíma að endurheimta gluggann.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

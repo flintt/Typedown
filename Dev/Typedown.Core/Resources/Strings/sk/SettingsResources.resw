@@ -365,6 +365,14 @@
     <value>Pokračujte v behu</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Stlačte skratku „Nový zo schránky“ v ľubovoľnom programe: okno sa presunie dopredu s textom zo schránky na novej karte. Aplikácia musí bežať; kláves sa nastavuje v Klávesových skratkách a ostatné programy ho nedostanú, kým je toto zapnuté.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>„Nový zo schránky“ aj v iných programoch</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Keď sa okno minimalizuje, editor vráti pamäť, ktorú môže (pri dlhom dokumente asi gigabajt); obnovenie okna môže chvíľu dlhšie trvať.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

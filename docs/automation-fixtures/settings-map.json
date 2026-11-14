@@ -918,6 +918,7 @@
         "OpenFilesInNewTab",
         "TabWheelWraps",
         "ReleaseMemoryWhenMinimized",
+        "GlobalNewFromClipboard",
         "MermaidRenderer",
         "AutoSave",
         "AutoReload",

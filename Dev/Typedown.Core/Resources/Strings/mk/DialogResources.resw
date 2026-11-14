@@ -173,6 +173,14 @@
     <value>ДОБРО</value>
     <comment>对话框/确定</comment>
   </data>
+  <data name="NoClipboardText" xml:space="preserve">
+    <value>Во таблата со исечоци нема текст.</value>
+    <comment>对话框/剪贴板里没有文字</comment>
+  </data>
+  <data name="GlobalShortcutTaken" xml:space="preserve">
+    <value>{0} веќе го користи друга програма. Изберете друго копче за „Ново од таблата со исечоци“ во Поставки &gt; Кратенки.</value>
+    <comment>对话框/快捷键已被其他程序占用，{0} 是按键</comment>
+  </data>
   <data name="PleasePressTheKeyCombination" xml:space="preserve">
     <value>Ве молам, притиснете ја комбинацијата на клучот.</value>
     <comment>请按下组合键</comment>

@@ -365,6 +365,14 @@
     <value>Maintenir l'exécution</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.GlobalNewFromClipboard.Description" xml:space="preserve">
+    <value>Appuyez sur le raccourci de « Nouveau depuis le presse-papiers » dans n'importe quel programme : la fenêtre passe au premier plan avec le texte du presse-papiers dans un nouvel onglet. L'application doit être lancée ; la touche se règle dans Raccourcis, et les autres programmes ne la reçoivent plus tant que ceci est activé.</value>
+    <comment>通用/在任何程序里按快捷键从剪贴板新建</comment>
+  </data>
+  <data name="General.GlobalNewFromClipboard.Title" xml:space="preserve">
+    <value>« Nouveau depuis le presse-papiers » dans les autres programmes aussi</value>
+    <comment>通用/在其他程序中也能从剪贴板新建</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Quand une fenêtre est réduite, l'éditeur rend la mémoire qu'il peut (environ un gigaoctet avec un long document) ; la fenêtre peut mettre un peu plus de temps à revenir.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
