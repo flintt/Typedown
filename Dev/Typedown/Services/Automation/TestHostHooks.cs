@@ -147,6 +147,7 @@ namespace Typedown.Services.Automation
                         ["viewSize"] = view == null ? null : $"{view.ActualWidth:0}x{view.ActualHeight:0}",
                         ["hostVisible"] = editor?.XamlRoot?.IsHostVisible,
                         ["suspended"] = editor?.CoreWebView2?.IsSuspended,
+                        ["memoryTarget"] = editor?.CoreWebView2?.MemoryUsageTargetLevel.ToString(),
                         ["windowVisible"] = window?.AppWindow.IsVisible,
                         ["presenter"] = (window?.AppWindow.Presenter as Microsoft.UI.Windowing.OverlappedPresenter)?.State.ToString(),
                         // Where a size got stuck: the XAML root, the window's client area, the content island's window.
