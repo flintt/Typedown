@@ -13,19 +13,19 @@
             <StackPanel Orientation="Horizontal" Spacing="4" Padding="4,2,4,2" d:DataContext="{d:DesignInstance Type=viewmodels:AppViewModel}">
                 <!-- Checked where the selection already has the format (FormatState, as View > Format ticks it): the user,
                      2026-11-13 - the buttons said nothing of it. -->
-                <controls:StateToggleButton Style="{StaticResource EllipsisIconToggleButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="strong" IsChecked="{Binding FormatViewModel.FormatState.Bold, Mode=OneWay}" AutomationProperties.AutomationId="ContextFormatStrong" controls:ToolTip.TextResource="Strong">
+                <controls:StateToggleButton Style="{StaticResource EllipsisIconToggleButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="strong" IsChecked="{Binding FormatViewModel.FormatState.Bold, Mode=OneWay}" AutomationProperties.AutomationId="ContextFormatStrong" controls:ToolTip.TextResource="Strong" controls:ToolTip.Shortcut="ShortcutStrong">
                     <FontIcon FontSize="16" Glyph="&#xE8DD;"/>
                 </controls:StateToggleButton>
-                <controls:StateToggleButton Style="{StaticResource EllipsisIconToggleButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="em" IsChecked="{Binding FormatViewModel.FormatState.Italic, Mode=OneWay}" AutomationProperties.AutomationId="ContextFormatEmphasis" controls:ToolTip.TextResource="Emphasis">
+                <controls:StateToggleButton Style="{StaticResource EllipsisIconToggleButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="em" IsChecked="{Binding FormatViewModel.FormatState.Italic, Mode=OneWay}" AutomationProperties.AutomationId="ContextFormatEmphasis" controls:ToolTip.TextResource="Emphasis" controls:ToolTip.Shortcut="ShortcutEmphasis">
                     <FontIcon FontSize="16" Glyph="&#xE8DB;"/>
                 </controls:StateToggleButton>
-                <controls:StateToggleButton Style="{StaticResource EllipsisIconToggleButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="u" IsChecked="{Binding FormatViewModel.FormatState.Underline, Mode=OneWay}" AutomationProperties.AutomationId="ContextFormatUnderline" controls:ToolTip.TextResource="Underline">
+                <controls:StateToggleButton Style="{StaticResource EllipsisIconToggleButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="u" IsChecked="{Binding FormatViewModel.FormatState.Underline, Mode=OneWay}" AutomationProperties.AutomationId="ContextFormatUnderline" controls:ToolTip.TextResource="Underline" controls:ToolTip.Shortcut="ShortcutUnderline">
                     <FontIcon FontSize="16" Glyph="&#xE8DC;"/>
                 </controls:StateToggleButton>
-                <controls:StateToggleButton Style="{StaticResource EllipsisIconToggleButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="del" IsChecked="{Binding FormatViewModel.FormatState.Strikethrough, Mode=OneWay}" AutomationProperties.AutomationId="ContextFormatStrikethrough" controls:ToolTip.TextResource="Strikethrough">
+                <controls:StateToggleButton Style="{StaticResource EllipsisIconToggleButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="del" IsChecked="{Binding FormatViewModel.FormatState.Strikethrough, Mode=OneWay}" AutomationProperties.AutomationId="ContextFormatStrikethrough" controls:ToolTip.TextResource="Strikethrough" controls:ToolTip.Shortcut="ShortcutStrikethrough">
                     <FontIcon FontSize="16" Glyph="&#xEDE0;"/>
                 </controls:StateToggleButton>
-                <Button Style="{StaticResource EllipsisIconButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="clear" AutomationProperties.AutomationId="ContextFormatClear" controls:ToolTip.TextResource="ClearFormat">
+                <Button Style="{StaticResource EllipsisIconButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="clear" AutomationProperties.AutomationId="ContextFormatClear" controls:ToolTip.TextResource="ClearFormat" controls:ToolTip.Shortcut="ShortcutClearFormat">
                     <FontIcon FontSize="16" Glyph="&#xe75c;"/>
                 </Button>
             </StackPanel>

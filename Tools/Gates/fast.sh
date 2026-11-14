@@ -20,6 +20,7 @@ gate() {
 }
 gate "translations (74 languages complete)" python3 Tools/Translations/check.py --strict
 gate "no resource name is also a scope (the Windows build fails, PRI278)" python3 Tools/Translations/check-scopes.py
+gate "the context menu says what the menu bar says for the same command (text and shortcut hint)" python3 Tools/Gates/menu-names-check.py
 gate "brand names only in the brand files" python3 Tools/Branding/check-brand.py
 gate "docs/testing.md lists the cases and test methods" python3 Tools/Docs/testing-index.py
 gate "the Chinese and English user guides match" python3 Tools/Docs/user-guide-check.py
