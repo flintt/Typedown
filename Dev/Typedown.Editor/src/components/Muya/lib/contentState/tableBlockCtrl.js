@@ -384,7 +384,8 @@ const tableBlockCtrl = ContentState => {
         const share = widths.splice(removed, 1)[0] || 0
         widths[Math.min(removed, widths.length - 1)] += share
       }
-      table.widths = widths.length === newColum + 1 ? shares(widths) : undefined
+      // (The table as wide as it was: the widths together as before.)
+      table.widths = widths.length === newColum + 1 ? shares(widths, widths.reduce((a, b) => a + b, 0)) : undefined
     }
     Object.assign(table, { row: newRow, column: newColum })
 

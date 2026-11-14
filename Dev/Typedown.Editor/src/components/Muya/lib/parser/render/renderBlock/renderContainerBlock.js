@@ -8,6 +8,7 @@ import { renderLeftBar, renderBottomBar } from './renderTableDargBar'
 import { h } from '../snabbdom'
 import { detectTextDirection, findBlockText } from '../../../utils/detectTextDirection'
 import { FOLD_MIN_LINES, blockFingerprint, isFolded } from 'services/blockFold'
+import { columnShares, tableWidth } from 'services/tableWidths'
 
 // A table's widths when they are drawn: the setting on, one share for each column.
 const tableWidthsOf = (muya, table) =>
@@ -123,10 +124,11 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     Object.assign(data.attrs, { spellcheck: 'false' })
   }
 
-  // Column widths (Settings > Editor > Table column widths, services/tableWidths): the table laid out fixed, each header
-  // cell its share.
-  if (type === 'table' && tableWidthsOf(this.muya, block)) {
-    Object.assign(data.attrs, { style: 'table-layout:fixed;width:100%' })
+  // Column widths (Settings > Editor > Table column widths, services/tableWidths): the table laid out fixed, as wide as
+  // its columns together, each header cell its share of it.
+  const ownWidths = type === 'table' && tableWidthsOf(this.muya, block)
+  if (ownWidths) {
+    Object.assign(data.attrs, { style: `table-layout:fixed;width:${tableWidth(ownWidths)}%` })
     selector += '.ag-table-widths'
   }
 
@@ -137,7 +139,7 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     if (type === 'th' && typeof column === 'number') {
       const table = this.muya.contentState.closest(block, 'table')
       const widths = table && tableWidthsOf(this.muya, table)
-      if (widths) styles.push(`width:${widths[column]}%`)
+      if (widths) styles.push(`width:${columnShares(widths)[column]}%`)
     }
     if (styles.length) {
       Object.assign(data.attrs, {
