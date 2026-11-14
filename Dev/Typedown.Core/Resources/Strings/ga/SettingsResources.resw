@@ -365,6 +365,14 @@
     <value>Coinnigh ort ag rith</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Nuair a íoslaghdaítear fuinneog, tugann an t-eagarthóir ar ais an chuimhne is féidir leis (thart ar ghigibheart le doiciméad fada); d'fhéadfadh sé nóiméad níos faide a thógáil an fhuinneog a athchóiriú.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Scaoil cuimhne nuair a íoslaghdaítear</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Teanga iarratais</value>
     <comment>通用/应用显示的语言</comment>

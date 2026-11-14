@@ -365,6 +365,14 @@
     <value>ਚੱਲਦੇ ਰਹੋ</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>ਵਿੰਡੋ ਛੋਟੀ ਕਰਨ 'ਤੇ ਸੰਪਾਦਕ ਜਿੰਨੀ ਹੋ ਸਕੇ ਮੈਮੋਰੀ ਵਾਪਸ ਕਰਦਾ ਹੈ (ਲੰਬੇ ਦਸਤਾਵੇਜ਼ ਵਿੱਚ ਲਗਭਗ ਇੱਕ ਗੀਗਾਬਾਈਟ); ਵਿੰਡੋ ਵਾਪਸ ਲਿਆਉਣ ਵਿੱਚ ਥੋੜ੍ਹਾ ਵੱਧ ਸਮਾਂ ਲੱਗ ਸਕਦਾ ਹੈ।</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>ਛੋਟਾ ਕਰਨ 'ਤੇ ਮੈਮੋਰੀ ਛੱਡੋ</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>ਐਪਲੀਕੇਸ਼ਨ ਭਾਸ਼ਾ</value>
     <comment>通用/应用显示的语言</comment>

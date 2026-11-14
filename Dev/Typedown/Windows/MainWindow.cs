@@ -509,6 +509,28 @@ namespace Typedown.Windows
             if (args.DidPresenterChange || args.DidSizeChange) ScheduleEditorLayoutCheck();
             if (args.DidPositionChange || args.DidSizeChange) CloseOpenMenus();
             if (args.DidPositionChange || args.DidSizeChange) UpdateMinimumSize();
+            if (args.DidPresenterChange) UpdateWebViewMemoryTarget();
+        }
+
+        private bool webViewMemoryLow;
+
+        // Settings > General > Release memory when minimized: the editor's web view on the low memory target while the
+        // window is minimized - it gives back its caches, up to a gigabyte with a long document - and on the normal one
+        // again when the window comes back.
+        private void UpdateWebViewMemoryTarget()
+        {
+            var low = AppWindow.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized }
+                && AppViewModel?.SettingsViewModel.ReleaseMemoryWhenMinimized == true;
+            if (low == webViewMemoryLow) return;
+            try
+            {
+                var web = (AppViewModel?.MarkdownEditor as global::Typedown.Controls.MarkdownEditor)?.CoreWebView2;
+                if (web == null) return;
+                web.MemoryUsageTargetLevel = low ? Microsoft.Web.WebView2.Core.CoreWebView2MemoryUsageTargetLevel.Low : Microsoft.Web.WebView2.Core.CoreWebView2MemoryUsageTargetLevel.Normal;
+                webViewMemoryLow = low;
+                Log.Debug($"web view memory target {(low ? "low (minimized)" : "normal")}");
+            }
+            catch (Exception ex) { Log.Debug($"web view memory target not set: {ex.Message}"); }
         }
 
         // A menu open while the window is dragged by its title bar or resized stayed where the window had been: WinUI 3

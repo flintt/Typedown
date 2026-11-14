@@ -365,6 +365,14 @@
     <value>បន្តរត់</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>ពេលបង្រួមបង្អួច កម្មវិធីកែសម្រួលនឹងប្រគល់អង្គចងចាំដែលអាចប្រគល់បាន (ប្រហែលមួយជីកាបៃសម្រាប់ឯកសារវែង); ការស្ដារបង្អួចវិញអាចយឺតបន្តិច។</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>បញ្ចេញអង្គចងចាំពេលបង្រួម</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>ភាសាកម្មវិធី</value>
     <comment>通用/应用显示的语言</comment>

@@ -365,6 +365,14 @@
     <value>ഓടുന്നത് തുടരുക</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>വിൻഡോ ചെറുതാക്കുമ്പോൾ എഡിറ്റർ കഴിയുന്നത്ര മെമ്മറി തിരികെ നൽകും (നീണ്ട പ്രമാണത്തിൽ ഏകദേശം ഒരു ജിഗാബൈറ്റ്); വിൻഡോ തിരികെ കൊണ്ടുവരാൻ അൽപം കൂടുതൽ സമയമെടുത്തേക്കാം.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>ചെറുതാക്കുമ്പോൾ മെമ്മറി വിട്ടുകൊടുക്കുക</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>ആപ്ലിക്കേഷൻ ഭാഷ</value>
     <comment>通用/应用显示的语言</comment>

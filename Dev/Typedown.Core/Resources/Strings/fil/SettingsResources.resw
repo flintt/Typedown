@@ -365,6 +365,14 @@
     <value>Patuloy na tumakbo</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Kapag na-minimize ang window, ibinabalik ng editor ang memoryang kaya nito (mga isang gigabyte sa mahabang dokumento); maaaring medyo tumagal ang pagbalik ng window.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Magbakante ng memorya kapag naka-minimize</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Wika ng aplikasyon</value>
     <comment>通用/应用显示的语言</comment>

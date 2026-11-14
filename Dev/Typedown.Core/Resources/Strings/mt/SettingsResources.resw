@@ -365,6 +365,14 @@
     <value>Kompli għaddej</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Meta tieqa titnaqqas, l-editur jagħti lura l-memorja li jista' (madwar gigabyte b'dokument twil); ir-restawr tat-tieqa jista' jieħu ftit aktar żmien.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Eħles il-memorja meta titnaqqas</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Lingwa tal-applikazzjoni</value>
     <comment>通用/应用显示的语言</comment>

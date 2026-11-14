@@ -365,6 +365,14 @@
     <value>ሩጫችሁን ቀጥሉ</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>መስኮት ሲቀነስ አርታኢው የሚችለውን ማህደረ ትውስታ ይመልሳል (ረጅም ሰነድ ሲሆን አንድ ጊጋባይት ገደማ)፤ መስኮቱ ሲመለስ ትንሽ ሊዘገይ ይችላል።</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>ሲቀነስ ማህደረ ትውስታን ልቀቅ</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>የመተግበሪያ ቋንቋ</value>
     <comment>通用/应用显示的语言</comment>

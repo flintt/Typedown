@@ -365,6 +365,14 @@
     <value>दौड़ते रहो</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>विंडो छोटी करने पर संपादक जितनी हो सके मेमोरी लौटा देता है (लंबे दस्तावेज़ में लगभग एक गीगाबाइट); विंडो वापस लाने में थोड़ा अधिक समय लग सकता है।</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>छोटा करने पर मेमोरी खाली करें</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>अनुप्रयोग भाषा</value>
     <comment>通用/应用显示的语言</comment>

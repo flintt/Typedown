@@ -365,6 +365,14 @@
     <value>Maintenir l'exécution</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Quand une fenêtre est réduite, l'éditeur rend la mémoire qu'il peut (environ un gigaoctet avec un long document) ; la fenêtre peut mettre un peu plus de temps à revenir.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Libérer la mémoire en réduisant la fenêtre</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Langue de l'application</value>
     <comment>通用/应用显示的语言</comment>

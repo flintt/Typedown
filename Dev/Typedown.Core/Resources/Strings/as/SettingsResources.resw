@@ -365,6 +365,14 @@
     <value>চলি থাকক</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>উইণ্ড' সৰু কৰিলে সম্পাদকে পৰা মেমৰি ঘূৰাই দিয়ে (দীঘল নথিত প্ৰায় এক গিগাবাইট); উইণ্ড' ঘূৰাই আনোঁতে অলপ বেছি সময় লাগিব পাৰে।</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>সৰু কৰিলে মেমৰি এৰি দিয়ক</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>প্ৰয়োগ ৰ ভাষা</value>
     <comment>通用/应用显示的语言</comment>

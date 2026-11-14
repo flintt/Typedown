@@ -365,6 +365,14 @@
     <value>Haltu áfram að hlaupa</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Þegar gluggi er lágmarkaður skilar ritillinn því minni sem hann getur (um gígabæti með löngu skjali); það getur tekið aðeins lengri tíma að endurheimta gluggann.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Losa minni þegar lágmarkað er</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Tungumál umsóknar</value>
     <comment>通用/应用显示的语言</comment>

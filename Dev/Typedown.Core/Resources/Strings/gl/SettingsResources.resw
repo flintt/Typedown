@@ -365,6 +365,14 @@
     <value>Segue funcionando</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Ao minimizar unha xanela, o editor devolve a memoria que pode (arredor dun gigabyte cun documento longo); restaurar a xanela pode tardar un pouco máis.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Liberar memoria ao minimizar</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Idioma de aplicación</value>
     <comment>通用/应用显示的语言</comment>
