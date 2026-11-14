@@ -25,7 +25,9 @@
 		<UseRidGraph>true</UseRidGraph>
 		<SelfContained>true</SelfContained>
 		<!-- The Windows App SDK runtime travels with the app: the installer and portable builds have no package to
-		     depend on, and the MSIX then needs no framework package installed beside it. -->
+		     depend on, and the MSIX then needs no framework package installed beside it. The Store upload alone is
+		     built with WindowsAppSDKSelfContained=false (build.yml, Tools/dev/hp-store-upload.ps1): it names the
+		     framework package and the Store installs it. -->
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<WindowsPackageType Condition="'$(WindowsPackageType)' == ''">None</WindowsPackageType>
 		<EnableMsixTooling>true</EnableMsixTooling>
