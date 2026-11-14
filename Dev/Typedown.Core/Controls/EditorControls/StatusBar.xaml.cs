@@ -35,7 +35,7 @@ namespace Typedown.Core.Controls
             this.InitializeComponent();
             // Switching the status bar off and on again builds a new control, which knows nothing of the
             // theme that was applied to the old one — so it asks for the colours itself when it loads.
-            Loaded += (_, _) => { ApplyCurrentTheme(); UpdateReadingTip(); FollowHeadings(Editor); AddEditionItems(); WatchForLayout(); };
+            Loaded += (_, _) => { ApplyCurrentTheme(); UpdateReadingTip(); UpdateZoomTips(); FollowHeadings(Editor); AddEditionItems(); WatchForLayout(); UpdateLastSaved(); };
         }
 
         private void ApplyCurrentTheme()
@@ -156,6 +156,60 @@ namespace Typedown.Core.Controls
             ViewModel?.FileViewModel?.SaveCommand.Execute(System.Reactive.Unit.Default);
         }
 
+        // ---- the editor's zoom (its font size; SettingsViewModel.ZoomBy, as View > Zoom and Ctrl+wheel) ----
+
+        private string ZoomText(double fontSize) => $"{SettingsViewModel.ZoomPercent(fontSize)}%";
+
+        private void OnZoomOutClick(object sender, RoutedEventArgs e) => Settings?.ZoomBy(1 / 1.1);
+
+        private void OnZoomInClick(object sender, RoutedEventArgs e) => Settings?.ZoomBy(1.1);
+
+        private void OnZoomResetClick(object sender, RoutedEventArgs e) => Settings?.ResetZoom();
+
+        /// <summary>Each button's tip says what it does and its shortcut, as set now.</summary>
+        private void UpdateZoomTips()
+        {
+            var keys = this.GetService<Interfaces.IKeyboardAccelerator>();
+            void Tip(FrameworkElement button, string key, Models.ShortcutKey shortcut)
+            {
+                var text = Locale.GetString(key);
+                var keysText = shortcut == null ? null : keys?.GetShortcutKeyText(shortcut);
+                ToolTipService.SetToolTip(button, string.IsNullOrEmpty(keysText) ? text : $"{text} ({keysText})");
+            }
+            Tip(ZoomOutButton, "ZoomOut", Settings?.ShortcutZoomOut);
+            Tip(ZoomInButton, "ZoomIn", Settings?.ShortcutZoomIn);
+            Tip(ZoomResetButton, "ResetZoom", Settings?.ShortcutResetZoom);
+        }
+
+        // ---- when the file was last saved: its time on disk, read off the UI thread (a network folder can be slow) ----
+
+        private DateTime? lastSaved;
+        private int lastSavedAsked;
+
+        private async void UpdateLastSaved()
+        {
+            var path = ViewModel?.FileViewModel?.FilePath;
+            var asked = ++lastSavedAsked;
+            DateTime? when = null;
+            if (!string.IsNullOrEmpty(path))
+            {
+                try { when = await System.Threading.Tasks.Task.Run(() => System.IO.File.Exists(path) ? System.IO.File.GetLastWriteTime(path) : (DateTime?)null); }
+                catch (Exception ex) { Log.Debug($"status bar: last saved of {System.IO.Path.GetFileName(path)}: {ex.Message}"); }
+            }
+            // A later ask (another tab, another save) answered first wins.
+            if (asked != lastSavedAsked || LastSavedText == null) return;
+            lastSaved = when;
+            ShowLastSaved();
+            LayOutItemsSoon();
+        }
+
+        private void ShowLastSaved()
+        {
+            if (lastSaved is not { } when) return;
+            LastSavedText.Text = string.Format(Locale.GetString("SaveState.LastSaved"), RecentTime.Format(when, DateTime.Now, Locale.Culture));
+            ToolTipService.SetToolTip(LastSavedText, when.ToString("F", Locale.Culture));
+        }
+
         /// <summary>
         /// The status bar's number: characters or words, as the reader chose ("1,234 characters"); with a selection, the
         /// selection's of the whole ("120 of 1,234 characters selected").
@@ -265,10 +319,10 @@ namespace Typedown.Core.Controls
 
         // ---- which items show: the reader's choice (right-click), then what the width leaves room for ----
 
-        private static readonly string[] ItemNames = { "modes", "heading", "format", "save", "count" };
+        private static readonly string[] ItemNames = { "modes", "heading", "format", "save", "lastsaved", "zoom", "count" };
 
         // The first to go when the bar is too narrow; the count stays. An edition's items go before all of these.
-        private static readonly string[] SqueezeOrder = { "heading", "format", "save", "modes" };
+        private static readonly string[] SqueezeOrder = { "heading", "lastsaved", "zoom", "format", "save", "modes" };
 
         // An edition's items (EditionHooks.AddStatusBarItems), each in a slot of the bar's own left of the count: the
         // bar shows and hides the slot, the element's own Visibility stays the edition's.
@@ -309,6 +363,8 @@ namespace Typedown.Core.Controls
             "heading" => new FrameworkElement[] { HeadingButton },
             "format" => new FrameworkElement[] { FileFormatButton },
             "save" => new FrameworkElement[] { SaveStateButton },
+            "lastsaved" => new FrameworkElement[] { LastSavedText },
+            "zoom" => new FrameworkElement[] { ZoomItems },
             "count" => new FrameworkElement[] { WordCountButton },
             _ => editionItems?.Where(x => x.Item.Id == item).Select(x => (FrameworkElement)x.Slot).ToArray() ?? new FrameworkElement[0],
         };
@@ -317,7 +373,8 @@ namespace Typedown.Core.Controls
 
         private bool Chosen(string item) => !HiddenItems().Contains(item);
 
-        private bool Wanted(string item) => Chosen(item) && (item != "heading" || headingAvailable) && (EditionItem(item) is not { } edition || Present(edition));
+        private bool Wanted(string item) => Chosen(item) && (item != "heading" || headingAvailable) && (item != "lastsaved" || lastSaved != null)
+            && (EditionItem(item) is not { } edition || Present(edition));
 
         private StatusBarItem EditionItem(string id)
         {
@@ -346,9 +403,14 @@ namespace Typedown.Core.Controls
 
         private void OnLayoutSourceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            // Saved (by hand, automatically, another tab shown saved) or another file: its time on disk read again.
+            if (e.PropertyName is nameof(EditorViewModel.Saved) or nameof(FileViewModel.FilePath))
+                UpdateLastSaved();
+            if (e.PropertyName is nameof(SettingsViewModel.ShortcutZoomIn) or nameof(SettingsViewModel.ShortcutZoomOut) or nameof(SettingsViewModel.ShortcutResetZoom))
+                UpdateZoomTips();
             if (e.PropertyName is nameof(SettingsViewModel.StatusBarHiddenItems) or nameof(SettingsViewModel.ReadOnly) or nameof(SettingsViewModel.WordCountMethod)
                 or nameof(EditorViewModel.ContentState) or nameof(EditorViewModel.Saved) or nameof(EditorViewModel.AutoSaveHeldBack) or nameof(EditorViewModel.SelectionText)
-                or nameof(FileViewModel.FileFormat))
+                or nameof(FileViewModel.FileFormat) or nameof(SettingsViewModel.FontSize))
                 LayOutItemsSoon();
         }
 
@@ -428,6 +490,17 @@ namespace Typedown.Core.Controls
             }
             if (squeezed.Contains("save") && Editor != null)
                 OverflowMenu.Items.Add(Entry("OverflowSave", SaveStateText(Editor.Saved, Editor.AutoSaveHeldBack), () => OnSaveStateClick(this, null)));
+            if (squeezed.Contains("lastsaved") && lastSaved != null)
+                OverflowMenu.Items.Add(new MenuFlyoutItem { Text = LastSavedText.Text, IsEnabled = false });
+            if (squeezed.Contains("zoom") && Settings != null)
+            {
+                var zoom = new MenuFlyoutSubItem { Text = $"{Locale.GetString("Zoom")} {ZoomText(Settings.FontSize)}" };
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(zoom, "OverflowZoom");
+                zoom.Items.Add(Entry("OverflowZoomIn", Locale.GetString("ZoomIn"), () => Settings.ZoomBy(1.1)));
+                zoom.Items.Add(Entry("OverflowZoomOut", Locale.GetString("ZoomOut"), () => Settings.ZoomBy(1 / 1.1)));
+                zoom.Items.Add(Entry("OverflowZoomReset", Locale.GetString("ResetZoom"), () => Settings.ResetZoom()));
+                OverflowMenu.Items.Add(zoom);
+            }
             if (squeezed.Contains("format") && ViewModel?.FileViewModel != null)
             {
                 var format = new MenuFlyoutSubItem { Text = FormatText(ViewModel.FileViewModel.FileFormat) };
@@ -456,7 +529,8 @@ namespace Typedown.Core.Controls
         private void OnItemsMenuOpening(object sender, object e)
         {
             ItemsMenu.Items.Clear();
-            var entries = new[] { ("modes", Locale.GetString("View")), ("heading", Locale.GetString("StatusBarItem.CurrentHeading")), ("format", Locale.GetString("Encoding.Tip")), ("save", Locale.GetString("StatusBarItem.SaveState")) }.ToList();
+            var entries = new[] { ("modes", Locale.GetString("View")), ("heading", Locale.GetString("StatusBarItem.CurrentHeading")), ("format", Locale.GetString("Encoding.Tip")), ("save", Locale.GetString("StatusBarItem.SaveState")),
+                ("lastsaved", Locale.GetString("StatusBarItem.LastSaved")), ("zoom", Locale.GetString("Zoom")) }.ToList();
             // An edition's named items, where they are on the bar: before the count.
             foreach (var (edition, _) in EditionList)
                 if (edition.Name != null && Present(edition)) entries.Add((edition.Id, edition.Name));

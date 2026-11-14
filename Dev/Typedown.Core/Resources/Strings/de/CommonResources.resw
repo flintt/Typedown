@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Spalten an Inhalt anpassen</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Zuletzt gespeichert</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>Zuletzt gespeichert {0}</value>
+  </data>
 </root>

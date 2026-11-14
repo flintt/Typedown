@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>நெடுவரிசைகளை உள்ளடக்கத்துக்குப் பொருத்து</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>கடைசியாகச் சேமித்த நேரம்</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>கடைசியாகச் சேமித்தது {0}</value>
+  </data>
 </root>

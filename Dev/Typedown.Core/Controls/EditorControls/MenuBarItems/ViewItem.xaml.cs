@@ -13,9 +13,9 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         public ViewItem()
         {
             InitializeComponent();
-            ZoomInCommand.OnExecute.Subscribe(_ => Zoom(1.1));
-            ZoomOutCommand.OnExecute.Subscribe(_ => Zoom(1 / 1.1));
-            ResetZoomCommand.OnExecute.Subscribe(_ => { if (Settings != null) Settings.FontSize = 16; });
+            ZoomInCommand.OnExecute.Subscribe(_ => Settings?.ZoomBy(1.1));
+            ZoomOutCommand.OnExecute.Subscribe(_ => Settings?.ZoomBy(1 / 1.1));
+            ResetZoomCommand.OnExecute.Subscribe(_ => Settings?.ResetZoom());
             // The event is static: a closed window's menu must not stay reachable through it.
             Unloaded += (_, _) => ThemeFiles.Changed -= OnThemesChanged;
         }
@@ -181,11 +181,6 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         public Command<System.Reactive.Unit> ZoomOutCommand { get; } = new();
 
         public Command<System.Reactive.Unit> ResetZoomCommand { get; } = new();
-
-        private void Zoom(double factor)
-        {
-            if (Settings != null) Settings.FontSize = Math.Max(8, Math.Min(48, Math.Round(Settings.FontSize * factor, 1)));
-        }
 
         /// <summary>
         /// The settings outlive this control, so the subscription is remembered rather than looked up again on

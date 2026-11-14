@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Whakaōrite ngā tīwae ki te ihirangi</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>Te wā tiaki whakamutunga</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>I tiakina whakamutunga {0}</value>
+  </data>
 </root>

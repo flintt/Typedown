@@ -1391,4 +1391,10 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>列幅を内容に合わせる</value>
   </data>
+  <data name="StatusBarItem.LastSaved" xml:space="preserve">
+    <value>最終保存時刻</value>
+  </data>
+  <data name="SaveState.LastSaved" xml:space="preserve">
+    <value>最終保存 {0}</value>
+  </data>
 </root>
