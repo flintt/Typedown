@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Tulemusi pole</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Muster on liiga aeglane</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0}/{1}</value>
   </data>

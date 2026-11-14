@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Dim canlyniadau</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Patrwm yn rhy araf</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} o {1}</value>
   </data>

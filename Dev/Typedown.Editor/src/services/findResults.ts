@@ -1,5 +1,6 @@
 import transport from './transport';
 import type { FindPreview } from './findPreview';
+import { searchGivenUp } from './searchGivenUp';
 
 /**
  * The find bar's search, told to the host: where it stands (`FindState`: how many matches, which one is chosen - the
@@ -102,7 +103,7 @@ export function setFindProvider(p: FindProvider): () => void {
 export function noteFindChange(now = false) {
     if (!provider) return;
     const { total, index } = provider.state();
-    transport.postMessage('FindState', { total, index });
+    transport.postMessage('FindState', { total, index, givenUp: searchGivenUp() });
     if (!open) return;
     if (now) { postResults(); return; }
     if (timer) clearTimeout(timer);

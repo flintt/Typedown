@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>ਪੈਟਰਨ ਬਹੁਤ ਹੌਲੀ ਹੈ</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{1} ਵਿੱਚੋਂ {0}</value>
   </data>

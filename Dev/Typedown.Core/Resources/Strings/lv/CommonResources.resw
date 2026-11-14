@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Nav rezultātu</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Šablons ir pārāk lēns</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} no {1}</value>
   </data>

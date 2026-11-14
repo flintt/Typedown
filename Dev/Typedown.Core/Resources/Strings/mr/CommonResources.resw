@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>कोणतेही निकाल नाहीत</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>पॅटर्न खूप मंद आहे</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{1} पैकी {0}</value>
   </data>

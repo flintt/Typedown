@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Kāore he hua</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>He pōturi rawa te tauira</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} o {1}</value>
   </data>

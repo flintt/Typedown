@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>কোনো ফলাফল নাই</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>আৰ্হিটো অতি লেহেমীয়া</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{1}ৰ ভিতৰত {0}</value>
   </data>

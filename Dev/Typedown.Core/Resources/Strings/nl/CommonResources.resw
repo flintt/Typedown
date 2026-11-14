@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Geen resultaten</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Patroon te traag</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} van {1}</value>
   </data>

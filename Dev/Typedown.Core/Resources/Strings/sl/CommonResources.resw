@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Ni rezultatov</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Vzorec je prepočasen</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} od {1}</value>
   </data>

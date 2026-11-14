@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Engar niðurstöður</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Mynstrið er of hægt</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} af {1}</value>
   </data>

@@ -57,7 +57,7 @@ describe('findResults', () => {
         const p = provider(3, 1);
         // Lent: where it stands is told at once.
         results.setFindProvider(p);
-        expect(sent('FindState')).toEqual([{ total: 3, index: 1 }]);
+        expect(sent('FindState')).toEqual([{ total: 3, index: 1, givenUp: false }]);
         jest.runAllTimers();
         expect(sent('FindResults')).toEqual([]);
 
@@ -73,7 +73,7 @@ describe('findResults', () => {
         results.noteFindChange();
         jest.advanceTimersByTime(results.FIND_RESULTS_DELAY_MS);
         expect(sent('FindResults')).toHaveLength(1);
-        expect(sent('FindState').pop()).toEqual({ total: 3, index: 2 });
+        expect(sent('FindState').pop()).toEqual({ total: 3, index: 2, givenUp: false });
 
         // New matches: sent again, a moment after the last change.
         p.total = 4;

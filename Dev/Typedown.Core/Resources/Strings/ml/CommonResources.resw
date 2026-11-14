@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>ഫലങ്ങളൊന്നുമില്ല</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>പാറ്റേൺ വളരെ മന്ദഗതിയിലാണ്</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{1}-ൽ {0}</value>
   </data>

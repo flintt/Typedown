@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>L-ebda riżultat</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Il-mudell bil-mod wisq</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} minn {1}</value>
   </data>

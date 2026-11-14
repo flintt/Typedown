@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>ఫలితాలు లేవు</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>నమూనా చాలా నెమ్మదిగా ఉంది</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{1}లో {0}</value>
   </data>

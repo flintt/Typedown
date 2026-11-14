@@ -1182,6 +1182,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>ምንም ውጤት የለም</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>ስርዓተ ጥለቱ በጣም ቀርፋፋ ነው</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} ከ{1}</value>
   </data>

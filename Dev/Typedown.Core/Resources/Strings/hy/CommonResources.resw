@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Արդյունքներ չկան</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Օրինաչափությունը չափազանց դանդաղ է</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0}՝ {1}-ից</value>
   </data>

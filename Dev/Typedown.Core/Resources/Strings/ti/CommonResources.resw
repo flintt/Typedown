@@ -1182,6 +1182,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>ውጽኢት የለን</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>ቅዲ ኣዝዩ ደንጉዩ</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} ካብ {1}</value>
   </data>

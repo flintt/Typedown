@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Tidak ada hasil</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Pola terlalu lambat</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} dari {1}</value>
   </data>

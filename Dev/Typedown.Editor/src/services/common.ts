@@ -2,6 +2,7 @@ import { EXPORT_DOMPURIFY_CONFIG } from 'components/Muya/lib/config';
 import Slugger from 'components/Muya/lib/parser/marked/slugger';
 import { sanitize, getHeadingPlainText } from 'components/Muya/lib/utils';
 import execAll from 'execall'
+import { setSearchGivenUp } from './searchGivenUp'
 import { Lexer } from 'components/Muya/lib/parser/marked'
 
 /** The slug of the heading on a line in source mode's outline: the line it is on (sourceHeadingLine reads it back). */
@@ -114,11 +115,18 @@ const regexWorkerSource = `onmessage = e => {
 
 /** Whether a search with these options may run now: a plain one always, a regular expression once tried (see above). */
 export const searchMayRun = (value: string, options: any) => {
-    if (!options?.searchIsRegexp || typeof Worker === 'undefined') return true
+    if (!options?.searchIsRegexp || typeof Worker === 'undefined') return noteGivenUp(true)
     const re = searchRegExp(value, options)
-    if (!re) return true
+    if (!re) return noteGivenUp(true)
     const pattern = regexKey(re)
-    return regexTexts.has(pattern) && regexVerdicts.get(`${pattern}#${regexTexts.get(pattern)}`) === 'ok'
+    const verdict = regexTexts.has(pattern) ? regexVerdicts.get(`${pattern}#${regexTexts.get(pattern)}`) : undefined
+    setSearchGivenUp(verdict === 'slow')
+    return verdict === 'ok'
+}
+
+const noteGivenUp = (mayRun: boolean) => {
+    setSearchGivenUp(false)
+    return mayRun
 }
 
 /**
@@ -160,6 +168,8 @@ export const trySearch = (value: string, options: any, texts: () => string[], do
         console.log(`search: the regular expression ${pattern} took over ${SLOW_REGEX_MS} ms on these texts; it finds nothing`)
         worker.terminate()
         if (regexWorker === worker) regexWorker = null
+        // Searched again (finding nothing), for the bar to be told it was given up on.
+        done()
     }
     const onMessage = (e: MessageEvent) => { if (e.data === id) finish('ok') }
     const timer = window.setTimeout(() => finish('slow'), SLOW_REGEX_MS)

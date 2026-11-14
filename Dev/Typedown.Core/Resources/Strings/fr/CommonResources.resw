@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Aucun résultat</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Expression trop lente</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} sur {1}</value>
   </data>

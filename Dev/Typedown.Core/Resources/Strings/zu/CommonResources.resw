@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>Ayikho imiphumela</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>Iphethini ihamba kancane kakhulu</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} kokungu-{1}</value>
   </data>

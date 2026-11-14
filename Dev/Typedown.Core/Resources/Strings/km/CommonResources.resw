@@ -1183,6 +1183,9 @@
   <data name="FindResults.None" xml:space="preserve">
     <value>គ្មានលទ្ធផល</value>
   </data>
+  <data name="FindResults.GivenUp" xml:space="preserve">
+    <value>លំនាំយឺតពេក</value>
+  </data>
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} នៃ {1}</value>
   </data>
