@@ -23,7 +23,8 @@ namespace Typedown.Core.Models
 
         public ImageUploadMethod Method { get; set; }
 
-        public string Config { get; private set; } = new JObject().ToString();
+        // Set by its own Store...Config methods; read back from the database (ConfigStore).
+        public string Config { get; internal set; } = new JObject().ToString();
 
         public ConfigModel LoadUploadConfig()
         {

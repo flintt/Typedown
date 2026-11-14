@@ -9,7 +9,7 @@ flowchart LR
     C <--> T[Transport / EventCenter / RemoteInvoke]
     W <--> E[React + Muya + CodeMirror / Dev/Typedown.Editor]
     C --> F[文档、Settings.json、Backup]
-    C --> D[SQLite / EF Core migrations]
+    C --> D[SQLite (StorageDb)]
     P[MSIX + Installer] --> U
     P --> C
     P --> E
@@ -43,7 +43,7 @@ flowchart LR
 - `SafeFile` 在目标同目录写入临时文件，flush 后以替换提交；提交失败时保留完整恢复副本，避免截断原文件。
 - `JsonSettingsStore` 在内存保留完整设置对象。快速连续修改合并为最新快照，写入串行执行，并通过 `SafeFile` 原子提交。正常关闭会等待队列排空。
 - `AutoBackup` 使用源路径哈希定位备份，并同样使用原子写入。
-- `AppDbContext` 使用 SQLite 和 EF Core migrations。迁移在进程内共享一个初始化任务，旧库 fixture 用于验证数据保留和重复执行。
+- `StorageDb`（Storage.db）直接用 Microsoft.Data.Sqlite 读写（原来是 EF Core，约 12 MB 只为四张表）。建表语句与 EF Core 原来生成的一字不差，并照写 EF 的迁移记录，旧版本打开新建的库不会再迁移；时间按 EF 的文本格式存。表结构以后要改，在 `StorageDb` 里用 SQLite 的 `user_version` 记版本，并保留 `__EFMigrationsHistory`。可靠性测试用旧版的 EF 模型（Tests/Typedown.ReliabilityTests/LegacyEf）验证两个方向都能打开、数据不丢。
 
 用户文档写入、设置写入和备份写入都不能降级为先截断目标再复制。需要增加新的持久化文件时，应复用可恢复的原子提交方式，并为损坏输入、旧格式和快速连续写入增加测试。
 

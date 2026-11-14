@@ -38,7 +38,8 @@
     <PackageReference Include="Microsoft.WindowsAppSDK.Search" Version="2.5.5" ExcludeAssets="all" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.3.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
+    <!-- The app's database (Services/StorageDb.cs) straight through SQLite: EF Core was about 12 MB for four tables. -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
     <!-- The encoding of a text file with no byte order mark (TextFileFormat.GuessEncoding): Mozilla's charset detector. -->
     <PackageReference Include="UTF.Unknown" Version="2.8.0" />

@@ -2615,7 +2615,7 @@ Installs the WebView2 Runtime where Windows does not have it. Microsoft's terms:
 Copyright (c) Microsoft Corporation. All rights reserved.
 
 ================================================================================
-Microsoft.Data.Sqlite.Core 10.0.0
+Microsoft.Data.Sqlite 10.0.0
 ================================================================================
 Licence: MIT
 Home: https://docs.microsoft.com/dotnet/standard/data/sqlite/
@@ -2625,80 +2625,10 @@ Home: https://docs.microsoft.com/dotnet/standard/data/sqlite/
 Licence text: "MIT License" at the end of this file.
 
 ================================================================================
-Microsoft.EntityFrameworkCore 10.0.0
+Microsoft.Data.Sqlite.Core 10.0.0
 ================================================================================
 Licence: MIT
-Home: https://docs.microsoft.com/ef/core/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.EntityFrameworkCore.Abstractions 10.0.0
-================================================================================
-Licence: MIT
-Home: https://docs.microsoft.com/ef/core/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.EntityFrameworkCore.Relational 10.0.0
-================================================================================
-Licence: MIT
-Home: https://docs.microsoft.com/ef/core/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.EntityFrameworkCore.Sqlite 10.0.0
-================================================================================
-Licence: MIT
-Home: https://docs.microsoft.com/ef/core/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.EntityFrameworkCore.Sqlite.Core 10.0.0
-================================================================================
-Licence: MIT
-Home: https://docs.microsoft.com/ef/core/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.Extensions.Caching.Abstractions 10.0.0
-================================================================================
-Licence: MIT
-Home: https://dot.net/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.Extensions.Caching.Memory 10.0.0
-================================================================================
-Licence: MIT
-Home: https://dot.net/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.Extensions.Configuration.Abstractions 10.0.0
-================================================================================
-Licence: MIT
-Home: https://dot.net/
+Home: https://docs.microsoft.com/dotnet/standard/data/sqlite/
 
 © Microsoft Corporation. All rights reserved.
 
@@ -2716,56 +2646,6 @@ Licence text: "MIT License" at the end of this file.
 
 ================================================================================
 Microsoft.Extensions.DependencyInjection.Abstractions 10.0.0
-================================================================================
-Licence: MIT
-Home: https://dot.net/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.Extensions.DependencyModel 10.0.0
-================================================================================
-Licence: MIT
-Home: https://dot.net/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.Extensions.Logging 10.0.0
-================================================================================
-Licence: MIT
-Home: https://dot.net/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.Extensions.Logging.Abstractions 10.0.0
-================================================================================
-Licence: MIT
-Home: https://dot.net/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.Extensions.Options 10.0.0
-================================================================================
-Licence: MIT
-Home: https://dot.net/
-
-© Microsoft Corporation. All rights reserved.
-
-Licence text: "MIT License" at the end of this file.
-
-================================================================================
-Microsoft.Extensions.Primitives 10.0.0
 ================================================================================
 Licence: MIT
 Home: https://dot.net/

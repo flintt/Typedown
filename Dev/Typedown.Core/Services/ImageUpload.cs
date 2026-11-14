@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -59,31 +58,22 @@ namespace Typedown.Core.Services
 
         private async Task ResetDefaultConfigs()
         {
-            using var ctx = await AppDbContext.Create();
-            ctx.ImageUploadConfigs.RemoveRange(ctx.ImageUploadConfigs);
-            await ctx.SaveChangesAsync();
+            await ConfigStore.ClearUploadConfigsAsync();
             await UpdateImageUploadConfigs();
         }
 
         public async Task<ImageUploadConfig> AddImageUploadConfig(string name = null, ImageUploadMethod method = 0)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.ImageUploadConfigs;
             // Enabled from the start: switched off, a new configuration was in neither Settings > Image > Upload with nor
             // the image's Upload menu, and nothing on its page said why.
-            var res = new ImageUploadConfig() { Name = name ?? string.Empty, Method = method, IsEnable = true };
-            await model.AddAsync(res);
-            await ctx.SaveChangesAsync();
+            var res = await ConfigStore.AddUploadConfigAsync(new ImageUploadConfig() { Name = name ?? string.Empty, Method = method, IsEnable = true });
             await UpdateImageUploadConfigs();
             return res;
         }
 
         public async Task RemoveImageUploadConfig(int id)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.ImageUploadConfigs;
-            model.RemoveRange(model.Where(x => x.Id == id));
-            await ctx.SaveChangesAsync();
+            await ConfigStore.RemoveUploadConfigAsync(id);
             await UpdateImageUploadConfigs();
         }
 
@@ -91,10 +81,7 @@ namespace Typedown.Core.Services
         {
             try
             {
-                using var ctx = await AppDbContext.Create();
-                var model = ctx.ImageUploadConfigs;
-                model.Update(config);
-                await ctx.SaveChangesAsync();
+                await ConfigStore.SaveUploadConfigAsync(config);
                 await UpdateImageUploadConfigs();
                 return true;
             }
@@ -107,15 +94,12 @@ namespace Typedown.Core.Services
 
         public async Task<ImageUploadConfig> GetImageUploadConfig(int id)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.ImageUploadConfigs;
-            return await model.Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await ConfigStore.UploadConfigAsync(id);
         }
 
         public async Task UpdateImageUploadConfigs()
         {
-            using var ctx = await AppDbContext.Create();
-            var newItems = await ctx.ImageUploadConfigs.ToListAsync();
+            var newItems = await ConfigStore.UploadConfigsAsync();
             ImageUploadConfigs.UpdateCollection(newItems, (a, b) => a.Id == b.Id);
         }
 

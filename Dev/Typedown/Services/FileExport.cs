@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -69,9 +68,7 @@ namespace Typedown.Services
 
         private async Task ResetDefaultConfigs()
         {
-            using var ctx = await AppDbContext.Create();
-            ctx.ExportConfigs.RemoveRange(ctx.ExportConfigs);
-            await ctx.SaveChangesAsync();
+            await ConfigStore.ClearExportConfigsAsync();
             await AddExportConfig("PDF", ExportType.PDF);
             await AddExportConfig("HTML", ExportType.HTML);
             await UpdateExportConfigs();
@@ -79,21 +76,14 @@ namespace Typedown.Services
 
         public async Task<ExportConfig> AddExportConfig(string name = null, ExportType type = 0)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.ExportConfigs;
-            var res = new ExportConfig() { Name = name ?? string.Empty, Type = type };
-            await model.AddAsync(res);
-            await ctx.SaveChangesAsync();
+            var res = await ConfigStore.AddExportConfigAsync(name, type);
             await UpdateExportConfigs();
             return res;
         }
 
         public async Task RemoveExportConfig(int id)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.ExportConfigs;
-            model.RemoveRange(model.Where(x => x.Id == id));
-            await ctx.SaveChangesAsync();
+            await ConfigStore.RemoveExportConfigAsync(id);
             await UpdateExportConfigs();
         }
 
@@ -101,10 +91,7 @@ namespace Typedown.Services
         {
             try
             {
-                using var ctx = await AppDbContext.Create();
-                var model = ctx.ExportConfigs;
-                model.Update(config);
-                await ctx.SaveChangesAsync();
+                await ConfigStore.SaveExportConfigAsync(config);
                 await UpdateExportConfigs();
                 return true;
             }
@@ -117,15 +104,12 @@ namespace Typedown.Services
 
         public async Task<ExportConfig> GetExportConfig(int id)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.ExportConfigs;
-            return await model.Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await ConfigStore.ExportConfigAsync(id);
         }
 
         public async Task UpdateExportConfigs()
         {
-            using var ctx = await AppDbContext.Create();
-            var newItems = await ctx.ExportConfigs.ToListAsync();
+            var newItems = await ConfigStore.ExportConfigsAsync();
             ExportConfigs.UpdateCollection(newItems, (a, b) => a.Id == b.Id);
         }
 

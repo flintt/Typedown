@@ -44,7 +44,10 @@ namespace Typedown.Core.Models
 
 namespace Typedown.Core.Services
 {
-    /// <summary>A test host for the production migration classes linked into this assembly.</summary>
+    /// <summary>
+    /// The EF Core model earlier versions opened Storage.db with, and its one migration (LegacyEf/Migrations): the app
+    /// reads and writes the file through StorageDb now, and these show a database goes from one to the other and back.
+    /// </summary>
     public class AppDbContext : DbContext
     {
         private readonly string databasePath;

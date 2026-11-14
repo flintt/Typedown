@@ -39,7 +39,9 @@
     <Compile Include="../../Dev/Typedown.Core/Utilities/TextFileFormat.cs" Link="Production/TextFileFormat.cs" />
     <Compile Include="../../Dev/Typedown.Core/Services/FavoritesStore.cs" Link="Production/FavoritesStore.cs" />
     <Compile Include="../../Dev/Typedown.Core/Services/FirstEditMutes.cs" Link="Production/FirstEditMutes.cs" />
-    <Compile Include="../../Dev/Typedown.Core/Migrations/*.cs" Link="Production/Migrations/%(Filename)%(Extension)" />
+    <Compile Include="../../Dev/Typedown.Core/Services/StorageDb.cs" Link="Production/StorageDb.cs" />
+    <!-- LegacyEf: the EF Core model and migration earlier versions open the database with (the app reads and writes it
+         through StorageDb now), to show a database goes from one to the other and back. -->
   </ItemGroup>
 
   <ItemGroup>

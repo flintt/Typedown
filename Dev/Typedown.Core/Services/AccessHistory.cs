@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -68,23 +67,9 @@ namespace Typedown.Core.Services
             await recordLock.WaitAsync();
             try
             {
-                using var ctx = await AppDbContext.Create();
-                var model = ctx.FileAccessHistories;
-                // One row per path, its time updated — not a new row every save. Otherwise the table grows without
-                // bound and the most-recent query returns many rows of the same file, crowding others out.
-                var existing = await model.FirstOrDefaultAsync(x => x.FilePath == filePath);
-                if (existing != null)
-                    existing.AccessTime = DateTime.Now;
-                else
-                    await model.AddAsync(new FileAccessHistory() { FilePath = filePath, AccessTime = DateTime.Now });
-                await ctx.SaveChangesAsync();
-                // Only the latest rows are kept: the lists show a few, and an old path says where someone was.
-                var excess = await model.OrderByDescending(x => x.AccessTime).Skip(KeepRows).ToListAsync();
-                if (excess.Count > 0)
-                {
-                    model.RemoveRange(excess);
-                    await ctx.SaveChangesAsync();
-                }
+                // One row per path, its time updated, and only the latest rows kept: the lists show a few, and an old
+                // path says where someone was (StorageDb.RecordAsync).
+                await AppStorage.Db.RecordAsync(StorageDb.Recent.Files, filePath, DateTime.Now, KeepRows);
             }
             finally
             {
@@ -95,31 +80,20 @@ namespace Typedown.Core.Services
 
         public async Task RemoveFileHistory(string filePath)
         {
-            using (var ctx = await AppDbContext.Create())
-            {
-                var model = ctx.FileAccessHistories;
-                model.RemoveRange(model.Where(x => x.FilePath == filePath));
-                await ctx.SaveChangesAsync();
-            }
+            await AppStorage.Db.RemoveAsync(StorageDb.Recent.Files, filePath);
             await ReloadFiles();
         }
 
         public async Task ClearFileHistory()
         {
-            using (var ctx = await AppDbContext.Create())
-            {
-                var model = ctx.FileAccessHistories;
-                model.RemoveRange(model);
-                await ctx.SaveChangesAsync();
-            }
+            await AppStorage.Db.ClearAsync(StorageDb.Recent.Files);
             await ReloadFiles();
         }
 
         // The list read again from the database, which is what every change writes to first.
         private async Task ReloadFiles()
         {
-            using var ctx = await AppDbContext.Create();
-            files = await ctx.FileAccessHistories.OrderByDescending(x => x.AccessTime).Take(ListCount).Select(x => x.FilePath).ToListAsync();
+            files = await AppStorage.Db.LatestAsync(StorageDb.Recent.Files, ListCount);
             RaiseChanged();
         }
 
@@ -129,21 +103,8 @@ namespace Typedown.Core.Services
             await recordLock.WaitAsync();
             try
             {
-                using var ctx = await AppDbContext.Create();
-                var model = ctx.FolderAccessHistories;
                 // One row per path, its time updated — see RecordFileHistory.
-                var existing = await model.FirstOrDefaultAsync(x => x.FolderPath == folderPath);
-                if (existing != null)
-                    existing.AccessTime = DateTime.Now;
-                else
-                    await model.AddAsync(new FolderAccessHistory() { FolderPath = folderPath, AccessTime = DateTime.Now });
-                await ctx.SaveChangesAsync();
-                var excess = await model.OrderByDescending(x => x.AccessTime).Skip(KeepRows).ToListAsync();
-                if (excess.Count > 0)
-                {
-                    model.RemoveRange(excess);
-                    await ctx.SaveChangesAsync();
-                }
+                await AppStorage.Db.RecordAsync(StorageDb.Recent.Folders, folderPath, DateTime.Now, KeepRows);
             }
             finally
             {
@@ -154,30 +115,19 @@ namespace Typedown.Core.Services
 
         public async Task RemoveFolderHistory(string folderPath)
         {
-            using (var ctx = await AppDbContext.Create())
-            {
-                var model = ctx.FolderAccessHistories;
-                model.RemoveRange(model.Where(x => x.FolderPath == folderPath));
-                await ctx.SaveChangesAsync();
-            }
+            await AppStorage.Db.RemoveAsync(StorageDb.Recent.Folders, folderPath);
             await ReloadFolders();
         }
 
         public async Task ClearFolderHistory()
         {
-            using (var ctx = await AppDbContext.Create())
-            {
-                var model = ctx.FolderAccessHistories;
-                model.RemoveRange(model);
-                await ctx.SaveChangesAsync();
-            }
+            await AppStorage.Db.ClearAsync(StorageDb.Recent.Folders);
             await ReloadFolders();
         }
 
         private async Task ReloadFolders()
         {
-            using var ctx = await AppDbContext.Create();
-            folders = await ctx.FolderAccessHistories.OrderByDescending(x => x.AccessTime).Take(ListCount).Select(x => x.FolderPath).ToListAsync();
+            folders = await AppStorage.Db.LatestAsync(StorageDb.Recent.Folders, ListCount);
             RaiseChanged();
         }
 

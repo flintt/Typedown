@@ -101,12 +101,10 @@
 	</ItemGroup>
 
 	<!-- A trimmed publish (TypedownTrim=true) trims the WinRT projection and the .NET libraries only: the libraries
-	     that find types and members by reflection at run time are kept whole (EF Core builds its model, Newtonsoft
-	     reads the settings and the automation messages, WinRT.Runtime and the WinUI projection marshal by type, Rx). -->
+	     that find types and members by reflection at run time are kept whole (Microsoft.Data.Sqlite finds its native
+	     SQLite through SQLitePCL's batteries, Newtonsoft reads the settings and the automation messages, WinRT.Runtime
+	     and the WinUI projection marshal by type, Rx). -->
 	<ItemGroup Condition="'$(TypedownTrim)' == 'true'">
-		<TrimmerRootAssembly Include="Microsoft.EntityFrameworkCore" />
-		<TrimmerRootAssembly Include="Microsoft.EntityFrameworkCore.Relational" />
-		<TrimmerRootAssembly Include="Microsoft.EntityFrameworkCore.Sqlite" />
 		<TrimmerRootAssembly Include="Microsoft.Data.Sqlite" />
 		<TrimmerRootAssembly Include="Newtonsoft.Json" />
 		<TrimmerRootAssembly Include="WinRT.Runtime" />
