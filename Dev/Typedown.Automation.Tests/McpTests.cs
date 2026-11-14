@@ -54,7 +54,7 @@ namespace Typedown.Automation.Tests
             Assert.Equal(McpServer.ProtocolVersions[0], (string)unknownVersion["result"]!["protocolVersion"]!);
 
             var tools = (JArray)(await Send("tools/list"))["result"]!["tools"]!;
-            Assert.Equal(new[] { "typedown_list_documents", "typedown_read_document", "typedown_replace_text", "typedown_replace_document", "typedown_save_document",
+            Assert.Equal(new[] { "typedown_list_documents", "typedown_read_document", "typedown_replace_text", "typedown_edit_text", "typedown_replace_document", "typedown_save_document",
                 "typedown_close_document", "typedown_get_view", "typedown_set_view" },
                 tools.Select(t => (string)t["name"]!));
             foreach (var t in tools)
@@ -168,6 +168,98 @@ namespace Typedown.Automation.Tests
             Assert.True((bool)result["isError"]!);
             Assert.Equal("not_connected", (string)result["structuredContent"]!["error"]!["data"]!["kind"]!);
             Assert.Contains("Allow local automation", (string)result["structuredContent"]!["next"]!);
+        }
+
+        // An agent moving a passage from one chapter to another made two writes (two revisions, two reviews) or sent the
+        // whole 20,000-character document (the agent's feedback, 2026-11-12).
+        [Fact]
+        public async Task Several_edits_are_one_revision_or_nothing()
+        {
+            await Tool("typedown_replace_document", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 0, ["text"] = "# One\n\nmove me\n\n# Two\n\nend\n" });
+            var edits = new JArray(
+                new JObject { ["find"] = "\nmove me\n", ["replacement"] = "\n" },
+                new JObject { ["find"] = "\nend\n", ["replacement"] = "\nend\n\nmove me\n" });
+            var write = await Tool("typedown_edit_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 1, ["edits"] = edits });
+            Assert.False((bool)write["isError"]!, write.ToString());
+            Assert.Equal(2, (long)write["structuredContent"]!["revision"]!);
+            Assert.Equal("# One\n\n\n# Two\n\nend\n\nmove me\n", doc.Text);
+
+            // One edit that does not fit: none is made, and the error names it.
+            var bad = await Tool("typedown_edit_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 2, ["edits"] = new JArray(
+                new JObject { ["find"] = "# One", ["replacement"] = "# First" },
+                new JObject { ["find"] = "absent", ["replacement"] = "x" }) });
+            Assert.True((bool)bad["isError"]!);
+            Assert.Equal("match_count_mismatch", (string)bad["structuredContent"]!["error"]!["data"]!["kind"]!);
+            Assert.Equal(1, (int)bad["structuredContent"]!["error"]!["data"]!["editIndex"]!);
+            Assert.Contains("none of the edits", (string)bad["structuredContent"]!["next"]!);
+            Assert.Equal(2, doc.Revision);
+            Assert.Contains("# One", doc.Text);
+
+            var overlap = await Tool("typedown_edit_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 2, ["edits"] = new JArray(
+                new JObject { ["find"] = "# Two", ["replacement"] = "# 2" },
+                new JObject { ["find"] = "Two\n\nend", ["replacement"] = "x" }) });
+            Assert.Equal("edits_overlap", (string)overlap["structuredContent"]!["error"]!["data"]!["kind"]!);
+            Assert.Equal(2, doc.Revision);
+
+            var stale = await Tool("typedown_edit_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 1, ["edits"] = new JArray(new JObject { ["find"] = "# One", ["replacement"] = "# First" }) });
+            Assert.Equal("revision_conflict", (string)stale["structuredContent"]!["error"]!["data"]!["kind"]!);
+            Assert.Equal(2, doc.Revision);
+        }
+
+        // Read only a part of a long document: a heading's section, or lines; the revision is still the whole one's.
+        [Fact]
+        public async Task A_part_of_a_document_by_heading_or_lines()
+        {
+            await Tool("typedown_replace_document", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 0,
+                ["text"] = "# Book\n\n## Chapter 5\n\nfive\n\n```md\n## not a heading\n```\n\n### Note\n\nnote\n\n## Chapter 7\n\nseven\n" });
+            var section = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId, ["heading"] = "chapter 5" });
+            Assert.False((bool)section["isError"]!, section.ToString());
+            Assert.Equal("## Chapter 5\n\nfive\n\n```md\n## not a heading\n```\n\n### Note\n\nnote\n\n", (string)section["structuredContent"]!["text"]!);
+            Assert.Equal(3, (int)section["structuredContent"]!["range"]!["startLine"]!);
+            Assert.Equal(14, (int)section["structuredContent"]!["range"]!["endLine"]!);
+            Assert.Equal(17, (int)section["structuredContent"]!["range"]!["totalLines"]!);
+            Assert.Equal(1, (long)section["structuredContent"]!["revision"]!);
+
+            var lines = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId, ["startLine"] = 15, ["endLine"] = 99 });
+            Assert.Equal("## Chapter 7\n\nseven\n", (string)lines["structuredContent"]!["text"]!);
+            Assert.Equal(17, (int)lines["structuredContent"]!["range"]!["endLine"]!);
+
+            var missing = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId, ["heading"] = "Chapter 9" });
+            Assert.True((bool)missing["isError"]!);
+            Assert.Contains("## Chapter 7 (line 15)", (string)missing["structuredContent"]!["error"]!["message"]!);
+        }
+
+        // An agent whose first edits were rejected in review found out only by reading the whole text back and comparing
+        // (the agent's feedback, 2026-11-12): a read says what became of this session's last edit.
+        [Fact]
+        public async Task A_read_says_whether_this_sessions_last_edit_is_still_there()
+        {
+            await Tool("typedown_replace_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 0, ["find"] = "old text", ["replacement"] = "brand new words" });
+            var read = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId });
+            Assert.Equal("unchanged", (string)read["structuredContent"]!["lastEditThisSession"]!["status"]!);
+
+            // Someone else (the person rejecting it, here another session) puts the text back.
+            var other = New(endpoint);
+            await Tool("typedown_replace_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 1, ["find"] = "brand new words", ["replacement"] = "old text" }, other);
+            read = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId });
+            Assert.Equal("gone", (string)read["structuredContent"]!["lastEditThisSession"]!["status"]!);
+            Assert.Contains("rejected it in review", (string)read["structuredContent"]!["lastEditThisSession"]!["note"]!);
+            // The other session never wrote to it before its own edit: its read reports its own edit.
+            var theirs = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId }, other);
+            Assert.Equal("unchanged", (string)theirs["structuredContent"]!["lastEditThisSession"]!["status"]!);
+        }
+
+        [Fact]
+        public async Task A_read_explains_normalization_in_words()
+        {
+            var read = await Tool("typedown_read_document", new JObject { ["documentId"] = doc.DocumentId });
+            var pending = (string?)read["structuredContent"]!["normalization"]?["pendingNormalization"];
+            if (pending is "none" or "knownFormatting" or "unknown" or "unsafe")
+                Assert.False(string.IsNullOrEmpty((string?)read["structuredContent"]!["normalizationNote"]));
+            var tools = (JArray)(await Send("tools/list"))["result"]!["tools"]!;
+            var allow = (string)tools.First(t => (string)t["name"]! == "typedown_replace_text")["inputSchema"]!["properties"]!["allowFormattingChanges"]!["description"]!;
+            Assert.Contains("formatting-changed", allow);
+            Assert.Contains("formatting-changed", McpServer.Instructions);
         }
 
         [Fact]
