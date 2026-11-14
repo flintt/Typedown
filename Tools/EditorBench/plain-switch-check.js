@@ -41,6 +41,17 @@ const { openEditor } = require('./harness');
     report(!reported.change, 'the plain text is never reported by the visual editor on the way back', JSON.stringify(reported.change));
     report(/Section 0$/.test(await page.evaluate(() => document.querySelector('#ag-editor-id h2')?.textContent.trim() || '')), 'the Markdown file is what is shown', '');
 
+    // A long plain text, then a short Markdown file: the load's receipt is about the Markdown file (it carried the plain
+    // text's whole 488,879 characters under the new load's number - the audit's E08; the host's retry put it right).
+    const longTxt = Array.from({ length: 20000 }, (_, i) => `line ${i} of a long plain text file, with some words in it`).join('\n');
+    await loadPlain(longTxt);
+    await pause(800);
+    const short = '# Short\n\nA new file.\n';
+    await loadMarkdown(short);
+    const receipt = await page.evaluate(() => { const r = window.__last.FileLoaded; return { loadId: r.loadId, same: r.same, length: typeof r.text === 'string' ? r.text.length : null }; });
+    report(receipt.same === true || (receipt.length !== null && receipt.length < 100), 'a short Markdown file after a long plain text: the receipt has its text, not the plain text',
+      JSON.stringify(receipt));
+
     // Save as: a .txt becomes a .md - PlainTextShown off and no load. The visual editor comes with the text.
     await loadPlain('# Now Markdown\n\n**bold**\n');
     await pause(300);
