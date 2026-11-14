@@ -1080,7 +1080,22 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }), [editor]);
 
     useEffect(() => transport.addListener<any>('Paste', arg => {
-        if (optionsRef.current?.readOnly) return
+        if (optionsRef.current?.readOnly) {
+            // Reading mode takes no paste, but New from Clipboard's into the new document it made (intoNew): it stayed
+            // empty (the user, 2026-11-14). Muya draws a paste again around the caret's block, which reading mode has
+            // none of (getActiveBlocks), and threw: the paste made as in editing, the document drawn for reading after.
+            if (!arg?.intoNew || !editor) return
+            markEdited(shownRef)
+            const options = (editor as any).options
+            options.readOnly = false
+            Promise.resolve((editor as any).contentState.pasteHandler(arg.type, arg.text ?? '', arg.html ?? ''))
+                .catch((err: unknown) => console.log('paste failed', err))
+                .finally(() => {
+                    options.readOnly = !!optionsRef.current?.readOnly
+                    ;(editor as any).contentState.render(false, true)
+                })
+            return
+        }
         markEdited(shownRef)
         editor?.clipboard.paste(arg)
     }), [editor]);

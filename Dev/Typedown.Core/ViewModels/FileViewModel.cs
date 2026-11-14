@@ -634,7 +634,7 @@ namespace Typedown.Core.ViewModels
             while (EditorViewModel.ConfirmedLoadId < EditorViewModel.LoadId && clock.ElapsedMilliseconds < 10000)
                 await Task.Delay(50);
             Log.Debug($"new from clipboard: the new document in the page after {clock.ElapsedMilliseconds} ms; pasting");
-            EditorViewModel.Paste("normal");
+            EditorViewModel.Paste("newDocument");
             MarkdownEditor?.FocusEditorInPlace();
         }
 

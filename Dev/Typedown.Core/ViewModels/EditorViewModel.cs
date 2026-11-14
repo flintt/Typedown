@@ -1650,7 +1650,11 @@ namespace Typedown.Core.ViewModels
             // The document pasted into (Services.DocumentOperation): its pictures' addresses are looked for in its text and
             // written back into it, not into a document its tab was given meanwhile.
             var op = DocumentOperation.Of(ServiceProvider.GetService<TabsViewModel>(), tab);
-            MarkdownEditor?.PostMessage("Paste", new { type, text, html });
+            // New from Clipboard's paste ("newDocument"): a normal paste, into the new document even in reading mode, which
+            // takes no other paste - the new tab stayed empty there (the user, 2026-11-14).
+            var intoNew = type == "newDocument";
+            if (intoNew) type = "normal";
+            MarkdownEditor?.PostMessage("Paste", new { type, text, html, intoNew });
             EditionHooks.ReportActivity(ActivityKind.Pasted, AppViewModel);
             if (type == "pasteAsPlainText" || string.IsNullOrEmpty(html)) return;
             if (Settings.InsertWebImageAction is not (Enums.InsertImageAction.CopyToPath or Enums.InsertImageAction.Upload or Enums.InsertImageAction.Base64)) return;
