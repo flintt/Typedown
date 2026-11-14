@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Тақырыпқа сілтемені көшіру</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Бағандарды мазмұнға сәйкестендіру</value>
+  </data>
 </root>

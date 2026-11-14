@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>സൈഡ് പാളി മുകളിൽ ഫയലുകളും താഴെ രൂപരേഖയും കാണിക്കുന്നു, ഓരോന്നും അതിന്റെ തലക്കെട്ട് വരെ മടക്കാം, രണ്ട് ടാബുകൾക്ക് പകരം.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>പട്ടിക കോളം വീതി</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>വീതി നിശ്ചയിക്കാൻ തലക്കെട്ട് വരിയിൽ കോളത്തിന്റെ അറ്റം വലിക്കുക. വീതി ഫയലിൽ തലക്കെട്ടിന് താഴെയുള്ള ഡാഷുകളായി സൂക്ഷിക്കും (മറ്റ് എഡിറ്ററുകൾ പട്ടിക സാധാരണ പോലെ കാണിക്കും) കൂടാതെ എക്സ്പോർട്ടിലേക്ക് പോകും.</value>
+  </data>
 </root>

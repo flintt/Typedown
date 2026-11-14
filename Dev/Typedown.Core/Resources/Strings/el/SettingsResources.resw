@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Το πλαϊνό παράθυρο δείχνει τα αρχεία επάνω και τη διάρθρωση κάτω, το καθένα πτυσσόμενο στον τίτλο του, αντί για δύο καρτέλες.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Πλάτος στηλών πινάκων</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Σύρετε το άκρο μιας στήλης στη γραμμή κεφαλίδας για να ορίσετε το πλάτος της. Το πλάτος αποθηκεύεται στο αρχείο ως οι παύλες κάτω από την κεφαλίδα (άλλοι επεξεργαστές δείχνουν τον πίνακα κανονικά) και περνά στις εξαγωγές.</value>
+  </data>
 </root>

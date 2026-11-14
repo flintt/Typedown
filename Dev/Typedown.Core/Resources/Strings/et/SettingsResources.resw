@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Külgpaan näitab üleval faile ja all liigendust, kumbki kokkupandav pealkirjareani, kahe vahekaardi asemel.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Tabeli veergude laius</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Lohistage päiserea veeru serva, et laiust määrata. Laius salvestatakse failis päise all olevate kriipsudena (teised redaktorid näitavad tabelit tavapäraselt) ja läheb eksporti.</value>
+  </data>
 </root>

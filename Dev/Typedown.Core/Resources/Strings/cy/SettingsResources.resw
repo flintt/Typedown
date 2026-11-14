@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Mae’r cwarel ochr yn dangos y ffeiliau uwchben a’r amlinelliad oddi tano, pob un yn plygu i’w deitl, yn lle dau dab.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Lled colofnau tablau</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Llusgwch ymyl colofn yn y rhes pennawd i osod ei lled. Mae'r lled yn cael ei gadw yn y ffeil fel y llinellau toriad o dan y pennawd (mae golygyddion eraill yn dangos y tabl fel arfer) ac yn mynd i'r allforion.</value>
+  </data>
 </root>

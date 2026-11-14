@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Kopyahin ang link sa heading</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Iangkop ang mga column sa nilalaman</value>
+  </data>
 </root>

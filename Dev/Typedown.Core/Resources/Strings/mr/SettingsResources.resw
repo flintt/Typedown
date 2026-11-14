@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>बाजूचा पॅन वर फायली आणि खाली रूपरेषा दाखवतो, प्रत्येक आपल्या शीर्षकापर्यंत मिटवता येतो, दोन टॅबऐवजी.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>सारणी स्तंभ रुंदी</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>रुंदी ठरवण्यासाठी शीर्षक ओळीत स्तंभाची कडा ओढा. रुंदी फाइलमध्ये शीर्षकाखालील डॅशच्या रूपात राहते (इतर संपादक सारणी नेहमीप्रमाणे दाखवतात) आणि निर्यातीत जाते.</value>
+  </data>
 </root>

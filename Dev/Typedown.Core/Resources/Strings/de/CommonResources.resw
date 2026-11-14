@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Link zur Überschrift kopieren</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Spalten an Inhalt anpassen</value>
+  </data>
 </root>

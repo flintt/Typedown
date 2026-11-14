@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>কাষৰ পেনত ওপৰত ফাইল আৰু তলত ৰূপৰেখা দেখুৱায়, প্ৰতিটো নিজৰ শিৰোনামলৈকে সংকুচিত কৰিব পাৰি, দুটা টেবৰ সলনি।</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>তালিকাৰ স্তম্ভৰ প্ৰস্থ</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>প্ৰস্থ ঠিক কৰিবলৈ শিৰোনামৰ শাৰীত স্তম্ভৰ কাষ টানক। প্ৰস্থ ফাইলত শিৰোনামৰ তলৰ ডেছৰ দৈৰ্ঘ্য হিচাপে থাকে (আন সম্পাদকে তালিকা সাধাৰণভাৱে দেখুৱায়) আৰু ৰপ্তানিত যায়।</value>
+  </data>
 </root>

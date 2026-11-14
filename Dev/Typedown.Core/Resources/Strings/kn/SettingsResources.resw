@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>ಬದಿ ಫಲಕ ಮೇಲೆ ಫೈಲ್‌ಗಳನ್ನು ಮತ್ತು ಕೆಳಗೆ ರೂಪರೇಖೆಯನ್ನು ತೋರಿಸುತ್ತದೆ, ಪ್ರತಿಯೊಂದನ್ನು ಅದರ ಶೀರ್ಷಿಕೆಯವರೆಗೆ ಮಡಚಬಹುದು, ಎರಡು ಟ್ಯಾಬ್‌ಗಳ ಬದಲು.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>ಕೋಷ್ಟಕ ಕಾಲಮ್ ಅಗಲ</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>ಅಗಲ ಹೊಂದಿಸಲು ಶೀರ್ಷಿಕೆ ಸಾಲಿನಲ್ಲಿ ಕಾಲಮ್‌ನ ಅಂಚನ್ನು ಎಳೆಯಿರಿ. ಅಗಲವು ಫೈಲ್‌ನಲ್ಲಿ ಶೀರ್ಷಿಕೆಯ ಕೆಳಗಿನ ಡ್ಯಾಶ್‌ಗಳಾಗಿ ಉಳಿಯುತ್ತದೆ (ಇತರ ಸಂಪಾದಕಗಳು ಕೋಷ್ಟಕವನ್ನು ಎಂದಿನಂತೆ ತೋರಿಸುತ್ತವೆ) ಮತ್ತು ರಫ್ತಿಗೆ ಹೋಗುತ್ತದೆ.</value>
+  </data>
 </root>

@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Panel samping menampilkan file di atas dan kerangka di bawah, masing-masing bisa dilipat hingga judulnya, alih-alih dua tab.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Lebar kolom tabel</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Seret tepi kolom di baris judul untuk mengatur lebarnya. Lebar disimpan di file sebagai tanda hubung di bawah judul (editor lain menampilkan tabel seperti biasa) dan ikut ke ekspor.</value>
+  </data>
 </root>

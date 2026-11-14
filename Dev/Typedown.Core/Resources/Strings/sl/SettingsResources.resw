@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Stransko podokno prikaže datoteke zgoraj in oris spodaj, vsakega je mogoče strniti na naslov, namesto dveh zavihkov.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Širina stolpcev tabel</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Povlecite rob stolpca v vrstici glave, da nastavite širino. Širina se v datoteki shrani kot pomišljaji pod glavo (drugi urejevalniki tabelo prikažejo kot običajno) in gre v izvoz.</value>
+  </data>
 </root>

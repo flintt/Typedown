@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Šoninis polangis viršuje rodo failus, apačioje – struktūrą, kiekvieną galima suskleisti iki pavadinimo, vietoj dviejų skirtukų.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Lentelių stulpelių plotis</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Vilkite stulpelio kraštą antraštės eilutėje, kad nustatytumėte plotį. Plotis faile saugomas kaip brūkšneliai po antrašte (kiti redaktoriai lentelę rodo kaip įprasta) ir patenka į eksportą.</value>
+  </data>
 </root>

@@ -1404,4 +1404,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>复制标题链接</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>列宽按内容适配</value>
+  </data>
 </root>

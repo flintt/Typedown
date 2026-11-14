@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Cóipeáil nasc chuig an gceannteideal</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Oiriúnaigh colúin don ábhar</value>
+  </data>
 </root>

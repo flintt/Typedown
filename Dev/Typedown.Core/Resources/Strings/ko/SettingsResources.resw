@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>사이드 창 위쪽에 파일, 아래쪽에 개요를 표시하며 각각 제목 줄로 접을 수 있습니다(탭 두 개 대신).</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>표 열 너비</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>머리글 행에서 열의 경계를 끌어 너비를 정합니다. 너비는 머리글 아래 줄의 대시 길이로 파일에 저장되며(다른 편집기에서는 평소대로 표시) 내보내기에도 반영됩니다.</value>
+  </data>
 </root>

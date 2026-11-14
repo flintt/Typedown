@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Kopírovat odkaz na nadpis</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Přizpůsobit sloupce obsahu</value>
+  </data>
 </root>

@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Copiere link către titlu</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Potrivește coloanele la conținut</value>
+  </data>
 </root>

@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>העתקת קישור לכותרת</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>התאמת עמודות לתוכן</value>
+  </data>
 </root>

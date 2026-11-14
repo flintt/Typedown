@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Копирај врска до насловот</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Прилагоди ги колоните на содржината</value>
+  </data>
 </root>

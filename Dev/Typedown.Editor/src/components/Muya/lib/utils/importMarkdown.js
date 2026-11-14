@@ -236,6 +236,8 @@ const importRegister = ContentState => {
           }
 
           Object.assign(table, { row: cells.length, column: header.length - 1 }) // set row and column
+          // Column widths from the delimiter row (services/tableWidths): kept with the table, used when the setting is on.
+          if (token.widths && token.widths.length === header.length) table.widths = token.widths
           block = this.createBlock('figure')
           block.functionType = 'table'
           this.appendChild(thead, theadRow)

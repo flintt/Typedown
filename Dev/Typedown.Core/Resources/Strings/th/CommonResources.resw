@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>คัดลอกลิงก์ไปยังหัวข้อ</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>ปรับคอลัมน์ตามเนื้อหา</value>
+  </data>
 </root>

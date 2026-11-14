@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>บานหน้าต่างด้านข้างแสดงไฟล์ด้านบนและเค้าโครงด้านล่าง แต่ละส่วนพับเหลือแค่หัวข้อได้ แทนที่จะเป็นสองแท็บ</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>ความกว้างคอลัมน์ตาราง</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>ลากขอบคอลัมน์ในแถวหัวตารางเพื่อตั้งความกว้าง ความกว้างจะเก็บในไฟล์เป็นขีดใต้หัวตาราง (โปรแกรมอื่นแสดงตารางตามปกติ) และติดไปในการส่งออก</value>
+  </data>
 </root>

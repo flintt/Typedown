@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Ipinapakita ng side pane ang mga file sa itaas at ang outline sa ibaba, bawat isa ay natitiklop hanggang sa pamagat nito, sa halip na dalawang tab.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Lapad ng mga column ng table</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>I-drag ang gilid ng column sa header row para itakda ang lapad. Naiimbak ang lapad sa file bilang mga gitling sa ilalim ng header (karaniwang ipinapakita ng ibang editor ang table) at kasama sa export.</value>
+  </data>
 </root>

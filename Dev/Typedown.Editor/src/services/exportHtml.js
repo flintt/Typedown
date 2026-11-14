@@ -356,6 +356,8 @@ class ExportHtml {
       isGitlabCompatibilityEnabled: this.options?.isGitlabCompatibilityEnabled ?? false,
       baseUrl: this.options?.baseUrl,
       showBlankLines: !!this.options?.showBlankLines,
+      // Settings > Editor > Table column widths: the delimiter rows' widths kept in the export (HTML, PDF, Word).
+      tableColumnWidths: !!this.options?.tableColumnWidths,
       highlight(code, lang) {
         // Language may be undefined (GH#591)
         if (!lang) {

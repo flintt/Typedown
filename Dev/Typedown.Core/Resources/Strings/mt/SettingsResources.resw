@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Il-pannell tal-ġenb juri l-fajls fuq u l-iskema taħt, kull wieħed jingħalaq sat-titlu tiegħu, minflok żewġ tabs.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Wisa tal-kolonni tat-tabelli</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Kaxkar it-tarf ta’ kolonna fir-ringiela tal-intestatura biex tissettja l-wisa’. Il-wisa’ tinżamm fil-fajl bħala s-sing taħt l-intestatura (editers oħra juru t-tabella bħas-soltu) u tgħaddi fl-esportazzjonijiet.</value>
+  </data>
 </root>

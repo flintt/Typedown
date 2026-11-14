@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Бічна панель показує файли вгорі та структуру внизу, кожен блок згортається до заголовка, замість двох вкладок.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Ширина стовпців таблиць</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Перетягніть межу стовпця в рядку заголовка, щоб задати ширину. Ширина зберігається у файлі довжиною дефісів під заголовком (інші редактори показують таблицю як звичайно) і потрапляє в експорт.</value>
+  </data>
 </root>

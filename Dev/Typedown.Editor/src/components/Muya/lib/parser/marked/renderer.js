@@ -155,10 +155,9 @@ Renderer.prototype.tablerow = function (content) {
 
 Renderer.prototype.tablecell = function (content, flags) {
   const type = flags.header ? 'th' : 'td'
-  const tag = flags.align
-    ? '<' + type + ' align="' + flags.align + '">'
-    : '<' + type + '>'
-  return tag + content + '</' + type + '>\n'
+  const align = flags.align ? ' align="' + flags.align + '"' : ''
+  const width = typeof flags.width === 'number' ? ' style="width:' + flags.width + '%"' : ''
+  return '<' + type + align + width + '>' + content + '</' + type + '>\n'
 }
 
 // span level renderer

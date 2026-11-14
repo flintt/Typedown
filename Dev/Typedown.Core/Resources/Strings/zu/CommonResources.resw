@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Kopisha isixhumanisi esiya esihlokweni</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Lingisa amakholomu nokuqukethwe</value>
+  </data>
 </root>

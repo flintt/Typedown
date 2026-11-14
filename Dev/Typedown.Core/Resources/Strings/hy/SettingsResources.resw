@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Կողային վահանակը վերևում ցույց է տալիս ֆայլերը, ներքևում՝ ուրվագիծը, յուրաքանչյուրը ծալվում է մինչև վերնագիրը, երկու ներդիրի փոխարեն։</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Աղյուսակի սյունակների լայնություն</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Լայնությունը սահմանելու համար քաշեք սյունակի եզրը վերնագրի տողում։ Լայնությունը ֆայլում պահվում է վերնագրի տակի գծիկների տեսքով (այլ խմբագրիչները աղյուսակը ցույց են տալիս սովորականի պես) և անցնում է արտահանման մեջ։</value>
+  </data>
 </root>

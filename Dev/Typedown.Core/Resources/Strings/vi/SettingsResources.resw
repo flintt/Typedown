@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Ngăn bên hiện tệp ở trên và dàn ý ở dưới, mỗi phần có thể thu gọn về tiêu đề, thay cho hai thẻ.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Độ rộng cột bảng</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Kéo mép một cột ở hàng tiêu đề để đặt độ rộng. Độ rộng được lưu trong tệp bằng các dấu gạch dưới tiêu đề (trình soạn thảo khác vẫn hiện bảng như thường) và đi vào bản xuất.</value>
+  </data>
 </root>

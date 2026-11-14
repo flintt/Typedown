@@ -1402,4 +1402,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>複製標題連結</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>欄寬依內容調整</value>
+  </data>
 </root>

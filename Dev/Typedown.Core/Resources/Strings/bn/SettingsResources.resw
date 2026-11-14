@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>পার্শ্ব প্যানে উপরে ফাইল ও নিচে রূপরেখা দেখায়, প্রতিটি তার শিরোনাম পর্যন্ত গুটানো যায়, দুটি ট্যাবের বদলে।</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>সারণির কলামের প্রস্থ</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>প্রস্থ ঠিক করতে শিরোনাম সারিতে কলামের প্রান্ত টানুন। প্রস্থ ফাইলে শিরোনামের নিচের ড্যাশের দৈর্ঘ্য হিসেবে থাকে (অন্য সম্পাদক সারণি স্বাভাবিকভাবে দেখায়) এবং রপ্তানিতে যায়।</value>
+  </data>
 </root>

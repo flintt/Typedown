@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>O panel lateral amosa os ficheiros arriba e o esquema abaixo, cada un pregable ata o título, en lugar de dúas lapelas.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Largura das columnas das táboas</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Arrastra o bordo dunha columna na fila de cabeceira para fixar a súa largura. A largura gárdase no ficheiro como os guións baixo a cabeceira (outros editores amosan a táboa como sempre) e pasa ás exportacións.</value>
+  </data>
 </root>

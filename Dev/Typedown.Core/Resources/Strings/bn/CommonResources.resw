@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>শিরোনামের লিঙ্ক কপি করুন</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>কলাম বিষয়বস্তু অনুযায়ী করুন</value>
+  </data>
 </root>

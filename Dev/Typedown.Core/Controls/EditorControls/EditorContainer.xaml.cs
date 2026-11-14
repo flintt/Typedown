@@ -258,6 +258,9 @@ namespace Typedown.Core.Controls
         /// <summary>The table's rows and columns: in a table, in the visual editor, not in reading mode.</summary>
         public static Visibility TableEditVisibility(bool inTable, bool sourceCode, bool readOnly) => inTable && !sourceCode && !readOnly ? Visibility.Visible : Visibility.Collapsed;
 
+        /// <summary>Fit columns to content: with column widths on (Settings > Editor > Table column widths), not in reading mode.</summary>
+        public static Visibility FitColumnsVisibility(bool columnWidths, bool readOnly) => columnWidths && !readOnly ? Visibility.Visible : Visibility.Collapsed;
+
         public static Visibility IsPasteAsVisible(bool sourceCode, bool readOnly, bool onGhost) => sourceCode || readOnly || onGhost ? Visibility.Collapsed : Visibility.Visible;
 
         /// <summary>Cut, paste and delete: not in reading mode, nor on a deleted block review mode draws (not the document's text).</summary>

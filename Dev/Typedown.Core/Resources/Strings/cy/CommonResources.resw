@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Copïo dolen i’r pennawd</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Ffitio colofnau i'r cynnwys</value>
+  </data>
 </root>

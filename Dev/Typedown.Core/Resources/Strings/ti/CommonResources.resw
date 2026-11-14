@@ -1387,4 +1387,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>ናብ ኣርእስቲ ዝወስድ መላግቦ ቅዳሕ</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>ዓምድታት ምስ ትሕዝቶ ኣሰማምዕ</value>
+  </data>
 </root>

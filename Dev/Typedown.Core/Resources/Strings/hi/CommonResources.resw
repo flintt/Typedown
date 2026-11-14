@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>शीर्षक का लिंक कॉपी करें</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>स्तंभ सामग्री के अनुसार करें</value>
+  </data>
 </root>

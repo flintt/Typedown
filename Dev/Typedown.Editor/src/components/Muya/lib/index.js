@@ -248,7 +248,7 @@ class Muya {
     const blocks = this.contentState.getBlocks()
     const { isGitlabCompatibilityEnabled, listIndentation } = this.contentState
     const { tableAlignColumns } = this.options
-    return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false }).generate();
+    return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false, tableColumnWidths: !!this.options.tableColumnWidths }).generate();
   }
 
   /** A text as the editor writes it back: read into a model of its own and exported, the document shown untouched. */
@@ -257,7 +257,7 @@ class Muya {
     const blocks = this.contentState.markdownToState(markdown)
     const { isGitlabCompatibilityEnabled, listIndentation } = this.contentState
     const { tableAlignColumns } = this.options
-    return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false }).generate()
+    return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false, tableColumnWidths: !!this.options.tableColumnWidths }).generate()
   }
 
   getTOC() {
@@ -556,7 +556,7 @@ class Muya {
     })
     const exportOf = blocks => {
       const { isGitlabCompatibilityEnabled, listIndentation } = contentState
-      return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: this.options.tableAlignColumns !== false }).generate()
+      return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: this.options.tableAlignColumns !== false, tableColumnWidths: !!this.options.tableColumnWidths }).generate()
     }
     link(assembled)
     // The same blocks as a new parse, not only the same text written out: an empty paragraph the old blocks kept (Enter

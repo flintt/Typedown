@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Nakili kiungo cha kichwa</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Linganisha safu wima na maudhui</value>
+  </data>
 </root>

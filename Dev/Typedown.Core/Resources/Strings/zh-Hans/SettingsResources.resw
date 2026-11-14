@@ -1075,4 +1075,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>侧栏上面显示文件、下面显示大纲，各自可折叠到标题行，不再用两个页签。</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>表格列宽</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>拖动表头里列的边线设置宽度。宽度以表头下一行短横线的长短保存在文件里（其他编辑器照常显示表格），导出时也会带上。</value>
+  </data>
 </root>

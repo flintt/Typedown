@@ -10,13 +10,16 @@
  */
 
 import { CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA } from '../config'
+import { delimiterDashes } from 'services/tableWidths'
 import { isEmptyParagraph, visibleEmptyParagraphs } from './blankLines'
 
 class ExportMarkdown {
-  constructor(blocks, listIndentation = 1, isGitlabCompatibilityEnabled = false, { alignTableColumns = true } = {}) {
+  constructor(blocks, listIndentation = 1, isGitlabCompatibilityEnabled = false, { alignTableColumns = true, tableColumnWidths = false } = {}) {
     this.blocks = blocks
     // false: write tables compactly (`| a | b |`) instead of padding every cell to the column width
     this.alignTableColumns = alignTableColumns
+    // Settings > Editor > Table column widths: a table's widths written as its delimiter row's dashes (services/tableWidths)
+    this.tableColumnWidths = tableColumnWidths
     this.listType = [] // 'ul' or 'ol'
     // helper to translate the first tight item in a nested list
     this.isLooseParentList = true
@@ -440,8 +443,13 @@ class ExportMarkdown {
       }).join('|') + '|'
       result.push(rs)
       if (i === 0) {
-        const cutOff = indent + '|' + columnWidth.map(({ width, align }) => {
-          let raw = '-'.repeat(this.alignTableColumns && width ? width - 2 : 3)
+        // Widths set (the setting on): the dashes are the columns' shares, the cells padded as before.
+        const widths = this.tableColumnWidths && Array.isArray(table.widths) && table.widths.length === column + 1 ? table.widths : null
+        const dashes = widths
+          ? delimiterDashes(widths, columnWidth.map((c, j) => this.alignTableColumns && c.width ? c.width : visibleLength(tableData[0][j]) + 2))
+          : null
+        const cutOff = indent + '|' + columnWidth.map(({ width, align }, j) => {
+          let raw = '-'.repeat(dashes ? dashes[j] : this.alignTableColumns && width ? width - 2 : 3)
           switch (align) {
             case 'left':
               raw = `:${raw} `

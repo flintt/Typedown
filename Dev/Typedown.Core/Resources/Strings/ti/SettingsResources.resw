@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>ናይ ጎኒ ፓነል ፋይላት ኣብ ላዕሊ ትሕዝቶ ኣብ ታሕቲ የርኢ፣ ነፍሲ ወከፍ ክሳብ ኣርእስቱ ይዕጸፍ፣ ኣብ ክንዲ ክልተ ትራት።</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>ስፍሓት ዓምዲ ሰንጠረዥ</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>ስፍሓት ንምውሳን ኣብ መስመር ኣርእስቲ ንወሰን ዓምዲ ስሓብ። ስፍሓት ኣብ ፋይል ከም ሰረዛት ትሕቲ ኣርእስቲ ይዕቀብ (ካልኦት ኣሰናደውቲ ሰንጠረዥ ከም ልሙድ የርእዩ) ናብ ምልኣኽ ድማ ይኣቱ።</value>
+  </data>
 </root>

@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Копировать ссылку на заголовок</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Подогнать столбцы по содержимому</value>
+  </data>
 </root>

@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Sideruten viser filene øverst og disposisjonen nederst, hver kan felles sammen til tittelen, i stedet for to faner.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Kolonnebredde i tabeller</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Dra kanten av en kolonne i overskriftsraden for å angi bredden. Bredden lagres i filen som strekene under overskriften (andre redigerere viser tabellen som vanlig) og blir med ved eksport.</value>
+  </data>
 </root>

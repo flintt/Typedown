@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>साइड पैन ऊपर फ़ाइलें और नीचे रूपरेखा दिखाता है, हर एक अपने शीर्षक तक सिमट सकता है, दो टैब के बजाय।</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>तालिका स्तंभ की चौड़ाई</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>चौड़ाई तय करने के लिए शीर्ष पंक्ति में स्तंभ का किनारा खींचें। चौड़ाई फ़ाइल में शीर्ष के नीचे के डैश की लंबाई के रूप में रहती है (अन्य संपादक तालिका सामान्य रूप से दिखाते हैं) और निर्यात में जाती है।</value>
+  </data>
 </root>

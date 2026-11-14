@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Страничниот панел прикажува датотеки горе и преглед долу, секој може да се собере до насловот, наместо две картички.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Ширина на колоните во табели</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Повлечете го работ на колона во редот за заглавие за да ја поставите ширината. Ширината се чува во датотеката како цртички под заглавието (другите уредници ја прикажуваат табелата како обично) и оди во извозот.</value>
+  </data>
 </root>

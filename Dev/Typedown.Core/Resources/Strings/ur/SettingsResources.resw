@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>سائیڈ پین اوپر فائلیں اور نیچے خاکہ دکھاتا ہے، ہر ایک اپنے عنوان تک سمٹ سکتا ہے، دو ٹیبز کے بجائے۔</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>جدول کے کالم کی چوڑائی</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>چوڑائی مقرر کرنے کے لیے سرخی کی قطار میں کالم کا کنارہ گھسیٹیں۔ چوڑائی فائل میں سرخی کے نیچے ڈیشوں کی صورت محفوظ رہتی ہے (دوسرے ایڈیٹر جدول معمول کے مطابق دکھاتے ہیں) اور برآمد میں شامل ہوتی ہے۔</value>
+  </data>
 </root>

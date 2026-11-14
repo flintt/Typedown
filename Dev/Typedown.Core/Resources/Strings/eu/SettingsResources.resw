@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Alboko panelak fitxategiak goian eta eskema behean erakusten ditu, bakoitza bere izenburura tolesgarria, bi fitxaren ordez.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Taulen zutabe-zabalera</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Arrastatu zutabe baten ertza goiburuko errenkadan zabalera ezartzeko. Zabalera fitxategian goiburuaren azpiko marratxo gisa gordetzen da (beste editoreek taula ohi bezala erakusten dute) eta esportazioetara pasatzen da.</value>
+  </data>
 </root>

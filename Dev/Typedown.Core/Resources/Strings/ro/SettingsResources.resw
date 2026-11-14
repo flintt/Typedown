@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Panoul lateral arată fișierele sus și schița jos, fiecare pliabilă până la titlu, în loc de două file.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Lățimea coloanelor din tabele</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Trageți marginea unei coloane din rândul de antet pentru a-i seta lățimea. Lățimea se păstrează în fișier ca liniuțele de sub antet (alte editoare afișează tabelul ca de obicei) și ajunge în exporturi.</value>
+  </data>
 </root>
