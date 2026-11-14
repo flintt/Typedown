@@ -56,7 +56,7 @@ import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
 import Slugger from 'components/Muya/lib/parser/marked/slugger'
 import { getHeadingPlainText } from 'components/Muya/lib/utils'
-import { shares } from 'services/tableWidths'
+import { MIN_TABLE, columnShares, shares, tableWidth } from 'services/tableWidths'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
 import CodePicker from 'components/Muya/lib/ui/codePicker'
 import EmojiPicker from 'components/Muya/lib/ui/emojiPicker'
@@ -712,6 +712,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // Settings > Editor > Table column widths: tables drawn again with or without the widths in their delimiter rows.
         const on = !!props.options?.tableColumnWidths
         applyOnce(editor, 'tableColumnWidths', on, () => editor?.setOptions({ tableColumnWidths: on }, true))
+        // The columns' edges in a header row show they can be dragged (index.css td-table-widths).
+        document.body.classList.toggle('td-table-widths', on)
     }, [editor, props.options?.tableColumnWidths])
 
     // A column's width dragged by its right edge in the header (Settings > Editor > Table column widths): the column and
@@ -720,63 +722,107 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (!editor) return
         const root = document.getElementById('ag-editor-id')
         if (!root) return
-        const EDGE = 5
+        // How near an edge, on either side of it, a press takes it (the user, 2026-11-13: 5 px on its left side only - past
+        // the edge the pointer is in the next cell - was too small to find).
+        const EDGE = 8
+        // The edge under the pointer, or the one being dragged, as a line down the whole table: what a drag moves (the
+        // user, 2026-11-13: nothing showed a column could be widened). Outside the editable page, over it.
+        const guide = document.createElement('div')
+        guide.className = 'td-column-edge'
+        document.body.appendChild(guide)
+        const showGuide = (th: HTMLTableCellElement | null) => {
+            const table = th?.closest('table')
+            if (!th || !table) { guide.style.display = 'none'; return }
+            const t = table.getBoundingClientRect()
+            guide.style.display = 'block'
+            guide.style.left = `${th.getBoundingClientRect().right - 1}px`
+            guide.style.top = `${t.top}px`
+            guide.style.height = `${t.height}px`
+        }
         const edgeOf = (event: MouseEvent): HTMLTableCellElement | null => {
             if (!(editor as any).options?.tableColumnWidths || optionsRef.current?.readOnly) return null
             const th = (event.target as Element | null)?.closest?.('th') as HTMLTableCellElement | null
-            if (!th || !th.nextElementSibling) return null
+            if (!th) return null
             const r = th.getBoundingClientRect()
-            return Math.abs(event.clientX - r.right) <= EDGE ? th : null
+            if (th.nextElementSibling && Math.abs(event.clientX - r.right) <= EDGE) return th
+            const before = th.previousElementSibling as HTMLTableCellElement | null
+            return before && Math.abs(event.clientX - r.left) <= EDGE ? before : null
         }
-        let drag: { th: HTMLTableCellElement, next: HTMLTableCellElement, cells: HTMLTableCellElement[], start: number[], x: number, total: number, index: number } | null = null
+        // The widths dragged are the widths kept: whole percents of the page (services/tableWidths), the table laid out as
+        // it will be drawn, so letting go changes nothing (it moved columns by the rounding: the user, 2026-11-13).
+        let drag: { table: any, cells: HTMLTableCellElement[], widths: number[], start: number[], x: number, page: number, index: number } | null = null
+        const lay = (element: HTMLTableElement, cells: HTMLTableCellElement[], widths: number[]) => {
+            element.style.tableLayout = 'fixed'
+            element.style.width = `${tableWidth(widths)}%`
+            const own = columnShares(widths)
+            cells.forEach((c, i) => { c.style.boxSizing = 'border-box'; c.style.width = `${own[i]}%` })
+        }
         const move = (event: MouseEvent) => {
             if (!drag) {
-                root.style.cursor = edgeOf(event) ? 'col-resize' : ''
+                const th = edgeOf(event)
+                root.style.cursor = th ? 'col-resize' : ''
+                showGuide(th)
                 return
             }
-            const dx = event.clientX - drag.x
-            const pair = drag.start[drag.index] + drag.start[drag.index + 1]
-            const left = Math.min(Math.max(30, drag.start[drag.index] + dx), pair - 30)
-            drag.th.style.width = `${left / drag.total * 100}%`
-            drag.next.style.width = `${(pair - left) / drag.total * 100}%`
+            // The edge's two columns only: what one gains the other gives, the table and the other columns as they are.
+            const { start, index, page, cells } = drag
+            const step = Math.round((event.clientX - drag.x) / page * 100)
+            const pair = start[index] + start[index + 1]
+            const least = Math.max(1, Math.ceil(30 / page * 100))
+            const left = Math.min(Math.max(least, start[index] + step), pair - least)
+            drag.widths = start.slice()
+            drag.widths[index] = left
+            drag.widths[index + 1] = pair - left
+            lay(cells[0].closest('table') as HTMLTableElement, cells, drag.widths)
+            showGuide(cells[index])
             event.preventDefault()
         }
         const down = (event: MouseEvent) => {
             if (event.button !== 0) return
             const th = edgeOf(event)
             if (!th) return
-            event.preventDefault()
-            event.stopPropagation()
-            const cells = Array.from(th.parentElement!.children) as HTMLTableCellElement[]
-            const table = th.closest('table') as HTMLTableElement
-            const start = cells.map(c => c.getBoundingClientRect().width)
-            const total = start.reduce((a, b) => a + b, 0)
-            // Fixed from here on: what is dragged is what is drawn.
-            table.style.tableLayout = 'fixed'
-            table.style.width = '100%'
-            cells.forEach((c, i) => { c.style.width = `${start[i] / total * 100}%` })
-            drag = { th, next: th.nextElementSibling as HTMLTableCellElement, cells, start, x: event.clientX, total, index: cells.indexOf(th) }
-        }
-        const up = () => {
-            if (!drag) return
-            const { cells, th } = drag
-            drag = null
-            root.style.cursor = ''
             const contentState = (editor as any).contentState
             const cell = contentState.getBlock(th.id)
             const table = cell && contentState.closest(cell, 'table')
             if (!table) return
-            table.widths = shares(cells.map(c => c.getBoundingClientRect().width))
+            event.preventDefault()
+            event.stopPropagation()
+            const cells = Array.from(th.parentElement!.children) as HTMLTableCellElement[]
+            const element = th.closest('table') as HTMLTableElement
+            // The page's width, which the widths are percents of (the figure is as wide as the page).
+            const page = (element.parentElement as HTMLElement).clientWidth
+            // Its widths if it has them; a table without, as wide as it is drawn (it used to be made as wide as the page,
+            // every column with it), in whole percents.
+            const kept = Array.isArray(table.widths) && table.widths.length === cells.length && (editor as any).options?.tableColumnWidths
+            const start = kept ? table.widths.slice() : shares(cells.map(c => c.getBoundingClientRect().width),
+                Math.min(100, Math.max(MIN_TABLE, element.getBoundingClientRect().width / page * 100)))
+            lay(element, cells, start)
+            drag = { table, cells, widths: start, start, x: event.clientX, page, index: cells.indexOf(th) }
+        }
+        const up = () => {
+            if (!drag) return
+            const { table, widths } = drag
+            drag = null
+            root.style.cursor = ''
+            showGuide(null)
+            const contentState = (editor as any).contentState
+            table.widths = widths
             contentState.render()
             ;(editor as any).dispatchChange()
         }
+        const away = () => { if (!drag) showGuide(null) }
         root.addEventListener('mousemove', move)
         root.addEventListener('mousedown', down, true)
+        root.addEventListener('mouseleave', away)
         window.addEventListener('mouseup', up)
+        window.addEventListener('scroll', away, true)
         return () => {
             root.removeEventListener('mousemove', move)
             root.removeEventListener('mousedown', down, true)
+            root.removeEventListener('mouseleave', away)
             window.removeEventListener('mouseup', up)
+            window.removeEventListener('scroll', away, true)
+            guide.remove()
         }
     }, [editor])
 

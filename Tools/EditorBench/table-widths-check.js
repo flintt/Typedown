@@ -4,6 +4,14 @@
 // - a column's edge dragged in the header row: the widths change, the document says so, and read again they are the same;
 // - an aligned table (dashes padded to the cells) has no widths even with the setting on;
 // - Fit columns to content: the widths gone.
+// The user, 2026-11-13: nothing showed a column could be widened; the edge was hard to catch; letting go changed other
+// columns; reading mode let long text out of a table with widths:
+// - the pointer over the table: its header's column edges show (faintly); 6 px past an edge, in the next cell: the
+//   resize cursor and a line down the table at the edge;
+// - a table narrower than the page, dragged: as wide as before, the columns not dragged as before, and letting go
+//   changes nothing; dragged again (it has widths now), the others exactly as they were;
+// - it reads back as wide as it was (its widths together less than 100);
+// - reading mode: a long address, code or word stays in its cell.
 //
 //   node table-widths-check.js
 const { openEditor } = require('./harness');
@@ -76,6 +84,59 @@ const { openEditor } = require('./harness');
     await open('| Name  | A longer note |\n| ----- | ------------- |\n| Ann   | x             |\n');
     md = await markdown();
     report(noWidths(md), 'an aligned table has no widths (none read, none written)', delimiter(md));
+
+    // A table narrower than the page: its edges shown, caught a little past them, dragged.
+    const narrow = '# N\n\n| Name | Note | Other | Last |\n| --- | --- | --- | --- |\n| Ann | a note here | something | z |\n| Bob | another | more text here | y |\n';
+    await open(narrow);
+    const ths = () => page.evaluate(() => [...document.querySelectorAll('#ag-editor-id table th')].map(th => Math.round(th.getBoundingClientRect().width * 10) / 10));
+    const tableW = () => page.evaluate(() => Math.round(document.querySelector('#ag-editor-id table').getBoundingClientRect().width));
+    const edgeAt = i => page.evaluate(i => { const r = document.querySelectorAll('#ag-editor-id table th')[i].getBoundingClientRect(); return { x: r.right, y: r.top + r.height / 2 }; }, i);
+    let at = await edgeAt(1);
+    await page.mouse.move(at.x - 40, at.y + 40);
+    await pause(250);
+    const grip = await page.evaluate(() => Number(getComputedStyle(document.querySelector('#ag-editor-id table th'), '::after').opacity));
+    report(grip > 0.2, 'the pointer over the table: its column edges show', String(grip));
+    await page.mouse.move(at.x + 6, at.y, { steps: 4 });
+    await pause(100);
+    const caught = await page.evaluate(() => { const g = document.querySelector('.td-column-edge'); const t = document.querySelector('#ag-editor-id table').getBoundingClientRect(); const r = g && g.getBoundingClientRect(); return { cursor: document.getElementById('ag-editor-id').style.cursor, line: !!r && getComputedStyle(g).display !== 'none' && Math.abs(r.height - t.height) < 2 } });
+    report(caught.cursor === 'col-resize' && caught.line, '6 px past an edge: the resize cursor and a line down the table', JSON.stringify(caught));
+    const before = await ths(), wideBefore = await tableW();
+    await page.mouse.down();
+    await page.mouse.move(at.x + 106, at.y, { steps: 6 });
+    await pause(100);
+    const during = await ths();
+    await page.mouse.up();
+    await pause(500);
+    const after = await ths();
+    report(Math.abs(await tableW() - wideBefore) <= 8, 'dragged: the table as wide as before (not the page\'s width)', `${wideBefore} -> ${await tableW()}`);
+    report([0, 3].every(i => Math.abs(during[i] - before[i]) <= 4) && during[1] > before[1] + 60, 'dragged: that edge\'s columns only', `${JSON.stringify(before)} -> ${JSON.stringify(during)}`);
+    report(JSON.stringify(after) === JSON.stringify(during), 'letting go changes nothing', `${JSON.stringify(during)} -> ${JSON.stringify(after)}`);
+    at = await edgeAt(2);
+    await page.mouse.move(at.x - 3, at.y, { steps: 3 });
+    await page.mouse.down();
+    await page.mouse.move(at.x - 60, at.y, { steps: 6 });
+    await page.mouse.up();
+    await pause(500);
+    const second = await ths();
+    report(second[0] === after[0] && second[1] === after[1] && second[2] < after[2] && second[2] + second[3] === after[2] + after[3], 'dragged again: the others exactly as they were', `${JSON.stringify(after)} -> ${JSON.stringify(second)}`);
+    md = await markdown();
+    const together = dashes(md).reduce((a, b) => a + b, 0);
+    await open(md);
+    report(together < 100 && Math.abs(await tableW() - wideBefore) <= 8, 'read back: as wide as it was (its widths together less than 100)', `${together}: ${delimiter(md)}`);
+
+    // Reading mode: a table with widths keeps long text in its cells.
+    const long = '| Name | Note |\n| -------------------- | ------------------------------ |\n| Ann | https://example.com/a/very/long/path/without/any/spaces/index.html |\n| Bob | `inline_code_that_is_very_long_and_has_no_spaces_at_all` |\n| Cy | ' + 'x'.repeat(120) + ' |\n';
+    await mode(true, false);
+    await load(long);
+    await mode(false, true);
+    await pause(600);
+    const out = await page.evaluate(() => Math.max(...[...document.querySelectorAll('#ag-editor-id td')].map(c => {
+      const right = c.getBoundingClientRect().right;
+      const range = document.createRange(); range.selectNodeContents(c);
+      return Math.max(0, ...[...range.getClientRects()].map(r => r.right - right));
+    })));
+    report(out < 2, 'reading mode: long text stays in its cell', `${Math.round(out)} px out`);
+    await mode(false, false);
 
     // Fit columns to content.
     await open(doc);

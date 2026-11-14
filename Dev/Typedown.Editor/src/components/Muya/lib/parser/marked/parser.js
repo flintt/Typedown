@@ -3,6 +3,7 @@ import InlineLexer from './inlineLexer'
 import Slugger from './slugger'
 import TextRenderer from './textRenderer'
 import defaultOptions from './options'
+import { columnShares, tableWidth } from 'services/tableWidths'
 
 /**
  * Parsing & Compiling
@@ -125,7 +126,7 @@ Parser.prototype.tok = function () {
           this.inline.output(this.token.header[i]), {
             header: true,
             align: this.token.align[i],
-            width: widths ? widths[i] : null
+            width: widths ? columnShares(widths)[i] : null
           }
         )
       }
@@ -147,8 +148,9 @@ Parser.prototype.tok = function () {
         body += this.renderer.tablerow(cell)
       }
       const table = this.renderer.table(header, body)
-      // Laid out fixed, as the editor draws it: the shares are the columns' widths, not hints.
-      return widths ? table.replace('<table>', '<table style="table-layout:fixed;width:100%">') : table
+      // Laid out fixed, as the editor draws it: the shares are the columns' widths, not hints; the table as wide as they
+      // are together.
+      return widths ? table.replace('<table>', `<table style="table-layout:fixed;width:${tableWidth(widths)}%">`) : table
     }
     case 'blockquote_start': {
       let body = ''

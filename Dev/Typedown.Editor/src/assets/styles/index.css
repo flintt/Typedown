@@ -213,6 +213,51 @@ div.ag-show-quick-insert-hint p.ag-paragraph.ag-active>span.ag-paragraph-content
   word-break: break-word;
 }
 
+/* A long word or address that has no room breaks where it must, as the browser does it for an editable page; reading
+   mode is not editable and lost it: a table with widths (fixed) had a long address, code or word run out of its cell
+   (the user, 2026-11-13). */
+#ag-editor-id {
+  overflow-wrap: break-word;
+}
+
+/* Table column widths (Settings > Editor): the columns' edges in a header row show, faintly while the pointer is over the
+   table, that they can be dragged; the edge under the pointer or being dragged is a line down the whole table
+   (Muya/index.tsx, outside the editable page). */
+body.td-table-widths #ag-editor-id th {
+  position: relative;
+}
+/* A width set is the width seen, padding and all (as the drag measures it). */
+#ag-editor-id table.ag-table-widths th {
+  box-sizing: border-box;
+}
+body.td-table-widths #ag-editor-id th:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  right: -2px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--themeColor);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease-in-out;
+}
+body.td-table-widths #ag-editor-id table:hover th:not(:last-child)::after {
+  opacity: .45;
+}
+body.read-only.td-table-widths #ag-editor-id th::after {
+  display: none;
+}
+.td-column-edge {
+  display: none;
+  position: fixed;
+  width: 2px;
+  background: var(--themeColor);
+  pointer-events: none;
+  z-index: 50;
+}
+
 /* TODO: This disables wrapping long lines in code blocks, allowing
    scrolling instead.  Make this contingent on user preference. */
 .ag-code-content {
