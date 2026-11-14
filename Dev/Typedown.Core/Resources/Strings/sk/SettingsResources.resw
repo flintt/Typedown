@@ -365,6 +365,14 @@
     <value>Pokračujte v behu</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Keď sa okno minimalizuje, editor vráti pamäť, ktorú môže (pri dlhom dokumente asi gigabajt); obnovenie okna môže chvíľu dlhšie trvať.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Uvoľniť pamäť pri minimalizovaní</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Aplikačný jazyk</value>
     <comment>通用/应用显示的语言</comment>

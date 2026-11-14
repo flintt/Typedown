@@ -365,6 +365,14 @@
     <value>Іске қосуды жалғастыру</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Терезе кішірейтілгенде, өңдегіш қайтара алатын жадты қайтарады (ұзын құжатта шамамен бір гигабайт); терезені қалпына келтіру сәл ұзағырақ болуы мүмкін.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Кішірейткенде жадты босату</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Қолданба тілі</value>
     <comment>通用/应用显示的语言</comment>

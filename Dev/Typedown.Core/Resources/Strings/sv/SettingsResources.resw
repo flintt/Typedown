@@ -365,6 +365,14 @@
     <value>Fortsätt springa</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>När ett fönster minimeras lämnar redigeraren tillbaka det minne den kan (ungefär en gigabyte med ett långt dokument); det kan ta en stund längre att återställa fönstret.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Frigör minne vid minimering</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Språk för ansökan</value>
     <comment>通用/应用显示的语言</comment>

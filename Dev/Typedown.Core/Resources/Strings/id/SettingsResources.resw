@@ -365,6 +365,14 @@
     <value>Terus berjalan</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Saat jendela diminimalkan, editor mengembalikan memori yang bisa dilepas (sekitar satu gigabita untuk dokumen panjang); memulihkan jendela mungkin sedikit lebih lama.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Lepaskan memori saat diminimalkan</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Bahasa aplikasi</value>
     <comment>通用/应用显示的语言</comment>

@@ -917,6 +917,7 @@
         "HedgeDocPublishReadOnly",
         "OpenFilesInNewTab",
         "TabWheelWraps",
+        "ReleaseMemoryWhenMinimized",
         "MermaidRenderer",
         "AutoSave",
         "AutoReload",

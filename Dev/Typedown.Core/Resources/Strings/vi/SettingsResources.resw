@@ -365,6 +365,14 @@
     <value>Tiếp tục chạy</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Khi thu nhỏ cửa sổ, trình soạn thảo trả lại bộ nhớ có thể trả (khoảng một gigabyte với tài liệu dài); khôi phục cửa sổ có thể lâu hơn một chút.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Giải phóng bộ nhớ khi thu nhỏ</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Ngôn ngữ ứng dụng</value>
     <comment>通用/应用显示的语言</comment>

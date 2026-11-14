@@ -365,6 +365,14 @@
     <value>Daliwch i redeg</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Pan gaiff ffenestr ei lleihau, mae'r golygydd yn rhoi'n ôl y cof a all (tua gigabeit gyda dogfen hir); gall adfer y ffenestr gymryd ychydig yn hirach.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Rhyddhau cof wrth leihau</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Iaith ymgeisio</value>
     <comment>通用/应用显示的语言</comment>

@@ -365,6 +365,14 @@
     <value>పరిగెత్తుతూ ఉండండి.</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>విండోను కనిష్టీకరించినప్పుడు, ఎడిటర్ వీలైనంత మెమరీని తిరిగి ఇస్తుంది (పొడవైన పత్రంతో సుమారు ఒక గిగాబైట్); విండోను తిరిగి తెచ్చేందుకు కొంచెం ఎక్కువ సమయం పట్టవచ్చు.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>కనిష్టీకరించినప్పుడు మెమరీని విడుదల చేయి</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>అనువర్తన భాష</value>
     <comment>通用/应用显示的语言</comment>

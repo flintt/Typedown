@@ -365,6 +365,14 @@
     <value>起動し続ける</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>ウィンドウを最小化すると、エディターが解放できるメモリを返します（長い文書では約 1 GB）。ウィンドウを元に戻すのに少し時間がかかることがあります。</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>最小化時にメモリを解放する</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>アプリケーション言語</value>
     <comment>通用/应用显示的语言</comment>

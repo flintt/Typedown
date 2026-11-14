@@ -365,6 +365,14 @@
     <value>Seguir corrent</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Quan es minimitza una finestra, l'editor retorna la memòria que pot (prop d'un gigabyte amb un document llarg); restaurar la finestra pot trigar una mica més.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Allibera memòria en minimitzar</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Llengua d'aplicació</value>
     <comment>通用/应用显示的语言</comment>

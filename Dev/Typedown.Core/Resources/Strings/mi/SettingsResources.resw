@@ -365,6 +365,14 @@
     <value>Me haere tonu</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Ina whakaitihia tētahi matapihi, ka whakahokia e te ētita te pūmahara ka taea (tata ki te kotahi gigapai mō tētahi tuhinga roa); ka roa ake pea te whakahoki mai i te matapihi.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Tukuna te pūmahara ina whakaitihia</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Reo taupānga</value>
     <comment>通用/应用显示的语言</comment>

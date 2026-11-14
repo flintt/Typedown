@@ -365,6 +365,14 @@
     <value>Çalışmaya devam edin</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Bir pencere simge durumuna küçültüldüğünde düzenleyici bırakabildiği belleği geri verir (uzun bir belgede yaklaşık bir gigabayt); pencereyi geri getirmek biraz daha uzun sürebilir.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Simge durumuna küçültünce belleği bırak</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Uygulama dili</value>
     <comment>通用/应用显示的语言</comment>

@@ -365,6 +365,14 @@
     <value>ಚಲಿಸುತ್ತಲೇ ಇರಿ</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>ವಿಂಡೋ ಕಿರಿದಾಗಿಸಿದಾಗ ಸಂಪಾದಕ ಸಾಧ್ಯವಾದಷ್ಟು ಮೆಮೊರಿಯನ್ನು ಹಿಂದಿರುಗಿಸುತ್ತದೆ (ಉದ್ದ ದಾಖಲೆಯಲ್ಲಿ ಸುಮಾರು ಒಂದು ಗಿಗಾಬೈಟ್); ವಿಂಡೋ ಮರಳಿ ತರಲು ಸ್ವಲ್ಪ ಹೆಚ್ಚು ಸಮಯ ಹಿಡಿಯಬಹುದು.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>ಕಿರಿದಾಗಿಸಿದಾಗ ಮೆಮೊರಿ ಬಿಡುಗಡೆ ಮಾಡಿ</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>ಅಪ್ಲಿಕೇಶನ್ ಭಾಷೆ</value>
     <comment>通用/应用显示的语言</comment>

@@ -365,6 +365,14 @@
     <value>Folytasd a futást</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>Ha egy ablakot kis méretre állít, a szerkesztő visszaadja a nélkülözhető memóriát (hosszú dokumentumnál kb. egy gigabájtot); az ablak visszaállítása kicsit tovább tarthat.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>Memória felszabadítása kis méretre állításkor</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>Alkalmazás nyelve</value>
     <comment>通用/应用显示的语言</comment>

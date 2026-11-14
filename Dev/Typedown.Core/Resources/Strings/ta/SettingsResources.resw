@@ -365,6 +365,14 @@
     <value>தொடர்ந்து இயங்குங்கள்</value>
     <comment>通用/保持运行</comment>
   </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
+    <value>சாளரம் சிறிதாக்கப்படும்போது, திருத்தி முடிந்த நினைவகத்தைத் திருப்பித் தரும் (நீண்ட ஆவணத்தில் சுமார் ஒரு ஜிகாபைட்); சாளரத்தை மீட்டெடுக்கச் சற்று அதிக நேரம் ஆகலாம்.</value>
+    <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
+  </data>
+  <data name="General.ReleaseMemoryWhenMinimized.Title" xml:space="preserve">
+    <value>சிறிதாக்கும்போது நினைவகத்தை விடுவி</value>
+    <comment>通用/最小化时释放内存</comment>
+  </data>
   <data name="General.Language.Description" xml:space="preserve">
     <value>பயன்பாட்டு மொழி</value>
     <comment>通用/应用显示的语言</comment>

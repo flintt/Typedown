@@ -316,6 +316,12 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public bool KeepRun { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>
+        /// Settings > General > Release memory when minimized: a minimized window's web view gets the low memory target
+        /// (WebView2's MemoryUsageTargetLevel), and gives back the caches it holds - up to a gigabyte with a long document
+        /// (MM01: 1.5-1.8 GB down to 640-1000 MB) - and the normal one when the window comes back. Off unless chosen.
+        /// </summary>
+        public bool ReleaseMemoryWhenMinimized { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
         /// Lets programs running as this user read and edit open documents through the local automation endpoint
         /// (docs/automation-api-spec.md). Off by default; turning it off closes the endpoint and every connection.
         /// </summary>
