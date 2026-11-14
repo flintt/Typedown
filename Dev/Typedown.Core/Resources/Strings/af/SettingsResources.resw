@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Voeg die reëls van ’n paragraaf in leesmodus saam</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Benewens $ en $$ word LaTeX se \( … \) en \[ … \] ook as formules gelees, in die redigeerder en in uitvoere; die lêer behou sy eie skryfwyse.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) en \[ \] as formuleskeiers</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>In leesmodus word ’n enkele reëlbreuk binne ’n paragraaf as ’n spasie gewys, soos Markdown bepaal en soos die uitvoere reeds doen (geen spasie tussen Chinese of Japannese karakters nie). Om ’n breuk te behou, eindig die reël met twee spasies of ’n agteroorstreep</value>
   </data>

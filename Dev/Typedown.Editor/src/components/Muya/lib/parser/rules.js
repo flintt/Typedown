@@ -38,7 +38,9 @@ export const inlineRules = {
   backlash: /^(\\)([\\`*{}\[\]()#+\-.!_>~:\|\<\>$]{1})/,
 
   // Markdown extensions (not belongs to GFM and Commonmark)
-  inline_math: /^(\$)(?!\s)([^\$]*?[^\s\$\\])(\\*)\1(?![\d$])/
+  inline_math: /^(\$)(?!\s)([^\$]*?[^\s\$\\])(\\*)\1(?![\d$])/,
+  // LaTeX's \( ... \), with the bracketMath option (Settings > Editor).
+  bracket_inline_math: /^(\\\()([\s\S]+?)(\\\))/
 }
 
 // Markdown extensions (not belongs to GFM and Commonmark)

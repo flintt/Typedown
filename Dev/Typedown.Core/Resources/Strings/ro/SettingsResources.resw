@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Unește rândurile unui paragraf în modul de citire</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Pe lângă $ și $$, și \( … \) și \[ … \] din LaTeX sunt citite ca formule, în editor și la export; fișierul își păstrează scrierea.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) și \[ \] ca delimitatori de formule</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>În modul de citire, o singură trecere la rând nou într-un paragraf apare ca spațiu, așa cum prevede Markdown și cum fac deja exporturile (fără spațiu între caractere chinezești sau japoneze). Pentru a păstra trecerea la rând nou, încheiați rândul cu două spații sau o bară oblică inversă</value>
   </data>

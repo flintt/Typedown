@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Spoji redove pasusa u režimu čitanja</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Pored $ i $$, i LaTeX \( … \) i \[ … \] se čitaju kao formule, u uređivaču i pri izvozu; datoteka zadržava svoj zapis.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) i \[ \] kao graničnici formula</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>U režimu čitanja jedan prelom reda unutar pasusa prikazuje se kao razmak, kako propisuje Markdown i kako to već rade izvozi (bez razmaka između kineskih ili japanskih znakova). Da biste zadržali prelom, završite red sa dva razmaka ili obrnutom kosom crtom</value>
   </data>

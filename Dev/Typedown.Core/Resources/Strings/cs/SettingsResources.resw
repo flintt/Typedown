@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Spojovat řádky odstavce v režimu čtení</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Kromě $ a $$ se jako vzorce čtou i LaTeXové \( … \) a \[ … \], v editoru i při exportu; soubor si ponechá svůj zápis.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) a \[ \] jako oddělovače vzorců</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>V režimu čtení se jednoduché zalomení řádku uvnitř odstavce zobrazí jako mezera, jak stanoví Markdown a jak to už dělají exporty (mezi čínskými či japonskými znaky bez mezery). Chcete-li zalomení zachovat, ukončete řádek dvěma mezerami nebo zpětným lomítkem</value>
   </data>

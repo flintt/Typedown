@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Slå ihop raderna i ett stycke i läsläge</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Förutom $ och $$ läses även LaTeX \( … \) och \[ … \] som formler, i redigeraren och vid export; filen behåller sitt skrivsätt.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) och \[ \] som formelavgränsare</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>I läsläge visas en enkel radbrytning inuti ett stycke som ett mellanslag, som Markdown anger och som exporterna redan gör (inget mellanslag mellan kinesiska eller japanska tecken). Avsluta raden med två mellanslag eller ett omvänt snedstreck för att behålla en radbrytning</value>
   </data>

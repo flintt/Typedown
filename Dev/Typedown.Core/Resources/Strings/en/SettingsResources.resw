@@ -781,6 +781,14 @@
     <value>Join the lines of a paragraph in reading mode</value>
     <comment>编辑器/阅读模式下合并段内换行</comment>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Besides $ and $$, LaTeX's \( … \) and \[ … \] are read as formulas too, in the editor and in exports; the file keeps the delimiters it has.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) and \[ \] as formula delimiters</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>In reading mode, a single line break inside a paragraph shows as a space, as Markdown specifies and exports already do (no space between Chinese or Japanese characters). To keep a break, end the line with two spaces or a backslash</value>
     <comment>编辑器/合并段内换行说明：阅读模式下段落中的单个换行显示为空格，与 Markdown 规范和导出一致（中日文字符之间不加空格）；要保留换行，在行尾加两个空格或反斜杠</comment>

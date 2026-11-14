@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Regels van een alinea samenvoegen in leesmodus</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Naast $ en $$ worden ook LaTeX' \( … \) en \[ … \] als formules gelezen, in de editor en bij exporteren; het bestand houdt zijn schrijfwijze.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) en \[ \] als formulescheidingstekens</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>In leesmodus wordt een enkele regeleinde binnen een alinea als spatie weergegeven, zoals Markdown voorschrijft en de exports al doen (geen spatie tussen Chinese of Japanse tekens). Wilt u een regeleinde behouden, eindig de regel dan met twee spaties of een backslash</value>
   </data>

@@ -544,6 +544,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             renderPlantUml: JSON.stringify([!!o?.renderPlantUml, o?.plantUmlServer ?? '']),
             codeBlockLineNumbers: JSON.stringify(!!o?.codeBlockLineNumbers),
             listIndentation: JSON.stringify(o?.listIndentation ?? null),
+            bracketMath: JSON.stringify(!!o?.bracketMath),
             readOnly: JSON.stringify(!!o?.readOnly)
         };
         (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
@@ -715,6 +716,28 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // The columns' edges in a header row show they can be dragged (index.css td-table-widths).
         document.body.classList.toggle('td-table-widths', on)
     }, [editor, props.options?.tableColumnWidths])
+
+    useEffect(() => {
+        // Settings > Editor > \( \) and \[ \] as formula delimiters: read when the text is taken in (a \[ \] block is a
+        // formula block or a paragraph from then on), so the document shown is taken in again - its text as written while
+        // nothing has been edited (the reader's own lines), else what the editor holds - with the caret where it was.
+        const on = !!props.options?.bracketMath
+        applyOnce(editor, 'bracketMath', on, () => {
+            if (!editor) return
+            editor.setOptions({ bracketMath: on })
+            // A paragraph's tokens are kept by its text alone (StateRender.tokenCache): read with \( \) as formulas or
+            // not, the same text has other tokens. (The option itself is in Muya's already: props.options are copied
+            // into it on every render.)
+            ;(editor as any).contentState.stateRender.tokenCache.clear()
+            const imported = importedRef.current
+            if (!imported) return
+            const exported = editor.getMarkdown()
+            const text = exported === imported.normalized ? imported.source : exported
+            editor.setMarkdown(text, cursorRef.current, true)
+            importedRef.current = { source: text, normalized: editor.getMarkdown() }
+            shownRef.current = null
+        })
+    }, [editor, props.options?.bracketMath])
 
     // A column's width dragged by its right edge in the header (Settings > Editor > Table column widths): the column and
     // the next one share what they had; the widths kept as shares and written into the delimiter row (services/tableWidths).

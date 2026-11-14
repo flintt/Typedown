@@ -981,6 +981,14 @@
   <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
     <value>Pagsamahin ang mga linya ng talata sa reading mode</value>
   </data>
+  <data name="Editor.BracketMath.Description" xml:space="preserve">
+    <value>Bukod sa $ at $$, binabasa ring formula ang \( … \) at \[ … \] ng LaTeX, sa editor at sa mga export; nananatili ang pagkakasulat sa file.</value>
+    <comment>编辑器/除了 $ 和 $$，LaTeX 的 \( … \) 和 \[ … \] 也当作公式显示和导出；文件里的写法不变</comment>
+  </data>
+  <data name="Editor.BracketMath.Title" xml:space="preserve">
+    <value>\( \) at \[ \] bilang delimiter ng formula</value>
+    <comment>编辑器/把 \( \) 和 \[ \] 当作公式</comment>
+  </data>
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Sa reading mode, ang iisang line break sa loob ng talata ay ipinapakita bilang espasyo, ayon sa itinakda ng Markdown at gaya ng ginagawa na ng mga export (walang espasyo sa pagitan ng mga karakter na Chinese o Japanese). Para mapanatili ang line break, tapusin ang linya sa dalawang espasyo o isang backslash</value>
   </data>
