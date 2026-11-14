@@ -24,5 +24,11 @@ namespace Typedown.Automation
         public const string AboutLinkText = "GitHub";
         public const string AboutLinkUrl = "https://github.com/flintt/Typedown";
         public const string FeedbackUrl = "https://github.com/flintt/Typedown/issues";
+
+        /// <summary>
+        /// Settings > About > Check for updates: the latest release on GitHub, as its API gives it
+        /// ({"tag_name": "v1.4.2", "html_url": ...}; drafts and pre-releases are not "latest").
+        /// </summary>
+        public const string UpdateFeedUrl = "https://api.github.com/repos/flintt/Typedown/releases/latest";
     }
 }
