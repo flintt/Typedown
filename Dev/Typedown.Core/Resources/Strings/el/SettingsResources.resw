@@ -1032,4 +1032,10 @@
 • άλλοι επεξεργαστές μπορεί να ανοίγουν αργά το αρχείο;
 • το ιστορικό αναίρεσης πιάνει περισσότερη μνήμη.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Εμφάνιση αρχείων και διάρθρωσης μαζί</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Το πλαϊνό παράθυρο δείχνει τα αρχεία επάνω και τη διάρθρωση κάτω, το καθένα πτυσσόμενο στον τίτλο του, αντί για δύο καρτέλες.</value>
+  </data>
 </root>

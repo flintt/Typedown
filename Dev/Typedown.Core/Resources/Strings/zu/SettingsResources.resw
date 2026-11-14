@@ -1032,4 +1032,10 @@
 • abanye abahleli bangavula ifayela kancane;
 • umlando wokuhlehlisa uthatha inkumbulo eyengeziwe.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Bonisa amafayela nohlaka ndawonye</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Iphaneli eseceleni ibonisa amafayela phezulu nohlaka phansi, ngalinye ligoqeka kuze kube yisihloko salo, esikhundleni samathebhu amabili.</value>
+  </data>
 </root>

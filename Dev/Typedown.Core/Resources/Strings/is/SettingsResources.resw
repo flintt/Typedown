@@ -1032,4 +1032,10 @@
 • önnur forrit gætu opnað skrána hægt;
 • afturköllunarsagan tekur meira minni.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Sýna skrár og efnisyfirlit saman</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Hliðarsvæðið sýnir skrár efst og efnisyfirlit neðst, hvort um sig hægt að fella saman að titli, í stað tveggja flipa.</value>
+  </data>
 </root>

@@ -1032,4 +1032,10 @@
 • citi redaktori var lēni atvērt failu;
 • atsaukšanas vēsture aizņem vairāk atmiņas.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Rādīt failus un struktūru kopā</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Sānu rūts augšā rāda failus un apakšā struktūru, katru var sakļaut līdz virsrakstam, divu ciļņu vietā.</value>
+  </data>
 </root>

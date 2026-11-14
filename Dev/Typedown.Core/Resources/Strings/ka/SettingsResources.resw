@@ -1032,4 +1032,10 @@
 • სხვა რედაქტორებმა ფაილი შეიძლება ნელა გახსნან;
 • გაუქმების ისტორია მეტ მეხსიერებას იკავებს.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ფაილებისა და მონახაზის ერთად ჩვენება</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>გვერდითა პანელი ზემოთ აჩვენებს ფაილებს, ქვემოთ — მონახაზს, თითოეული სათაურამდე იკეცება, ორი ჩანართის ნაცვლად.</value>
+  </data>
 </root>

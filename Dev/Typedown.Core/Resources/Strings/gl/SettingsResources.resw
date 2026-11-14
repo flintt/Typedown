@@ -1032,4 +1032,10 @@
 • outros editores poden abrir o ficheiro amodo;
 • o historial de desfacer ocupa máis memoria.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Amosar ficheiros e esquema xuntos</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>O panel lateral amosa os ficheiros arriba e o esquema abaixo, cada un pregable ata o título, en lugar de dúas lapelas.</value>
+  </data>
 </root>

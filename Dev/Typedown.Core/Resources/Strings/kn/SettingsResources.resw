@@ -1032,4 +1032,10 @@
 • ಇತರ ಸಂಪಾದಕಗಳು ಫೈಲ್ ಅನ್ನು ನಿಧಾನವಾಗಿ ತೆರೆಯಬಹುದು;
 • ರದ್ದುಗೊಳಿಸುವ ಇತಿಹಾಸ ಹೆಚ್ಚು ಮೆಮೊರಿ ಬಳಸುತ್ತದೆ.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ಫೈಲ್‌ಗಳು ಮತ್ತು ರೂಪರೇಖೆಯನ್ನು ಒಟ್ಟಿಗೆ ತೋರಿಸಿ</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>ಬದಿ ಫಲಕ ಮೇಲೆ ಫೈಲ್‌ಗಳನ್ನು ಮತ್ತು ಕೆಳಗೆ ರೂಪರೇಖೆಯನ್ನು ತೋರಿಸುತ್ತದೆ, ಪ್ರತಿಯೊಂದನ್ನು ಅದರ ಶೀರ್ಷಿಕೆಯವರೆಗೆ ಮಡಚಬಹುದು, ಎರಡು ಟ್ಯಾಬ್‌ಗಳ ಬದಲು.</value>
+  </data>
 </root>

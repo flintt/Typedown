@@ -1032,4 +1032,10 @@
 • ka pōturi pea ētahi atu ētita ki te whakatuwhera i te kōnae;
 • ka nui ake te pūmahara ka pau i te hītori wetekina.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Whakaaturia ngā kōnae me te whakaraupapa tahi</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Ka whakaatu te paewhiri taha i ngā kōnae ki runga me te whakaraupapa ki raro, ka taea te kopa ia mea ki tōna taitara, hei whakakapi i ngā ripa e rua.</value>
+  </data>
 </root>

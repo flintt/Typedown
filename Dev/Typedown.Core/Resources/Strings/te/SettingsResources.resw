@@ -1032,4 +1032,10 @@
 • ఇతర ఎడిటర్లు ఫైల్‌ను నెమ్మదిగా తెరవవచ్చు;
 • రద్దు చరిత్ర ఎక్కువ మెమరీ తీసుకుంటుంది.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ఫైల్‌లు, రూపురేఖను కలిపి చూపు</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>సైడ్ పేన్ పైన ఫైల్‌లను, కింద రూపురేఖను చూపుతుంది, ప్రతిదాన్ని దాని శీర్షిక వరకు ముడవచ్చు, రెండు ట్యాబ్‌లకు బదులుగా.</value>
+  </data>
 </root>

@@ -1032,4 +1032,10 @@
 • আন সম্পাদকে ফাইলটো লাহে লাহে খুলিব পাৰে;
 • আনডু ইতিহাসে বেছি মেমৰি লয়।</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ফাইল আৰু ৰূপৰেখা একেলগে দেখুৱাওক</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>কাষৰ পেনত ওপৰত ফাইল আৰু তলত ৰূপৰেখা দেখুৱায়, প্ৰতিটো নিজৰ শিৰোনামলৈকে সংকুচিত কৰিব পাৰি, দুটা টেবৰ সলনি।</value>
+  </data>
 </root>

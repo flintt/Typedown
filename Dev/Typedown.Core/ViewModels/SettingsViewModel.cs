@@ -93,6 +93,8 @@ namespace Typedown.Core.ViewModels
         public bool SearchIsWholeWord { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The side pane's block last asked for (0 files, 1 outline); both are shown, one above the other.</summary>
         public int SidePaneIndex { get => GetSettingValue(0); set => SetSettingValue(value); }
+        /// <summary>The side pane shows files above and the outline below, both at once (#46), instead of two tabs. Off unless chosen.</summary>
+        public bool SidePaneStacked { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The share of the side pane's height the files block has, when both blocks are open.</summary>
         public double SidePaneSplit { get => GetSettingValue(0.5d); set => SetSettingValue(value); }
         public bool SidePaneFilesCollapsed { get => GetSettingValue(false); set => SetSettingValue(value); }

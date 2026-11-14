@@ -1032,4 +1032,10 @@
 • andere Editoren öffnen die Datei womöglich langsam;
 • der Rückgängig-Verlauf braucht mehr Speicher.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Dateien und Gliederung zusammen anzeigen</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Der Seitenbereich zeigt oben die Dateien und unten die Gliederung, jeweils bis auf die Titelzeile einklappbar, statt zweier Registerkarten.</value>
+  </data>
 </root>

@@ -1032,4 +1032,10 @@
 • دوسرے ایڈیٹر فائل آہستہ کھول سکتے ہیں؛
 • کالعدم کرنے کی تاریخ زیادہ میموری لیتی ہے۔</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>فائلیں اور خاکہ ساتھ دکھائیں</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>سائیڈ پین اوپر فائلیں اور نیچے خاکہ دکھاتا ہے، ہر ایک اپنے عنوان تک سمٹ سکتا ہے، دو ٹیبز کے بجائے۔</value>
+  </data>
 </root>

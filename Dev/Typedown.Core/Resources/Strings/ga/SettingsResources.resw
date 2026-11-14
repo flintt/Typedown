@@ -1032,4 +1032,10 @@
 • d’fhéadfadh eagarthóirí eile an comhad a oscailt go mall;
 • tógann an stair cealaithe níos mó cuimhne.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Taispeáin comhaid agus imlíne le chéile</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Taispeánann an phána taoibh na comhaid thuas agus an imlíne thíos, gach ceann infhillte go dtí a theideal, in ionad dhá chluaisín.</value>
+  </data>
 </root>

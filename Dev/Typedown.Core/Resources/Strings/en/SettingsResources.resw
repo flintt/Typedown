@@ -1101,4 +1101,10 @@
 • other editors may open the file slowly;
 • the undo history takes more memory.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Show files and outline together</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>The side pane shows the files above and the outline below, each folding to its title, instead of two tabs.</value>
+  </data>
 </root>

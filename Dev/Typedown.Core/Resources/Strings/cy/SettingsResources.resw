@@ -1032,4 +1032,10 @@
 • gall golygyddion eraill agor y ffeil yn araf;
 • mae’r hanes dadwneud yn defnyddio mwy o gof.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Dangos ffeiliau ac amlinelliad gyda’i gilydd</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Mae’r cwarel ochr yn dangos y ffeiliau uwchben a’r amlinelliad oddi tano, pob un yn plygu i’w deitl, yn lle dau dab.</value>
+  </data>
 </root>

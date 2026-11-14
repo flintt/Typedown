@@ -1032,4 +1032,10 @@
 • andere editors openen het bestand mogelijk traag;
 • de geschiedenis voor ongedaan maken gebruikt meer geheugen.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Bestanden en overzicht samen tonen</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Het zijpaneel toont bovenaan de bestanden en onderaan het overzicht, elk inklapbaar tot de titel, in plaats van twee tabbladen.</value>
+  </data>
 </root>

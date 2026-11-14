@@ -1032,4 +1032,10 @@
 • altres editors poden obrir el fitxer lentament;
 • l’historial de desfer ocupa més memòria.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Mostra els fitxers i l’esquema alhora</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>La subfinestra lateral mostra els fitxers a dalt i l’esquema a baix, cadascun plegable fins al títol, en lloc de dues pestanyes.</value>
+  </data>
 </root>

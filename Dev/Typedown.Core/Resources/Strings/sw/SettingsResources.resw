@@ -1032,4 +1032,10 @@
 • vihariri vingine vinaweza kufungua faili polepole;
 • historia ya kutendua hutumia kumbukumbu zaidi.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Onyesha faili na muhtasari pamoja</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Kidirisha cha pembeni kinaonyesha faili juu na muhtasari chini, kila kimoja kinakunjika hadi kichwa chake, badala ya vichupo viwili.</value>
+  </data>
 </root>

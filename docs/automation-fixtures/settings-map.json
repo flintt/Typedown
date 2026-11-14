@@ -908,6 +908,7 @@
     {
       "reason": "candidate: application preference not yet reviewed for exposure (type, range, apply path, multi-window test)",
       "windows": [
+        "SidePaneStacked",
         "Base64ImageMaxKB",
         "Base64ClipboardJpeg",
         "Base64JpegQuality",

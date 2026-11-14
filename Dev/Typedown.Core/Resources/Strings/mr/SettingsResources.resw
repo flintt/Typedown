@@ -1032,4 +1032,10 @@
 • इतर संपादक फाइल हळू उघडू शकतात;
 • पूर्ववत इतिहास अधिक मेमरी घेतो.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>फायली आणि रूपरेषा एकत्र दाखवा</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>बाजूचा पॅन वर फायली आणि खाली रूपरेषा दाखवतो, प्रत्येक आपल्या शीर्षकापर्यंत मिटवता येतो, दोन टॅबऐवजी.</value>
+  </data>
 </root>

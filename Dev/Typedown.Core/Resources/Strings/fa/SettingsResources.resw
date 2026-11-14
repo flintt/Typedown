@@ -1032,4 +1032,10 @@
 • ویرایشگرهای دیگر ممکن است فایل را کند باز کنند؛
 • تاریخچهٔ واگرد حافظهٔ بیشتری می‌گیرد.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>نمایش فایل‌ها و طرح کلی با هم</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>پنل کناری فایل‌ها را بالا و طرح کلی را پایین نشان می‌دهد و هر کدام تا عنوانش جمع می‌شود، به جای دو زبانه.</value>
+  </data>
 </root>

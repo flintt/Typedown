@@ -1032,4 +1032,10 @@
 • các trình soạn thảo khác có thể mở tệp chậm;
 • lịch sử hoàn tác chiếm nhiều bộ nhớ hơn.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Hiện tệp và dàn ý cùng lúc</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Ngăn bên hiện tệp ở trên và dàn ý ở dưới, mỗi phần có thể thu gọn về tiêu đề, thay cho hai thẻ.</value>
+  </data>
 </root>

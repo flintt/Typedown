@@ -1032,4 +1032,10 @@
 • ካልኦት ኣሰናደውቲ ነቲ ፋይል ብዝግታ ክኸፍትዎ ይኽእሉ፤
 • ታሪኽ ምምላስ ዝያዳ ዝኽሪ ይወስድ።</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ፋይላትን ትሕዝቶን ብሓባር ኣርኢ</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>ናይ ጎኒ ፓነል ፋይላት ኣብ ላዕሊ ትሕዝቶ ኣብ ታሕቲ የርኢ፣ ነፍሲ ወከፍ ክሳብ ኣርእስቱ ይዕጸፍ፣ ኣብ ክንዲ ክልተ ትራት።</value>
+  </data>
 </root>

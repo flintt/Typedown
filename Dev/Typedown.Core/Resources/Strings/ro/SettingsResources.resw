@@ -1032,4 +1032,10 @@
 • alte editoare pot deschide fișierul încet;
 • istoricul de anulare ocupă mai multă memorie.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Afișează fișierele și schița împreună</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Panoul lateral arată fișierele sus și schița jos, fiecare pliabilă până la titlu, în loc de două file.</value>
+  </data>
 </root>

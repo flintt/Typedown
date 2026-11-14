@@ -1069,4 +1069,10 @@
 • 其他编辑器打开可能变慢；
 • 撤销历史占用更多内存。</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>文件和大纲同时显示</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>侧栏上面显示文件、下面显示大纲，各自可折叠到标题行，不再用两个页签。</value>
+  </data>
 </root>

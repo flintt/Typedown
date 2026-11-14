@@ -1032,4 +1032,10 @@
 • ander redigeerders kan die lêer stadig oopmaak;
 • die ontdoengeskiedenis neem meer geheue.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Wys lêers en uiteensetting saam</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Die sypaneel wys die lêers bo en die uiteensetting onder, elk invoubaar tot sy titel, in plaas van twee oortjies.</value>
+  </data>
 </root>

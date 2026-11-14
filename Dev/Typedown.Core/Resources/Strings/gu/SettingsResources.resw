@@ -1032,4 +1032,10 @@
 • અન્ય સંપાદકો ફાઇલ ધીમેથી ખોલી શકે છે;
 • પૂર્વવત્ ઇતિહાસ વધુ મેમરી લે છે.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ફાઇલો અને રૂપરેખા સાથે બતાવો</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>સાઇડ પેન ઉપર ફાઇલો અને નીચે રૂપરેખા બતાવે છે, દરેક પોતાના શીર્ષક સુધી સંકેલી શકાય છે, બે ટૅબને બદલે.</value>
+  </data>
 </root>

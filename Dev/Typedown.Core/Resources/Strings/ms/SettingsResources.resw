@@ -1032,4 +1032,10 @@
 • editor lain mungkin membuka fail dengan perlahan;
 • sejarah buat asal menggunakan lebih banyak memori.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Tunjukkan fail dan rangka bersama</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Anak tetingkap sisi menunjukkan fail di atas dan rangka di bawah, setiap satu boleh dilipat ke tajuknya, bukannya dua tab.</value>
+  </data>
 </root>

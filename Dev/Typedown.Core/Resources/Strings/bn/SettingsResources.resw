@@ -1032,4 +1032,10 @@
 • অন্য সম্পাদক ফাইলটি ধীরে খুলতে পারে;
 • পূর্বাবস্থার ইতিহাস বেশি মেমরি নেয়।</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>ফাইল ও রূপরেখা একসাথে দেখান</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>পার্শ্ব প্যানে উপরে ফাইল ও নিচে রূপরেখা দেখায়, প্রতিটি তার শিরোনাম পর্যন্ত গুটানো যায়, দুটি ট্যাবের বদলে।</value>
+  </data>
 </root>

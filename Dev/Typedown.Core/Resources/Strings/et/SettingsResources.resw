@@ -1032,4 +1032,10 @@
 • teised redaktorid võivad faili aeglaselt avada;
 • tagasivõtmise ajalugu võtab rohkem mälu.</value>
   </data>
+  <data name="View.SidePaneStacked.Title" xml:space="preserve">
+    <value>Näita faile ja liigendust koos</value>
+  </data>
+  <data name="View.SidePaneStacked.Description" xml:space="preserve">
+    <value>Külgpaan näitab üleval faile ja all liigendust, kumbki kokkupandav pealkirjareani, kahe vahekaardi asemel.</value>
+  </data>
 </root>
