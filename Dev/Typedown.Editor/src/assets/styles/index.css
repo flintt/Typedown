@@ -1435,8 +1435,8 @@ pre:not(.ag-active):hover .ag-code-copy {
 }
 
 /* A figure's copy button (ContentState.copyBlockToClipboard) - a diagram's, a display formula's, a table's: shown on hover, as the
-   code block's, and not while the block is being edited (ag-active): a diagram's or a formula's source has its own code
-   button then, a table its tool bar. */
+   code block's, and not while a diagram or a formula is being edited (ag-active): its source has its own code button
+   then. A table's shows while it is edited too, as its fold button does (the user, 2026-11-13). */
 figure>.ag-diagram-copy {
   z-index: 2;
 }
@@ -1449,13 +1449,23 @@ figure:not(.ag-active)>.ag-diagram-copy:hover {
   opacity: 1;
 }
 
-figure.ag-active>.ag-diagram-copy {
+figure.ag-active:not([data-role=TABLE])>.ag-diagram-copy {
   display: none;
 }
 
-/* A table's sits just above its top right corner (placed there by ClickEvent: the figure is wider than a narrow table),
-   where the tool bar of a table being edited goes, so it covers no cell. */
-figure[data-role=TABLE]>.ag-diagram-copy {
+figure[data-role=TABLE].ag-active>.ag-diagram-copy {
+  opacity: .5;
+}
+
+figure[data-role=TABLE].ag-active>.ag-diagram-copy:hover {
+  opacity: 1;
+}
+
+/* A table's, with its fold button beside it, sits just above its top right corner (placed there by ClickEvent: the
+   figure is wider than a narrow table), the row the tool bar of a table being edited has at its left, so they cover no
+   cell. */
+figure[data-role=TABLE]>.ag-diagram-copy,
+figure[data-role=TABLE]>.ag-block-fold {
   top: -21px;
 }
 
@@ -2018,6 +2028,7 @@ tr.ag-review-ghost td { text-decoration: line-through var(--reviewDel) 1.5px; }
 }
 pre:hover > .ag-block-fold,
 figure:hover > .ag-block-fold,
+figure[data-role=TABLE].ag-active > .ag-block-fold,
 .ag-folded > .ag-block-fold {
   opacity: .6;
 }
@@ -2031,6 +2042,21 @@ pre.ag-folded {
   overflow: hidden;
   -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent);
   mask-image: linear-gradient(to bottom, #000 65%, transparent);
+}
+/* A folded table: its box reaches up over the row of its buttons and tool bar above it, and a little past its sides, so
+   that the clipping keeps them and the table's own right border (a wide table's was cut off: the user, 2026-11-13). */
+figure[data-role=TABLE].ag-folded {
+  max-height: calc(11em + 24px);
+  padding: 24px 3px 0;
+  margin: calc(1.4em - 24px) -3px 1.4em;
+}
+figure[data-role=TABLE].ag-folded > .ag-diagram-copy,
+figure[data-role=TABLE].ag-folded > .ag-block-fold,
+figure[data-role=TABLE].ag-folded > .ag-tool-bar {
+  top: 3px;
+}
+figure[data-role=TABLE].ag-folded > .ag-tool-bar {
+  left: 3px;
 }
 figure:has(> .ag-block-fold) {
   position: relative;
