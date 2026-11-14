@@ -163,7 +163,8 @@ namespace Typedown.Core.ViewModels
             saveTimerRunning = true;
             try
             {
-                CursorMemory.Flush();
+                // Written off the UI thread: every few seconds while the caret moves, and a slow disk held the typing.
+                _ = Task.Run(CursorMemory.Flush);
                 if (SettingsViewModel.AutoSave)
                 {
                     EditorViewModel.AutoSavedSucc = await AutoSaveFile();
@@ -568,7 +569,10 @@ namespace Typedown.Core.ViewModels
                     return false;
                 }
                 IgnoreOwnFileWrite();
-                await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
+                // The text encoded off the UI thread too: a long document's bytes held keys typed meanwhile.
+                var format = FileFormat ?? TextFileFormat.Default;
+                var bytes = await Task.Run(() => format.GetBytes(text));
+                await SafeFile.WriteAllBytesAtomicAsync(path, bytes);
                 IgnoreOwnFileWrite();
                 EditionHooks.ReportDocumentOnDisk(path, text, written: true, manual: alert, window: AppViewModel);
                 EditorViewModel.AutoSaveHeldBack = null;
