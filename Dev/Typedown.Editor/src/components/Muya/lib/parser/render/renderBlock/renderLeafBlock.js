@@ -9,6 +9,7 @@ import { tokenizer } from '../../'
 import { snakeToCamel, sanitize, escapeHTML, getLongUniqueId, getImageInfo } from '../../../utils'
 import { h, htmlToVNode } from '../snabbdom'
 import { reviewBlockMarks, reviewStrips, withReviewLights } from '../review'
+import { foldDataUrisInHtml } from 'services/dataUriFold'
 
 // todo@jocs any better solutions?
 const MARKER_HASK = {
@@ -273,10 +274,11 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
       prism.highlightElement(wrapper, false, function () {
         const highlightedCode = this.innerHTML
         selector += `.language-${transformedLang}`
-        children = htmlToVNode(highlightedCode)
+        // A picture's base64 in a code line (an <img src="data:..."> in a raw HTML block) as a short label.
+        children = htmlToVNode(foldDataUrisInHtml(highlightedCode))
       })
     } else {
-      children = htmlToVNode(code)
+      children = htmlToVNode(foldDataUrisInHtml(code))
     }
   } else if (type === 'span' && functionType === 'languageInput') {
     const escapedText = sanitize(text, PREVIEW_DOMPURIFY_CONFIG, true)

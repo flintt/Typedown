@@ -1981,6 +1981,22 @@ tr.ag-review-ghost td { text-decoration: line-through var(--reviewDel) 1.5px; }
   cursor: default;
 }
 
+/* The same in the visual editor, in a code line (a raw HTML block's <img src="data:...">): the encoded part is in the
+   DOM (the block's text and offsets are whole) but not drawn; the caret steps over it (contenteditable=false). */
+.ag-data-uri-fold .ag-data-uri-payload {
+  display: none;
+}
+.ag-data-uri-fold::after {
+  content: attr(data-label);
+  padding: 0 4px;
+  margin: 0 1px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--editorColor60, inherit);
+  background: var(--codeBlockBgColor, rgba(127, 127, 127, 0.15));
+  cursor: default;
+}
+
 /* A long code block's or table's fold button (services/blockFold), left of its copy button; always a little visible on a
    folded one, so it can be found to open it again. */
 .ag-block-fold {
