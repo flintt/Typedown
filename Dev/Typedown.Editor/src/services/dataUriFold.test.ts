@@ -1,6 +1,6 @@
 jest.mock('execall', () => (re: RegExp, s: string) => [...s.matchAll(re)].map(m => ({ match: m[0], index: m.index, subMatches: m.slice(1) })))
 const CodeMirror = require('codemirror')
-import { findDataUris, foldDataUris, kindLabel, MIN_FOLDED, sizeLabel } from './dataUriFold'
+import { findDataUris, foldDataUris, foldDataUrisInHtml, kindLabel, MIN_FOLDED, sizeLabel } from './dataUriFold'
 
 const encoded = (n: number) => 'iVBORw0K' + 'A'.repeat(n - 8)
 
@@ -14,6 +14,22 @@ test('a long data address is folded after its first characters, labelled with it
     expect(run.end).toBe(start + data.length)
     expect(line.slice(run.end, run.end + 1)).toBe(')')
     expect(run.label).toBe('PNG · 3 KB')
+})
+
+test('in the visual editor\'s HTML of a code line (a raw HTML block\'s <img>): the same label, the text whole', () => {
+    const data = encoded(4000)
+    // As Prism highlights it: the address inside an attribute value's span.
+    const html = `<span class="token attr-value">="data:image/png;base64,${data}"</span> alt=""&gt;`
+    const div = document.createElement('div')
+    div.innerHTML = foldDataUrisInHtml(html)
+    const fold = div.querySelector('.ag-data-uri-fold') as HTMLElement
+    expect(fold.getAttribute('contenteditable')).toBe('false')
+    expect(fold.dataset.label).toBe('…[PNG · 3 KB]')
+    expect(fold.textContent).toBe(data.slice(8))
+    const plain = document.createElement('div')
+    plain.innerHTML = html
+    expect(div.textContent).toBe(plain.textContent)
+    expect(foldDataUrisInHtml('<span>no picture</span>')).toBe('<span>no picture</span>')
 })
 
 test('a short one (an icon) is left as text, and other addresses are not touched', () => {

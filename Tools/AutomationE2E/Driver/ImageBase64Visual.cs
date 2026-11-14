@@ -9,7 +9,8 @@ using Newtonsoft.Json.Linq;
 /// IU06: a picture kept in the document (data:image/...;base64,...) is never shown as its encoding in the visual editor
 /// (the user, 2026-11-13): in source mode with the caret on the line below the picture, switched to visual, the whole
 /// base64 showed; and in the visual editor the caret moved up onto the picture showed its source too. Where the source
-/// is shown, the encoding is a short label, as source mode folds it.
+/// is shown (a raw HTML block's source: an <img src="data:..."> alone at the start of the document), the encoding is a
+/// short label, as source mode folds it.
 /// </summary>
 internal static partial class Program
 {
@@ -30,12 +31,14 @@ internal static partial class Program
             bitmap.Save(shot, System.Drawing.Imaging.ImageFormat.Png);
         }
         var address = "data:image/png;base64," + Convert.ToBase64String(File.ReadAllBytes(shot));
-        // Markdown's own picture, and the user's document as it was (2026-11-13): an HTML <img> with the attributes
-        // another editor writes, blank lines around it, CRLF.
+        // Markdown's own picture; an HTML <img> with the attributes another editor writes, between blank lines (a picture
+        // in a paragraph); and the user's document as it was (2026-11-13), that <img> alone: a raw HTML block, whose
+        // source shows while the caret is in it - where the whole base64 showed.
         foreach (var (name, text, below) in new[]
         {
             ("markdown", $"# IU06\n\n![]({address})\n\nNext line\n", 3),
             ("html", $"\r\n\r\n\r\n\r\n<img title=\"\" src=\"{address}\" alt=\"\" style=\"zoom:100%;\">\r\n\r\n\r\n\r\n\r\nNext line\r\n", 5),
+            ("block", $"<img title=\"\" src=\"{address}\" alt=\"\" style=\"zoom:100%;\">\r\n", 1),
         })
         {
             var doc = Path.Combine(folder, $"iu06-{name}.md");
@@ -54,7 +57,7 @@ internal static partial class Program
             {
                 when = name + " " + when;
                 notes.Add($"{when}: {seen.ToString(Formatting.None)} {Screenshot("IU06-" + when.Replace(' ', '-'))}");
-                Check((int)seen["paragraph"]! >= 0 && (int)seen["paragraph"]! < 200 && (int)seen["editor"]! < 400, $"{when}: the encoding is not shown ({(int)seen["paragraph"]!} characters in the picture's paragraph)");
+                Check((int)seen["paragraph"]! < 200 && (int)seen["editor"]! < 400, $"{when}: the encoding is not shown ({(int)seen["editor"]!} characters in the editor)");
             }
             try
             {
@@ -72,8 +75,8 @@ internal static partial class Program
                     await Task.Delay(1200);
                     Shown(await Seen(), $"{by} source to visual");
 
-                    // The caret moved up onto the picture, from the line below it.
-                    await ClickEditorText(c, windowId, window, "Next line");
+                    // The caret moved up onto the picture, from the line below it (the block: from where it is).
+                    if (name != "block") await ClickEditorText(c, windowId, window, "Next line");
                     Chord("Home");
                     await Task.Delay(200);
                     Chord("Up");

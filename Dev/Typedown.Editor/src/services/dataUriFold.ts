@@ -73,6 +73,25 @@ export function findDataUris(line: string): DataUriRun[] {
     return runs
 }
 
+/**
+ * The same fold in the visual editor's HTML of a code line (a raw HTML block's source, as an <img src="data:..."> at
+ * the start of a document is: the user, 2026-11-13, the whole base64 shown while the caret was in it). The encoded part
+ * stays in the DOM, so the block's text and the caret's offsets are as before, but in a span the caret steps over,
+ * not drawn, with the label in its place. Base64 has no character that HTML escapes, so it is found in the HTML as is.
+ */
+export function foldDataUrisInHtml(html: string): string {
+    const runs = findDataUris(html)
+    if (runs.length === 0) return html
+    let out = '', at = 0
+    for (const run of runs) {
+        out += html.slice(at, run.start) +
+            `<span class="ag-data-uri-fold" contenteditable="false" data-label="…[${run.label}]" title="${run.label}">` +
+            `<span class="ag-data-uri-payload">${html.slice(run.start, run.end)}</span></span>`
+        at = run.end
+    }
+    return out + html.slice(at)
+}
+
 const FOLD_CLASS = 'cm-data-uri-fold'
 
 /**
