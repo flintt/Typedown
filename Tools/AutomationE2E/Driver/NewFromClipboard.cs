@@ -115,9 +115,28 @@ internal static partial class Program
             // On: the window back in front, the clipboard's text in a new tab.
             await c.Call("test.settings.set", new { windowId, name = "GlobalNewFromClipboard", value = true });
             await Task.Delay(800);
+            var registered = (string?)(await c.Call("test.globalShortcut"))["registered"];
+            notes.Add($"on: registered {registered ?? "nothing"}");
+            Action press = PressAltShiftN;
+            if (registered == null)
+            {
+                // Another program on this PC has Alt+Shift+N (hp, 2026-11-14): the app says so, and the case goes on with a
+                // key nothing else takes, as a reader would choose one in Shortcuts.
+                var said = (JArray?)(await c.Call("test.dialogs.dismiss", new { }))["closed"];
+                notes.Add("Alt+Shift+N taken by another program; said: " + (said == null ? "nothing" : string.Join(", ", said)));
+                Check(said is { Count: > 0 }, "a key another program has: the app says so");
+                await c.Call("test.settings.set", new { windowId, name = "ShortcutNewFromClipboard", value = new { Modifiers = 7, Key = 123 } }); // Ctrl+Alt+Shift+F12
+                await Task.Delay(800);
+                registered = (string?)(await c.Call("test.globalShortcut"))["registered"];
+                notes.Add($"another key: registered {registered ?? "nothing"}");
+                Check(registered != null, "another key chosen: registered");
+                press = () => Send(Key(0x11, false), Key(VkAlt, false), Key(VkShift, false), Key(0x7B, false), Key(0x7B, true), Key(VkShift, true), Key(VkAlt, true), Key(0x11, true));
+                ShowWindow(window, 6 /* SW_MINIMIZE */);
+                await Task.Delay(1500);
+            }
             const string clip = "# NC02 from another program\n\nPasted by the global shortcut.\n";
             SetClipboardText(clip);
-            PressAltShiftN();
+            press();
             string? added = null;
             await Eventually(async () => (added = (await DocumentsOf(c, windowId)).Except(before).FirstOrDefault()) != null, 10000, 100);
             Check(added != null, "on, the key pressed in another program makes a new tab");
@@ -133,6 +152,7 @@ internal static partial class Program
         finally
         {
             try { await c.Call("test.settings.set", new { windowId, name = "GlobalNewFromClipboard", value = false }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "ShortcutNewFromClipboard", value = new { Modifiers = 6, Key = 78 } }); } catch { } // Alt+Shift+N
             ShowWindow(window, 9 /* SW_RESTORE */);
             try { await Activate(window); } catch { }
             foreach (var d in made) await UndoAndClose(c, d, notes);

@@ -185,6 +185,15 @@ namespace Typedown.Services.Automation
                     var json = await editor.CoreWebView2.CallDevToolsProtocolMethodAsync(c.Params.RequiredString("method"), c.Params.OptionalString("params") ?? "{}");
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["result"] = Newtonsoft.Json.Linq.JToken.Parse(json) };
                 })));
+            // The key the global shortcut has now (Services.GlobalShortcut), or null: off, no key, or another program has it.
+            methods.Add(new MethodDescriptor("test.globalShortcut", null, "test.globalShortcut/1", (c, ct) =>
+            {
+                var key = Services.GlobalShortcut.Registered;
+                return System.Threading.Tasks.Task.FromResult<Newtonsoft.Json.Linq.JToken?>(new Newtonsoft.Json.Linq.JObject
+                {
+                    ["registered"] = key == null ? null : $"{key.Modifiers}+{key.Key}",
+                });
+            }));
             // The release feed's JSON instead of the edition's feed (null: the edition's again), for Check for updates.
             methods.Add(new MethodDescriptor("test.updates.feed", null, "test.updates.feed/1", (c, ct) =>
             {
