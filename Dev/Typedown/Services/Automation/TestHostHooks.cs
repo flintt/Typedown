@@ -185,6 +185,19 @@ namespace Typedown.Services.Automation
                     var json = await editor.CoreWebView2.CallDevToolsProtocolMethodAsync(c.Params.RequiredString("method"), c.Params.OptionalString("params") ?? "{}");
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["result"] = Newtonsoft.Json.Linq.JToken.Parse(json) };
                 })));
+            // The release feed's JSON instead of the edition's feed (null: the edition's again), for Check for updates.
+            methods.Add(new MethodDescriptor("test.updates.feed", null, "test.updates.feed/1", (c, ct) =>
+            {
+                Core.Services.UpdateCheck.FeedJsonOverride = c.Params.OptionalString("json");
+                return System.Threading.Tasks.Task.FromResult<Newtonsoft.Json.Linq.JToken?>(new Newtonsoft.Json.Linq.JObject { ["available"] = Core.Services.UpdateCheck.Available });
+            }));
+            // The daily check made now in a window (as at a start a day after the last), and the card it left, if any.
+            methods.Add(new MethodDescriptor("test.updates.autoCheck", null, "test.updates.autoCheck/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    await Core.Services.UpdateCheck.CheckAutomaticallyAsync(app, now: true);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["card"] = Core.Utilities.EditionHooks.CardShown(app) };
+                })));
             // The web view's memory target (WebView2's MemoryUsageTargetLevel): low asks it to give back what it can.
             methods.Add(new MethodDescriptor("test.webview.memoryTarget", null, "test.webview.memoryTarget/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>

@@ -899,6 +899,34 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>ലോഗ് ഫോൾഡർ തുറക്കുക</value>
   </data>
+  <data name="About.CheckForUpdates" xml:space="preserve">
+    <value>അപ്‌ഡേറ്റുകൾക്കായി പരിശോധിക്കുക</value>
+    <comment>关于/检查更新</comment>
+  </data>
+  <data name="About.CheckingForUpdates" xml:space="preserve">
+    <value>പരിശോധിക്കുന്നു…</value>
+    <comment>关于/正在检查更新</comment>
+  </data>
+  <data name="About.UpToDate" xml:space="preserve">
+    <value>നിങ്ങൾക്ക് ഏറ്റവും പുതിയ പതിപ്പുണ്ട് ({0}).</value>
+    <comment>关于/已是最新版本，{0} 是版本号</comment>
+  </data>
+  <data name="About.UpdateFound" xml:space="preserve">
+    <value>പതിപ്പ് {0} ലഭ്യമാണ്.</value>
+    <comment>关于/有新版本，{0} 是版本号</comment>
+  </data>
+  <data name="About.UpdateCheckFailed" xml:space="preserve">
+    <value>അപ്‌ഡേറ്റുകൾ പരിശോധിക്കാനായില്ല: {0}</value>
+    <comment>关于/检查更新失败，{0} 是原因</comment>
+  </data>
+  <data name="About.OpenReleasePage" xml:space="preserve">
+    <value>ഡൗൺലോഡ് പേജ് തുറക്കുക</value>
+    <comment>关于/打开新版本的下载页</comment>
+  </data>
+  <data name="About.AutoCheckUpdates" xml:space="preserve">
+    <value>അപ്‌ഡേറ്റുകൾ സ്വയമേവ പരിശോധിക്കുക (ദിവസം ഒരിക്കൽ)</value>
+    <comment>关于/每天自动检查一次更新</comment>
+  </data>
   <data name="Export.AfterExport.Title" xml:space="preserve">
     <value>എക്സ്പോർട്ടിന് ശേഷം</value>
   </data>

@@ -633,6 +633,18 @@
     <value>ക്ലിപ്പ്ബോർഡിൽ നിന്ന് പുതിയത്</value>
     <comment>新建/从剪贴板新建</comment>
   </data>
+  <data name="UpdateCard.Available" xml:space="preserve">
+    <value>പതിപ്പ് {0} ലഭ്യമാണ് (നിങ്ങൾക്ക് {1}).</value>
+    <comment>更新提示卡片/有新版本 {0}，当前 {1}</comment>
+  </data>
+  <data name="UpdateCard.Download" xml:space="preserve">
+    <value>ഡൗൺലോഡ്</value>
+    <comment>更新提示卡片/下载</comment>
+  </data>
+  <data name="UpdateCard.Later" xml:space="preserve">
+    <value>പിന്നീട്</value>
+    <comment>更新提示卡片/以后再说</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>നടപടിയില്ല</value>
     <comment>自动操作/无操作</comment>

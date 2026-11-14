@@ -327,6 +327,10 @@ namespace Typedown.Core.ViewModels
         /// it takes the key from every other program.
         /// </summary>
         public bool GlobalNewFromClipboard { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>Settings > About: the release feed looked at once a day, a newer release said in a card (Services.UpdateCheck). Off unless chosen.</summary>
+        public bool CheckForUpdatesAutomatically { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>When the daily check last had an answer (round-trip time), so a day passes before the next.</summary>
+        public string LastUpdateCheck { get => GetSettingValue(""); set => SetSettingValue(value); }
         /// <summary>
         /// Settings > General > Release memory when minimized: a minimized window's web view gets the low memory target
         /// (WebView2's MemoryUsageTargetLevel), and gives back the caches it holds - up to a gigabyte with a long document

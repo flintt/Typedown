@@ -633,6 +633,18 @@
     <value>क्लिपबोर्डबाट नयाँ</value>
     <comment>新建/从剪贴板新建</comment>
   </data>
+  <data name="UpdateCard.Available" xml:space="preserve">
+    <value>संस्करण {0} उपलब्ध छ (तपाईंसँग {1})।</value>
+    <comment>更新提示卡片/有新版本 {0}，当前 {1}</comment>
+  </data>
+  <data name="UpdateCard.Download" xml:space="preserve">
+    <value>डाउनलोड</value>
+    <comment>更新提示卡片/下载</comment>
+  </data>
+  <data name="UpdateCard.Later" xml:space="preserve">
+    <value>पछि</value>
+    <comment>更新提示卡片/以后再说</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>कुनै कार्य छैन</value>
     <comment>自动操作/无操作</comment>

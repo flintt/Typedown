@@ -633,6 +633,18 @@
     <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ಹೊಸದು</value>
     <comment>新建/从剪贴板新建</comment>
   </data>
+  <data name="UpdateCard.Available" xml:space="preserve">
+    <value>ಆವೃತ್ತಿ {0} ಲಭ್ಯವಿದೆ (ನಿಮ್ಮಲ್ಲಿ {1} ಇದೆ).</value>
+    <comment>更新提示卡片/有新版本 {0}，当前 {1}</comment>
+  </data>
+  <data name="UpdateCard.Download" xml:space="preserve">
+    <value>ಡೌನ್‌ಲೋಡ್</value>
+    <comment>更新提示卡片/下载</comment>
+  </data>
+  <data name="UpdateCard.Later" xml:space="preserve">
+    <value>ನಂತರ</value>
+    <comment>更新提示卡片/以后再说</comment>
+  </data>
   <data name="NoAction" xml:space="preserve">
     <value>ಕ್ರಿಯೆ ಇಲ್ಲ</value>
     <comment>自动操作/无操作</comment>
