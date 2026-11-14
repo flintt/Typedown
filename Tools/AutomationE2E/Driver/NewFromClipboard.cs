@@ -46,6 +46,27 @@ internal static partial class Program
             Check(await ActiveOf(c, windowId) == added, "the new tab is the one shown");
             Check(await PageShows(c, windowId, "NC01 from the clipboard"), "the page shows it");
 
+            // In reading mode too, which takes no other paste: the new tab stayed empty there (the user, 2026-11-14).
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = true });
+            await Task.Delay(500);
+            const string readingClip = "# NC01 in reading mode\n\nShown, not edited.\n";
+            SetClipboardText(readingClip);
+            var beforeReading = await DocumentsOf(c, windowId);
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(300);
+            PressAltShiftN();
+            string? readingTab = null;
+            await Eventually(async () => (readingTab = (await DocumentsOf(c, windowId)).Except(beforeReading).FirstOrDefault()) != null, 8000, 100);
+            Check(readingTab != null, "reading mode: Alt+Shift+N makes a new tab");
+            made.Add(readingTab!);
+            var readingText = "";
+            await Eventually(async () => (readingText = ((string?)(await Get(c, readingTab!))["text"] ?? "").Replace("\r\n", "\n")).Contains("NC01 in reading mode"), 8000, 100);
+            notes.Add("reading mode, new tab's text: " + readingText.Replace("\n", "⏎"));
+            Check(readingText.TrimEnd('\n') == readingClip.TrimEnd('\n'), $"reading mode: the new tab has the clipboard's text ({readingText.Length} chars)");
+            Check(await PageShows(c, windowId, "Shown, not edited."), "reading mode: the page shows it");
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
+
             // Nothing to paste: said so, no tab made.
             EmptyTheClipboard();
             var count = (await DocumentsOf(c, windowId)).Count;
@@ -61,6 +82,7 @@ internal static partial class Program
         }
         finally
         {
+            try { await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false }); } catch { }
             foreach (var d in made) await UndoAndClose(c, d, notes);
             try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
