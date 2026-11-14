@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>ផ្ទាំងចំហៀងបង្ហាញឯកសារនៅខាងលើ និងគ្រោងនៅខាងក្រោម នីមួយៗអាចបត់ត្រឹមចំណងជើង ជំនួសឱ្យផ្ទាំងពីរ។</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>ទទឹងជួរឈរតារាង</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>អូសគែមជួរឈរក្នុងជួរក្បាលដើម្បីកំណត់ទទឹង។ ទទឹងត្រូវរក្សាទុកក្នុងឯកសារជាសញ្ញាដាសក្រោមក្បាល (កម្មវិធីផ្សេងបង្ហាញតារាងដូចធម្មតា) ហើយទៅក្នុងការនាំចេញ។</value>
+  </data>
 </root>

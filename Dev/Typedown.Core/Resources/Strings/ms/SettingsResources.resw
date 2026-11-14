@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Anak tetingkap sisi menunjukkan fail di atas dan rangka di bawah, setiap satu boleh dilipat ke tajuknya, bukannya dua tab.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Lebar lajur jadual</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Seret tepi lajur dalam baris pengepala untuk menetapkan lebarnya. Lebar disimpan dalam fail sebagai sengkang di bawah pengepala (editor lain memaparkan jadual seperti biasa) dan masuk ke eksport.</value>
+  </data>
 </root>

@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>O painel lateral mostra os arquivos em cima e a estrutura embaixo, cada um recolhível até o título, em vez de duas guias.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Largura das colunas de tabelas</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Arraste a borda de uma coluna na linha de cabeçalho para definir sua largura. A largura fica no arquivo como os traços abaixo do cabeçalho (outros editores mostram a tabela normalmente) e vai para as exportações.</value>
+  </data>
 </root>

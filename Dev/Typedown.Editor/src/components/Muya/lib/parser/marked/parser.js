@@ -117,13 +117,15 @@ Parser.prototype.tok = function () {
       let cell
       let j
 
-      // header
+      // header; its cells carry the columns' widths when they are kept (services/tableWidths)
+      const widths = this.options.tableColumnWidths && Array.isArray(this.token.widths) && this.token.widths.length === this.token.header.length ? this.token.widths : null
       cell = ''
       for (i = 0; i < this.token.header.length; i++) {
         cell += this.renderer.tablecell(
           this.inline.output(this.token.header[i]), {
             header: true,
-            align: this.token.align[i]
+            align: this.token.align[i],
+            width: widths ? widths[i] : null
           }
         )
       }
@@ -144,7 +146,9 @@ Parser.prototype.tok = function () {
 
         body += this.renderer.tablerow(cell)
       }
-      return this.renderer.table(header, body)
+      const table = this.renderer.table(header, body)
+      // Laid out fixed, as the editor draws it: the shares are the columns' widths, not hints.
+      return widths ? table.replace('<table>', '<table style="table-layout:fixed;width:100%">') : table
     }
     case 'blockquote_start': {
       let body = ''

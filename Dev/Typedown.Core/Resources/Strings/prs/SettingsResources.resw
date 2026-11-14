@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>پنل کناری فایل‌ها را در بالا و طرح کلی را در پایین نشان می‌دهد، هر کدام تا عنوانش جمع می‌شود، به جای دو زبانه.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>عرض ستون‌های جدول</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>برای تعیین عرض، لبهٔ ستون را در ردیف سرخط بکشید. عرض در فایل به حیث خط‌تیره‌های زیر سرخط نگهداری می‌شود (ویرایشگرهای دیگر جدول را مانند همیشه نشان می‌دهند) و به صادرات می‌رود.</value>
+  </data>
 </root>

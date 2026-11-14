@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Salin pautan ke tajuk</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Muatkan lajur dengan kandungan</value>
+  </data>
 </root>

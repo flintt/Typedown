@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>సైడ్ పేన్ పైన ఫైల్‌లను, కింద రూపురేఖను చూపుతుంది, ప్రతిదాన్ని దాని శీర్షిక వరకు ముడవచ్చు, రెండు ట్యాబ్‌లకు బదులుగా.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>పట్టిక నిలువు వరుస వెడల్పు</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>వెడల్పు నిర్ణయించడానికి శీర్షిక వరుసలో నిలువు వరుస అంచును లాగండి. వెడల్పు ఫైల్‌లో శీర్షిక కింది డాష్‌లుగా ఉంటుంది (ఇతర ఎడిటర్లు పట్టికను మామూలుగా చూపుతాయి) మరియు ఎగుమతిలోకి వెళ్తుంది.</value>
+  </data>
 </root>

@@ -1492,4 +1492,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Copy link to heading</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Fit columns to content</value>
+  </data>
 </root>

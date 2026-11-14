@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Panel boczny pokazuje pliki u góry i konspekt na dole, każdy zwijany do tytułu, zamiast dwóch kart.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Szerokość kolumn tabel</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Przeciągnij krawędź kolumny w wierszu nagłówka, aby ustawić jej szerokość. Szerokość zapisuje się w pliku jako myślniki pod nagłówkiem (inne edytory pokazują tabelę jak zwykle) i trafia do eksportu.</value>
+  </data>
 </root>

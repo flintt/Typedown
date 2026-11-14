@@ -1067,4 +1067,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>側邊欄上方顯示檔案、下方顯示大綱，各自可摺疊到標題列，不再使用兩個索引標籤。</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>表格欄寬</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>拖曳標題列中欄的邊線來設定寬度。寬度以標題下一列短橫線的長短保存在檔案裡（其他編輯器照常顯示表格），匯出時也會帶上。</value>
+  </data>
 </root>

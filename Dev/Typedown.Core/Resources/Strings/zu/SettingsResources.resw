@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Iphaneli eseceleni ibonisa amafayela phezulu nohlaka phansi, ngalinye ligoqeka kuze kube yisihloko salo, esikhundleni samathebhu amabili.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Ububanzi bamakholomu amathebula</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Hudula umphetho wekholomu emgqeni wesihloko ukuze usethe ububanzi bayo. Ububanzi bugcinwa efayeleni njengamadeshi angaphansi kwesihloko (abanye abahleli babonisa ithebula njengokujwayelekile) futhi bungena ekuthumeleni.</value>
+  </data>
 </root>

@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>سرخی کا لنک کاپی کریں</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>کالم مواد کے مطابق کریں</value>
+  </data>
 </root>

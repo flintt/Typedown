@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>ಶೀರ್ಷಿಕೆಯ ಲಿಂಕ್ ನಕಲಿಸಿ</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>ಕಾಲಮ್‌ಗಳನ್ನು ವಿಷಯಕ್ಕೆ ಹೊಂದಿಸಿ</value>
+  </data>
 </root>

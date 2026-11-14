@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Yan bölme dosyaları üstte, ana hattı altta gösterir; her biri başlığına kadar daraltılabilir; iki sekme yerine.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Tablo sütun genişlikleri</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Genişliği ayarlamak için başlık satırında bir sütunun kenarını sürükleyin. Genişlik dosyada başlığın altındaki tirelerin uzunluğu olarak tutulur (diğer düzenleyiciler tabloyu her zamanki gibi gösterir) ve dışa aktarmalara geçer.</value>
+  </data>
 </root>

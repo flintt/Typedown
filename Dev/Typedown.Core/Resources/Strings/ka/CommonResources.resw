@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>სათაურის ბმულის კოპირება</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>სვეტების მორგება შიგთავსზე</value>
+  </data>
 </root>

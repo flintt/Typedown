@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>የጎን ፓነሉ ፋይሎችን ከላይ፣ ዝርዝሩን ከታች ያሳያል፤ እያንዳንዱ እስከ ርዕሱ ይታጠፋል፤ ከሁለት ትሮች ይልቅ።</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>የሰንጠረዥ ዓምድ ስፋት</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>ስፋቱን ለማዘጋጀት በርዕስ ረድፍ ውስጥ የዓምዱን ጠርዝ ይጎትቱ። ስፋቱ በፋይሉ ውስጥ ከርዕሱ በታች ባሉ ሰረዞች ይቀመጣል (ሌሎች አርታዒዎች ሰንጠረዡን እንደተለመደው ያሳያሉ) እና ወደ መላኪያዎች ይገባል።</value>
+  </data>
 </root>

@@ -9,6 +9,10 @@ import { h } from '../snabbdom'
 import { detectTextDirection, findBlockText } from '../../../utils/detectTextDirection'
 import { FOLD_MIN_LINES, blockFingerprint, isFolded } from 'services/blockFold'
 
+// A table's widths when they are drawn: the setting on, one share for each column.
+const tableWidthsOf = (muya, table) =>
+  muya.options.tableColumnWidths && Array.isArray(table.widths) && table.widths.length === table.column + 1 ? table.widths : null
+
 // A long code block's or table's fold button (services/blockFold), by its copy button.
 const renderFoldButton = (fingerprint, folded) => h(`a.ag-block-fold${folded ? '.folded' : ''}`, {
   attrs: { contenteditable: 'false', 'data-fold': fingerprint, 'aria-expanded': folded ? 'false' : 'true' }
@@ -119,11 +123,25 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     Object.assign(data.attrs, { spellcheck: 'false' })
   }
 
+  // Column widths (Settings > Editor > Table column widths, services/tableWidths): the table laid out fixed, each header
+  // cell its share.
+  if (type === 'table' && tableWidthsOf(this.muya, block)) {
+    Object.assign(data.attrs, { style: 'table-layout:fixed;width:100%' })
+    selector += '.ag-table-widths'
+  }
+
   if (/^(?:th|td)$/.test(type)) {
     const { cells } = this.muya.contentState.selectedTableCells || {}
-    if (align) {
+    const styles = []
+    if (align) styles.push(`text-align:${align}`)
+    if (type === 'th' && typeof column === 'number') {
+      const table = this.muya.contentState.closest(block, 'table')
+      const widths = table && tableWidthsOf(this.muya, table)
+      if (widths) styles.push(`width:${widths[column]}%`)
+    }
+    if (styles.length) {
       Object.assign(data.attrs, {
-        style: `text-align:${align}`
+        style: styles.join(';')
       })
     }
 

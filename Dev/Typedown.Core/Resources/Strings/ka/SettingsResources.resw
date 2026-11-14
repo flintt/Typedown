@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>გვერდითა პანელი ზემოთ აჩვენებს ფაილებს, ქვემოთ — მონახაზს, თითოეული სათაურამდე იკეცება, ორი ჩანართის ნაცვლად.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>ცხრილის სვეტის სიგანე</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>სიგანის დასაყენებლად სათაურის მწკრივში სვეტის კიდე გადაათრიეთ. სიგანე ფაილში სათაურის ქვეშ ტირეების სახით ინახება (სხვა რედაქტორები ცხრილს ჩვეულებრივ აჩვენებენ) და ექსპორტში გადადის.</value>
+  </data>
 </root>

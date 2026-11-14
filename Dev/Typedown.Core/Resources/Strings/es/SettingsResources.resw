@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>El panel lateral muestra los archivos arriba y el esquema abajo, cada uno plegable hasta su título, en lugar de dos pestañas.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Ancho de columnas de tablas</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Arrastra el borde de una columna en la fila de encabezado para fijar su ancho. El ancho se guarda en el archivo con los guiones bajo el encabezado (otros editores muestran la tabla como siempre) y pasa a las exportaciones.</value>
+  </data>
 </root>

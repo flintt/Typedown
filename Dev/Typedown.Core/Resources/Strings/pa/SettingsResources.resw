@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>ਸਾਈਡ ਪੈਨ ਉੱਪਰ ਫ਼ਾਈਲਾਂ ਅਤੇ ਹੇਠਾਂ ਰੂਪਰੇਖਾ ਦਿਖਾਉਂਦਾ ਹੈ, ਹਰ ਇੱਕ ਆਪਣੇ ਸਿਰਲੇਖ ਤੱਕ ਸਮੇਟਿਆ ਜਾ ਸਕਦਾ ਹੈ, ਦੋ ਟੈਬਾਂ ਦੀ ਥਾਂ।</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>ਸਾਰਣੀ ਕਾਲਮ ਚੌੜਾਈ</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>ਚੌੜਾਈ ਤੈਅ ਕਰਨ ਲਈ ਸਿਰਲੇਖ ਕਤਾਰ ਵਿੱਚ ਕਾਲਮ ਦਾ ਕਿਨਾਰਾ ਘਸੀਟੋ। ਚੌੜਾਈ ਫ਼ਾਈਲ ਵਿੱਚ ਸਿਰਲੇਖ ਹੇਠਲੇ ਡੈਸ਼ਾਂ ਵਜੋਂ ਰਹਿੰਦੀ ਹੈ (ਹੋਰ ਸੰਪਾਦਕ ਸਾਰਣੀ ਆਮ ਵਾਂਗ ਦਿਖਾਉਂਦੇ ਹਨ) ਅਤੇ ਨਿਰਯਾਤ ਵਿੱਚ ਜਾਂਦੀ ਹੈ।</value>
+  </data>
 </root>

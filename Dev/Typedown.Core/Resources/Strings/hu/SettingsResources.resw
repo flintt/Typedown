@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Az oldalsáv felül a fájlokat, alul a vázlatot mutatja, mindkettő a címsoráig összecsukható, két lap helyett.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Táblázatok oszlopszélessége</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Az oszlop szélességét a fejlécsorban a széle húzásával állíthatja. A szélesség a fájlban a fejléc alatti kötőjelek hosszaként marad meg (más szerkesztők a szokásos módon mutatják a táblázatot), és bekerül az exportba.</value>
+  </data>
 </root>

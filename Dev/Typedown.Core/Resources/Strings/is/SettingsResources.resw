@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Hliðarsvæðið sýnir skrár efst og efnisyfirlit neðst, hvort um sig hægt að fella saman að titli, í stað tveggja flipa.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Dálkabreidd í töflum</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Dragðu brún dálks í fyrirsagnarlínunni til að stilla breiddina. Breiddin geymist í skránni sem strikin undir fyrirsögninni (önnur forrit sýna töfluna eins og venjulega) og fer með í útflutning.</value>
+  </data>
 </root>

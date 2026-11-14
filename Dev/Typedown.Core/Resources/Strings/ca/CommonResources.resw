@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Copia l’enllaç al títol</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Ajusta les columnes al contingut</value>
+  </data>
 </root>

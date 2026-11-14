@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Başlığa bağlantıyı kopyala</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Sütunları içeriğe sığdır</value>
+  </data>
 </root>

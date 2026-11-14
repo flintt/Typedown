@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Le volet latéral affiche les fichiers en haut et le plan en bas, chacun repliable sur son titre, au lieu de deux onglets.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Largeur des colonnes des tableaux</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Faites glisser le bord d’une colonne dans la ligne d’en-tête pour régler sa largeur. La largeur est enregistrée dans le fichier par les tirets sous l’en-tête (les autres éditeurs affichent le tableau comme d’habitude) et reprise dans les exportations.</value>
+  </data>
 </root>

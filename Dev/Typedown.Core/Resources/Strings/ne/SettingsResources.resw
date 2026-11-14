@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>साइड प्यानले माथि फाइल र तल रूपरेखा देखाउँछ, प्रत्येक आफ्नो शीर्षकसम्म खुम्चिन्छ, दुई ट्याबको सट्टा।</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>तालिका स्तम्भ चौडाइ</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>चौडाइ तोक्न शीर्षक पङ्क्तिमा स्तम्भको किनारा तान्नुहोस्। चौडाइ फाइलमा शीर्षकमुनिका ड्यासका रूपमा रहन्छ (अन्य सम्पादकले तालिका सामान्य रूपमा देखाउँछन्) र निर्यातमा जान्छ।</value>
+  </data>
 </root>

@@ -1107,4 +1107,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>The side pane shows the files above and the outline below, each folding to its title, instead of two tabs.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Table column widths</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Drag a column's edge in the header row to set its width. The width is kept in the file as the dashes under the header (other editors show the table as usual) and goes into exports.</value>
+  </data>
 </root>

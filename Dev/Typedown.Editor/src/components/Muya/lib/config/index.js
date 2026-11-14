@@ -269,6 +269,8 @@ export const MUYA_DEFAULT_OPTION = Object.freeze({
   orderListDelimiter: '.',
   tabSize: 4,
   codeBlockLineNumbers: false,
+  // Settings > Editor > Table column widths (services/tableWidths): off, tables are drawn and written as before.
+  tableColumnWidths: false,
   // bullet/list marker width + listIndentation, tab or Daring Fireball Markdown (4 spaces) --> list indentation
   listIndentation: 1,
   frontmatterType: '-',

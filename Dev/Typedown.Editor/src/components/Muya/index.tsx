@@ -56,6 +56,7 @@ import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
 import Slugger from 'components/Muya/lib/parser/marked/slugger'
 import { getHeadingPlainText } from 'components/Muya/lib/utils'
+import { shares } from 'services/tableWidths'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
 import CodePicker from 'components/Muya/lib/ui/codePicker'
 import EmojiPicker from 'components/Muya/lib/ui/emojiPicker'
@@ -708,6 +709,78 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor, props.options?.codeBlockLineNumbers])
 
     useEffect(() => {
+        // Settings > Editor > Table column widths: tables drawn again with or without the widths in their delimiter rows.
+        const on = !!props.options?.tableColumnWidths
+        applyOnce(editor, 'tableColumnWidths', on, () => editor?.setOptions({ tableColumnWidths: on }, true))
+    }, [editor, props.options?.tableColumnWidths])
+
+    // A column's width dragged by its right edge in the header (Settings > Editor > Table column widths): the column and
+    // the next one share what they had; the widths kept as shares and written into the delimiter row (services/tableWidths).
+    useEffect(() => {
+        if (!editor) return
+        const root = document.getElementById('ag-editor-id')
+        if (!root) return
+        const EDGE = 5
+        const edgeOf = (event: MouseEvent): HTMLTableCellElement | null => {
+            if (!(editor as any).options?.tableColumnWidths || optionsRef.current?.readOnly) return null
+            const th = (event.target as Element | null)?.closest?.('th') as HTMLTableCellElement | null
+            if (!th || !th.nextElementSibling) return null
+            const r = th.getBoundingClientRect()
+            return Math.abs(event.clientX - r.right) <= EDGE ? th : null
+        }
+        let drag: { th: HTMLTableCellElement, next: HTMLTableCellElement, cells: HTMLTableCellElement[], start: number[], x: number, total: number, index: number } | null = null
+        const move = (event: MouseEvent) => {
+            if (!drag) {
+                root.style.cursor = edgeOf(event) ? 'col-resize' : ''
+                return
+            }
+            const dx = event.clientX - drag.x
+            const pair = drag.start[drag.index] + drag.start[drag.index + 1]
+            const left = Math.min(Math.max(30, drag.start[drag.index] + dx), pair - 30)
+            drag.th.style.width = `${left / drag.total * 100}%`
+            drag.next.style.width = `${(pair - left) / drag.total * 100}%`
+            event.preventDefault()
+        }
+        const down = (event: MouseEvent) => {
+            if (event.button !== 0) return
+            const th = edgeOf(event)
+            if (!th) return
+            event.preventDefault()
+            event.stopPropagation()
+            const cells = Array.from(th.parentElement!.children) as HTMLTableCellElement[]
+            const table = th.closest('table') as HTMLTableElement
+            const start = cells.map(c => c.getBoundingClientRect().width)
+            const total = start.reduce((a, b) => a + b, 0)
+            // Fixed from here on: what is dragged is what is drawn.
+            table.style.tableLayout = 'fixed'
+            table.style.width = '100%'
+            cells.forEach((c, i) => { c.style.width = `${start[i] / total * 100}%` })
+            drag = { th, next: th.nextElementSibling as HTMLTableCellElement, cells, start, x: event.clientX, total, index: cells.indexOf(th) }
+        }
+        const up = () => {
+            if (!drag) return
+            const { cells, th } = drag
+            drag = null
+            root.style.cursor = ''
+            const contentState = (editor as any).contentState
+            const cell = contentState.getBlock(th.id)
+            const table = cell && contentState.closest(cell, 'table')
+            if (!table) return
+            table.widths = shares(cells.map(c => c.getBoundingClientRect().width))
+            contentState.render()
+            ;(editor as any).dispatchChange()
+        }
+        root.addEventListener('mousemove', move)
+        root.addEventListener('mousedown', down, true)
+        window.addEventListener('mouseup', up)
+        return () => {
+            root.removeEventListener('mousemove', move)
+            root.removeEventListener('mousedown', down, true)
+            window.removeEventListener('mouseup', up)
+        }
+    }, [editor])
+
+    useEffect(() => {
         // Settings > Editor > Diagram renderer: Mermaid or Pele draws the Mermaid fences; the drawn ones are drawn again.
         if (editor) (window as any).__typedownSetMermaidRenderer?.(props.options?.mermaidRenderer)
     }, [editor, props.options?.mermaidRenderer])
@@ -834,6 +907,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         } else if (action === 'copyCode') {
             const pre = kept.pre && document.getElementById(kept.pre)
             if (pre) contentState.copyCodeBlock({ target: pre })
+        } else if (action === 'fitColumns') {
+            // Fit columns to content: the table's widths gone, laid out by its content again (and written without them).
+            const figure = kept.figure && contentState.getBlock(kept.figure)
+            const table = figure?.children?.[0]
+            if (table && table.widths) {
+                delete table.widths
+                contentState.render()
+                editor.dispatchChange()
+            }
         } else if (action === 'copyBlock') {
             const figure = kept.figure && document.getElementById(kept.figure)
             if (figure) contentState.copyBlockToClipboard(figure, figure.querySelector(':scope > .ag-diagram-copy'))

@@ -1387,4 +1387,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>ወደ ርዕሱ የሚወስድ አገናኝ ቅዳ</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>ዓምዶችን ከይዘቱ ጋር አስማማ</value>
+  </data>
 </root>

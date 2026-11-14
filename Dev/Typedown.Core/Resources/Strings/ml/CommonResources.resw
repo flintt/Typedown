@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>തലക്കെട്ടിലേക്കുള്ള ലിങ്ക് പകർത്തുക</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>കോളങ്ങൾ ഉള്ളടക്കത്തിന് അനുയോജ്യമാക്കുക</value>
+  </data>
 </root>

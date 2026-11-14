@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>La subfinestra lateral mostra els fitxers a dalt i l’esquema a baix, cadascun plegable fins al títol, en lloc de dues pestanyes.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Amplada de columnes de taules</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Arrossegueu la vora d'una columna a la fila de capçalera per fixar-ne l'amplada. L'amplada es desa al fitxer com els guions sota la capçalera (altres editors mostren la taula com sempre) i passa a les exportacions.</value>
+  </data>
 </root>

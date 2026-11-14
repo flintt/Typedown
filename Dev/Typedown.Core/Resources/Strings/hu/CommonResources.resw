@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Hivatkozás másolása a címsorra</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Oszlopok igazítása a tartalomhoz</value>
+  </data>
 </root>

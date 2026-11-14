@@ -1,4 +1,5 @@
 import { isLengthEven, getParagraphReference } from '../utils'
+import { shares } from 'services/tableWidths'
 
 const TABLE_BLOCK_REG = /^\|.*?(\\*)\|.*?(\\*)\|/
 
@@ -371,6 +372,20 @@ const tableBlockCtrl = ContentState => {
 
     const newColum = thead.children[0].children.length - 1
     const newRow = thead.children.length + tbody.children.length - 1
+    // Column widths (services/tableWidths) kept in step: a column put in shares the one it was put beside; a column
+    // taken out gives its share to the one next to it.
+    if (Array.isArray(table.widths) && target === 'column' && table.widths.length !== newColum + 1) {
+      const widths = table.widths.slice()
+      if (widths.length + 1 === newColum + 1) {
+        const half = widths[columnIndex] / 2
+        widths.splice(columnIndex, 1, half, half)
+      } else if (widths.length - 1 === newColum + 1) {
+        const removed = location === 'left' ? columnIndex - 1 : location === 'current' ? columnIndex : columnIndex + 1
+        const share = widths.splice(removed, 1)[0] || 0
+        widths[Math.min(removed, widths.length - 1)] += share
+      }
+      table.widths = widths.length === newColum + 1 ? shares(widths) : undefined
+    }
     Object.assign(table, { row: newRow, column: newColum })
 
     if (cursorBlock) {

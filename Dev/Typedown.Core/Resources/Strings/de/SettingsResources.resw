@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Der Seitenbereich zeigt oben die Dateien und unten die Gliederung, jeweils bis auf die Titelzeile einklappbar, statt zweier Registerkarten.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Spaltenbreiten in Tabellen</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Ziehen Sie den Rand einer Spalte in der Kopfzeile, um ihre Breite festzulegen. Die Breite wird in der Datei als Striche unter der Kopfzeile gespeichert (andere Editoren zeigen die Tabelle wie gewohnt) und in Exporte übernommen.</value>
+  </data>
 </root>

@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Ka whakaatu te paewhiri taha i ngā kōnae ki runga me te whakaraupapa ki raro, ka taea te kopa ia mea ki tōna taitara, hei whakakapi i ngā ripa e rua.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Te whānui o ngā tīwae ripanga</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Tōia te tapa o tētahi tīwae i te rārangi upoko hei tautuhi i te whānui. Ka puritia te whānui ki te kōnae hei tohuhono i raro i te upoko (ka whakaatu ētahi atu ētita i te ripanga pērā i te tikanga) ā, ka uru ki ngā kaweake.</value>
+  </data>
 </root>

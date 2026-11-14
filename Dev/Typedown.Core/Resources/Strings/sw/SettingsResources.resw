@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Kidirisha cha pembeni kinaonyesha faili juu na muhtasari chini, kila kimoja kinakunjika hadi kichwa chake, badala ya vichupo viwili.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Upana wa safu wima za jedwali</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Buruta ukingo wa safu wima kwenye safu ya kichwa ili kuweka upana wake. Upana huhifadhiwa kwenye faili kama vistari chini ya kichwa (vihariri vingine huonyesha jedwali kama kawaida) na huingia kwenye uhamishaji.</value>
+  </data>
 </root>

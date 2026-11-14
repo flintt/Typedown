@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>பக்கப் பலகம் மேலே கோப்புகளையும் கீழே சுருக்கத்தையும் காட்டும், ஒவ்வொன்றும் தன் தலைப்பு வரை மடிக்கலாம், இரண்டு தாவல்களுக்குப் பதிலாக.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>அட்டவணை நெடுவரிசை அகலம்</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>அகலத்தை அமைக்க தலைப்பு வரிசையில் நெடுவரிசையின் விளிம்பை இழுக்கவும். அகலம் கோப்பில் தலைப்புக்குக் கீழுள்ள கோடுகளாக வைக்கப்படும் (மற்ற திருத்திகள் அட்டவணையை வழக்கம்போல் காட்டும்) மற்றும் ஏற்றுமதியில் சேரும்.</value>
+  </data>
 </root>

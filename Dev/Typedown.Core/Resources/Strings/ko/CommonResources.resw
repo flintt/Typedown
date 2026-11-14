@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>제목 링크 복사</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>열 너비를 내용에 맞춤</value>
+  </data>
 </root>

@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Boční panel zobrazí nahoře soubory a dole osnovu, každou lze sbalit na nadpis, místo dvou karet.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Šířka sloupců tabulek</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Šířku sloupce nastavíte tažením jeho okraje v řádku záhlaví. Šířka se v souboru uloží jako pomlčky pod záhlavím (jiné editory zobrazí tabulku jako obvykle) a přenese se do exportů.</value>
+  </data>
 </root>

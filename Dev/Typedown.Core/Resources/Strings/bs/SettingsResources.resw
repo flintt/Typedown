@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Bočno okno prikazuje datoteke gore i strukturu dolje, svaki se može sklopiti na naslov, umjesto dvije kartice.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Širina kolona tabela</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Povucite rub kolone u redu zaglavlja da postavite širinu. Širina se u datoteci čuva kao crtice ispod zaglavlja (drugi uređivači prikazuju tabelu kao i obično) i prenosi se u izvoz.</value>
+  </data>
 </root>

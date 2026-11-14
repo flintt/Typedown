@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>サイドペインの上にファイル、下にアウトラインを表示し、それぞれ見出し行まで折りたためます（2 つのタブの代わり）。</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>表の列幅</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>見出し行で列の境界をドラッグして幅を設定します。幅は見出しの下の行のハイフンの長さとしてファイルに保存され（他のエディターでは通常どおり表示）、エクスポートにも反映されます。</value>
+  </data>
 </root>

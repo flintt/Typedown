@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Бүйірлік тақта жоғарыда файлдарды, төменде құрылымды көрсетеді, әрқайсысы тақырыбына дейін жиналады, екі қойындының орнына.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Кесте бағандарының ені</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Енін орнату үшін тақырып жолында бағанның жиегін сүйреңіз. Ені файлда тақырып астындағы сызықшалар ретінде сақталады (басқа редакторлар кестені әдеттегідей көрсетеді) және экспортқа кіреді.</value>
+  </data>
 </root>

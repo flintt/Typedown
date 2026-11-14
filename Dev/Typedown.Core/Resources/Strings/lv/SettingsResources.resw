@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Sānu rūts augšā rāda failus un apakšā struktūru, katru var sakļaut līdz virsrakstam, divu ciļņu vietā.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Tabulu kolonnu platums</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Velciet kolonnas malu galvenes rindā, lai iestatītu platumu. Platums failā saglabājas kā domuzīmes zem galvenes (citi redaktori tabulu rāda kā parasti) un nonāk eksportā.</value>
+  </data>
 </root>

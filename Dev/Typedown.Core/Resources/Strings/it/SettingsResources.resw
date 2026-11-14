@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Il riquadro laterale mostra i file sopra e la struttura sotto, ciascuno comprimibile fino al titolo, invece di due schede.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Larghezza colonne delle tabelle</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Trascina il bordo di una colonna nella riga di intestazione per impostarne la larghezza. La larghezza resta nel file come trattini sotto l'intestazione (gli altri editor mostrano la tabella come sempre) e passa nelle esportazioni.</value>
+  </data>
 </root>

@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Die sypaneel wys die lêers bo en die uiteensetting onder, elk invoubaar tot sy titel, in plaas van twee oortjies.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Kolomwydte in tabelle</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Sleep 'n kolom se rand in die opskrifry om sy wydte te stel. Die wydte word in die lêer as die strepies onder die opskrif gehou (ander redigeerders wys die tabel soos gewoonlik) en gaan in uitvoere.</value>
+  </data>
 </root>

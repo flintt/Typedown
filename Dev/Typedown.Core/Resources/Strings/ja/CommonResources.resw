@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>見出しへのリンクをコピー</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>列幅を内容に合わせる</value>
+  </data>
 </root>

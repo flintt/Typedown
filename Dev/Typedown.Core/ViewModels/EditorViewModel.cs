@@ -330,6 +330,7 @@ namespace Typedown.Core.ViewModels
                 Settings.PreferLooseListItem,
                 Settings.ListIndentation,
                 Settings.TableAlignColumns,
+                Settings.TableColumnWidths,
                 Settings.ShowBlankLines,
                 Settings.JoinSoftBreaks,
                 Settings.CodeBlockLineNumbers,

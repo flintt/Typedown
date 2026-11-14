@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>ແຖບຂ້າງສະແດງໄຟລ໌ຢູ່ເທິງ ແລະ ໂຄງຮ່າງຢູ່ລຸ່ມ ແຕ່ລະສ່ວນພັບໃຫ້ເຫຼືອແຕ່ຫົວຂໍ້ໄດ້ ແທນສອງແຖບ.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>ຄວາມກວ້າງຖັນຕາຕະລາງ</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>ລາກຂອບຖັນໃນແຖວຫົວຕາຕະລາງເພື່ອຕັ້ງຄວາມກວ້າງ. ຄວາມກວ້າງເກັບໃນໄຟລ໌ເປັນຂີດໃຕ້ຫົວ (ໂປຣແກຣມອື່ນສະແດງຕາຕະລາງຕາມປົກກະຕິ) ແລະ ໄປນຳການສົ່ງອອກ.</value>
+  </data>
 </root>

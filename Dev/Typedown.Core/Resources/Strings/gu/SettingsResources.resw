@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>સાઇડ પેન ઉપર ફાઇલો અને નીચે રૂપરેખા બતાવે છે, દરેક પોતાના શીર્ષક સુધી સંકેલી શકાય છે, બે ટૅબને બદલે.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>કોષ્ટક કૉલમની પહોળાઈ</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>પહોળાઈ નક્કી કરવા શીર્ષક પંક્તિમાં કૉલમની કિનારી ખેંચો. પહોળાઈ ફાઇલમાં શીર્ષક નીચેના ડૅશ તરીકે રહે છે (અન્ય સંપાદકો કોષ્ટક સામાન્ય રીતે બતાવે છે) અને નિકાસમાં જાય છે.</value>
+  </data>
 </root>

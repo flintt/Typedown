@@ -1,7 +1,14 @@
 import { normal, gfm, pedantic } from './blockRules'
+import { widthsFromDelimiter } from 'services/tableWidths'
 import options from './options'
 import { splitCells, rtrim, getUniqueId } from './utils'
 import { visibleEmptyParagraphs } from '../../utils/blankLines'
+
+// A table's column widths from its first two lines (the header and the delimiter row), or null.
+const widthsOf = raw => {
+  const lines = raw.split('\n')
+  return lines.length >= 2 ? widthsFromDelimiter(lines[0], lines[1]) : null
+}
 
 /**
  * Splits the body rows of a table token into cells. A row with more cells than the header widens the table: the
@@ -405,7 +412,9 @@ Lexer.prototype.token = function (src, top, container) {
         type: 'table',
         header: splitCells(cap[1].replace(/^ *| *\| *$/g, '')),
         align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
-        cells: cap[3] ? cap[3].replace(/\n$/, '').split('\n') : []
+        cells: cap[3] ? cap[3].replace(/\n$/, '').split('\n') : [],
+        // Column widths kept in the delimiter row's dashes (services/tableWidths), drawn only when the setting is on.
+        widths: widthsOf(cap[0])
       }
 
       if (item.header.length === item.align.length) {
@@ -774,7 +783,8 @@ Lexer.prototype.token = function (src, top, container) {
         type: 'table',
         header: splitCells(cap[1].replace(/^ *| *\| *$/g, '')),
         align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
-        cells: cap[3] ? cap[3].replace(/\n$/, '').split('\n') : []
+        cells: cap[3] ? cap[3].replace(/\n$/, '').split('\n') : [],
+        widths: widthsOf(cap[0])
       }
 
       if (item.header.length === item.align.length) {

@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Het zijpaneel toont bovenaan de bestanden en onderaan het overzicht, elk inklapbaar tot de titel, in plaats van twee tabbladen.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Kolombreedte van tabellen</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Sleep de rand van een kolom in de koprij om de breedte in te stellen. De breedte staat in het bestand als de streepjes onder de kop (andere editors tonen de tabel gewoon) en gaat mee in exports.</value>
+  </data>
 </root>

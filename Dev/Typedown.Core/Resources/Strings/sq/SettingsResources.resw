@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Paneli anësor shfaq skedarët sipër dhe skicën poshtë, secila e palosshme deri te titulli, në vend të dy skedave.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Gjerësia e kolonave të tabelave</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Tërhiqni skajin e një kolone në rreshtin e kokës për të caktuar gjerësinë. Gjerësia ruhet në skedar si vizat poshtë kokës (redaktorët e tjerë e shfaqin tabelën si zakonisht) dhe kalon në eksportime.</value>
+  </data>
 </root>

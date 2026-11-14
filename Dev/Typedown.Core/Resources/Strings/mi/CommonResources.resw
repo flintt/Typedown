@@ -1388,4 +1388,7 @@
   <data name="CopyHeadingLink" xml:space="preserve">
     <value>Tāruatia te hono ki te upoko</value>
   </data>
+  <data name="FitColumnsToContent" xml:space="preserve">
+    <value>Whakaōrite ngā tīwae ki te ihirangi</value>
+  </data>
 </root>

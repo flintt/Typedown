@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Sidopanelen visar filerna överst och dispositionen nederst, var och en hopfällbar till sin rubrik, i stället för två flikar.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Kolumnbredd i tabeller</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Dra kanten på en kolumn i rubrikraden för att ange bredden. Bredden sparas i filen som strecken under rubriken (andra redigerare visar tabellen som vanligt) och följer med vid export.</value>
+  </data>
 </root>

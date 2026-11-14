@@ -1038,4 +1038,10 @@
   <data name="View.SidePaneStacked.Description" xml:space="preserve">
     <value>Taispeánann an phána taoibh na comhaid thuas agus an imlíne thíos, gach ceann infhillte go dtí a theideal, in ionad dhá chluaisín.</value>
   </data>
+  <data name="Editor.TableColumnWidths.Title" xml:space="preserve">
+    <value>Leithead colún táblaí</value>
+  </data>
+  <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
+    <value>Tarraing imeall colúin sa ró ceannteidil chun a leithead a shocrú. Coinnítear an leithead sa chomhad mar na daiseanna faoin gceannteideal (taispeánann eagarthóirí eile an tábla mar is gnáth) agus téann sé san easpórtáil.</value>
+  </data>
 </root>

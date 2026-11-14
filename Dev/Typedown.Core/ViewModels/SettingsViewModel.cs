@@ -115,6 +115,11 @@ namespace Typedown.Core.ViewModels
         /// <summary>Pad table cells so columns line up in the source (upstream #24/#70 ask for a way to turn this off).</summary>
         public bool TableAlignColumns { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>
+        /// Tables keep column widths in their delimiter rows' dashes (Typedown.Editor services/tableWidths): drawn, dragged
+        /// by a header cell's edge, written and exported. Off (the default): tables are as before.
+        /// </summary>
+        public bool TableColumnWidths { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
         /// Extra blank lines (shown as empty paragraphs) keep a line's height in reading mode and in HTML and PDF exports
         /// too, as they do while editing (todo S8). Display only: the file is written the same either way.
         /// </summary>
@@ -394,6 +399,7 @@ namespace Typedown.Core.ViewModels
             "PreferLooseListItem",
             "ListIndentation",
             "TableAlignColumns",
+            "TableColumnWidths",
             "ShowBlankLines",
             "JoinSoftBreaks",
             "CodeBlockLineNumbers",
