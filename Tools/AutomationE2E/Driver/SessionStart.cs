@@ -91,6 +91,15 @@ internal static partial class Program
             using var c = await Session("e2e SR01 restore");
             var w = await FirstWindowId(c);
             try { await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 0 }); } catch { }
+            // The session's six documents closed (two of them over a megabyte): left open, every case after had them, 270 MB
+            // more (its footprint, w10 job 490).
+            try
+            {
+                foreach (var d in (JArray)(await c.Call("document.list", new { windowId = w }))["documents"]!)
+                    if (Path.GetFileName((string?)d["path"] ?? "").StartsWith("sr01-"))
+                        try { await c.Call("document.close", new { documentId = (string)d["documentId"]! }); } catch { }
+            }
+            catch { }
             try
             {
                 var window = await WindowOf(w, c);

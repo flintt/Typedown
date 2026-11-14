@@ -58,8 +58,10 @@ internal static partial class Program
             + $"windows {before?.Windows.ToString() ?? "?"} -> {after?.Windows.ToString() ?? "?"}; documents {before?.Documents.Count.ToString() ?? "?"} -> {after?.Documents.Count.ToString() ?? "?"}, unsaved {before?.Documents.Count(d => !d.Saved).ToString() ?? "?"} -> {after?.Documents.Count(d => !d.Saved).ToString() ?? "?"}");
         if (before != null && after != null)
         {
+            // More than it found: the new ones named (closing a window's last document leaves a new untitled one, so a
+            // new id alone is not one left open).
             var known = before.Documents.Select(d => d.Id).ToHashSet();
-            var left = after.Documents.Where(d => !known.Contains(d.Id)).ToList();
+            var left = after.Documents.Count > before.Documents.Count ? after.Documents.Where(d => !known.Contains(d.Id)).ToList() : new();
             if (after.Windows > before.Windows || left.Count > 0)
                 notes.Add($"left open by this case: {after.Windows - before.Windows} window(s) more; {left.Count} document(s): " + string.Join(", ", left.Select(d => d.Name + (d.Saved ? "" : " (unsaved)"))));
         }
