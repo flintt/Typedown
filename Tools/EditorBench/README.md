@@ -99,6 +99,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   the editor and in the HTML the exports render, and the text handed back keeps its delimiters; an escaped backslash
   before `(` stays text. Off, they are escaped brackets and only `$`/`$$` are formulas. Turning it on or off with the
   document shown takes it in again, its text unchanged.
+- `new-from-clipboard-check.js` — File > New from Clipboard's paste (`Paste` with `intoNew`) fills the new document in
+  reading mode as in editing (text as it is, a web page's HTML as Markdown); reading mode takes no other paste. Before,
+  the new tab stayed empty in reading mode.
 - `softbreaks-join-check.js` — the "join the lines of a paragraph in reading mode" setting (Settings > Editor,
   `joinSoftBreaks`, off by default; markdown-linewrap's samples). With it, reading mode shows a single line ending inside
   a paragraph or quotation as a space, and as nothing between two Chinese or Japanese characters (Korean keeps its

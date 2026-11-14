@@ -152,6 +152,7 @@ jobs:
           node xhtml-toc-check.js
           node xhtml-math-check.js
           node bracket-math-check.js
+          node new-from-clipboard-check.js
           node xhtml-footnote-check.js
           node export-anchors-check.js
           node wordcount-mode-check.js
