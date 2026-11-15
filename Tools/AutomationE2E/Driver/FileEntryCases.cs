@@ -189,6 +189,17 @@ internal static partial class Program
         finally
         {
             await CloseMenus();
+            // The folder search opened for its results closed again: left open, it covered the tree for the cases after
+            // (FN01, XM09 on hp job 555).
+            try
+            {
+                if (FindIn(window, "SearchTextBox") != null && FindIn(window, "CloseButton") is { } closeSearch)
+                {
+                    await Click(window, closeSearch);
+                    await WaitGone(window, "SearchTextBox");
+                }
+            }
+            catch (Exception e) { notes.Add("the folder search left open: " + e.Message); }
             if (blank != null) try { await c.Call("document.close", new { documentId = blank }); } catch { }
             try { await c.Call("document.close", new { documentId = id }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
