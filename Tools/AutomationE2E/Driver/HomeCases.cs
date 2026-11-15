@@ -659,6 +659,11 @@ internal static partial class Program
         {
             for (var i = 0; i < 5 && ((string?)(await Get(c, documentId))["text"] ?? "").Trim().Length > 0; i++)
                 await c.Call("document.undo", new { documentId, baseRevision = await Revision(c, documentId), reveal = "document" });
+            // A document made from a template has its text as its own, not as an edit: no undo empties it (the case's
+            // documents were left open, a save question with them, for the cases after - w10 job 566). Untitled, emptied.
+            var left = await Get(c, documentId);
+            if (string.IsNullOrEmpty((string?)left["path"]) && ((string?)left["text"] ?? "").Trim().Length > 0)
+                await c.Call("document.replace", new { documentId, baseRevision = await Revision(c, documentId), text = "", reveal = "none" });
             await c.Call("document.close", new { documentId });
         }
         catch (Exception e) { notes.Add("cleanup: " + e.Message.Split('\n')[0]); }
