@@ -102,7 +102,7 @@ Right-click the status bar to choose which items it shows; in a window too narro
 
 In visual editing, typing Markdown syntax turns into formatting right away: `## ` at the start of a line makes a level-2 heading, `- ` starts a list, `> ` a quote, three backticks a code block and `$$` a math block.
 
-**Dragging list items**: hold a list item by its bullet or number and drag it up or down its list, with the items nested in it; while dragging, move right to put it under the item above, left to take it out a level. A line shows where it will land and at what level; Esc drops the drag, and one Ctrl+Z undoes a move.
+**Dragging list items**: with the pointer over a list item, a handle (⋮⋮) shows left of it; hold the handle and drag the item up or down its list, with the items nested in it; while dragging, move right to put it under the item above, left to take it out a level. It can go into another list in the document too (past paragraphs and headings, or into a list in a quotation), where it takes that list's bullet or numbering; dropped outside the lists, between two paragraphs, it becomes a list of its own, one item long. Dropped right next to a list with the same marker it joins that list (saved, the two would read as one anyway). Near the window's top or bottom edge the page scrolls, faster the closer you are to the edge. A line shows where it will land and at what level (outside the lists the line starts at the text's left edge); Esc drops the drag, and one Ctrl+Z undoes a move, both lists as they were.
 
 **Tables**: select several cells by dragging, then Ctrl+C / Ctrl+X copies or cuts them; pasting onto selected cells (rows and columns copied from Excel, say) fills them cell by cell. Ctrl+A in a cell selects that cell's text first.
 

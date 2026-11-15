@@ -128,7 +128,8 @@ class ListDrag {
       if (contentState.listDrag && event.key === 'Escape') return contentState.listDragCancel()
       if (!contentState.listDrag) hide()
     })
-    eventCenter.attachDOMEvent(window, 'scroll', () => { if (!contentState.listDrag) hide() })
+    // While dragging, the place where it lands follows the page under the pointer (the wheel, or the drag at an edge).
+    eventCenter.attachDOMEvent(window, 'scroll', () => { if (!contentState.listDrag) hide(); else contentState.listDragScrolled() })
 
     // A drag begun on the handle.
     eventCenter.attachDOMEvent(handle, 'mousedown', event => {
