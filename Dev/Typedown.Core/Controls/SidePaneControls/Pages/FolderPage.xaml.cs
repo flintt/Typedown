@@ -760,7 +760,12 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnDeleteClick(object sender, RoutedEventArgs e)
         {
             var item = GetExplorerItemFromMenuFlyoutItem(sender);
-            FileOperation.Delete(new StringCollection() { item?.FullPath });
+            if (item?.FullPath == null) return;
+            var deleted = FileOperation.Delete(new StringCollection() { item.FullPath });
+            // Its folder read again: the row was left to the folder's watcher, and an open document's stayed (FN03).
+            var parent = WorkFolderExplorerItem?.Find(Path.GetDirectoryName(item.FullPath));
+            Log.Debug($"tree: deleted {item.Name}: {(deleted ? "done" : "not done")}; its folder {(parent != null ? "read again" : "not shown")}");
+            parent?.Refresh();
         }
 
         private async void RenameFile(ExplorerItem item)

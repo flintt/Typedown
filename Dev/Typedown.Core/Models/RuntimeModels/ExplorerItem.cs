@@ -302,7 +302,7 @@ namespace Typedown.Core.Models
             var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
             fileSystemWatcher.Created += async (s, e) =>
             {
-                if (e?.Name == null) return;
+                if (e?.Name == null || IsSaveTemporary(e.Name)) return;
                 var attr = await GetFileAttributes(e.FullPath);
                 if (attr.HasValue) dispatcherQueue?.TryEnqueueSafe(() =>
                 {
@@ -311,7 +311,7 @@ namespace Typedown.Core.Models
             };
             fileSystemWatcher.Renamed += async (s, e) =>
             {
-                if (e?.Name == null) return;
+                if (e?.Name == null || IsSaveTemporary(e.Name)) return;
                 var attr = await GetFileAttributes(e.FullPath);
                 if (attr.HasValue) dispatcherQueue?.TryEnqueueSafe(() =>
                 {
@@ -320,7 +320,7 @@ namespace Typedown.Core.Models
             };
             fileSystemWatcher.Changed += async (s, e) =>
             {
-                if (e?.Name == null) return;
+                if (e?.Name == null || IsSaveTemporary(e.Name)) return;
                 var attr = await GetFileAttributes(e.FullPath);
                 if (attr.HasValue) dispatcherQueue?.TryEnqueueSafe(() =>
                 {
@@ -351,14 +351,40 @@ namespace Typedown.Core.Models
             fileSystemWatcher.EnableRaisingEvents = true;
         }
 
+        /// <summary>The folder read again (after the folder pane's own delete: not left to its watcher alone).</summary>
+        public void Refresh()
+        {
+            if (Type == ExplorerItemType.Folder && IsWatching) UpdateChildren();
+        }
+
+        /// <summary>The row of <paramref name="path"/> in this folder or the folders under it that are shown; null when none is.</summary>
+        public ExplorerItem Find(string path)
+        {
+            if (string.Equals(FullPath, path, StringComparison.OrdinalIgnoreCase)) return this;
+            foreach (var child in Children.ToList())
+                if (child.Find(path) is { } found) return found;
+            return null;
+        }
+
         private void StopWatchFolder()
         {
             fileSystemWatcher?.Dispose();
             fileSystemWatcher = null;
         }
 
+        // Whether the entry is there now, on the UI thread, where the row is added: its attributes were read a moment before,
+        // and a file deleted meanwhile came back into the tree - deleting to the Recycle Bin changes its attributes first,
+        // and that event's row was added after the deletion's had been taken out (an open document deleted from the
+        // tree stayed in it: the user, 2026-11-15; FN03).
+        private static bool IsThere(string path) => File.Exists(path) || Directory.Exists(path);
+
+        // A file a save writes first and renames ("." name ".tmp", Utilities' atomic save): no row, and no wait on its
+        // attributes, gone by the time they are read (a FileNotFoundException logged every 100 ms).
+        private static bool IsSaveTemporary(string name) => name != null && name.StartsWith('.') && name.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase);
+
         private void OnFileCreated(FileSystemEventArgs e, FileAttributes attr)
         {
+            if (!IsThere(e.FullPath)) { RemoveChildren(e.Name); return; }
             if (Filter(attr, e.Name) && !Children.Any(x => x.Name == e.Name))
                 AddChild(e.Name);
         }
@@ -372,6 +398,7 @@ namespace Typedown.Core.Models
         [SuppressPropertyChangedWarnings]
         private void OnFileChanged(FileSystemEventArgs e, FileAttributes attr)
         {
+            if (!IsThere(e.FullPath)) { RemoveChildren(e.Name); return; }
             var test = Filter(attr, e.Name);
             var contains = ContainsChildren(e.Name);
             if (test && !contains)
