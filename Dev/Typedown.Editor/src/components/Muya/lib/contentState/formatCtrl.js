@@ -110,6 +110,35 @@ const checkTokenIsInlineFormat = token => {
   return false
 }
 
+// The selection without the marks at its edges: its start moved past each format's marks it lies in, its end back
+// before them, so what is compared with the formats is the text the selection shows. A format is on when every letter
+// selected has it - the marks are no letters: with Ctrl+A in ***x*** or a drag past the word's ends, only the outermost
+// format's range held the selection and only it showed pressed (the user, 2026-11-15). The marks are each format's own
+// (markRanges, as taking it off removes them); a picture is what shows, not marks. A selection of marks alone stays.
+const visibleRange = (tokens, from, to) => {
+  if (from >= to) return [from, to]
+  const marks = []
+  ;(function collect (tks) {
+    for (const token of tks) {
+      if (checkTokenIsInlineFormat(token) && token.type !== 'image' && !(token.type === 'html_tag' && /^img$/i.test(token.tag))) {
+        marks.push(...markRanges(token).filter(([a, b]) => b > a))
+      }
+      if (token.children && token.children.length) collect(token.children)
+    }
+  })(tokens)
+  let start = from
+  let end = to
+  for (let moved = true; moved && start < end;) {
+    moved = false
+    for (const [a, b] of marks) if (start >= a && start < b) { start = b; moved = true }
+  }
+  for (let moved = true; moved && start < end;) {
+    moved = false
+    for (const [a, b] of marks) if (end > a && end <= b) { end = a; moved = true }
+  }
+  return start < end ? [start, end] : [from, to]
+}
+
 const formatCtrl = ContentState => {
   ContentState.prototype.selectionFormats = function ({ start, end } = selection.getCursorRange()) {
     if (!start || !end) {
@@ -125,12 +154,15 @@ const formatCtrl = ContentState => {
       tokens = tokenizer(text, {
         options: this.muya.options
       })
+      // The format pressed, the visible letters' (and so the one a press takes off, format below); the neighbours,
+      // what the selection touches, marks and all.
+      const [from, to] = visibleRange(tokens, start.offset, end.offset)
       ;(function iterator (tks) {
         for (const token of tks) {
           if (
             checkTokenIsInlineFormat(token) &&
-            start.offset >= token.range.start &&
-            end.offset <= token.range.end
+            from >= token.range.start &&
+            to <= token.range.end
           ) {
             formats.push(token)
           }
