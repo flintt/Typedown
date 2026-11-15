@@ -169,11 +169,18 @@ const { firstDifference, openEditor } = require('./harness');
     await pause(800);
     const afterPress = await reports();
     report(JSON.stringify(afterPress) === JSON.stringify(beforePress), 'Bold at the caret alone: no change reported to the host', `${JSON.stringify(beforePress)} -> ${JSON.stringify(afterPress)}`);
-    await page.keyboard.type('ab', { delay: 40 });
+    // The first letter's report too: told as "other" (the press's own kind, left over), the host made it a step of
+    // its own, and Ctrl+Z after the typing left "**a**" (XM12 on w10 and hp, jobs 541, 542).
+    await page.keyboard.type('a');
+    await pause(800);
+    const firstLetter = await reports();
+    report(firstLetter && firstLetter.text === 'Some **a**text here\n\nOther line\n' && firstLetter.edit && firstLetter.edit.kind === 'insert',
+      'Bold then "a" typed: reported as a letter typed', JSON.stringify(firstLetter));
+    await page.keyboard.type('b');
     await pause(800);
     const afterTyping = await reports();
-    report(afterTyping && afterTyping.text === 'Some **ab**text here\n\nOther line\n' && afterTyping.edit && afterTyping.edit.kind === 'insert',
-      'Bold then "ab" typed: reported as letters typed', JSON.stringify(afterTyping));
+    report(afterTyping && afterTyping.text === 'Some **ab**text here\n\nOther line\n' && afterTyping.edit && afterTyping.edit.kind === 'insert' && !afterTyping.edit.moved,
+      'Bold then "ab" typed: the second letter reported as typed on', JSON.stringify(afterTyping));
     if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
   } finally {
     await close();
