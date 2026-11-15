@@ -328,6 +328,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   stays selected) and comes back on a second press, a missing one goes on once (no `****`). Only the outermost showed
   before (the user, 2026-11-15).
 - `caret-format-check.js` — a format pressed with the caret alone in plain text (Bold, Italic, Strikethrough, Underline,
-  Inline code, by `Format`): shown pressed after the press; pressed again at the same caret, the text as it was (no
-  `********`) and the caret where it was; pressed and then a real click on another line without typing, nothing left
-  in the page's or the host's text (no empty `****`); typing after the press types formatted text.
+  Inline code, by `Format`) waits for the text typed, as in Word: shown pressed after the press, the text unchanged
+  and no change told to the host; pressed again at the same caret, the text as it was (no `********`) and the caret
+  where it was; pressed and then a real click on another line, or an arrow, without typing, nothing left in the page's
+  or the host's text (no empty `****`) and what is typed then plain; typing after the press types formatted text (the
+  caret staying in the format), reported as letters typed; Bold then Italic both, Italic pressed twice taken back;
+  Chinese committed by an IME (CDP composition) after Bold, bold. Empty marks stayed and a second press doubled them
+  before (the user, 2026-11-15).

@@ -294,10 +294,12 @@ internal static partial class Program
     }
 
     /// <summary>
-    /// XM12 (the user's question, 2026-11-15): a format pressed with the caret alone in plain text, nothing selected.
-    /// Ctrl+B pressed twice at the same caret leaves the text as it was (no ********); Bold from a real right-click's
-    /// menu, then a click elsewhere without typing, leaves nothing (no empty **** in the file); Italic from the menu
-    /// opened by Shift+F10 at the caret, twice, the same. The menu's Bold state between the two presses is noted.
+    /// XM12 (the user, 2026-11-15): a format pressed with the caret alone in plain text, nothing selected, works as in
+    /// Word: nothing goes into the text, the format waits for what is typed. Ctrl+B pressed twice at the same caret
+    /// leaves the text as it was (no ********), the menu at the caret (Shift+F10) showing Bold pressed in between;
+    /// Bold from a real right-click's menu, then a click elsewhere without typing, leaves nothing (no empty **** in the
+    /// file); Italic from the Shift+F10 menu twice, the same. Ctrl+B then "abc" typed is **abc**; Ctrl+B, Ctrl+I, "abc"
+    /// both; Ctrl+B twice then "abc" plain; one Ctrl+Z after the typing takes the letters out with their marks.
     /// </summary>
     private static async Task XM12(List<string> notes)
     {
@@ -313,8 +315,10 @@ internal static partial class Program
         var n = 0;
         var wrong = new List<string>();
         // A document of its own for each way; the caret put into "Some plain words here" by a real click.
-        async Task Way(string what, Func<IntPtr, string, Task> steps)
+        // `expected`: the document after the steps, one of them (the original when none is given).
+        async Task Way(string what, Func<IntPtr, string, Task> steps, params string[] expected)
         {
+            if (expected.Length == 0) expected = new[] { original };
             var path = Path.Combine(folder, $"xm12-{++n}.md");
             File.WriteAllText(path, original);
             var id = await Open(c, path);
@@ -327,11 +331,11 @@ internal static partial class Program
                 await Task.Delay(400);
                 await steps(window, windowId);
                 var text = "";
-                // The page sends its text a moment after the change; read until it is the original or two seconds on.
-                await Eventually(async () => (text = (string)(await Get(c, id))["text"]!) == original, 2000, 200);
+                // The page sends its text a moment after the change; read until it is the one expected or three seconds on.
+                await Eventually(async () => Array.IndexOf(expected, text = (string)(await Get(c, id))["text"]!) >= 0, 3000, 200);
                 notes.Add($"{what}: {text.Replace("\n", " | ")}");
                 // Each way is tried whatever the one before did: all of them are told at the end.
-                if (text != original) wrong.Add($"{what}: the document as it was (it reads {Newtonsoft.Json.JsonConvert.ToString(text)})");
+                if (Array.IndexOf(expected, text) < 0) wrong.Add($"{what}: the document reads {Newtonsoft.Json.JsonConvert.ToString(text)}, not {string.Join(" or ", expected.Select(e => Newtonsoft.Json.JsonConvert.ToString(e)))}");
             }
             finally
             {
@@ -350,19 +354,63 @@ internal static partial class Program
             await Task.Delay(600);
         }
 
+        // The menu at the caret (Shift+F10 does not move it): the buttons expected pressed are, and closed again.
+        async Task MenuShows(IntPtr window, string where, params string[] on)
+        {
+            Chord("Shift+F10");
+            await Eventually(() => Task.FromResult(FindAnywhereInHost(window, "ContextFormatStrong") != null), 3000, 100);
+            await Task.Delay(300);
+            var states = new[] { "ContextFormatStrong", "ContextFormatEmphasis" }.Select(b => (b, s: State(window, b))).ToList();
+            notes.Add($"{where}, the menu at the caret: {string.Join(", ", states.Select(x => $"{x.b.Replace("ContextFormat", "")} {x.s}"))}");
+            foreach (var (b, s) in states)
+                if ((s == "On") != on.Contains(b)) wrong.Add($"{where}: the menu shows {b.Replace("ContextFormat", "")} {s}");
+            Close(); await Task.Delay(400);
+        }
+        // The caret at the end of "Some plain words here" and a space typed: what is typed next stands as a word.
+        async Task AtLineEnd()
+        {
+            Chord("End"); await Task.Delay(200);
+            TypeText(" "); await Task.Delay(500);
+        }
+
         await Way("Ctrl+B twice at the caret", async (window, windowId) =>
         {
             Chord("Ctrl+B");
             await Task.Delay(600);
-            // The menu at the caret (Shift+F10 does not move it): is Bold shown pressed now?
-            Chord("Shift+F10");
-            await Eventually(() => Task.FromResult(FindAnywhereInHost(window, "ContextFormatStrong") != null), 3000, 100);
-            await Task.Delay(300);
-            notes.Add($"after one Ctrl+B, the menu at the caret: Bold {State(window, "ContextFormatStrong")}");
-            Close(); await Task.Delay(400);
+            await MenuShows(window, "after one Ctrl+B", "ContextFormatStrong");
             Chord("Ctrl+B");
             await Task.Delay(600);
+            await MenuShows(window, "after the second Ctrl+B");
         });
+        await Way("Ctrl+B, then \"abc\" typed", async (window, windowId) =>
+        {
+            await AtLineEnd();
+            Chord("Ctrl+B"); await Task.Delay(500);
+            await MenuShows(window, "after Ctrl+B", "ContextFormatStrong");
+            TypeText("abc"); await Task.Delay(800);
+        }, "# Caret\n\nSome plain words here **abc**\n\nOther line\n");
+        await Way("Ctrl+B, Ctrl+I, then \"abc\" typed", async (window, windowId) =>
+        {
+            await AtLineEnd();
+            Chord("Ctrl+B"); await Task.Delay(400);
+            Chord("Ctrl+I"); await Task.Delay(500);
+            await MenuShows(window, "after Ctrl+B and Ctrl+I", "ContextFormatStrong", "ContextFormatEmphasis");
+            TypeText("abc"); await Task.Delay(800);
+        }, "# Caret\n\nSome plain words here ***abc***\n\nOther line\n");
+        await Way("Ctrl+B twice, then \"abc\" typed", async (window, windowId) =>
+        {
+            await AtLineEnd();
+            Chord("Ctrl+B"); await Task.Delay(400);
+            Chord("Ctrl+B"); await Task.Delay(500);
+            TypeText("abc"); await Task.Delay(800);
+        }, "# Caret\n\nSome plain words here abc\n\nOther line\n");
+        await Way("Ctrl+B, \"abc\" typed, then Ctrl+Z", async (window, windowId) =>
+        {
+            await AtLineEnd();
+            Chord("Ctrl+B"); await Task.Delay(500);
+            TypeText("abc"); await Task.Delay(1200);
+            Chord("Ctrl+Z"); await Task.Delay(1000);
+        }, "# Caret\n\nSome plain words here \n\nOther line\n", "# Caret\n\nSome plain words here\n\nOther line\n");
         await Way("Bold from the right-click menu, then a click on another line", async (window, windowId) =>
         {
             await ContextMenuAt(c, windowId, window, "#ag-editor-id p");

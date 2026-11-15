@@ -30,7 +30,7 @@ const { firstDifference, openEditor } = require('./harness');
     const where = () => page.evaluate(() => {
       const state = window.__typedownMuya.contentState;
       const { start, end } = state.cursor;
-      const formats = state.selectionFormats({ start: { ...start }, end: { ...end } }).formats.map(t => t.type === 'html_tag' ? t.tag : t.type);
+      const formats = state.selectionFormats({ start: { ...start }, end: { ...end } }, { pending: true }).formats.map(t => t.type === 'html_tag' ? t.tag : t.type);
       return { formats: [...new Set(formats)].sort().join('+'), offset: start.offset, text: state.getBlock(start.key).text };
     });
     const markdown = () => page.evaluate(() => window.__typedownMuya.getMarkdown());
@@ -90,7 +90,90 @@ const { firstDifference, openEditor } = require('./harness');
       held = await markdown();
       const expected = `${typed}\n\nOther line\n`;
       report(held === expected, `${type}, pressed then "ab" typed: "ab" formatted`, firstDifference(expected, held));
+      const typedOn = await where();
+      report(typedOn.formats.split('+').includes(type), `${type}, pressed then "ab" typed: the caret still in the format`, JSON.stringify(typedOn));
+
+      // Pressed twice, then typing: plain text.
+      await visual(original);
+      await place(at);
+      await format(type);
+      await format(type);
+      await page.keyboard.type('ab');
+      await pause(300);
+      held = await markdown();
+      report(held === 'Some abtext here\n\nOther line\n', `${type}, pressed twice then "ab" typed: plain`, firstDifference('Some abtext here\n\nOther line\n', held));
+
+      // Pressed, then the caret moved by an arrow and typing: plain, where the caret went.
+      await visual(original);
+      await place(at);
+      await format(type);
+      await page.keyboard.press('ArrowRight');
+      await pause(300);
+      const moved = await where();
+      report(!moved.formats.split('+').includes(type), `${type}, pressed then an arrow: shown off`, JSON.stringify(moved));
+      await page.keyboard.type('ab');
+      await pause(300);
+      held = await markdown();
+      report(held === 'Some tabext here\n\nOther line\n', `${type}, pressed, an arrow, then "ab" typed: plain`, firstDifference('Some tabext here\n\nOther line\n', held));
     }
+
+    // Bold then Italic, then typing: both. Between spaces: this editor does not read ***ab*** with a letter straight
+    // before or after it (typed by hand the same; CommonMark does).
+    await visual('Some  here\n\nOther line\n');
+    await place(at);
+    await format('strong');
+    await format('em');
+    let both = await where();
+    report(both.formats === 'em+strong', 'Bold then Italic at the caret: both shown pressed', JSON.stringify(both));
+    await page.keyboard.type('ab');
+    await pause(300);
+    let held = await markdown();
+    report(held === 'Some ***ab*** here\n\nOther line\n', 'Bold then Italic, then "ab" typed: bold and italic', firstDifference('Some ***ab*** here\n\nOther line\n', held));
+    both = await where();
+    report(both.formats === 'em+strong', 'Bold then Italic, then "ab" typed: the caret still in both', JSON.stringify(both));
+
+    // Bold, then Italic pressed twice: bold only.
+    await visual(original);
+    await place(at);
+    await format('strong'); await format('em'); await format('em');
+    await page.keyboard.type('ab');
+    await pause(300);
+    held = await markdown();
+    report(held === 'Some **ab**text here\n\nOther line\n', 'Bold, Italic twice, then "ab" typed: bold only', firstDifference('Some **ab**text here\n\nOther line\n', held));
+
+    // An IME's text (Chinese, composed then committed) after Bold: inside the marks.
+    await visual(original);
+    await place(at);
+    await format('strong');
+    const cdp = await page.target().createCDPSession();
+    await page.evaluate(() => { window.__compositionEnds = 0; document.addEventListener('compositionend', () => window.__compositionEnds++, true); });
+    await cdp.send('Input.imeSetComposition', { text: 'zhong', selectionStart: 5, selectionEnd: 5 });
+    await pause(150);
+    await cdp.send('Input.imeSetComposition', { text: '中文', selectionStart: 2, selectionEnd: 2 });
+    await pause(150);
+    await cdp.send('Input.insertText', { text: '中文' });
+    await pause(400);
+    held = await markdown();
+    const ends = await page.evaluate(() => window.__compositionEnds);
+    report(ends > 0 && held === 'Some **中文**text here\n\nOther line\n', 'Bold, then Chinese by an IME: bold', `${ends} compositionend; ${firstDifference('Some **中文**text here\n\nOther line\n', held)}`);
+    await cdp.detach();
+
+    // The host is told no change for the press alone, and the typing as letters typed (its undo step starts there and
+    // takes the marks out with the letters: no "****" in between).
+    await visual(original);
+    await place(at);
+    const reports = () => page.evaluate(() => window.__last.MarkdownChange ? { text: window.__last.MarkdownChange.text, edit: window.__last.MarkdownChange.edit } : null);
+    await pause(600);
+    const beforePress = await reports();
+    await format('strong');
+    await pause(800);
+    const afterPress = await reports();
+    report(JSON.stringify(afterPress) === JSON.stringify(beforePress), 'Bold at the caret alone: no change reported to the host', `${JSON.stringify(beforePress)} -> ${JSON.stringify(afterPress)}`);
+    await page.keyboard.type('ab', { delay: 40 });
+    await pause(800);
+    const afterTyping = await reports();
+    report(afterTyping && afterTyping.text === 'Some **ab**text here\n\nOther line\n' && afterTyping.edit && afterTyping.edit.kind === 'insert',
+      'Bold then "ab" typed: reported as letters typed', JSON.stringify(afterTyping));
     if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
   } finally {
     await close();
