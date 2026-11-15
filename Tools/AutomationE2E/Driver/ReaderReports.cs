@@ -238,6 +238,131 @@ internal static partial class Program
         {
             try { await c.Call("document.save", new { documentId = id }); await c.Call("document.close", new { documentId = id }); } catch { }
         }
+        await LR01Across(c, notes);
+    }
+
+    /// <summary>
+    /// LR01, on (docs/todo.md "列表拖动：跨列表与拖出列表"): an item dragged into another list two paragraphs below (it
+    /// takes that list's marker), out of the lists between two paragraphs (a list of its own), and to the window's bottom
+    /// edge, where the page scrolls by itself to a list off the screen and the item joins it. Each checked in the
+    /// document's Markdown, and one Ctrl+Z puts each back whole.
+    /// </summary>
+    private static async Task LR01Across(Client c, List<string> notes)
+    {
+        var original = "# LR01 across\n\n- one\n- two\n\nfirst paragraph\n\nsecond paragraph\n\n* three\n* four\n";
+        var filler = string.Join("\n\n", Enumerable.Range(1, 70).Select(i => $"filler paragraph {i}"));
+        var scrollOriginal = $"# LR01 scroll\n\n- top item\n- second item\n\n{filler}\n\n- end one\n- end two\n";
+        var path = Fixture("lr01-across.md", original);
+        var scrollPath = Fixture("lr01-scroll.md", scrollOriginal);
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        string? scrollId = null;
+        await WaitUntilDrawn(c, windowId, id, "four");
+        async Task<JToken> Eval(string script) => (await c.Call("test.editor.eval", new { windowId, script }))["result"]!;
+        async Task<(int X, int Y)> Screen(int x, int y) { var p = await c.Call("test.editor.screenPoint", new { windowId, x, y }); return ((int)p["x"]!, (int)p["y"]!); }
+        // A list item's text line (its own, not its nested items'), in page coordinates.
+        async Task<(int X, int Y, int Top, int Bottom)> Item(string text)
+        {
+            var r = await Eval($"(() => {{ const li = [...document.querySelectorAll('#ag-editor-id li')].find(el => {{ const own = [...el.children].find(x => !/^(INPUT|UL|OL)$/.test(x.tagName)); return own && own.textContent.trim() === '{text}' }}); const own = [...li.children].find(x => !/^(INPUT|UL|OL)$/.test(x.tagName)).getBoundingClientRect(); return {{ x: Math.round(own.left - 8), y: Math.round(own.top + own.height / 2), top: Math.round(own.top), bottom: Math.round(own.bottom) }} }})()");
+            var p = await Screen((int)r["x"]!, (int)r["y"]!);
+            var top = await Screen((int)r["x"]!, (int)r["top"]!);
+            var bottom = await Screen((int)r["x"]!, (int)r["bottom"]!);
+            return (p.X, p.Y, top.Y, bottom.Y);
+        }
+        async Task<(int X, int Y)> Handle((int X, int Y, int Top, int Bottom) item)
+        {
+            await Activate(window);
+            int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+            foreach (var dx in new[] { 60, 50, 40 })
+            {
+                Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = (item.X + dx) * 65535 / (screenW - 1), dy = item.Y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } });
+                await Task.Delay(60);
+            }
+            await Task.Delay(300);
+            var h = await Eval("(() => { const h = document.getElementById('mu-list-drag-handle'); const r = h.getBoundingClientRect(); return getComputedStyle(h).display === 'none' ? null : { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()");
+            if (h == null || h.Type != JTokenType.Object) throw new CaseFailed("no drag handle beside the item under the pointer");
+            return await Screen((int)h["x"]!, (int)h["y"]!);
+        }
+        async Task<string> Text(string doc, string not)
+        {
+            var text = "";
+            for (var i = 0; i < 30; i++) { text = (string?)(await Get(c, doc))["text"] ?? ""; if (text != not) break; await Task.Delay(200); }
+            return text;
+        }
+        async Task Undo(string doc, string from, string expected, string what)
+        {
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            Chord("Ctrl+Z");
+            var undone = await Text(doc, from);
+            notes.Add($"{what}, one undo: " + undone.Replace("\n", "\\n"));
+            Check(undone == expected, $"{what}: one Ctrl+Z puts it all back");
+        }
+        try
+        {
+            // Into another list, two paragraphs below: before "four"; it takes that list's "*".
+            var one = await Item("one");
+            var four = await Item("four");
+            var oneHandle = await Handle(one);
+            await Drag(window, oneHandle, (oneHandle.X, four.Top + 2), steps: 20);
+            var across = await Text(id, original);
+            notes.Add("into the list below: " + across.Replace("\n", "\\n"));
+            Check(across == "# LR01 across\n\n- two\n\nfirst paragraph\n\nsecond paragraph\n\n* three\n* one\n* four\n", "one dragged into the list two paragraphs below, before four, with its marker");
+            await Undo(id, across, original, "into another list");
+            // Out of the lists, between the two paragraphs: a list of its own.
+            await Task.Delay(500);
+            var gap = await Eval("(() => { const p = [...document.querySelectorAll('#ag-editor-id > p')].find(e => e.textContent.includes('first paragraph')); const a = p.getBoundingClientRect(), b = p.nextElementSibling.getBoundingClientRect(); return { x: Math.round(a.left + 40), y: Math.round((a.bottom + b.top) / 2) } })()");
+            var gapAt = await Screen((int)gap["x"]!, (int)gap["y"]!);
+            var two = await Item("two");
+            var twoHandle = await Handle(two);
+            await Drag(window, twoHandle, (twoHandle.X, gapAt.Y), steps: 20);
+            var outside = await Text(id, original);
+            notes.Add("out between the paragraphs: " + outside.Replace("\n", "\\n"));
+            Check(outside == "# LR01 across\n\n- one\n\nfirst paragraph\n\n- two\n\nsecond paragraph\n\n* three\n* four\n", "two dragged out between the paragraphs is a list of its own");
+            await c.Call("document.save", new { documentId = id });
+            await Task.Delay(500);
+            Check(File.ReadAllText(path).Replace("\r\n", "\n") == outside, "the file saved has it");
+            await Undo(id, outside, original, "out of the lists");
+
+            // To the window's bottom edge: the page scrolls to the list at the document's end, off the screen, and the
+            // item dropped there joins it (the same marker).
+            scrollId = await Open(c, scrollPath);
+            await WaitUntilDrawn(c, windowId, scrollId, "top item");
+            await Eval("(() => { window.scrollTo(0, 0); return true })()");
+            await Task.Delay(400);
+            var offScreen = (bool)await Eval("(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(e => e.textContent.trim() === 'end two'); return !li || li.getBoundingClientRect().top > window.innerHeight })()");
+            Check(offScreen, "the list at the end is off the screen at first");
+            var edge = await Eval("(() => ({ y: window.innerHeight - 3 }))()");
+            var top = await Item("top item");
+            var topHandle = await Handle(top);
+            var bottomEdge = await Screen(10, (int)edge["y"]!);
+            JToken? scrolled = null;
+            await Drag(window, topHandle, (topHandle.X, bottomEdge.Y), steps: 16, whileHeld: async () =>
+            {
+                for (var i = 0; i < 100; i++)
+                {
+                    scrolled = await Eval("(() => ({ y: Math.round(window.scrollY), max: Math.round(document.documentElement.scrollHeight - window.innerHeight) }))()");
+                    if ((int)scrolled["y"]! > 0 && (int)scrolled["y"]! >= (int)scrolled["max"]! - 2) break;
+                    await Task.Delay(200);
+                }
+                await Task.Delay(400);
+            });
+            notes.Add("held at the bottom edge: " + scrolled?.ToString(Newtonsoft.Json.Formatting.None));
+            Check(scrolled != null && (int)scrolled["y"]! > 0 && (int)scrolled["y"]! >= (int)scrolled["max"]! - 2, "held at the bottom edge, the page scrolled to the document's end");
+            var dropped = await Text(scrollId, scrollOriginal);
+            notes.Add("dropped at the end: ..." + dropped[Math.Max(0, dropped.Length - 60)..].Replace("\n", "\\n"));
+            Check(dropped == scrollOriginal.Replace("- top item\n", "").Replace("- end two\n", "- end two\n- top item\n"), "dropped there, the item joins the list at the end");
+            await Undo(scrollId, dropped, scrollOriginal, "dragged to the bottom edge");
+        }
+        finally
+        {
+            foreach (var doc in new[] { id, scrollId })
+            {
+                if (doc == null) continue;
+                try { await c.Call("document.save", new { documentId = doc }); await c.Call("document.close", new { documentId = doc }); } catch { }
+            }
+        }
     }
 
     /// <summary>
