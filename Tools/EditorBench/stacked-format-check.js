@@ -98,6 +98,103 @@ const { firstDifference, openEditor } = require('./harness');
       const held = await markdown();
       report(held === 'Some xyz here\n', `${stacked}: clear format takes them all off`, firstDifference('Some xyz here\n', held));
     }
+    // The marks selected too: Ctrl+A in the paragraph, or a selection dragged past the word's ends. What is pressed is
+    // what every letter selected has (the marks are not letters): all the word's formats. Only the outermost showed,
+    // its range alone holding the marks (the user, 2026-11-15); pressing an inner one then put it back where it was
+    // or moved it outside. The press takes off a format shown pressed, from the whole selection, leaving the others;
+    // a second press puts it back, and the word then has them all again.
+    const formatsAt = (from, to) => page.evaluate((from, to) => {
+      const state = window.__typedownMuya.contentState;
+      let span; (function walk(bs) { for (const b of bs) { if (b.type === 'span' && !span) span = b; if (b.children) walk(b.children); } })(state.blocks);
+      const formats = state.selectionFormats({ start: { key: span.key, offset: from }, end: { key: span.key, offset: to } }).formats.map(t => t.type === 'html_tag' ? t.tag : t.type);
+      return [...new Set(formats)].sort().join('+');
+    }, from, to);
+    const selectAll = async () => { await page.keyboard.down('Control'); await page.keyboard.press('KeyA'); await page.keyboard.up('Control'); await pause(300); };
+    // [stack, the formats it has]
+    const stacks = [
+      ['***xyz***', 'em+strong'],
+      ['**_xyz_**', 'em+strong'],
+      ['<u>**xyz**</u>', 'strong+u'],
+      ['**<u>xyz</u>**', 'strong+u'],
+      ['~~**xyz**~~', 'del+strong'],
+      ['***<u>xyz</u>***', 'em+strong+u'],
+      ['<u>***xyz***</u>', 'em+strong+u'],
+      ['~~***xyz***~~', 'del+em+strong'],
+    ];
+    for (const [stacked, all] of stacks) {
+      // Ctrl+A in a paragraph of the word alone: the menu shows them all.
+      await visual(`${stacked}\n`);
+      await place(stacked.indexOf('xyz') + 1, stacked.indexOf('xyz') + 1);
+      await selectAll();
+      let now = await where();
+      report(now.selected === stacked && now.formats === all, `${stacked}, Ctrl+A: ${all} shown on`, JSON.stringify(now));
+
+      // In a sentence, the marks dragged in at the start, at the end or both; with a letter or a space of the
+      // sentence too, none of them.
+      const sentence = `Some ${stacked} here`;
+      const from = sentence.indexOf(stacked), to = from + stacked.length;
+      const at = sentence.indexOf('xyz');
+      await visual(`${sentence}\n`);
+      for (const [a, b, expected, what] of [
+        [from, to, all, 'the marks at both ends'],
+        [from, at + 3, all, 'the marks at the start'],
+        [at, to, all, 'the marks at the end'],
+        [from + 1, to - 1, all, 'some of the marks at both ends'],
+        [from - 1, to, '', 'the space before too'],
+        [from, to + 1, '', 'the space after too'],
+        [0, sentence.length, '', 'the whole sentence'],
+      ]) {
+        const shown = await formatsAt(a, b);
+        report(shown === expected, `${stacked}, ${what}: ${expected || 'none'} shown on`, shown || 'none');
+      }
+
+      // Each format pressed after Ctrl+A: off, the others kept, the word still selected; pressed again, back.
+      for (const type of all.split('+')) {
+        const left = all.split('+').filter(t => t !== type).join('+');
+        await visual(`${stacked}\n`);
+        await place(stacked.indexOf('xyz') + 1, stacked.indexOf('xyz') + 1);
+        await selectAll();
+        await format(type);
+        let held = await markdown();
+        now = await where();
+        const word = held.trim();
+        const xyz = word.indexOf('xyz');
+        const atWord = await formatsAt(xyz + 1, xyz + 1);
+        report(atWord === left && !/\*{4}|_{3}|~{3}/.test(word), `${stacked}, Ctrl+A, ${type} pressed: ${left} left`, `${JSON.stringify(held)} has ${atWord || 'none'}`);
+        report(now.selected.includes('xyz') && now.formats === left, `${stacked}, Ctrl+A, ${type} pressed: the word still selected, ${left} shown on`, JSON.stringify(now));
+        const host = await flush();
+        report(host === held, `${stacked}, Ctrl+A, ${type} pressed: the host has it`, firstDifference(held, host));
+        await format(type);
+        held = await markdown();
+        now = await where();
+        const again = held.trim();
+        const xyz2 = again.indexOf('xyz');
+        const back = await formatsAt(xyz2 + 1, xyz2 + 1);
+        report(back === all && !/\*{4}|_{3}|~{3}/.test(again) && now.formats === all && now.selected.includes('xyz'),
+          `${stacked}, Ctrl+A, ${type} pressed twice: ${all} again, shown on`, `${JSON.stringify(held)} has ${back || 'none'}, ${JSON.stringify(now)}`);
+      }
+    }
+
+    // A format not on the word, pressed after Ctrl+A, goes on once (around it or inside the others), not doubled.
+    for (const [stacked, type, all] of [['***xyz***', 'u', 'em+strong+u'], ['<u>**xyz**</u>', 'em', 'em+strong+u'], ['~~**xyz**~~', 'em', 'del+em+strong']]) {
+      await visual(`${stacked}\n`);
+      await place(stacked.indexOf('xyz') + 1, stacked.indexOf('xyz') + 1);
+      await selectAll();
+      await format(type);
+      const held = (await markdown()).trim();
+      const back = await formatsAt(held.indexOf('xyz') + 1, held.indexOf('xyz') + 1);
+      const now = await where();
+      report(back === all && !/\*{4}|_{3}|~{3}/.test(held) && now.formats === all, `${stacked}, Ctrl+A, ${type} pressed: ${all}`, `${JSON.stringify(held)} has ${back || 'none'}, ${JSON.stringify(now)}`);
+    }
+
+    // Plain and formatted text together, Ctrl+A: none shown on.
+    for (const mixed of ['a ***xyz*** b', '***xyz*** b', 'a <u>**xyz**</u>']) {
+      await visual(`${mixed}\n`);
+      await place(mixed.indexOf('xyz') + 1, mixed.indexOf('xyz') + 1);
+      await selectAll();
+      const now = await where();
+      report(now.selected === mixed && now.formats === '', `${mixed}, Ctrl+A: none shown on`, JSON.stringify(now));
+    }
     if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
   } finally {
     await close();

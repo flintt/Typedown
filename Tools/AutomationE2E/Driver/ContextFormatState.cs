@@ -168,4 +168,128 @@ internal static partial class Program
             try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
+
+    /// <summary>
+    /// XM11 (the user, 2026-11-15): a paragraph of one word with several formats, Ctrl+A there (the marks selected
+    /// with the word), then a real right-click on it: the menu shows every format of the word pressed, not only the
+    /// outermost. The inner one pressed takes it off and leaves the others; the next menu shows that, and the same
+    /// button pressed again puts it back (all pressed once more). A format the word lacks goes on once. Plain text
+    /// selected with the word shows none pressed.
+    /// </summary>
+    private static async Task XM11(List<string> notes)
+    {
+        var folder = FixtureFolder("xm11");
+        using var c = await Session("e2e XM11");
+        string[] buttons = { "ContextFormatStrong", "ContextFormatEmphasis", "ContextFormatUnderline", "ContextFormatStrikethrough" };
+        string Name(string b) => b.Replace("ContextFormat", "");
+        string Show(Dictionary<string, bool?> s) => string.Join(", ", s.Select(x => $"{Name(x.Key)}={(x.Value == null ? "none" : x.Value.Value ? "on" : "off")}"));
+        void Close() => Send(Key(0x1B, false), Key(0x1B, true));
+        var n = 0;
+        // A document of the one paragraph, the caret put in its word by a real click and Ctrl+A pressed; then the
+        // steps, given the window, the document and the menu check.
+        async Task With(string paragraph, string word, Func<IntPtr, string, Func<string, string, string[], Task>, Task> steps)
+        {
+            var path = Path.Combine(folder, $"xm11-{++n}.md");
+            File.WriteAllText(path, paragraph + "\n");
+            var id = await Open(c, path);
+            var windowId = await WindowIdOf(c, id);
+            var window = await WindowOf(windowId, c);
+            await Task.Delay(1500);
+            Dictionary<string, bool?> States()
+            {
+                var states = new Dictionary<string, bool?>();
+                foreach (var b in buttons)
+                {
+                    var e = FindAnywhereInHost(window, b);
+                    states[b] = e != null && e.TryGetCurrentPattern(TogglePattern.Pattern, out var p) ? ((TogglePattern)p).Current.ToggleState == ToggleState.On : null;
+                }
+                return states;
+            }
+            // The menu by a real right-click on the selection: the buttons expected on are on and the others off.
+            async Task Menu(string where, string selector, params string[] on)
+            {
+                await Eventually(() => Task.FromResult(FindAnywhereInHost(window, "SelectAllItem") == null), 3000, 100);
+                await ContextMenuAt(c, windowId, window, selector);
+                await Task.Delay(400);
+                var s = States();
+                var selected = (await c.Call("test.editor.eval", new { windowId, script = "getSelection().toString()" }))["result"];
+                notes.Add($"{where}: {Show(s)} (selected \"{selected}\")");
+                Check(s.All(x => x.Value == on.Contains(x.Key)), $"{where}: the menu shows {(on.Length == 0 ? "none" : string.Join("+", on.Select(Name)))} on, the rest off ({Show(s)})");
+            }
+            try
+            {
+                await ClickEditorText(c, windowId, window, word);
+                await Task.Delay(400);
+                Chord("Ctrl+A");
+                await Task.Delay(600);
+                await steps(window, id, Menu);
+            }
+            finally
+            {
+                try { Close(); } catch { }
+                try { await c.Call("document.save", new { documentId = id }); } catch { }
+                try { await c.Call("document.close", new { documentId = id }); } catch { }
+            }
+        }
+        async Task Press(IntPtr window, string button)
+        {
+            var e = FindAnywhereInHost(window, button) ?? throw new CaseFailed($"no {button} button");
+            await ClickInPopup(window, e);
+        }
+        // The document reads one of `expected` once the format is pressed.
+        async Task Expect(string id, string what, params string[] expected)
+        {
+            var text = "";
+            var ok = await Eventually(async () => Array.IndexOf(expected, (text = (string)(await Get(c, id))["text"]!).TrimEnd('\n')) >= 0, 5000, 200);
+            notes.Add($"{what}: {text.Replace("\n", " | ")}");
+            Check(ok, $"{what}: the paragraph reads {string.Join(" or ", expected.Select(e => $"\"{e}\""))}");
+            await Task.Delay(500);
+        }
+
+        const string B = "ContextFormatStrong", I = "ContextFormatEmphasis", U = "ContextFormatUnderline", S = "ContextFormatStrikethrough";
+        // Bold and italic: both shown; Italic (the inner one) off, shown off, and back.
+        await With("***bolditalic***", "bolditalic", async (window, id, menu) =>
+        {
+            await menu("Ctrl+A in ***bolditalic***", "#ag-editor-id strong em", new[] { B, I });
+            await Press(window, I);
+            await Expect(id, "Italic pressed", "**bolditalic**");
+            await menu("then the menu", "#ag-editor-id strong", new[] { B });
+            await Press(window, I);
+            await Expect(id, "Italic pressed again", "***bolditalic***");
+            await menu("and the menu again", "#ag-editor-id strong em", new[] { B, I });
+            Close();
+        });
+        // Underlined and bold: Bold (the inner one) off and back; Italic, which it lacks, goes on once.
+        await With("<u>**boldunder**</u>", "boldunder", async (window, id, menu) =>
+        {
+            await menu("Ctrl+A in <u>**boldunder**</u>", "#ag-editor-id u strong", new[] { B, U });
+            await Press(window, B);
+            await Expect(id, "Bold pressed", "<u>boldunder</u>");
+            await menu("then the menu", "#ag-editor-id u", new[] { U });
+            await Press(window, B);
+            await Expect(id, "Bold pressed again", "**<u>boldunder</u>**", "<u>**boldunder**</u>");
+            await menu("and the menu again", "#ag-editor-id strong", new[] { B, U });
+            await Press(window, I);
+            await Expect(id, "Italic pressed", "***<u>boldunder</u>***", "*<u>**boldunder**</u>*", "**<u>*boldunder*</u>**", "<u>***boldunder***</u>");
+            await menu("and the menu after Italic", "#ag-editor-id em", new[] { B, I, U });
+            Close();
+        });
+        // Struck through and bold: Bold (the inner one) off, then Strikethrough.
+        await With("~~**strikebold**~~", "strikebold", async (window, id, menu) =>
+        {
+            await menu("Ctrl+A in ~~**strikebold**~~", "#ag-editor-id del strong", new[] { B, S });
+            await Press(window, B);
+            await Expect(id, "Bold pressed", "~~strikebold~~");
+            await menu("then the menu", "#ag-editor-id del", new[] { S });
+            await Press(window, S);
+            await Expect(id, "then Strikethrough pressed", "strikebold");
+            Close();
+        });
+        // Plain text selected with the word: none shown.
+        await With("Plain ***bolditalic*** end", "bolditalic", async (window, id, menu) =>
+        {
+            await menu("Ctrl+A in Plain ***bolditalic*** end", "#ag-editor-id strong em", Array.Empty<string>());
+            Close();
+        });
+    }
 }

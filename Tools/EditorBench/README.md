@@ -322,4 +322,8 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   menu, the Format menu and the shortcuts send it): that format comes off, the inner one as well as the outer, with the
   caret in the word (it stays after the same letter) or the word selected (it stays selected, and a second press puts the
   format back); the others stay; the host has the text; Clear format takes them all off. Only the outermost came off
-  before (the user, 2026-11-14), and `_**x**_` was not drawn as formatted.
+  before (the user, 2026-11-14), and `_**x**_` was not drawn as formatted. With the marks selected too (Ctrl+A in the
+  paragraph by a real key, or a selection past the word's ends), every format the selected letters all have shows
+  pressed, none with plain text or a space selected too; each pressed after Ctrl+A comes off (the others stay, the word
+  stays selected) and comes back on a second press, a missing one goes on once (no `****`). Only the outermost showed
+  before (the user, 2026-11-15).
