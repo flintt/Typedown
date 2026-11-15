@@ -963,10 +963,36 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
+        // The menu of the folder shown (a right-click on the tree's free space or on the folder's name): what a folder's row
+        // has for it - Add to favourites, an edition's entries (New from template here) - which only its subfolders had (the
+        // user, 2026-11-15: the folder open could not be made a favourite, nor a template made in it).
         private void OnTreeViewContextFlyoutOpening(object sender, object e)
         {
-            if (!Directory.Exists(WorkFolderExplorerItem?.FullPath) && sender is MenuFlyout flyout)
-                flyout.Hide();
+            if (sender is not MenuFlyout flyout) return;
+            var root = WorkFolderExplorerItem;
+            if (!Directory.Exists(root?.FullPath)) { flyout.Hide(); return; }
+            // Each entry acts on the folder shown, from the folder's name too (its button is not in the tree).
+            foreach (var item in flyout.Items) item.DataContext = root;
+            var favorite = flyout.Items.OfType<MenuFlyoutItem>().FirstOrDefault(x => "Favorite".Equals(x.Tag));
+            if (favorite != null) (favorite.Text, favorite.IsEnabled) = Services.FileEntryActions.FavoriteItem(EntryOf(root));
+            foreach (var old in editionRootItems) flyout.Items.Remove(old);
+            editionRootItems.Clear();
+            var after = flyout.Items.ToList().FindIndex(x => Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(x) == "TreeRootNewFolderItem");
+            var at = after < 0 ? flyout.Items.Count : after + 1;
+            foreach (var entry in EditionHooks.FolderMenuItems(ViewModel, root.FullPath))
+            {
+                entry.DataContext = root;
+                flyout.Items.Insert(at++, entry);
+                editionRootItems.Add(entry);
+            }
+        }
+
+        private readonly List<MenuFlyoutItemBase> editionRootItems = new();
+
+        private void OnRootFavoriteClick(object sender, RoutedEventArgs e)
+        {
+            if (WorkFolderExplorerItem is { } root && Directory.Exists(root.FullPath))
+                Services.FileEntryActions.ToggleFavorite(EntryOf(root));
         }
     }
 

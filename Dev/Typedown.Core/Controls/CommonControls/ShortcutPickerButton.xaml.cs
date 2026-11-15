@@ -26,7 +26,7 @@ namespace Typedown.Core.Controls
 
         private async void OnClick(object sender, RoutedEventArgs e)
         {
-            var picker = new ShortcutPicker(ShortcutKey, Setting as System.Reflection.PropertyInfo);
+            var picker = new ShortcutPicker(ShortcutKey, Setting as System.Reflection.PropertyInfo, Setting as EditionHooks.EditionShortcut);
             var dialog = new AppContentDialog
             {
                 XamlRoot = XamlRoot,

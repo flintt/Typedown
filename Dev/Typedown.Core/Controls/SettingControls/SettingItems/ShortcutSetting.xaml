@@ -63,7 +63,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:ShortcutSettingItemModel">
                     <controls:NormalSettingItem Title="{x:Bind DisplayName}" Description="{x:Bind Description}">
-                        <controls:ShortcutPickerButton ShortcutKey="{x:Bind ShortcutKey, Mode=TwoWay}" Setting="{x:Bind Property}" AutomationProperties.AutomationId="{x:Bind AutomationId}"/>
+                        <controls:ShortcutPickerButton ShortcutKey="{x:Bind ShortcutKey, Mode=TwoWay}" Setting="{x:Bind Setting}" AutomationProperties.AutomationId="{x:Bind AutomationId}"/>
                     </controls:NormalSettingItem>
                 </DataTemplate>
             </ListView.ItemTemplate>

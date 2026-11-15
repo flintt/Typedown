@@ -27,6 +27,12 @@ namespace Typedown.Core.Controls
 
         private Dictionary<ShortcutKey, PropertyInfo> existShortcutKeys;
 
+        // The editions' shortcuts' keys (EditionHooks.AddShortcut): taken as the app's own are.
+        private Dictionary<ShortcutKey, EditionHooks.EditionShortcut> editionShortcutKeys;
+
+        // The edition's shortcut this picker is for, when it is one.
+        private readonly EditionHooks.EditionShortcut edition;
+
         private HashSet<VirtualKey> modifiers;
 
         private SettingsViewModel settings;
@@ -40,10 +46,11 @@ namespace Typedown.Core.Controls
 
         private readonly bool click;
 
-        public ShortcutPicker(ShortcutKey currentShortcutKey, PropertyInfo property = null)
+        public ShortcutPicker(ShortcutKey currentShortcutKey, PropertyInfo property = null, EditionHooks.EditionShortcut edition = null)
         {
             this.currentShortcutKey = currentShortcutKey;
             this.property = property;
+            this.edition = edition;
             notRecommended = property?.GetCustomAttribute<NotRecommendedShortcutAttribute>() != null;
             digits = property?.GetCustomAttribute<DigitsShortcutAttribute>() != null;
             click = property?.GetCustomAttribute<ClickShortcutAttribute>() != null;
@@ -52,12 +59,19 @@ namespace Typedown.Core.Controls
             // A key people expect where it is: it may be changed, with a word that it is better not to.
             WarningText.Visibility = notRecommended ? Visibility.Visible : Visibility.Collapsed;
             ClickHint.Visibility = click ? Visibility.Visible : Visibility.Collapsed;
-            RestoreDefaultButton.Visibility = property != null ? Visibility.Visible : Visibility.Collapsed;
+            RestoreDefaultButton.Visibility = property != null || edition != null ? Visibility.Visible : Visibility.Collapsed;
         }
 
         // The key the setting comes with, put in the picker (saved with Save, as a key pressed is).
         private void OnRestoreDefaultClick(object sender, RoutedEventArgs e)
         {
+            if (edition != null)
+            {
+                ErrorMsgPanel.Visibility = Visibility.Collapsed;
+                Verified = true;
+                ShortcutKey = edition.Default ?? new(0, 0);
+                return;
+            }
             if (property == null || settings == null) return;
             ErrorMsgPanel.Visibility = Visibility.Collapsed;
             Verified = true;
@@ -76,6 +90,10 @@ namespace Typedown.Core.Controls
                 .ToList()
                 // A digits shortcut holds nine keys: each of them is taken.
                 .ForEach(x => { foreach (var key in x.ShortcutKey.Expand()) existShortcutKeys[key] = x.PropertyInfo; });
+            editionShortcutKeys = new();
+            foreach (var s in EditionHooks.Shortcuts)
+                if (s.Get?.Invoke() is { } k && k != new ShortcutKey(0, 0))
+                    foreach (var key in k.Expand()) editionShortcutKeys[key] = s;
 
             modifiers = new HashSet<VirtualKey>() {
                 VirtualKey.LeftControl,
@@ -133,11 +151,23 @@ namespace Typedown.Core.Controls
                 var owner = shortcutKey.Expand()
                     .Select(k => existShortcutKeys.TryGetValue(k, out var p) ? p : null)
                     .FirstOrDefault(p => p != null && (property != null ? p != property && !SettingsViewModel.MayShare(p.Name, property.Name) : shortcutKey != currentShortcutKey));
+                // Or by an edition's shortcut (not the one this picker is for).
+                var editionOwner = owner != null ? null : shortcutKey.Expand()
+                    .Select(k => editionShortcutKeys.TryGetValue(k, out var s) ? s : null)
+                    .FirstOrDefault(s => s != null && s != edition);
+                // An edition's shortcut taking a key of the app's own: said as for the app's.
+                if (edition != null && owner != null && property == null && shortcutKey == currentShortcutKey) owner = null;
                 if (owner != null)
                 {
                     Verified = false;
                     ErrorMsgPanel.Visibility = Visibility.Visible;
                     ExistOwnerTextBlock.Text = new ShortcutSettingItemModel(settings, owner).Description;
+                }
+                else if (editionOwner != null)
+                {
+                    Verified = false;
+                    ErrorMsgPanel.Visibility = Visibility.Visible;
+                    ExistOwnerTextBlock.Text = new ShortcutSettingItemModel(editionOwner).Description;
                 }
                 else
                 {

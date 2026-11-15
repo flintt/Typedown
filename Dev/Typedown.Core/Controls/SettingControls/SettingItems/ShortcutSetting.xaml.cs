@@ -60,6 +60,8 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
                 .GetProperties()
                 .Where(x => x.PropertyType == typeof(ShortcutKey))
                 .Select(x => new ShortcutSettingItemModel(target, x))
+                // The editions' after the app's own (EditionHooks.AddShortcut).
+                .Concat(EditionHooks.Shortcuts.Select(x => new ShortcutSettingItemModel(x)))
                 .ToList();
             FliterCategories = AllSettingItems.Select(x => x.Category).ToHashSet().Select(x => new ShortcutSettingCategoryModel(x, x)).ToList();
             FliterCategories.Insert(0, new(Locale.GetString("All"), null));
@@ -89,6 +91,12 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         public PropertyInfo Property { get; }
 
+        /// <summary>An edition's shortcut, when the row is one (Property is null then).</summary>
+        public EditionHooks.EditionShortcut Edition { get; }
+
+        /// <summary>What the picker edits: the setting's PropertyInfo or the edition's shortcut.</summary>
+        public object Setting => (object)Property ?? Edition;
+
         public string DisplayName { get; }
 
         public string Description { get; }
@@ -96,9 +104,21 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
         public string Category { get; }
 
         /// <summary>The row's picker button for UI Automation: "Shortcut." and the setting's name (the end-to-end tests).</summary>
-        public string AutomationId => "Shortcut." + Property.Name;
+        public string AutomationId => "Shortcut." + (Property?.Name ?? Edition.Name);
 
-        public ShortcutKey ShortcutKey { get => (ShortcutKey)Property.GetValue(Target); set => Property.SetValue(Target, value); }
+        public ShortcutKey ShortcutKey
+        {
+            get => Property != null ? (ShortcutKey)Property.GetValue(Target) : Edition.Get?.Invoke();
+            set { if (Property != null) Property.SetValue(Target, value); else Edition.Set?.Invoke(value); }
+        }
+
+        public ShortcutSettingItemModel(EditionHooks.EditionShortcut edition)
+        {
+            Edition = edition;
+            DisplayName = edition.DisplayName ?? edition.Name;
+            Category = edition.Category ?? "";
+            Description = string.Join(" / ", new[] { Category, DisplayName }.Where(x => !string.IsNullOrEmpty(x)));
+        }
 
         public ShortcutSettingItemModel(SettingsViewModel target, PropertyInfo property)
         {

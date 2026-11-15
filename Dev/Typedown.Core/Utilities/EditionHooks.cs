@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Typedown.Core.Models;
 using Typedown.Core.ViewModels;
 using Microsoft.UI.Xaml.Controls;
 
@@ -64,6 +65,39 @@ namespace Typedown.Core.Utilities
         /// Entries for a folder's right-click menu in the folder pane's tree, below New file and New folder. Made each time
         /// the menu opens on a folder, for that window and that folder (its full path).
         /// </summary>
+        /// <summary>
+        /// A shortcut of an edition's own, listed in Settings > Shortcuts with the app's (its category and name as shown,
+        /// the key read and written by the edition, which keeps it and registers it): a key two take is said there as for
+        /// the app's own.
+        /// </summary>
+        public sealed class EditionShortcut
+        {
+            /// <summary>A name of its own (the row's automation id: "Shortcut." and it).</summary>
+            public string Name { get; init; }
+            public string Category { get; init; }
+            public string DisplayName { get; init; }
+            /// <summary>The key it has now; none: ShortcutKey(0, 0) or null.</summary>
+            public Func<ShortcutKey> Get { get; init; }
+            public Action<ShortcutKey> Set { get; init; }
+            /// <summary>The key it comes with (Restore default); none: null.</summary>
+            public ShortcutKey Default { get; init; }
+        }
+
+        private static readonly List<EditionShortcut> shortcuts = new();
+
+        /// <summary>The editions' shortcuts (Settings > Shortcuts lists them after the app's own).</summary>
+        public static IReadOnlyList<EditionShortcut> Shortcuts { get { lock (shortcuts) return shortcuts.ToList(); } }
+
+        /// <summary>An edition's shortcut listed in Settings > Shortcuts; one of that name already there is replaced.</summary>
+        public static void AddShortcut(EditionShortcut shortcut)
+        {
+            lock (shortcuts)
+            {
+                shortcuts.RemoveAll(s => s.Name == shortcut.Name);
+                shortcuts.Add(shortcut);
+            }
+        }
+
         public static void AddFolderMenuItems(Func<AppViewModel, string, IEnumerable<MenuFlyoutItemBase>> build)
         {
             lock (folderMenu) folderMenu.Add(build);
