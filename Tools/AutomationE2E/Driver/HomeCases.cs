@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -659,11 +659,17 @@ internal static partial class Program
         {
             for (var i = 0; i < 5 && ((string?)(await Get(c, documentId))["text"] ?? "").Trim().Length > 0; i++)
                 await c.Call("document.undo", new { documentId, baseRevision = await Revision(c, documentId), reveal = "document" });
-            // A document made from a template has its text as its own, not as an edit: no undo empties it (the case's
-            // documents were left open, a save question with them, for the cases after - w10 job 566). Untitled, emptied.
+            // A document made from a template has its text as its own, not as an edit: no undo empties it, and emptied it
+            // is still not saved (documents and a save question were left for the cases after - w10 jobs 566, 567). Saved
+            // into the run's fixtures, it closes like any saved document.
             var left = await Get(c, documentId);
-            if (string.IsNullOrEmpty((string?)left["path"]) && ((string?)left["text"] ?? "").Trim().Length > 0)
-                await c.Call("document.replace", new { documentId, baseRevision = await Revision(c, documentId), text = "", reveal = "none" });
+            if ((bool?)left["saved"] == false && string.IsNullOrEmpty((string?)left["path"]))
+            {
+                var windowId = await WindowIdOf(c, documentId);
+                await c.Call("document.focus", new { documentId });
+                await Eventually(async () => await ActiveOf(c, windowId) == documentId, 4000);
+                await c.Call("test.file.saveAs", new { windowId, path = Path.Combine(fixtures, $"cleanup-{documentId}.md") });
+            }
             await c.Call("document.close", new { documentId });
         }
         catch (Exception e) { notes.Add("cleanup: " + e.Message.Split('\n')[0]); }
