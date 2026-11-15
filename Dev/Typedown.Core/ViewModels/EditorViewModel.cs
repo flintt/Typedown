@@ -958,7 +958,13 @@ namespace Typedown.Core.ViewModels
             ContentState = state;
             // Another load's outline comes with nothing marked yet; the same load's (an edit) keeps its mark.
             outlineMark.OutlineOf(LoadId);
-            if (ContentState.WordCount != null)
+            // A count of more characters than the document's text has is not of this text (another load's, counted late:
+            // the writing timeline took a 628,000-character .txt as written into the Markdown file shown after it, the
+            // user, 2026-11-15): the edition is not told, whatever the page's fault was.
+            var countOfAnother = ContentState.WordCount != null && Markdown != null && ContentState.WordCount.Character > Markdown.Length;
+            if (countOfAnother)
+                Log.Debug($"word count: {ContentState.WordCount.Character} characters counted in a text of {Markdown.Length} (load {LoadId}); not reported");
+            if (ContentState.WordCount != null && !countOfAnother)
                 EditionHooks.ReportWordCount(new WordCountReport
                 {
                     Editor = this, LoadId = LoadId, Words = ContentState.WordCount.Word, Characters = ContentState.WordCount.Character,

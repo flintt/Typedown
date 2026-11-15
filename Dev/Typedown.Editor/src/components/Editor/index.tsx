@@ -360,8 +360,11 @@ const Editor: React.FC = () => {
     // carries it - the host keeps one outline per load and drops reports of any other load - and an outline counts
     // as sent only once it has been.
     const sentTocRef = useRef<{ loadId?: number, toc: string } | null>(null)
-    const onStateChange = useCallback((state: any) => {
+    // `forLoad`: the load the count is of, when the editor says (source and plain text mode): a report of another load
+    // than the one shown now is dropped, not sent under this one's id - the host took the jump for writing.
+    const onStateChange = useCallback((state: any, forLoad?: number) => {
         if (fileLoadPending.current && !fileLoadPending.current.armed) return
+        if (typeof forLoad === 'number' && typeof loadIdRef.current === 'number' && forLoad !== loadIdRef.current) return
         const loadId = loadIdRef.current
         const toc = JSON.stringify(state?.toc ?? null)
         const sent = sentTocRef.current

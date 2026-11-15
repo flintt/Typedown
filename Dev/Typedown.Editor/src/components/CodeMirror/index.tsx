@@ -75,13 +75,19 @@ interface ICodeMirrorEditor {
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
     onContentApplied?: () => void
     onCursorChange: (cursor: any) => void
-    onStateChange: (state: any) => void
+    // With the load the report counted (its text): the page drops one of a load no longer shown.
+    onStateChange: (state: any, loadId?: number) => void
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
 
 
 const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     const { onStateChange } = props
+    // The load shown, for a count made now to say which text it is of (a count sent later - a long text's, 300 ms on -
+    // went out under the next load's id when a tab was switched meanwhile: a 628,000-character .txt counted as written
+    // into the Markdown file shown after it, the user's writing timeline, 2026-11-15).
+    const loadIdPropRef = useRef(props.loadId)
+    loadIdPropRef.current = props.loadId
     const [editor, setEditor] = useState<any>();
     const [marginTop, setMarginTop] = useState(0);
     const matchsRef = useRef<any[]>([]);
@@ -487,7 +493,9 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         cursorRef.current = { anchor, head }
     }, [editor, props.cursor])
 
-    const countRef = useRef<{ time: number, value: any, timer?: any, toc?: any[] }>({ time: 0, value: null })
+    const countRef = useRef<{ time: number, value: any, timer?: any, toc?: any[], load?: number }>({ time: 0, value: null })
+    // A count waiting (a long text's) is let go with the editor: shown again it counts anew.
+    useEffect(() => () => clearTimeout(countRef.current.timer), [])
     // The heading the caret is under, as the outline marks it: the last one at or above the caret's line - the first
     // heading always, before (the user, 2026-11-06: the outline marked the first heading wherever the caret was).
     const curOf = useCallback((toc: any[] | undefined) => {
@@ -511,6 +519,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         const counted = countRef.current
         clearTimeout(counted.timer)
         const now = Date.now()
+        const load = loadIdPropRef.current
         // The outline with it: read by the visual editor's lexer now (services/common.ts getTOC), about 70 ms on 300k
         // characters - on a long document only once the typing stops, not every 300 ms of it.
         const long = value.length >= 50000
@@ -518,23 +527,25 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         if (!long || loaded || !counted.value || now - counted.time >= 300) {
             counted.time = now
             counted.value = countWords(value)
+            counted.load = load
             if (!long || loaded || !counted.toc) counted.toc = getTOC(value).toc
         }
         if (long) {
             counted.timer = setTimeout(() => {
                 counted.time = Date.now()
                 counted.value = countWords(value)
+                counted.load = load
                 counted.toc = getTOC(value).toc
                 const cur = curOf(counted.toc)
                 sentCurRef.current = cur?.slug
-                onStateChange({ wordCount: counted.value, toc: counted.toc, cur })
+                onStateChange({ wordCount: counted.value, toc: counted.toc, cur }, load)
             }, 300)
         }
         const toc = counted.toc ?? []
         const cur = curOf(toc)
         sentCurRef.current = cur?.slug
         const state = { wordCount: counted.value, toc, cur }
-        onStateChange(state)
+        onStateChange(state, counted.load)
     }, [onStateChange, curOf])
 
     // The caret moved into another section (no edit): the outline's mark follows it.
@@ -546,7 +557,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             const cur = curOf(counted.toc)
             if (cur?.slug === sentCurRef.current) return
             sentCurRef.current = cur?.slug
-            onStateChange({ wordCount: counted.value, toc: counted.toc, cur })
+            onStateChange({ wordCount: counted.value, toc: counted.toc, cur }, counted.load)
         }
         editor.on('cursorActivity', moved)
         return () => { editor.off('cursorActivity', moved) }
