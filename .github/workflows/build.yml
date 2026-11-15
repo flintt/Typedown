@@ -166,6 +166,7 @@ jobs:
           node enter-closing-marks-check.js
           node triple-click-format-check.js
           node stacked-format-check.js
+          node caret-format-check.js
           node duplicate-check.js
           node scroll-past-end-check.js
           node theme-text-colour-check.js

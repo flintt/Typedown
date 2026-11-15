@@ -292,4 +292,88 @@ internal static partial class Program
             Close();
         });
     }
+
+    /// <summary>
+    /// XM12 (the user's question, 2026-11-15): a format pressed with the caret alone in plain text, nothing selected.
+    /// Ctrl+B pressed twice at the same caret leaves the text as it was (no ********); Bold from a real right-click's
+    /// menu, then a click elsewhere without typing, leaves nothing (no empty **** in the file); Italic from the menu
+    /// opened by Shift+F10 at the caret, twice, the same. The menu's Bold state between the two presses is noted.
+    /// </summary>
+    private static async Task XM12(List<string> notes)
+    {
+        var folder = FixtureFolder("xm12");
+        const string original = "# Caret\n\nSome plain words here\n\nOther line\n";
+        using var c = await Session("e2e XM12");
+        void Close() => Send(Key(0x1B, false), Key(0x1B, true));
+        string State(IntPtr window, string button)
+        {
+            var e = FindAnywhereInHost(window, button);
+            return e == null ? "none" : e.TryGetCurrentPattern(TogglePattern.Pattern, out var p) ? ((TogglePattern)p).Current.ToggleState.ToString() : "no toggle";
+        }
+        var n = 0;
+        // A document of its own for each way; the caret put into "Some plain words here" by a real click.
+        async Task Way(string what, Func<IntPtr, string, Task> steps)
+        {
+            var path = Path.Combine(folder, $"xm12-{++n}.md");
+            File.WriteAllText(path, original);
+            var id = await Open(c, path);
+            var windowId = await WindowIdOf(c, id);
+            var window = await WindowOf(windowId, c);
+            await Task.Delay(1500);
+            try
+            {
+                await ClickEditorText(c, windowId, window, "Some plain words here");
+                await Task.Delay(400);
+                await steps(window, windowId);
+                var text = "";
+                // The page sends its text a moment after the change; read until it is the original or two seconds on.
+                await Eventually(async () => (text = (string)(await Get(c, id))["text"]!) == original, 2000, 200);
+                notes.Add($"{what}: {text.Replace("\n", " | ")}");
+                Check(text == original, $"{what}: the document as it was (it reads {Newtonsoft.Json.JsonConvert.ToString(text)})");
+            }
+            finally
+            {
+                try { Close(); } catch { }
+                try { await c.Call("document.save", new { documentId = id }); } catch { }
+                try { await c.Call("document.close", new { documentId = id }); } catch { }
+            }
+        }
+        async Task MenuPress(IntPtr window, string button, string where)
+        {
+            var opened = await Eventually(() => Task.FromResult(FindAnywhereInHost(window, button) != null), 3000, 100);
+            if (!opened) throw new CaseFailed($"{where}: no menu with {button}");
+            await Task.Delay(300);
+            notes.Add($"{where}: {button.Replace("ContextFormat", "")} {State(window, button)} before the press");
+            await ClickInPopup(window, FindAnywhereInHost(window, button)!);
+            await Task.Delay(600);
+        }
+
+        await Way("Ctrl+B twice at the caret", async (window, windowId) =>
+        {
+            Chord("Ctrl+B");
+            await Task.Delay(600);
+            // The menu at the caret (Shift+F10 does not move it): is Bold shown pressed now?
+            Chord("Shift+F10");
+            await Eventually(() => Task.FromResult(FindAnywhereInHost(window, "ContextFormatStrong") != null), 3000, 100);
+            await Task.Delay(300);
+            notes.Add($"after one Ctrl+B, the menu at the caret: Bold {State(window, "ContextFormatStrong")}");
+            Close(); await Task.Delay(400);
+            Chord("Ctrl+B");
+            await Task.Delay(600);
+        });
+        await Way("Bold from the right-click menu, then a click on another line", async (window, windowId) =>
+        {
+            await ContextMenuAt(c, windowId, window, "#ag-editor-id p");
+            await MenuPress(window, "ContextFormatStrong", "the right-click menu");
+            await ClickEditorText(c, windowId, window, "Other line");
+            await Task.Delay(600);
+        });
+        await Way("Italic from the Shift+F10 menu twice at the caret", async (window, windowId) =>
+        {
+            Chord("Shift+F10");
+            await MenuPress(window, "ContextFormatEmphasis", "the first Shift+F10 menu");
+            Chord("Shift+F10");
+            await MenuPress(window, "ContextFormatEmphasis", "the second Shift+F10 menu");
+        });
+    }
 }

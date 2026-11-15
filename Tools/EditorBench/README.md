@@ -327,3 +327,7 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   pressed, none with plain text or a space selected too; each pressed after Ctrl+A comes off (the others stay, the word
   stays selected) and comes back on a second press, a missing one goes on once (no `****`). Only the outermost showed
   before (the user, 2026-11-15).
+- `caret-format-check.js` — a format pressed with the caret alone in plain text (Bold, Italic, Strikethrough, Underline,
+  Inline code, by `Format`): shown pressed after the press; pressed again at the same caret, the text as it was (no
+  `********`) and the caret where it was; pressed and then a real click on another line without typing, nothing left
+  in the page's or the host's text (no empty `****`); typing after the press types formatted text.
