@@ -552,11 +552,48 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             SetItemFocusState(sender, false);
         }
 
+        // The row the menu is open on, outlined while it is. Every row's outline taken off first, not only the row the menu
+        // says it is on now: the menu is one for every row - opened on another before this one closed, the first kept its
+        // outline - and the tree hands a row's box to another file as it scrolls or refreshes, so an outline left on one
+        // turned up around files and folders nobody had right-clicked (the user, 2026-11-15: "clicking between files").
         private void SetItemFocusState(object menuFlyout, bool isFocus)
         {
-            var container = GetContainerFromMenuFlyout(menuFlyout);
+            var cleared = ClearOutlines();
+            var container = isFocus ? GetContainerFromMenuFlyout(menuFlyout) : null;
             if (container != null)
-                container.BorderBrush = Resources[isFocus ? "FocusStrokeColorOuterBrush" : "NormalStrokeColorOuterBrush"] as Brush;
+                container.BorderBrush = Resources["FocusStrokeColorOuterBrush"] as Brush;
+            if (cleared > (isFocus ? 0 : 1) || container != null)
+                Log.Debug($"tree: menu outline {(container != null ? "on " + (container.DataContext as ExplorerItem)?.Name : "off")}; {cleared} row(s) cleared");
+        }
+
+        // Every row on screen without the menu's outline; how many had one.
+        private int ClearOutlines()
+        {
+            var focus = Resources["FocusStrokeColorOuterBrush"] as Brush;
+            var normal = Resources["NormalStrokeColorOuterBrush"] as Brush;
+            var cleared = 0;
+            foreach (var row in Rows())
+                if (row.BorderBrush == focus) { row.BorderBrush = normal; cleared++; }
+            return cleared;
+        }
+
+        private IEnumerable<muxc.TreeViewItem> Rows()
+        {
+            var stack = new Stack<DependencyObject>();
+            if (TreeView != null) stack.Push(TreeView);
+            while (stack.Count > 0)
+            {
+                var node = stack.Pop();
+                if (node is muxc.TreeViewItem row) yield return row;
+                for (var i = VisualTreeHelper.GetChildrenCount(node) - 1; i >= 0; i--) stack.Push(VisualTreeHelper.GetChild(node, i));
+            }
+        }
+
+        /// <summary>The rows outlined as a menu's now (the automation test host): their names.</summary>
+        public IReadOnlyList<string> OutlinedRows()
+        {
+            var focus = Resources["FocusStrokeColorOuterBrush"] as Brush;
+            return Rows().Where(r => r.BorderBrush == focus).Select(r => (r.DataContext as ExplorerItem)?.Name ?? "?").ToList();
         }
 
         private muxc.TreeViewItem GetContainerFromMenuFlyout(object menuFlyout)

@@ -1270,6 +1270,8 @@ namespace Typedown.Services.Automation
                         ["workFolder"] = app.FileViewModel.WorkFolder,
                         ["explicit"] = app.FileViewModel.WorkFolderIsExplicit,
                         ["paneOpen"] = app.SettingsViewModel.SidePaneOpen,
+                        // The rows outlined as a menu's (one at most, while a menu is open).
+                        ["outlined"] = page == null ? null : new Newtonsoft.Json.Linq.JArray(page.OutlinedRows()),
                     };
                 })));
             // The folder pane's root menu (its name's dropdown) as it would open now: each entry's automation id, text and path.
