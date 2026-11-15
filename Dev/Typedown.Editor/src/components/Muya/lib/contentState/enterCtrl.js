@@ -109,11 +109,15 @@ const enterCtrl = ContentState => {
     const options = this.muya.options
     const leave = tokens => {
       for (const token of tokens) {
-        const { type, range: { start, end }, marker, children, srcAndTitle, hrefAndTitle, backlash } = token
+        const { type, range: { start, end }, marker, children, srcAndTitle, hrefAndTitle, backlash, closeTag } = token
         if (offset <= start || offset >= end) continue
-        const inner = children && leave(children)
+        // An html_tag without content has '' for children, not a list.
+        const inner = Array.isArray(children) ? leave(children) : null
         if (inner != null) return inner
         if (CLOSED_BY_MARKER.test(type) && marker && offset === end - marker.length) return end
+        // An inline HTML format (<u>, <sub>, <sup>, <mark>): the caret before its closing tag. "</u>~~" of
+        // "~~<u>下划线回车</u>~~" went to the next line, and the loop stopped there, the `~~` not left either.
+        if (type === 'html_tag' && closeTag && offset === end - closeTag.length) return end
         if (type === 'link' || type === 'image') {
           const second = backlash && backlash.second ? backlash.second.length : 0
           if (offset === end - 3 - ((srcAndTitle || hrefAndTitle || '').length + second) || offset === end - 1) return end
