@@ -126,6 +126,21 @@ const inputCtrl = ContentState => {
     const block = this.getBlock(key)
     const paragraph = document.querySelector(`#${key}`)
 
+    // Formats kept by a press with the caret alone (formatCtrl): the text typed there - a key's or an IME's - goes in
+    // inside their marks, the caret after it, so what is typed on is formatted too. Anything else gives them up.
+    if (this.pendingFormats) {
+      const typing = start.key === end.key && start.offset === end.offset && paragraph &&
+        (event.inputType === 'insertText' || event.type === 'compositionend')
+      const typed = typing
+        ? this.takePendingFormats(key, getTextContent(paragraph, [CLASS_OR_ID.AG_MATH_RENDER, CLASS_OR_ID.AG_RUBY_RENDER]), start.offset)
+        : (this.pendingFormats = null)
+      if (typed) {
+        block.text = typed.text
+        this.cursor = { start: { key, offset: typed.offset }, end: { key, offset: typed.offset } }
+        return this.partialRender()
+      }
+    }
+
     // Fix issue 1447
     // Fixme: any better solution?
     if (

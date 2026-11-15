@@ -237,7 +237,8 @@ class Muya {
   }
 
   dispatchSelectionFormats = () => {
-    const { formats } = this.contentState.selectionFormats()
+    // With the formats a press at the caret alone keeps for the text typed next.
+    const { formats } = this.contentState.selectionFormats(selection.getCursorRange(), { pending: true })
     this.eventCenter.dispatch('selectionFormats', formats)
   }
 
@@ -704,11 +705,18 @@ class Muya {
     this.container.blur()
   }
 
+  // 'pending' when the press only kept the format for the text typed next (the caret alone): the text is unchanged,
+  // only the buttons' state is told.
   format(type) {
-    this.contentState.format(type)
+    const done = this.contentState.format(type)
+    if (done === 'pending') {
+      this.dispatchSelectionFormats()
+      return done
+    }
     // Told as an edit typed is: a format comes from the host (a menu, a shortcut) with no input event, and the host
     // kept the text from before it - a save at once lost the bold.
     this.dispatchChange()
+    return done
   }
 
   insertImage(imageInfo) {

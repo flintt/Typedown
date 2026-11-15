@@ -936,8 +936,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => transport.addListener('Format', type => {
         if (optionsRef.current?.readOnly) return
-        markEdited(shownRef)
-        editor?.format(type)
+        // A press with the caret alone changes no text (the format waits for what is typed): the document stays as
+        // it came, its own source kept.
+        if (editor?.format(type) !== 'pending') markEdited(shownRef)
     }), [editor]);
 
     useEffect(() => transport.addListener('DeleteSelection', () => {

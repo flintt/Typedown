@@ -139,10 +139,71 @@ const visibleRange = (tokens, from, to) => {
   return start < end ? [start, end] : [from, to]
 }
 
+// The formats a press with the caret alone keeps for the text typed next, as Word does (the user, 2026-11-15): the
+// press put the empty marks in at once ("****", the caret between them), which stayed in the file when nothing was
+// typed and were no format to the editor, so a second press added another pair ("********"). The marks go in only
+// with what is typed (inputHandler, takePendingFormats).
+const PENDING_TYPES = ['strong', 'em', 'del', 'u', 'inline_code', 'inline_math', 'sub', 'sup', 'mark']
+
+// The open and close marks of the formats kept, the first pressed outermost.
+export const pendingMarks = types => types.reduce(([open, close], type) => {
+  const marker = FORMAT_MARKER_MAP[type]
+  return typeof marker === 'string' ? [open + marker, marker + close] : [open + marker.open, marker.close + close]
+}, ['', ''])
+
 const formatCtrl = ContentState => {
-  ContentState.prototype.selectionFormats = function ({ start, end } = selection.getCursorRange()) {
+  // The formats kept for the caret, or null; dropped once the caret has moved or the block's text changed (another
+  // edit, another document shown). While an IME composes, the caret moves on through the composed text: kept.
+  ContentState.prototype.pendingFormatsAt = function (range) {
+    const pending = this.pendingFormats
+    if (!pending) return null
+    const { start, end } = range && range.start && range.end ? range : this.cursor || {}
+    const block = this.getBlock(pending.key)
+    const composing = this.muya.keyboard && this.muya.keyboard.isComposed
+    const there = start && end && start.key === pending.key && end.key === pending.key &&
+      start.offset === pending.offset && end.offset === pending.offset
+    if (!block || block.text !== pending.text || (!there && !composing)) {
+      this.pendingFormats = null
+      return null
+    }
+    return pending
+  }
+
+  // The text typed where formats were kept: given the block's text as the page has it now and the caret after the
+  // typing, the text with the typed part inside the marks and the caret after it (still inside them), or null when
+  // what changed is not just text typed at the kept place. The formats are given up either way.
+  ContentState.prototype.takePendingFormats = function (key, text, caret) {
+    const pending = this.pendingFormats
+    this.pendingFormats = null
+    if (!pending || pending.key !== key) return null
+    const block = this.getBlock(key)
+    const { offset: at, text: before, types } = pending
+    const typed = text.length - before.length
+    if (!block || block.text !== before || typed <= 0 || caret !== at + typed ||
+      text.substring(0, at) !== before.substring(0, at) || text.substring(at + typed) !== before.substring(at)) {
+      return null
+    }
+    const [open, close] = pendingMarks(types)
+    return {
+      text: before.substring(0, at) + open + text.substr(at, typed) + close + before.substring(at),
+      offset: at + open.length + typed
+    }
+  }
+
+  // `pending`: the formats kept for the caret count too (what the host's buttons show).
+  ContentState.prototype.selectionFormats = function ({ start, end } = selection.getCursorRange(), { pending = false } = {}) {
     if (!start || !end) {
       return { formats: [], tokens: [], neighbors: [] }
+    }
+    if (pending) {
+      const result = this.selectionFormats({ start, end })
+      const kept = this.pendingFormatsAt({ start, end })
+      if (kept) {
+        for (const type of kept.types) {
+          result.formats.push(/^(?:u|sub|sup|mark)$/.test(type) ? { type: 'html_tag', tag: type, pending: true } : { type, pending: true })
+        }
+      }
+      return result
     }
 
     const startBlock = this.getBlock(start.key)
@@ -254,6 +315,28 @@ const formatCtrl = ContentState => {
 
     const startBlock = this.getBlock(start.key)
     const endBlock = this.getBlock(end.key)
+
+    // The caret alone, the format not on there: nothing goes in, the format is kept for the text typed next (pressed
+    // again, it is given up). In a format already there the press takes it off the word, as before.
+    if (
+      start.key === end.key && start.offset === end.offset && PENDING_TYPES.includes(type) &&
+      startBlock && startBlock.type === 'span' && /paragraphContent|cellContent|atxLine/.test(startBlock.functionType)
+    ) {
+      const on = this.selectionFormats({ start: { ...start }, end: { ...end } }).formats
+        .some(t => t.type === type || (t.type === 'html_tag' && t.tag === type))
+      if (!on) {
+        const kept = this.pendingFormatsAt({ start, end })
+        const types = kept ? kept.types.filter(t => t !== type) : []
+        if (!kept || types.length === kept.types.length) types.push(type)
+        this.pendingFormats = types.length ? { key: start.key, offset: start.offset, text: startBlock.text, types } : null
+        this.cursor = { start: { key: start.key, offset: start.offset }, end: { key: end.key, offset: end.offset } }
+        // The caret back in the page (a menu had the focus); the text is as it was.
+        selection.setCursorRange(this.cursor)
+        return 'pending'
+      }
+    }
+    if (type === 'clear') this.pendingFormats = null
+
     start.delata = end.delata = 0
     if (start.key === end.key) {
       const { formats, neighbors } = this.selectionFormats({ start, end })
