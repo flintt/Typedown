@@ -58,6 +58,30 @@ namespace Typedown.Core.Utilities
             lock (exportMenu) exportMenu.Add(build);
         }
 
+        private static readonly List<Func<AppViewModel, string, IEnumerable<MenuFlyoutItemBase>>> folderMenu = new();
+
+        /// <summary>
+        /// Entries for a folder's right-click menu in the folder pane's tree, below New file and New folder. Made each time
+        /// the menu opens on a folder, for that window and that folder (its full path).
+        /// </summary>
+        public static void AddFolderMenuItems(Func<AppViewModel, string, IEnumerable<MenuFlyoutItemBase>> build)
+        {
+            lock (folderMenu) folderMenu.Add(build);
+        }
+
+        internal static IReadOnlyList<MenuFlyoutItemBase> FolderMenuItems(AppViewModel viewModel, string folder)
+        {
+            List<Func<AppViewModel, string, IEnumerable<MenuFlyoutItemBase>>> builders;
+            lock (folderMenu) builders = folderMenu.ToList();
+            var items = new List<MenuFlyoutItemBase>();
+            foreach (var build in builders)
+            {
+                try { items.AddRange(build(viewModel, folder) ?? Enumerable.Empty<MenuFlyoutItemBase>()); }
+                catch (Exception ex) { Log.WriteLocal("EditionMenu", ex.ToString()); }
+            }
+            return items;
+        }
+
         private static readonly List<Func<AppViewModel, IEnumerable<StatusBarItem>>> statusBar = new();
 
         /// <summary>

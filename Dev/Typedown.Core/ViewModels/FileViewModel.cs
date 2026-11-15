@@ -323,7 +323,7 @@ namespace Typedown.Core.ViewModels
             await HandleExternalFileChange();
         }
 
-        private async Task NewFileFun(bool postMessage = true, bool inNewTab = true, string initialText = null)
+        private async Task NewFileFun(bool postMessage = true, bool inNewTab = true, string initialText = null, CursorState initialCursor = null)
         {
             // Keys typed from here on are for the new document (see HoldInput); the document left keeps its latest edits,
             // as on a tab switch.
@@ -331,7 +331,7 @@ namespace Typedown.Core.ViewModels
             try
             {
                 if (postMessage) await EditorViewModel.FlushBeforeTabChangeAsync();
-                await NewFileCore(postMessage, inNewTab, initialText);
+                await NewFileCore(postMessage, inNewTab, initialText, initialCursor);
             }
             finally
             {
@@ -339,7 +339,7 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        private async Task NewFileCore(bool postMessage, bool inNewTab, string initialText = null)
+        private async Task NewFileCore(bool postMessage, bool inNewTab, string initialText = null, CursorState initialCursor = null)
         {
             // Tabs (upstream #73): a new document opens in its own tab unless the current one is a pristine untitled tab.
             if (inNewTab && TabsViewModel != null && !TabsViewModel.IsActiveTabBlank)
@@ -376,7 +376,7 @@ namespace Typedown.Core.ViewModels
             ApplyLoadedState(backup ?? initialText ?? Common.DefaultMarkdwn, fromBackup: backup != null || initialText != null);
             if (postMessage)
             {
-                EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
+                EditorViewModel.PostLoadFile(EditorViewModel.Markdown, backup == null ? initialCursor : null);
             }
             EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
         }
@@ -607,11 +607,12 @@ namespace Typedown.Core.ViewModels
         /// editor, not under the home page (an automation client's document.create, the home page's own command). With
         /// <paramref name="text"/> (an edition's template), that is the new document's own text, as a file opened is - not an
         /// edit made on a blank one: Ctrl+Z does not take it out - but not saved anywhere yet, so closing asks and the backup
-        /// keeps it; line endings as "\n" whatever it came with.
+        /// keeps it; line endings as "\n" whatever it came with. With <paramref name="cursor"/> (lines and characters in that
+        /// text, as a file's remembered caret), the caret starts there rather than at the start.
         /// </summary>
-        public async Task NewDocumentAsync(string text = null)
+        public async Task NewDocumentAsync(string text = null, CursorState cursor = null)
         {
-            await NewFileFun(initialText: text == null ? null : TextFileFormat.Normalize(text));
+            await NewFileFun(initialText: text == null ? null : TextFileFormat.Normalize(text), initialCursor: cursor);
             Home?.Hide();
         }
 

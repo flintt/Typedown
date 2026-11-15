@@ -34,7 +34,7 @@
             <MenuFlyoutItem Tag="File" AutomationProperties.AutomationId="TreeOpenInNewWindowItem" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
             <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=FolderPane.SetAsRoot}" AutomationProperties.AutomationId="FolderSetAsRoot" Click="OnSetAsRootClick"/>
             <MenuFlyoutItem Tag="Folder" AutomationProperties.AutomationId="TreeNewFileItem" Text="{u:LocaleString Key=NewFile}" Click="OnNewFileClick"/>
-            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFolder}" Click="OnNewFolderClick"/>
+            <MenuFlyoutItem Tag="Folder" AutomationProperties.AutomationId="TreeNewFolderItem" Text="{u:LocaleString Key=NewFolder}" Click="OnNewFolderClick"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TreeFavoriteItem" Text="{u:LocaleString Key=Favorites.Add}" Click="OnToggleFavoriteClick"/>
             <MenuFlyoutItem AutomationProperties.AutomationId="TreeLocationItem" Text="{u:LocaleString Key=OpenFileLocation}" Click="OnOpenFileLocationClick"/>

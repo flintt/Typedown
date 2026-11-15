@@ -523,7 +523,23 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             foreach (var entry in flyout.Items)
                 if (entry.Tag is "Folder" or "File")
                     entry.Visibility = (string)entry.Tag == kind ? Visibility.Visible : Visibility.Collapsed;
+            // An edition's entries for this folder (EditionHooks.AddFolderMenuItems), made afresh each time: the menu is
+            // one for every row, and the last folder's entries are taken out first.
+            foreach (var old in editionFolderItems) flyout.Items.Remove(old);
+            editionFolderItems.Clear();
+            if (kind != "Folder" || item.IsNotice) return;
+            var after = flyout.Items.ToList().FindIndex(x => Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(x) == "TreeNewFolderItem");
+            var at = after < 0 ? flyout.Items.Count : after + 1;
+            foreach (var entry in EditionHooks.FolderMenuItems(ViewModel, item.FullPath))
+            {
+                // The entries see the row the menu is on as the menu's own do (GetExplorerItemFromMenuFlyout).
+                entry.DataContext = item;
+                flyout.Items.Insert(at++, entry);
+                editionFolderItems.Add(entry);
+            }
         }
+
+        private readonly List<MenuFlyoutItemBase> editionFolderItems = new();
 
         private void OnItemContextFlyoutOpened(object sender, object e)
         {
