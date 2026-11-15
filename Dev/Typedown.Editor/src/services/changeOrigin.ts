@@ -109,6 +109,21 @@ export function takeEditReport(): EditReport {
     return report;
 }
 
+// What was noted before the last editing command, for a command that turned out to change no text.
+let beforeCommand: { armed: boolean, editKind: EditKind | null } | null = null;
+
+/**
+ * The host's command just received changed no text (a format pressed with the caret alone only waits for the text
+ * typed): what it noted is taken back, so the letters typed next are told as typed - told as "other", the first one
+ * was an undo step of its own, and Ctrl+Z after the typing left "**a**" (the user, 2026-11-15).
+ */
+export function commandChangedNothing() {
+    if (!beforeCommand) return;
+    armed = beforeCommand.armed;
+    editKind = beforeCommand.editKind;
+    beforeCommand = null;
+}
+
 let installed = false;
 
 export function installChangeOriginTracking() {
@@ -121,6 +136,10 @@ export function installChangeOriginTracking() {
     window.addEventListener('pointerdown', e => { if (e.isTrusted) caretMoved = true }, true);
     for (const type of ['paste', 'cut', 'drop']) window.addEventListener(type, e => { if (e.isTrusted) noteEdit('other') }, true);
     // Registered at start-up, before the components' own listeners, so the command counts before it edits.
-    for (const name of editingCommands) transport.addListener(name, () => { noteUserIntent(); noteEdit('other') });
+    for (const name of editingCommands) transport.addListener(name, () => {
+        beforeCommand = { armed, editKind };
+        noteUserIntent();
+        noteEdit('other');
+    });
     for (const name of ['LoadFile', 'SetMarkdown']) transport.addListener(name, resetUserIntent);
 }

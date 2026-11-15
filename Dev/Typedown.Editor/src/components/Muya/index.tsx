@@ -52,6 +52,7 @@ import transport, { beforeHostMessage } from "services/transport";
 import { editLink, followLink, removeLink } from "services/linkActions";
 import { STANDARD_Y, leastToShow, toStandard, toStandardIfOut } from "services/reveal";
 import { SearchSession } from "services/searchSession";
+import { commandChangedNothing } from "services/changeOrigin";
 import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
 import Slugger from 'components/Muya/lib/parser/marked/slugger'
@@ -937,8 +938,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => transport.addListener('Format', type => {
         if (optionsRef.current?.readOnly) return
         // A press with the caret alone changes no text (the format waits for what is typed): the document stays as
-        // it came, its own source kept.
+        // it came, its own source kept, and the letters typed next are told as typed (commandChangedNothing).
         if (editor?.format(type) !== 'pending') markEdited(shownRef)
+        else commandChangedNothing()
     }), [editor]);
 
     useEffect(() => transport.addListener('DeleteSelection', () => {
