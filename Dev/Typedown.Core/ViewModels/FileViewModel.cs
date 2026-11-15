@@ -323,7 +323,7 @@ namespace Typedown.Core.ViewModels
             await HandleExternalFileChange();
         }
 
-        private async Task NewFileFun(bool postMessage = true, bool inNewTab = true)
+        private async Task NewFileFun(bool postMessage = true, bool inNewTab = true, string initialText = null)
         {
             // Keys typed from here on are for the new document (see HoldInput); the document left keeps its latest edits,
             // as on a tab switch.
@@ -331,7 +331,7 @@ namespace Typedown.Core.ViewModels
             try
             {
                 if (postMessage) await EditorViewModel.FlushBeforeTabChangeAsync();
-                await NewFileCore(postMessage, inNewTab);
+                await NewFileCore(postMessage, inNewTab, initialText);
             }
             finally
             {
@@ -339,7 +339,7 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        private async Task NewFileCore(bool postMessage, bool inNewTab)
+        private async Task NewFileCore(bool postMessage, bool inNewTab, string initialText = null)
         {
             // Tabs (upstream #73): a new document opens in its own tab unless the current one is a pristine untitled tab.
             if (inNewTab && TabsViewModel != null && !TabsViewModel.IsActiveTabBlank)
@@ -354,7 +354,8 @@ namespace Typedown.Core.ViewModels
             // The new document (Services.DocumentOperation): the backup question below is a wait.
             var op = DocumentOperation.Of(TabsViewModel);
             string backup = null;
-            if (AppViewModel.GetInstances().Where(x => x != AppViewModel).All(x => !string.IsNullOrEmpty(x.FileViewModel.FilePath)))
+            // A text asked for (a template) is not traded for an untitled backup: that one stays for the next plain New.
+            if (initialText == null && AppViewModel.GetInstances().Where(x => x != AppViewModel).All(x => !string.IsNullOrEmpty(x.FileViewModel.FilePath)))
             {
                 backup = await CheckBackup(FilePath, EditorViewModel.FileHash);
             }
@@ -371,7 +372,8 @@ namespace Typedown.Core.ViewModels
                 }
                 return;
             }
-            ApplyLoadedState(backup ?? Common.DefaultMarkdwn, fromBackup: backup != null);
+            // A text asked for is as an untitled document recovered is: in the editor as its own, not saved, kept by backups.
+            ApplyLoadedState(backup ?? initialText ?? Common.DefaultMarkdwn, fromBackup: backup != null || initialText != null);
             if (postMessage)
             {
                 EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
@@ -602,11 +604,14 @@ namespace Typedown.Core.ViewModels
 
         /// <summary>
         /// A new untitled document in this window (a new tab, or the pristine blank one), as the New command; shown in the
-        /// editor, not under the home page (an automation client's document.create, the home page's own command).
+        /// editor, not under the home page (an automation client's document.create, the home page's own command). With
+        /// <paramref name="text"/> (an edition's template), that is the new document's own text, as a file opened is - not an
+        /// edit made on a blank one: Ctrl+Z does not take it out - but not saved anywhere yet, so closing asks and the backup
+        /// keeps it; line endings as "\n" whatever it came with.
         /// </summary>
-        public async Task NewDocumentAsync()
+        public async Task NewDocumentAsync(string text = null)
         {
-            await NewFileFun();
+            await NewFileFun(initialText: text == null ? null : TextFileFormat.Normalize(text));
             Home?.Hide();
         }
 
