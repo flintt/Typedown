@@ -311,6 +311,7 @@ internal static partial class Program
             return e == null ? "none" : e.TryGetCurrentPattern(TogglePattern.Pattern, out var p) ? ((TogglePattern)p).Current.ToggleState.ToString() : "no toggle";
         }
         var n = 0;
+        var wrong = new List<string>();
         // A document of its own for each way; the caret put into "Some plain words here" by a real click.
         async Task Way(string what, Func<IntPtr, string, Task> steps)
         {
@@ -329,7 +330,8 @@ internal static partial class Program
                 // The page sends its text a moment after the change; read until it is the original or two seconds on.
                 await Eventually(async () => (text = (string)(await Get(c, id))["text"]!) == original, 2000, 200);
                 notes.Add($"{what}: {text.Replace("\n", " | ")}");
-                Check(text == original, $"{what}: the document as it was (it reads {Newtonsoft.Json.JsonConvert.ToString(text)})");
+                // Each way is tried whatever the one before did: all of them are told at the end.
+                if (text != original) wrong.Add($"{what}: the document as it was (it reads {Newtonsoft.Json.JsonConvert.ToString(text)})");
             }
             finally
             {
@@ -375,5 +377,6 @@ internal static partial class Program
             Chord("Shift+F10");
             await MenuPress(window, "ContextFormatEmphasis", "the second Shift+F10 menu");
         });
+        Check(wrong.Count == 0, string.Join("; ", wrong));
     }
 }
