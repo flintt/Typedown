@@ -200,6 +200,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   table gets column widths by its content.
 - `wordcount-mode-check.js` — the word count is the same in the visual editor and in source mode (source mode counted
   every character and split words at spaces only, so a mode switch moved the count with nothing written).
+- `wordcount-plain-switch-check.js` — a long plain text left quickly for a Markdown file: every count reported under a
+  load is of that load's text (the user, 2026-11-15: a .txt's 520,000 characters went into the writing statistics as
+  written into a Markdown file, nothing typed).
 - `export-pdf-check.js` — the exported HTML carries what the PDF is made from: images by absolute path (so
   they survive being opened from a temp file) and KaTeX fonts by real address (so a formula keeps its font).
   A PDF is then produced from that HTML with a document outline, and the outline is checked to have an entry

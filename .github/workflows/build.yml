@@ -156,6 +156,7 @@ jobs:
           node xhtml-footnote-check.js
           node export-anchors-check.js
           node wordcount-mode-check.js
+          node wordcount-plain-switch-check.js
           node tab-keys-check.js
           node arrow-edge-check.js
           node nested-list-enter-check.js
