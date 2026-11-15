@@ -53,14 +53,34 @@ const { firstDifference, openEditor } = require('./harness');
       ['bold inside italics, the caret before both closings', 'Text ***both***\n\nnext\n', ['Text', 12], 'Text ***both***\n\nX\n\nnext\n'],
       ['a link, the caret at the end of its text', 'See [site](https://example.com)\n\nnext\n', ['See', 9], 'See [site](https://example.com)\n\nX\n\nnext\n'],
       ['bold mid-line, the caret before its closing', 'Text **bold** tail\n\nnext\n', ['Text', 11], 'Text **bold**\n\nX tail\n\nnext\n'],
+      // An inline HTML format (underline, sub, sup, mark) the same: the caret before its closing tag, and before any
+      // marks closing around it, splits after all of them. The `</u>~~` of "~~<u>下划线回车</u>~~" went to the next
+      // line as text (a reader's report).
+      ['the report\'s line, the caret before </u>', '~~<u>下划线回车</u>~~\n\nnext\n', ['~~', 10], '~~<u>下划线回车</u>~~\n\nX\n\nnext\n'],
+      ['a paragraph ending in underline', 'Text <u>under</u>\n\nnext\n', null, 'Text <u>under</u>\n\nX\n\nnext\n'],
+      ['underline inside strikethrough (the report)', '~~<u>下划线回车</u>~~\n\nnext\n', null, '~~<u>下划线回车</u>~~\n\nX\n\nnext\n'],
+      ['underline inside bold', 'Text **<u>both</u>**\n\nnext\n', null, 'Text **<u>both</u>**\n\nX\n\nnext\n'],
+      ['bold inside underline', 'Text <u>**both**</u>\n\nnext\n', null, 'Text <u>**both**</u>\n\nX\n\nnext\n'],
+      ['a paragraph ending in subscript', 'H<sub>2</sub>\n\nnext\n', null, 'H<sub>2</sub>\n\nX\n\nnext\n'],
+      ['a paragraph ending in superscript', 'x<sup>2</sup>\n\nnext\n', null, 'x<sup>2</sup>\n\nX\n\nnext\n'],
+      ['a paragraph ending in a <mark>', 'Text <mark>lit</mark>\n\nnext\n', null, 'Text <mark>lit</mark>\n\nX\n\nnext\n'],
+      ['a list item ending in underline', '- item <u>under</u>\n- two\n', null, '- item <u>under</u>\n- X\n- two\n'],
+      ['underline inside strikethrough, the caret before both closings', '~~<u>gone</u>~~ tail\n\nnext\n', ['~~', 9], '~~<u>gone</u>~~\n\nX tail\n\nnext\n'],
+      ['underline mid-line, the caret before its closing', 'Text <u>under</u> tail\n\nnext\n', ['Text', 13], 'Text <u>under</u>\n\nX tail\n\nnext\n'],
+      ['inside the underline\'s text (as bold does)', 'Text <u>under</u>\n\nnext\n', ['Text', 10], 'Text <u>un\n\nXder</u>\n\nnext\n'],
+      // Shift+Enter (a line break in the paragraph) the same.
+      ['Shift+Enter before bold\'s closing', 'Text **bold**\n\nnext\n', ['Text', 11], 'Text **bold**\nX\n\nnext\n', 'Shift+Enter'],
+      ['Shift+Enter before underline\'s closing', 'Text <u>under</u>\n\nnext\n', ['Text', 13], 'Text <u>under</u>\nX\n\nnext\n', 'Shift+Enter'],
       // As before: a split inside the bold's text, and in plain text.
       ['inside the bold\'s text (as before)', 'Text **bold**\n\nnext\n', ['Text', 9], 'Text **bo\n\nXld**\n\nnext\n'],
       ['in plain text (as before)', 'Plain text\n\nnext\n', ['Plain', 5], 'Plain\n\nX text\n\nnext\n'],
     ];
-    for (const [what, md, at, expected] of cases) {
+    for (const [what, md, at, expected, key] of cases) {
       await visual(md);
       if (at) await caretAt(at[0], at[1]); else await clickEnd();
-      await page.keyboard.press('Enter');
+      if (key === 'Shift+Enter') {
+        await page.keyboard.down('Shift'); await page.keyboard.press('Enter'); await page.keyboard.up('Shift');
+      } else await page.keyboard.press('Enter');
       await pause(300);
       await page.keyboard.type('X');
       await pause();

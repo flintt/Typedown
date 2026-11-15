@@ -294,6 +294,7 @@ internal static partial class Program
             await Case("KB01 shortcuts given other keys: Last used tab and Zoom in answer theirs and Alt+0 nothing; indent's picker warns, takes F2 alone, the page indents on it; Restore default gives Tab back", KB01);
             await Case("ED01 in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page", ED01);
             await Case("ED02 Shift+Enter and Alt+Enter in a table cell put a line break in that cell", ED02);
+            await Case("ED03 a real click at the end of the text shown of ~~<u>x</u>~~, **<u>x</u>** and <u>**x**</u>, a real Enter: the line stays whole (its closing tag and marks with it) and the new line is empty, a letter typed goes there; Ctrl+Z gives the one line back", ED03);
             await Case("OL04 measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have it laid out", OL04);
             await Case("OL05 Ctrl+Tab to a document of 3000 headings with the outline shown, letters typed straight after: every one reaches that document", OL05);
             await Case("OL06 a plain text document has no outline: from a .md to a .txt (a # line, a ```md block's heading in it) the outline empties, back to the .md it is its headings again; written into, the pane closed and opened, a .md with none", OL06);
