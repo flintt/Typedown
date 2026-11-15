@@ -351,6 +351,55 @@ internal static partial class Program
     /// shows for a document outside the tree moves the tree to that document's folder. It did nothing: the opened
     /// folder won over the button.
     /// </summary>
+    // A document open, deleted from the folder pane's menu (the user, 2026-11-15: it stayed in the tree): the file gone
+    // to the Recycle Bin and its row out of the tree; a second file deleted the same way while it is not open; the
+    // folder's other files left.
+    private static async Task FN03(List<string> notes)
+    {
+        using var c = await Session("e2e FN03");
+        var folder = FixtureFolder("fn03-" + DateTime.Now.Ticks);
+        Directory.CreateDirectory(folder);
+        var open = Path.Combine(folder, "fn03 open.md");
+        var closed = Path.Combine(folder, "fn03 closed.md");
+        File.WriteAllText(open, "# open\n");
+        File.WriteAllText(closed, "# closed\n");
+        File.WriteAllText(Path.Combine(folder, "fn03 kept.md"), "# kept\n");
+        var a = await Open(c, open);
+        var windowId = await WindowIdOf(c, a);
+        var window = await WindowOf(windowId, c);
+        async Task Delete(string name)
+        {
+            AutomationElement? row = null;
+            if (!await Eventually(() => Task.FromResult((row = TreeRow(window, name)) != null), 6000)) throw new CaseFailed($"'{name}' is not in the tree");
+            await Click(window, row!, Mouse.Right);
+            await Task.Delay(500);
+            await ClickInPopup(window, await MenuEntry(window, "TreeDeleteItem"));
+        }
+        try
+        {
+            await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "files" } });
+            Check((bool)(await c.Call("test.folder.open", new { windowId, path = folder }))["opened"]!, "the folder opens in the tree");
+
+            await Delete("fn03 open.md");
+            Check(await Eventually(() => Task.FromResult(!File.Exists(open)), 6000), "the open document's file is deleted");
+            // The document's own question (the file gone under it), if one is asked: closed.
+            for (var i = 0; i < 3; i++) { try { await PressDialogButton(c, windowId, DialogButton.Close, 800); } catch { break; } }
+            var gone = await Eventually(() => Task.FromResult(TreeRow(window, "fn03 open.md") == null), 6000);
+            notes.Add("rows after the open one's delete: " + string.Join(", ", new[] { "fn03 open.md", "fn03 closed.md", "fn03 kept.md" }.Where(n => TreeRow(window, n) != null)));
+            Check(gone, "the open document's row is out of the tree");
+
+            await Delete("fn03 closed.md");
+            Check(await Eventually(() => Task.FromResult(!File.Exists(closed)), 6000), "a file not open is deleted");
+            Check(await Eventually(() => Task.FromResult(TreeRow(window, "fn03 closed.md") == null), 6000), "and its row is out of the tree");
+            Check(TreeRow(window, "fn03 kept.md") != null && File.Exists(Path.Combine(folder, "fn03 kept.md")), "the folder's other file is left, in the tree and on disk");
+        }
+        finally
+        {
+            for (var i = 0; i < 3; i++) { try { await PressDialogButton(c, windowId, DialogButton.Close, 300); } catch { break; } }
+            try { await c.Call("document.close", new { documentId = a }); } catch { }
+        }
+    }
+
     private static async Task FN02(List<string> notes)
     {
         using var c = await Session("e2e FN02");

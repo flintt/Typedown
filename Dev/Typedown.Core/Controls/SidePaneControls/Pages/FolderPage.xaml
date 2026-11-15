@@ -45,7 +45,7 @@
             <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=Paste}" Click="OnPasteClick"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Rename}" AutomationProperties.AutomationId="TreeRenameItem" Click="OnRenameClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Delete}" Click="OnDeleteClick"/>
+            <MenuFlyoutItem AutomationProperties.AutomationId="TreeDeleteItem" Text="{u:LocaleString Key=Delete}" Click="OnDeleteClick"/>
         </MenuFlyout>
 
         <MenuFlyout x:Key="TreeViewContextFlyout" Opening="OnTreeViewContextFlyoutOpening">
