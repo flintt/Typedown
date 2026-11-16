@@ -405,7 +405,20 @@ namespace Typedown.Core.ViewModels
         // Files asked to be read, counted: a read that ends after a later one began into the same tab is not shown.
         private int openRequests;
 
+        // Files are opened one at a time, in the order asked. Asked at the same moment (several files opened from Explorer,
+        // each handed over by a launch of its own; the automation's document.open), each put a tab of its own in front and
+        // read its file, and by the time a read ended another one's tab was shown: A08's guard below dropped every one but
+        // the last (hp job 586: seven of eight). A tab the reader shows meanwhile still drops the open, as A08 has it.
+        private readonly System.Threading.SemaphoreSlim openQueue = new(1, 1);
+
         private async Task<bool> LoadFile(string path, bool skipSavedCheck = false, bool postMessage = true, bool preview = false)
+        {
+            await openQueue.WaitAsync();
+            try { return await LoadFileNow(path, skipSavedCheck, postMessage, preview); }
+            finally { openQueue.Release(); }
+        }
+
+        private async Task<bool> LoadFileNow(string path, bool skipSavedCheck, bool postMessage, bool preview)
         {
             DocumentTab startedTab = null;
             try
