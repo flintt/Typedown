@@ -294,8 +294,20 @@ internal static partial class Program
                     notes.Add($"before +: the tab shown ({strip[selected].Current.Name}, {selected + 1} of {strip.Count}) reaches {reach:0} px over its neighbour");
                     shownOver = Math.Max(shownOver, reach);
                 }
+                async Task Layout(string when)
+                {
+                    try
+                    {
+                        foreach (var tab in (Newtonsoft.Json.Linq.JArray)(await c.Call("test.tabs.layout", new { windowId }))["tabs"]!)
+                            if ((bool)tab["selected"]! || ((string?)tab["title"] ?? "").StartsWith("td01-2"))
+                                notes.Add($"layout {when}: {tab["title"]} selected={tab["selected"]} x={tab["x"]} w={tab["width"]} m={tab["margin"]} p={tab["padding"]} scale={tab["scale"]}; " + string.Join("; ", ((Newtonsoft.Json.Linq.JArray)tab["parts"]!).Select(x => (string?)x)));
+                    }
+                    catch (Exception ex) { notes.Add($"layout {when}: {ex.Message.Split('\n')[0]}"); }
+                }
+                await Layout("before +");
                 Invoke(addButton);
                 await Task.Delay(1500);
+                await Layout("after +");
                 var all = AllTabs();
                 notes.Add("after +: " + string.Join(" | ", all.Select(t => $"{t.name} {t.r.Left:0}-{t.r.Right:0}")));
                 var overlaps = all.Zip(all.Skip(1), (a, b) => (a, b)).Where(p => p.b.r.Left < p.a.r.Right - shownOver - 2).Select(p => $"{p.a.name} / {p.b.name} {p.a.r.Right - p.b.r.Left:0} px").ToList();
