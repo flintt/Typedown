@@ -352,6 +352,22 @@ internal static partial class Program
                 .Where(t => t.Current.Name.Contains("td03-")).ToList();
             notes.Add("tabs: " + string.Join(", ", tabs.Select(t => t.Current.Name)));
             Check(paths.All(p => tabs.Any(t => t.Current.Name.Contains(Path.GetFileNameWithoutExtension(p)))), "all eight files have their tabs");
+
+            // Close Others: the other eight taken out of the strip one right after another, several within one tick of the
+            // clock (16 ms) - the time of the last change, taken as the clock's, was the same for those, each took itself
+            // for the last, and hp88 started with 8 resets for 10 tabs (1.4.2.32). Counted, they make one reset and one after.
+            var closeBefore = LogLines("tabs: states reset on ").Count;
+            AutomationElement? one = tabs.FirstOrDefault(t => t.Current.Name.Contains("td03-1"));
+            Check(one != null, "td03-1's tab is in the strip");
+            await Click(window, one!, Mouse.Right);
+            await Task.Delay(600);
+            var others = await MenuEntry(window, "TabCloseOthersItem");
+            Check(others != null, "its tab menu offers Close Others");
+            await ClickInPopup(window, others!);
+            await Task.Delay(2500);
+            var afterClose = LogLines("tabs: states reset on ").Skip(closeBefore).ToList();
+            notes.Add($"resets after Close Others: {afterClose.Count} ({string.Join(" | ", afterClose.Select(p => p.Length > 13 ? p.Substring(13) : p))})");
+            Check(afterClose.Count >= 1 && afterClose.Count <= 2, "Close Others makes one reset, and one after the animation");
         }
         finally
         {
