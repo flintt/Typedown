@@ -79,10 +79,18 @@ internal static partial class Program
             Check(second != null, "untitled 2 came back as a tab");
             await c.Call("document.focus", new { documentId = second! });
             await Task.Delay(800);
+            var askedBefore = LogLines("the editor page asked for the document again").Count;
+            var backBefore = LogLines("back on the untitled document the session was closed on").Count;
             c = await CloseAllAndStart(c, windowId, notes, "round 2");
             var (path2, text2) = await ActiveDocument(c);
             notes.Add($"round 2, after the start: shown {(path2 != null ? Path.GetFileName(path2) : "untitled: " + text2?.Split('\n')[0])}; tabs {string.Join(" | ", await Tabs())}");
             Check(path2 == null && (text2 ?? "").Contains("SR03 untitled 2"), $"closed on untitled 2, the start shows it with its text ({path2 ?? text2?.Split('\n')[0]})");
+            // Shown first, not after another: the start showed the first file, and switched to the untitled one once the
+            // page had drawn it - seconds later, a jump the reader saw (hp88, 1.4.2.34, 2026-11-16).
+            var asked = LogLines("the editor page asked for the document again").Skip(askedBefore).FirstOrDefault() ?? "";
+            var back = LogLines("back on the untitled document the session was closed on").Count - backBefore;
+            notes.Add($"round 2, the page's first document: {(asked.Length > 13 ? asked.Substring(13) : asked)}; switched back afterwards: {back}");
+            Check(asked.Contains("(untitled)") && back == 0, "the page's first document is the untitled one closed on, not a file shown before it");
         }
         finally
         {
