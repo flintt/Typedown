@@ -300,9 +300,11 @@ namespace Typedown.Core.Controls
             var shift = new TranslateTransform();
             add.RenderTransform = shift;
             double? autoRoom = null;
-            // Under a pressed button (a tab held to be dragged) the + stays: the tab lifted takes its width out of the list's
-            // tabs, and the + went left by a tab while it was held, back when let go (w10 jobs 594, 597). Placed once the
-            // button is up, as the tabs are then.
+            // Under a pressed button (a tab held to be dragged) the tabs' end is the one before the press: the tab lifted takes
+            // its width out of the list's tabs, and the + went left by a tab while it was held, back when let go (w10 jobs
+            // 594, 597). The column's widening is still made up for - left alone, the + went right by a tab (hp job 600).
+            // Placed again once the button is up, as the tabs are then.
+            double? endBeforePress = null;
             var waiting = false;
             async void PlaceWhenLetGo()
             {
@@ -311,14 +313,20 @@ namespace Typedown.Core.Controls
                 for (var waited = 0; waited < 10000 && PInvoke.GetIsKeyDownNow(Windows.System.VirtualKey.LeftButton); waited += 100)
                     await System.Threading.Tasks.Task.Delay(100);
                 waiting = false;
+                // Let go: the tabs as they are now (a tab moved, closed or the press ended); waited 10 s, they are taken as
+                // they are too.
+                endBeforePress = null;
                 Place();
             }
             void Place()
             {
-                if (PInvoke.GetIsKeyDownNow(Windows.System.VirtualKey.LeftButton)) { PlaceWhenLetGo(); return; }
+                var pressed = PInvoke.GetIsKeyDownNow(Windows.System.VirtualKey.LeftButton);
+                if (pressed) PlaceWhenLetGo();
                 var count = list.Items.Count;
                 if (count == 0 || list.ContainerFromIndex(count - 1) is not FrameworkElement last || VisualTreeHelper.GetParent(last) is not UIElement panel) return;
                 var end = panel.TransformToVisual(list).TransformPoint(default).X + last.ActualOffset.X + last.ActualWidth;
+                if (pressed && endBeforePress is double before) end = before;
+                else if (!pressed) endBeforePress = end;
                 var room = list.ActualWidth - end;
                 if (column.Width.IsAuto) autoRoom = room;
                 var x = !column.Width.IsAuto && autoRoom is double normal && room - normal > 1 ? -(room - normal) : 0;
