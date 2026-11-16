@@ -411,6 +411,25 @@ figure[data-role="DETAILS"]:not(.ag-details-open) > :not(.ag-details-toggle):not
 }
 
 
+@media print {
+  figure[data-role="DETAILS"] > :not(.ag-details-toggle):not(.ag-details-summary):not(.ag-front-icon) {
+    display: revert !important;
+  }
+
+  figure[data-role="DETAILS"] > .ag-details-toggle {
+    display: none;
+  }
+
+  figure[data-role="DETAILS"]::after {
+    content: '';
+    position: absolute;
+    left: .55em;
+    top: 1.9em;
+    bottom: .25em;
+    border-left: 2px solid var(--editorColor10);
+  }
+}
+
 figure[data-role="FOOTNOTE"] {
   position: relative;
   border-radius: 4px;

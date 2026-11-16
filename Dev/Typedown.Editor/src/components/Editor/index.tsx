@@ -492,7 +492,7 @@ const Editor: React.FC = () => {
         transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current, loadId: loadIdRef.current })
     }), []);
 
-    useEffect(() => transport.addListener<IExportArgs>('Export', async ({ type, context, basePath, title, options }) => {
+    useEffect(() => transport.addListener<IExportArgs & { openDetails?: boolean }>('Export', async ({ type, context, basePath, title, options, openDetails }) => {
         flushRef.current?.()
         // The theme and the user's own CSS style the editor, so the exported file should carry them too —
         // otherwise a document looks different the moment it leaves the app.
@@ -530,6 +530,8 @@ const Editor: React.FC = () => {
             else remote.exportCallback({ error, context })
             return
         }
+        // A PDF or a picture (openDetails, from the host): every <details> block open - a page folds nothing.
+        if (openDetails) html = html.replace(/<details(?![^>]*\sopen\b)(?=[\s>])/g, '<details open')
         if (type == 'print') {
             remote.printHTML({ html, context })
         } else {

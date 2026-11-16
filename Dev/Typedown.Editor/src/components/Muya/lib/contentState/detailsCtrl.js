@@ -58,6 +58,29 @@ const detailsCtrl = ContentState => {
     return false
   }
 
+  /**
+   * The <details> blocks `block` is inside of, closed, opened (in the view): what is shown of it and the caret in it are
+   * seen. Its own summary is shown while closed, so a summary opens only the blocks around its own.
+   */
+  ContentState.prototype.openDetailsAround = function (block) {
+    let child = block
+    let b = block && block.parent ? this.getBlock(block.parent) : null
+    while (b) {
+      if (isDetails(b) && !b.expanded && b.children[0] !== child) {
+        this.toggleDetails(b, typeof document !== 'undefined' ? document.getElementById(b.key) : null, true)
+      }
+      child = b
+      b = b.parent ? this.getBlock(b.parent) : null
+    }
+  }
+
+  /** Before a drawing: the caret (a search's match, an undo, a jump) in a closed block opens it. */
+  ContentState.prototype.revealCaret = function () {
+    const key = this.cursor && this.cursor.start && this.cursor.start.key
+    const block = key && this.getBlock(key)
+    if (block) this.openDetailsAround(block)
+  }
+
   /** Enter in a summary: no line break in it - the block opened, the caret at the start of what is in it. */
   ContentState.prototype.leaveDetailsSummary = function (summary) {
     const figure = this.getBlock(summary.parent)

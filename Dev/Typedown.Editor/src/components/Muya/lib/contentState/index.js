@@ -197,6 +197,7 @@ class ContentState {
   // progressive (a whole new document only): { center: the top-level block to draw first, done: once all is drawn } -
   // the document is drawn a part at a time (StateRender.renderProgressive).
   render(isRenderCursor = true, clearCache = false, fresh = false, cursorLater = false, progressive = null) {
+    this.revealCaret()
     const { blocks, searchMatches: { matches, index } } = this
     const activeBlocks = this.getActiveBlocks()
     if (clearCache) {
@@ -261,6 +262,7 @@ class ContentState {
   // (find, an entry of the results list): only the blocks of the match chosen and the caret, before and now, are drawn
   // again, not every block with a mark.
   renderSearch(before, isRenderCursor = true, onDrawn = null, drawNow = false, onlyChosen = false) {
+    this.revealCaret()
     const { blocks, searchMatches: { matches, index } } = this
     matches.forEach((m, i) => {
       m.active = i === index
@@ -333,6 +335,7 @@ class ContentState {
   }
 
   partialRender(isRenderCursor = true) {
+    this.revealCaret()
     const { blocks, searchMatches: { matches, index } } = this
     const activeBlocks = this.getActiveBlocks()
     const [startKey, endKey] = this.renderRange
@@ -376,6 +379,7 @@ class ContentState {
   }
 
   singleRender(block, isRenderCursor = true) {
+    this.revealCaret()
     const { blocks, searchMatches: { matches, index } } = this
     const activeBlocks = this.getActiveBlocks()
     matches.forEach((m, i) => {

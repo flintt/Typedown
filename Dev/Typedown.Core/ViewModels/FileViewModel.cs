@@ -1733,6 +1733,8 @@ namespace Typedown.Core.ViewModels
                 title = Path.GetFileNameWithoutExtension(filePath),
                 context = new { configId = config.Id, filePath },
                 basePath,
+                // A PDF or a picture folds nothing: every <details> block in it open. An HTML file keeps them as written.
+                openDetails = config.Type == Enums.ExportType.PDF || config.Type == Enums.ExportType.Image,
                 options = config.LoadExportConfig()
             });
         }

@@ -886,6 +886,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // the heading landed right, and the load's delayed go - held back by the drawing the jump finished - put the page
         // back at the top half a second later (300k: 88,648 px away, heading-jump-check).
         holdStopRef.current('jumped')
+        // A heading in a closed <details> block: the block opened first (detailsCtrl), or there is nothing to scroll to.
+        try {
+            const contentState = (editor as any)?.contentState
+            const heading = contentState?.getBlock(slug)
+            if (heading) contentState.openDetailsAround(heading)
+        } catch (err) {
+            console.log(err)
+        }
         scrollToElement(`#${slug}`, OUTLINE_TOP)
         // A long document's blocks around the heading only guessed so far (drawn off screen: parser/render
         // predictHeights.js) predicted now, and the page put at the heading again: refined later, they moved it.

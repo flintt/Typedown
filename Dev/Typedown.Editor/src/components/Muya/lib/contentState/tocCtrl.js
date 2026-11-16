@@ -9,7 +9,16 @@ const tocCtrl = ContentState => {
     const start = this.findOutMostBlock(this.getBlock(this.cursor.start.key))
     const end = this.findOutMostBlock(this.getBlock(this.cursor.end.key))
 
-    for (const block of blocks) {
+    // The headings in <details> blocks are the document's too: listed where they are (the jump opens the block).
+    const walk = []
+    const visit = list => {
+      for (const block of list) {
+        walk.push(block)
+        if (block.type === 'figure' && block.functionType === 'details') visit(block.children.slice(1))
+      }
+    }
+    visit(blocks)
+    for (const block of walk) {
       if (/^h\d$/.test(block.type)) {
         const { headingStyle, key, type } = block
         const { text } = block.children[0]

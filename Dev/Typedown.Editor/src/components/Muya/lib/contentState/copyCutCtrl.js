@@ -210,6 +210,24 @@ const copyCutCtrl = ContentState => {
       }
     }
 
+    // A <details> block: as the HTML it stands for, its summary as written, its toggle left out (turndownService's rule
+    // writes it back as the editor writes it).
+    for (const figure of [...wrapper.querySelectorAll('figure[data-role="DETAILS"]')].reverse()) {
+      const details = document.createElement('details')
+      const model = this.getBlock(figure.id)
+      if (model && model.detailsOpen) details.setAttribute('open', '')
+      const summary = figure.querySelector(':scope > .ag-details-summary')
+      if (summary) {
+        const s = document.createElement('summary')
+        s.textContent = summary.textContent
+        details.appendChild(s)
+      }
+      for (const child of [...figure.children]) {
+        if (!child.matches('.ag-details-toggle, .ag-details-summary')) details.appendChild(child)
+      }
+      figure.replaceWith(details)
+    }
+
     const htmlBlock = wrapper.querySelectorAll('figure[data-role=\'HTML\']')
     for (const hb of htmlBlock) {
       const codeContent = hb.querySelector('.ag-code-content')
@@ -252,7 +270,7 @@ const copyCutCtrl = ContentState => {
 
     let htmlData = wrapper.innerHTML
     const textData = this.htmlToMarkdown(htmlData)
-    htmlData = svgImagesAsPng(absoluteImageUrls(marked(textData)))
+    htmlData = svgImagesAsPng(absoluteImageUrls(marked(textData, { details: this.muya.options.detailsBlocks !== false })))
     // What the selection reads as, without Markdown (services/plainText).
     const plainText = selectionToPlainText()
 

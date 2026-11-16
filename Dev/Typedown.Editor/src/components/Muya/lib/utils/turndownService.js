@@ -41,6 +41,25 @@ export const usePluginAddRules = (turndownService, keeps) => {
     }
   })
 
+  // <details> (a page's, GitHub's; or the editor's own, copied): its summary on its own line, the Markdown in it between
+  // blank lines - the form the editor reads as a block (parser/marked/detailsBlock.js) and writes back.
+  turndownService.addRule('detailsSummary', {
+    filter: node => node.nodeName === 'SUMMARY' && node.parentNode && node.parentNode.nodeName === 'DETAILS',
+    replacement () {
+      return ''
+    }
+  })
+  turndownService.addRule('details', {
+    filter: ['details'],
+    replacement (content, node) {
+      const summary = [...node.children].find(c => c.nodeName === 'SUMMARY')
+      const open = node.hasAttribute('open') ? ' open' : ''
+      const head = summary ? `<details${open}>\n<summary>${summary.textContent.trim().replace(/\s+/g, ' ')}</summary>\n` : `<details${open}>\n`
+      const inner = content.replace(/^\n+|\n+$/g, '')
+      return `\n\n${head}\n${inner ? inner + '\n\n' : ''}</details>\n\n`
+    }
+  })
+
   turndownService.addRule('mark', {
     filter: ['mark'],
     replacement (content) {
