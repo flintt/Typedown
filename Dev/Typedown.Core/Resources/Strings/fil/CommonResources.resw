@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>I-save muna ang mga pagbabago</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Natitiklop na block</value>
+  </data>
 </root>

@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>שמור קודם את השינויים</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>בלוק מתקפל</value>
+  </data>
 </root>

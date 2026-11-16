@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>先に変更を保存してください</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>折りたたみブロック</value>
+  </data>
 </root>

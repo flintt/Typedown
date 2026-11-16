@@ -1531,4 +1531,7 @@
   <data name="FitColumnsToContent" xml:space="preserve">
     <value>Fit columns to content</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Details block</value>
+  </data>
 </root>

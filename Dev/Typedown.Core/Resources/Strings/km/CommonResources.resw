@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>សូមរក្សាទុកការផ្លាស់ប្ដូរជាមុនសិន</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>ប្លុកដែលអាចបត់បាន</value>
+  </data>
 </root>

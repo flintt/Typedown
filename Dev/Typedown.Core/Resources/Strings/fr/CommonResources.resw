@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Enregistrez d’abord les modifications</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Bloc repliable</value>
+  </data>
 </root>

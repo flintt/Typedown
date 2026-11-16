@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>ჯერ შეინახეთ ცვლილებები</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>დასაკეცი ბლოკი</value>
+  </data>
 </root>

@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>முதலில் மாற்றங்களைச் சேமிக்கவும்</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>மடிக்கக்கூடிய தொகுதி</value>
+  </data>
 </root>

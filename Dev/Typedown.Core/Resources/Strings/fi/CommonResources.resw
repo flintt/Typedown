@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Tallenna muutokset ensin</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Taitettava lohko</value>
+  </data>
 </root>

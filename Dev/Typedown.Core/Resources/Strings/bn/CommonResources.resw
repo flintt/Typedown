@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>আগে পরিবর্তনগুলি সংরক্ষণ করুন</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>ভাঁজযোগ্য ব্লক</value>
+  </data>
 </root>

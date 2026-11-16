@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Najprej shranite spremembe</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Zložljiv blok</value>
+  </data>
 </root>

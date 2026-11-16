@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Önce değişiklikleri kaydedin</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Katlanabilir blok</value>
+  </data>
 </root>

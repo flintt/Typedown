@@ -1421,4 +1421,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>ቅድም ለውጥታት ዕቀብ</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>ዝዕጾ ብሎክ</value>
+  </data>
 </root>

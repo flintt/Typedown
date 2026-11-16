@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Sla eerst de wijzigingen op</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Inklapbaar blok</value>
+  </data>
 </root>

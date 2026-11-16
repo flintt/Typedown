@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Najprv uložte zmeny</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Zbaliteľný blok</value>
+  </data>
 </root>

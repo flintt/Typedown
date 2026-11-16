@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>บันทึกการเปลี่ยนแปลงก่อน</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>บล็อกพับได้</value>
+  </data>
 </root>

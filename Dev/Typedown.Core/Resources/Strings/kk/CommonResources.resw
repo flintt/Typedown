@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Алдымен өзгерістерді сақтаңыз</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Жиналатын блок</value>
+  </data>
 </root>

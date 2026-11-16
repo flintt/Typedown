@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>먼저 변경 내용을 저장하세요</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>접기 블록</value>
+  </data>
 </root>

@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Londoloza izinguquko kuqala</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Ibhulokhi elisongekayo</value>
+  </data>
 </root>

@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Előbb mentse a módosításokat</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Összecsukható blokk</value>
+  </data>
 </root>

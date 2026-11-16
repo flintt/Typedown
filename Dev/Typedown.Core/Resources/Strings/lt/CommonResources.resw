@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Pirmiausia įrašykite pakeitimus</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Suskleidžiamas blokas</value>
+  </data>
 </root>

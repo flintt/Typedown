@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>ਪਹਿਲਾਂ ਤਬਦੀਲੀਆਂ ਸੰਭਾਲੋ</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>ਸਮੇਟਣਯੋਗ ਬਲਾਕ</value>
+  </data>
 </root>

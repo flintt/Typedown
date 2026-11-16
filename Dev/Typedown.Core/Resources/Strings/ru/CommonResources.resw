@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Сначала сохраните изменения</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Сворачиваемый блок</value>
+  </data>
 </root>

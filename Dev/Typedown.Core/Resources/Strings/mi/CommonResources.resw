@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Tiakina ngā panonitanga i te tuatahi</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Poraka kōpaki</value>
+  </data>
 </root>

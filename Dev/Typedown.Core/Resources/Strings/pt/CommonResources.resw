@@ -1364,4 +1364,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Salve as alterações primeiro</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Bloco recolhível</value>
+  </data>
 </root>

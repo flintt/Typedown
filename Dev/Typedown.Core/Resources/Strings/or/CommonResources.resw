@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>ପ୍ରଥମେ ପରିବର୍ତ୍ତନଗୁଡ଼ିକ ସେଭ୍ କରନ୍ତୁ</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>ଫୋଲ୍ଡ କରିହେବା ବ୍ଲକ</value>
+  </data>
 </root>

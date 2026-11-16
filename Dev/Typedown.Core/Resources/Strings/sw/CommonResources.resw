@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Hifadhi mabadiliko kwanza</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Kizuizi kinachokunjika</value>
+  </data>
 </root>

@@ -1421,4 +1421,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>መጀመሪያ ለውጦቹን ያስቀምጡ</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>የሚታጠፍ ብሎክ</value>
+  </data>
 </root>

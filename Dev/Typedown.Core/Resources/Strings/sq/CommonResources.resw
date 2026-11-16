@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Ruani së pari ndryshimet</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Bllok i palosshëm</value>
+  </data>
 </root>

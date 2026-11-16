@@ -29,6 +29,7 @@ namespace Typedown.Core.Models
             HtmlBlock.IsChecked = affiliation.ContainsKey("html");
             MathBlock.IsChecked = affiliation.ContainsKey("multiplemath");
             QuoteBlock.IsChecked = affiliation.ContainsKey("blockquote");
+            DetailsBlock.IsChecked = affiliation.ContainsKey("details");
             OrderList.IsChecked = affiliation.ContainsKey("ol");
             BulletList.IsChecked = affiliation.ContainsKey("ul") && !MenuState.IsTaskList;
             Paragraph.IsChecked = affiliation.ContainsKey("p");
@@ -110,6 +111,7 @@ namespace Typedown.Core.Models
             HtmlBlock.IsEnable = IsEnable;
             MathBlock.IsEnable = IsEnable;
             QuoteBlock.IsEnable = IsEnable;
+            DetailsBlock.IsEnable = IsEnable;
             OrderList.IsEnable = IsEnable;
             BulletList.IsEnable = IsEnable;
             TaskList.IsEnable = IsEnable;
@@ -138,6 +140,9 @@ namespace Typedown.Core.Models
         public MenuItemState HtmlBlock { get; set; } = new();
         public MenuItemState MathBlock { get; set; } = new();
         public MenuItemState QuoteBlock { get; set; } = new();
+
+        /// <summary>Paragraph &gt; Details block: checked in a &lt;details&gt; block (the page's menu state, services/menuState.js).</summary>
+        public MenuItemState DetailsBlock { get; set; } = new();
         public MenuItemState OrderList { get; set; } = new();
         public MenuItemState BulletList { get; set; } = new();
         public MenuItemState TaskList { get; set; } = new();

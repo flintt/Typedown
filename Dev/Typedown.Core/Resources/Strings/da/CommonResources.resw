@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Gem ændringerne først</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Sammenfoldelig blok</value>
+  </data>
 </root>

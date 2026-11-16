@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Vispirms saglabājiet izmaiņas</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Sakļaujams bloks</value>
+  </data>
 </root>

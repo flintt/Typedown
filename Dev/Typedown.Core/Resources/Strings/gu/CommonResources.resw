@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>પહેલા ફેરફારો સાચવો</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>સંકેલી શકાય તેવો બ્લોક</value>
+  </data>
 </root>

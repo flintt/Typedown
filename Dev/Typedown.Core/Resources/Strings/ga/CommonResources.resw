@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Sábháil na hathruithe ar dtús</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Bloc infhillte</value>
+  </data>
 </root>

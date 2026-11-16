@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Αποθηκεύστε πρώτα τις αλλαγές</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Αναδιπλούμενο μπλοκ</value>
+  </data>
 </root>

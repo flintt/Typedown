@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Deseu primer els canvis</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Bloc plegable</value>
+  </data>
 </root>

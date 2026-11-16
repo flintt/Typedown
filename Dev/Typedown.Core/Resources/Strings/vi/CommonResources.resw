@@ -1422,4 +1422,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>Hãy lưu các thay đổi trước</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>Khối thu gọn</value>
+  </data>
 </root>

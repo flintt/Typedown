@@ -1436,4 +1436,7 @@
   <data name="Encoding.ReopenUnsaved" xml:space="preserve">
     <value>請先儲存變更</value>
   </data>
+  <data name="DetailsBlock" xml:space="preserve">
+    <value>摺疊區塊</value>
+  </data>
 </root>
