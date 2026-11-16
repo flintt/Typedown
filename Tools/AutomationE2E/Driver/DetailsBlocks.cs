@@ -113,6 +113,10 @@ internal static partial class Program
             Check(checkedState == System.Windows.Automation.ToggleState.On, "in the block the menu item is checked");
 
             await c.Call("test.editor.focus", new { windowId });
+            // What the page has selected before Enter, and the text: w10 job 617 ended with "TitleZ" alone - the block and
+            // "Hello" gone, as if a selection from the summary into "Hello" had been typed over.
+            var before = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const s = getSelection(); const where = n => { const e = n && (n.nodeType === 1 ? n : n.parentElement); const b = e && e.closest('.ag-details-summary, .ag-paragraph-content'); return b ? (b.classList.contains('ag-details-summary') ? 'summary' : 'p:' + b.textContent) : (e ? e.tagName : 'none'); }; const c = window.__typedownMuya.contentState.cursor; return { anchor: where(s.anchorNode) + '@' + s.anchorOffset, focus: where(s.focusNode) + '@' + s.focusOffset, collapsed: s.isCollapsed, cursor: c ? c.start.key.slice(0, 6) + ':' + c.start.offset + '-' + c.end.key.slice(0, 6) + ':' + c.end.offset : null, text: window.__typedownMuya.getMarkdown() } })()" }))["result"];
+            notes.Add("before Enter: " + before?.ToString(Newtonsoft.Json.Formatting.None));
             Chord("Enter");
             await Task.Delay(400);
             TypeText("Z");
