@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Typedown.Core.Controls.EditorControls.ContextMenuItems"
     xmlns:controls="using:Typedown.Core.Controls"
+    xmlns:u="using:Typedown.Core.Utilities"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodels="using:Typedown.Core.ViewModels" 
@@ -22,6 +23,9 @@
                 </Button>
                 <Button Style="{StaticResource EllipsisIconButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="del" controls:ToolTip.TextResource="Strikethrough">
                     <FontIcon FontSize="16" Glyph="&#xEDE0;"/>
+                </Button>
+                <Button x:Name="HighlightButton" Style="{StaticResource EllipsisIconButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="mark" controls:ToolTip.TextResource="Highlight" AutomationProperties.Name="{u:LocaleString Key=Highlight}">
+                    <FontIcon FontSize="16" Glyph="&#xE7E6;"/>
                 </Button>
                 <Button Style="{StaticResource EllipsisIconButtonStyle}" Command="{Binding FormatViewModel.SetFormatCommand}" CommandParameter="clear" controls:ToolTip.TextResource="ClearFormat">
                     <FontIcon FontSize="16" Glyph="&#xe75c;"/>
