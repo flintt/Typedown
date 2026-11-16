@@ -60,5 +60,20 @@ namespace Typedown.ReliabilityTests
             Assert.IsFalse(WebViewPagePolicy.CanReceiveMessage(Editor, "https://evil.example/", Editor));
             Assert.IsFalse(WebViewPagePolicy.CanReceiveMessage(Editor, null, Editor));
         }
+
+        // A page loaded with a query of its own (the writing timeline's ?theme=dark): the same page whatever its query, none
+        // other - a page beside it, a longer path, another scheme.
+        [TestMethod]
+        public void APageMatchesWhateverItsQuery()
+        {
+            const string page = "file:///C:/App/Resources/Edition/Timeline/timeline.html";
+            Assert.IsTrue(WebViewPagePolicy.MatchesPage(page + "?theme=dark", page));
+            Assert.IsTrue(WebViewPagePolicy.MatchesPage(page + "?theme=light#x", page + "?theme=dark"));
+            Assert.IsFalse(WebViewPagePolicy.MatchesPage("file:///C:/App/Resources/Edition/Timeline/other.html?theme=dark", page));
+            Assert.IsFalse(WebViewPagePolicy.MatchesPage(page + ".evil/x.html", page));
+            Assert.IsFalse(WebViewPagePolicy.MatchesPage("https://example.com/?theme=dark", page));
+            Assert.IsTrue(WebViewPagePolicy.CanPageReceiveMessage(page + "?theme=dark", page + "?theme=dark", page));
+            Assert.IsFalse(WebViewPagePolicy.CanPageReceiveMessage(page, "https://example.com/", page));
+        }
     }
 }

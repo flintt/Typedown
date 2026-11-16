@@ -22,7 +22,9 @@ namespace Typedown.Services
                 {
                     var coreWebView2 = controller.CoreWebView2;
                     var loadedTaskSource = new TaskCompletionSource<bool>();
-                    coreWebView2.NavigationCompleted += (s, e) => loadedTaskSource.SetResult(true);
+                    // A navigation refused below completes too: set once.
+                    coreWebView2.NavigationCompleted += (s, e) => loadedTaskSource.TrySetResult(true);
+                    KeepOn(coreWebView2, tmpFile);
                     File.WriteAllText(tmpFile, html);
                     coreWebView2.Navigate(tmpFile);
                     await loadedTaskSource.Task;
@@ -90,6 +92,7 @@ namespace Typedown.Services
                     var coreWebView2 = controller.CoreWebView2;
                     var loaded = new TaskCompletionSource<bool>();
                     coreWebView2.NavigationCompleted += (s, e) => loaded.TrySetResult(true);
+                    KeepOn(coreWebView2, tmpFile);
                     File.WriteAllText(tmpFile, html);
                     coreWebView2.Navigate(tmpFile);
                     await loaded.Task;
@@ -148,6 +151,15 @@ namespace Typedown.Services
             {
                 File.Delete(tmpFile);
             }
+        }
+
+        // The exported HTML printed here is the document's: a script or a meta refresh in it does not take the page
+        // anywhere else, nor open a window (the same page policy as the editor's, PR #2).
+        private static void KeepOn(Microsoft.Web.WebView2.Core.CoreWebView2 web, string file)
+        {
+            var address = new Uri(file).AbsoluteUri;
+            web.NavigationStarting += (_, e) => e.Cancel = !Core.Utilities.WebViewPagePolicy.Matches(e.Uri, address);
+            web.NewWindowRequested += (_, e) => e.Handled = true;
         }
     }
 }

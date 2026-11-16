@@ -22,5 +22,22 @@ namespace Typedown.Core.Utilities
 
         public static bool CanReceiveMessage(string source, string currentAddress, string expectedAddress) =>
             Matches(source, expectedAddress) && Matches(currentAddress, expectedAddress);
+
+        /// <summary>
+        /// The same page whatever its query: a page loaded with its settings in the query (?theme=dark) is still that
+        /// page, and none other is.
+        /// </summary>
+        public static bool MatchesPage(string address, string expectedAddress) =>
+            Matches(WithoutQuery(address), WithoutQuery(expectedAddress));
+
+        /// <summary><see cref="CanReceiveMessage"/> for a page loaded with a query of its own.</summary>
+        public static bool CanPageReceiveMessage(string source, string currentAddress, string expectedAddress) =>
+            MatchesPage(source, expectedAddress) && MatchesPage(currentAddress, expectedAddress);
+
+        private static string WithoutQuery(string address)
+        {
+            if (!Uri.TryCreate(address, UriKind.Absolute, out var uri)) return address;
+            return new UriBuilder(uri) { Query = string.Empty, Fragment = string.Empty }.Uri.AbsoluteUri;
+        }
     }
 }
