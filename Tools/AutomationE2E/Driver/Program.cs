@@ -160,6 +160,7 @@ internal static partial class Program
             await Case("MB01 a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu", MB01);
             await Case("WV01 the editor comes back after its web view's browser process ends: the document on the page again, taking edits", WV01);
             await Case("WS01 local images work with browser isolation and cannot be fetched as text or executed", WS01);
+            await Case("WS02 what the page's isolation changes: local audio, video, a local page in a frame, a picture over 32 MB, local files in the person's CSS (noted, not checked)", WS02);
             await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
             await Case("SF03 a window opening under the light theme shows no dark frame on its way: sampled from the screen for two seconds, none over a quarter dark", SF03);
             await Case("SF04 a cold start restoring three tabs under the light Apricot theme shows no dark frame, Windows' apps dark and light: sampled from the process's start for five seconds", SF04);
