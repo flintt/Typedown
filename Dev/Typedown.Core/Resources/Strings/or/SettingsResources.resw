@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>ପ୍ରସ୍ଥ ସ୍ଥିର କରିବାକୁ ଶୀର୍ଷକ ଧାଡ଼ିରେ ସ୍ତମ୍ଭର ଧାର ଟାଣନ୍ତୁ। ପ୍ରସ୍ଥ ଫାଇଲରେ ଶୀର୍ଷକ ତଳର ଡ୍ୟାସ୍ ଭାବେ ରହେ (ଅନ୍ୟ ସମ୍ପାଦକ ସାରଣୀକୁ ସାଧାରଣ ଭାବେ ଦେଖାନ୍ତି) ଓ ରପ୍ତାନିକୁ ଯାଏ।</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>ଫୋଲ୍ଡ କରିହେବା &lt;details&gt; ବ୍ଲକ</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; ବ୍ଲକ ଏହାର ସାରାଂଶ ଓ ଭିତରର Markdown ସହ ଖୋଲି ଓ ବନ୍ଦ କରିହେବା ଏକ ବ୍ଲକ ଭାବେ ଦେଖାଯାଏ; ଫାଇଲର ଲେଖା ବଦଳେ ନାହିଁ।</value>
+  </data>
 </root>

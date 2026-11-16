@@ -1102,4 +1102,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>اسحب حافة العمود في صف العنوان لتعيين عرضه. يُحفظ العرض في الملف بطول الشرطات تحت العنوان (تعرض المحررات الأخرى الجدول كالمعتاد) ويدخل في التصدير.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>كتل &lt;details&gt; قابلة للطي</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>تُعرض كتلة &lt;details&gt; مع ملخصها ونص Markdown الذي بداخلها ككتلة واحدة تُفتح وتُغلق؛ ويبقى نص الملف كما هو.</value>
+  </data>
 </root>

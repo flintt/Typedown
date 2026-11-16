@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Arrastatu zutabe baten ertza goiburuko errenkadan zabalera ezartzeko. Zabalera fitxategian goiburuaren azpiko marratxo gisa gordetzen da (beste editoreek taula ohi bezala erakusten dute) eta esportazioetara pasatzen da.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>&lt;details&gt; bloke tolesgarriak</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; blokea, bere laburpena eta barruko Markdowna ireki eta itxi daitekeen bloke bakar gisa erakusten dira; fitxategiak bere testua gordetzen du.</value>
+  </data>
 </root>

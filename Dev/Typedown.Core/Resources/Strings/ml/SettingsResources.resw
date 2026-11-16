@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>വീതി നിശ്ചയിക്കാൻ തലക്കെട്ട് വരിയിൽ കോളത്തിന്റെ അറ്റം വലിക്കുക. വീതി ഫയലിൽ തലക്കെട്ടിന് താഴെയുള്ള ഡാഷുകളായി സൂക്ഷിക്കും (മറ്റ് എഡിറ്ററുകൾ പട്ടിക സാധാരണ പോലെ കാണിക്കും) കൂടാതെ എക്സ്പോർട്ടിലേക്ക് പോകും.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>മടക്കാവുന്ന &lt;details&gt; ബ്ലോക്കുകൾ</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; ബ്ലോക്ക് അതിന്റെ സംഗ്രഹവും ഉള്ളിലെ Markdown-ഉം ചേർത്ത് തുറക്കാനും അടയ്ക്കാനും കഴിയുന്ന ഒറ്റ ബ്ലോക്കായി കാണിക്കുന്നു; ഫയലിലെ വാചകം മാറുന്നില്ല.</value>
+  </data>
 </root>

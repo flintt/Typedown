@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Šírku stĺpca nastavíte potiahnutím jeho okraja v riadku hlavičky. Šírka sa v súbore uloží ako pomlčky pod hlavičkou (iné editory zobrazia tabuľku ako obvykle) a prenesie sa do exportov.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Zbaliteľné bloky &lt;details&gt;</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Blok &lt;details&gt; so súhrnom a Markdownom vnútri sa zobrazí ako jeden blok, ktorý sa dá rozbaliť a zbaliť; text súboru zostáva bez zmeny.</value>
+  </data>
 </root>

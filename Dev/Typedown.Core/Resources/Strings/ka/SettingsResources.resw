@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>სიგანის დასაყენებლად სათაურის მწკრივში სვეტის კიდე გადაათრიეთ. სიგანე ფაილში სათაურის ქვეშ ტირეების სახით ინახება (სხვა რედაქტორები ცხრილს ჩვეულებრივ აჩვენებენ) და ექსპორტში გადადის.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>დასაკეცი &lt;details&gt; ბლოკები</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; ბლოკი თავისი შეჯამებითა და შიგნით არსებული Markdown-ით ნაჩვენებია ერთ ბლოკად, რომელიც იხსნება და იკეცება; ფაილის ტექსტი არ იცვლება.</value>
+  </data>
 </root>

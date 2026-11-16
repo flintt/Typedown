@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>ስፋቱን ለማዘጋጀት በርዕስ ረድፍ ውስጥ የዓምዱን ጠርዝ ይጎትቱ። ስፋቱ በፋይሉ ውስጥ ከርዕሱ በታች ባሉ ሰረዞች ይቀመጣል (ሌሎች አርታዒዎች ሰንጠረዡን እንደተለመደው ያሳያሉ) እና ወደ መላኪያዎች ይገባል።</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>የሚታጠፉ &lt;details&gt; ብሎኮች</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; ብሎክ ከማጠቃለያው እና ከውስጡ ካለው Markdown ጋር የሚከፈትና የሚዘጋ አንድ ብሎክ ሆኖ ይታያል፤ የፋይሉ ጽሑፍ አይለወጥም።</value>
+  </data>
 </root>

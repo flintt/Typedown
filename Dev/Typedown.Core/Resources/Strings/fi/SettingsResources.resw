@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Vedä sarakkeen reunaa otsikkorivillä asettaaksesi leveyden. Leveys tallentuu tiedostoon otsikon alla olevien viivojen pituutena (muut editorit näyttävät taulukon tavalliseen tapaan) ja siirtyy vientiin.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Taitettavat &lt;details&gt;-lohkot</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt;-lohko, sen yhteenveto ja sen sisällä oleva Markdown näytetään yhtenä avattavana ja suljettavana lohkona; tiedoston teksti säilyy.</value>
+  </data>
 </root>

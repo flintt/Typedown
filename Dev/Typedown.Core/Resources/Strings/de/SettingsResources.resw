@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Ziehen Sie den Rand einer Spalte in der Kopfzeile, um ihre Breite festzulegen. Die Breite wird in der Datei als Striche unter der Kopfzeile gespeichert (andere Editoren zeigen die Tabelle wie gewohnt) und in Exporte übernommen.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Aufklappbare &lt;details&gt;-Blöcke</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Ein &lt;details&gt;-Block wird mit Zusammenfassung und dem Markdown darin als ein Block angezeigt, der sich auf- und zuklappen lässt; die Datei behält ihren Text.</value>
+  </data>
 </root>

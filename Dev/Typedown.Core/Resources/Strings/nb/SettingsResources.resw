@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Dra kanten av en kolonne i overskriftsraden for å angi bredden. Bredden lagres i filen som strekene under overskriften (andre redigerere viser tabellen som vanlig) og blir med ved eksport.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Sammenleggbare &lt;details&gt;-blokker</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>En &lt;details&gt;-blokk, sammendraget og Markdown i den vises som én blokk som kan åpnes og lukkes; filen beholder teksten sin.</value>
+  </data>
 </root>

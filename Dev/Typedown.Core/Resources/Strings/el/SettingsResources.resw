@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Σύρετε το άκρο μιας στήλης στη γραμμή κεφαλίδας για να ορίσετε το πλάτος της. Το πλάτος αποθηκεύεται στο αρχείο ως οι παύλες κάτω από την κεφαλίδα (άλλοι επεξεργαστές δείχνουν τον πίνακα κανονικά) και περνά στις εξαγωγές.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Αναδιπλούμενα μπλοκ &lt;details&gt;</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Ένα μπλοκ &lt;details&gt;, η σύνοψή του και το Markdown μέσα του εμφανίζονται ως ένα μπλοκ που ανοίγει και κλείνει· το κείμενο του αρχείου μένει ως έχει.</value>
+  </data>
 </root>

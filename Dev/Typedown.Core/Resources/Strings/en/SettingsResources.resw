@@ -1165,4 +1165,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Drag a column's edge in the header row to set its width. The width is kept in the file as the dashes under the header (other editors show the table as usual) and goes into exports.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Foldable &lt;details&gt; blocks</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>A &lt;details&gt; block, its summary and the Markdown in it are shown as one block that opens and closes; the file keeps its text as written.</value>
+  </data>
 </root>

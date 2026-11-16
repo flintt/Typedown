@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Vilkite stulpelio kraštą antraštės eilutėje, kad nustatytumėte plotį. Plotis faile saugomas kaip brūkšneliai po antrašte (kiti redaktoriai lentelę rodo kaip įprasta) ir patenka į eksportą.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Suskleidžiami &lt;details&gt; blokai</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; blokas su santrauka ir jame esančiu Markdown rodomas kaip vienas atveriamas ir suskleidžiamas blokas; failo tekstas nesikeičia.</value>
+  </data>
 </root>

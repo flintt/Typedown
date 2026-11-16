@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>برای تعیین عرض، لبهٔ ستون را در ردیف سرخط بکشید. عرض در فایل به حیث خط‌تیره‌های زیر سرخط نگهداری می‌شود (ویرایشگرهای دیگر جدول را مانند همیشه نشان می‌دهند) و به صادرات می‌رود.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>بلاک‌های قات‌شونده &lt;details&gt;</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>بلاک &lt;details&gt; همراه خلاصه و Markdown درون آن به‌شکل یک بلاک باز و بسته‌شونده نمایش داده می‌شود؛ متن فایل تغییر نمی‌کند.</value>
+  </data>
 </root>

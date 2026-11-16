@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>వెడల్పు నిర్ణయించడానికి శీర్షిక వరుసలో నిలువు వరుస అంచును లాగండి. వెడల్పు ఫైల్‌లో శీర్షిక కింది డాష్‌లుగా ఉంటుంది (ఇతర ఎడిటర్లు పట్టికను మామూలుగా చూపుతాయి) మరియు ఎగుమతిలోకి వెళ్తుంది.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>మడవగల &lt;details&gt; బ్లాక్‌లు</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; బ్లాక్ దాని సారాంశం మరియు లోపలి Markdown తో తెరిచి మూసివేయగల ఒకే బ్లాక్‌గా చూపబడుతుంది; ఫైల్ వచనం మారదు.</value>
+  </data>
 </root>

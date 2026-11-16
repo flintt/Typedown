@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Kéo mép một cột ở hàng tiêu đề để đặt độ rộng. Độ rộng được lưu trong tệp bằng các dấu gạch dưới tiêu đề (trình soạn thảo khác vẫn hiện bảng như thường) và đi vào bản xuất.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Khối &lt;details&gt; thu gọn được</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Khối &lt;details&gt; cùng phần tóm tắt và Markdown bên trong được hiển thị thành một khối có thể mở và thu gọn; văn bản trong tệp giữ nguyên.</value>
+  </data>
 </root>

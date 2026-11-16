@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>ລາກຂອບຖັນໃນແຖວຫົວຕາຕະລາງເພື່ອຕັ້ງຄວາມກວ້າງ. ຄວາມກວ້າງເກັບໃນໄຟລ໌ເປັນຂີດໃຕ້ຫົວ (ໂປຣແກຣມອື່ນສະແດງຕາຕະລາງຕາມປົກກະຕິ) ແລະ ໄປນຳການສົ່ງອອກ.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>ບລັອກ &lt;details&gt; ທີ່ພັບໄດ້</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>ບລັອກ &lt;details&gt; ພ້ອມສະຫຼຸບ ແລະ Markdown ພາຍໃນ ຖືກສະແດງເປັນບລັອກດຽວທີ່ເປີດ ແລະ ປິດໄດ້; ຂໍ້ຄວາມໃນໄຟລ໌ຍັງຄືເດີມ.</value>
+  </data>
 </root>

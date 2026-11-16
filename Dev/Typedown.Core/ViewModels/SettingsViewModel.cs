@@ -151,6 +151,12 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public bool BracketMath { get => GetSettingValue(false); set => SetSettingValue(value); }
 
+        /// <summary>
+        /// A &lt;details&gt; block with its &lt;summary&gt; and the Markdown in it shown and edited as one block, opened and closed
+        /// in place (Typedown issue #1). Off: as CommonMark has it, an HTML block, the Markdown after it on its own.
+        /// </summary>
+        public bool DetailsBlocks { get => GetSettingValue(true); set => SetSettingValue(value); }
+
         /// <summary>The notice that the first visual edit may rewrite part of a document (off: never shown, for every document).</summary>
         public bool WarnFirstEditRewrite { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>
@@ -439,6 +445,7 @@ namespace Typedown.Core.ViewModels
             "ShowBlankLines",
             "JoinSoftBreaks",
             "BracketMath",
+            "DetailsBlocks",
             "CodeBlockLineNumbers",
             "ScrollPastEnd",
             "SelectAllInSteps",

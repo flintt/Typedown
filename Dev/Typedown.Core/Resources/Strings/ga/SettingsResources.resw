@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Tarraing imeall colúin sa ró ceannteidil chun a leithead a shocrú. Coinnítear an leithead sa chomhad mar na daiseanna faoin gceannteideal (taispeánann eagarthóirí eile an tábla mar is gnáth) agus téann sé san easpórtáil.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Bloic &lt;details&gt; infhillte</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Taispeántar bloc &lt;details&gt;, a achoimre agus an Markdown ann mar bhloc amháin a osclaítear agus a dhúntar; coinníonn an comhad a théacs.</value>
+  </data>
 </root>

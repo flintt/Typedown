@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>برای تعیین عرض، لبهٔ ستون را در ردیف سرتیتر بکشید. عرض در فایل به‌صورت خط‌تیره‌های زیر سرتیتر نگه داشته می‌شود (ویرایشگرهای دیگر جدول را مثل همیشه نشان می‌دهند) و به خروجی‌ها می‌رود.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>بلوک‌های تاشونده &lt;details&gt;</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>بلوک &lt;details&gt; همراه خلاصه و Markdown درون آن به‌صورت یک بلوک باز و بسته‌شونده نمایش داده می‌شود؛ متن پرونده تغییر نمی‌کند.</value>
+  </data>
 </root>

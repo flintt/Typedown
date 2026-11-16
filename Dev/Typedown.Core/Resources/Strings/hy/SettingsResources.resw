@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Լայնությունը սահմանելու համար քաշեք սյունակի եզրը վերնագրի տողում։ Լայնությունը ֆայլում պահվում է վերնագրի տակի գծիկների տեսքով (այլ խմբագրիչները աղյուսակը ցույց են տալիս սովորականի պես) և անցնում է արտահանման մեջ։</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Ծալվող &lt;details&gt; բլոկներ</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; բլոկը իր ամփոփումով և ներսի Markdown-ով ցուցադրվում է որպես մեկ բլոկ, որը բացվում և փակվում է. ֆայլի տեքստը չի փոխվում։</value>
+  </data>
 </root>

@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>चौडाइ तोक्न शीर्षक पङ्क्तिमा स्तम्भको किनारा तान्नुहोस्। चौडाइ फाइलमा शीर्षकमुनिका ड्यासका रूपमा रहन्छ (अन्य सम्पादकले तालिका सामान्य रूपमा देखाउँछन्) र निर्यातमा जान्छ।</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>पट्याउन मिल्ने &lt;details&gt; ब्लक</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; ब्लक यसको सारांश र भित्रको Markdown सहित खोल्न र बन्द गर्न मिल्ने एउटै ब्लकका रूपमा देखाइन्छ; फाइलको पाठ उस्तै रहन्छ।</value>
+  </data>
 </root>

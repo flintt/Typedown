@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Velciet kolonnas malu galvenes rindā, lai iestatītu platumu. Platums failā saglabājas kā domuzīmes zem galvenes (citi redaktori tabulu rāda kā parasti) un nonāk eksportā.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Sakļaujami &lt;details&gt; bloki</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; bloks ar tā kopsavilkumu un tajā esošo Markdown tiek rādīts kā viens bloks, ko var atvērt un aizvērt; faila teksts paliek nemainīgs.</value>
+  </data>
 </root>

@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Trascina il bordo di una colonna nella riga di intestazione per impostarne la larghezza. La larghezza resta nel file come trattini sotto l'intestazione (gli altri editor mostrano la tabella come sempre) e passa nelle esportazioni.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Blocchi &lt;details&gt; comprimibili</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Un blocco &lt;details&gt;, il suo riepilogo e il Markdown al suo interno sono mostrati come un unico blocco che si apre e si chiude; il file mantiene il suo testo.</value>
+  </data>
 </root>

@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Плъзнете ръба на колона в заглавния ред, за да зададете ширината. Ширината се пази във файла като тирета под заглавието (другите редактори показват таблицата както обикновено) и влиза в експорта.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Сгъваеми блокове &lt;details&gt;</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Блок &lt;details&gt; с обобщението и Markdown в него се показва като един блок, който се отваря и затваря; текстът на файла остава същият.</value>
+  </data>
 </root>

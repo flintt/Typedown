@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Buruta ukingo wa safu wima kwenye safu ya kichwa ili kuweka upana wake. Upana huhifadhiwa kwenye faili kama vistari chini ya kichwa (vihariri vingine huonyesha jedwali kama kawaida) na huingia kwenye uhamishaji.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Vizuizi vya &lt;details&gt; vinavyokunjika</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Kizuizi cha &lt;details&gt;, muhtasari wake na Markdown iliyomo huonyeshwa kama kizuizi kimoja kinachofunguka na kufungika; maandishi ya faili hayabadiliki.</value>
+  </data>
 </root>

@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Перетащите границу столбца в строке заголовка, чтобы задать ширину. Ширина хранится в файле длиной дефисов под заголовком (другие редакторы показывают таблицу как обычно) и попадает в экспорт.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Сворачиваемые блоки &lt;details&gt;</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Блок &lt;details&gt; с заголовком и Markdown внутри показывается как один блок, который раскрывается и сворачивается; текст файла не меняется.</value>
+  </data>
 </root>

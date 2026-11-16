@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Hudula umphetho wekholomu emgqeni wesihloko ukuze usethe ububanzi bayo. Ububanzi bugcinwa efayeleni njengamadeshi angaphansi kwesihloko (abanye abahleli babonisa ithebula njengokujwayelekile) futhi bungena ekuthumeleni.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Amabhulokhi e-&lt;details&gt; agoqekayo</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Ibhulokhi le-&lt;details&gt;, isifinyezo salo ne-Markdown ekulo kuboniswa njengebhulokhi elilodwa elivuleka livaleke; umbhalo wefayela uhlala unjalo.</value>
+  </data>
 </root>

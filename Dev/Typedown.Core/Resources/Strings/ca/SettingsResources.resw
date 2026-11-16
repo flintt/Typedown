@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Arrossegueu la vora d'una columna a la fila de capçalera per fixar-ne l'amplada. L'amplada es desa al fitxer com els guions sota la capçalera (altres editors mostren la taula com sempre) i passa a les exportacions.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Blocs &lt;details&gt; plegables</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Un bloc &lt;details&gt;, el seu resum i el Markdown que conté es mostren com un sol bloc que s’obre i es tanca; el fitxer conserva el seu text.</value>
+  </data>
 </root>

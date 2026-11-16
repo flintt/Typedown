@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Prevucite ivicu kolone u redu zaglavlja da biste podesili širinu. Širina se u datoteci čuva kao crtice ispod zaglavlja (drugi uređivači prikazuju tabelu kao i obično) i prenosi se u izvoz.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Sklopivi blokovi &lt;details&gt;</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Blok &lt;details&gt; sa sažetkom i Markdownom unutar njega prikazuje se kao jedan blok koji se otvara i zatvara; tekst datoteke ostaje nepromenjen.</value>
+  </data>
 </root>

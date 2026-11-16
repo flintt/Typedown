@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Dra kanten på en kolumn i rubrikraden för att ange bredden. Bredden sparas i filen som strecken under rubriken (andra redigerare visar tabellen som vanligt) och följer med vid export.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Hopfällbara &lt;details&gt;-block</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Ett &lt;details&gt;-block, dess sammanfattning och Markdown i det visas som ett block som kan öppnas och stängas; filen behåller sin text.</value>
+  </data>
 </root>

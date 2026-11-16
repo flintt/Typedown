@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Tōia te tapa o tētahi tīwae i te rārangi upoko hei tautuhi i te whānui. Ka puritia te whānui ki te kōnae hei tohuhono i raro i te upoko (ka whakaatu ētahi atu ētita i te ripanga pērā i te tikanga) ā, ka uru ki ngā kaweake.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Ngā poraka &lt;details&gt; ka taea te kōpaki</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Ka whakaaturia te poraka &lt;details&gt;, tōna whakarāpopototanga me te Markdown kei roto hei poraka kotahi ka tuwhera, ka kati; ka noho tonu te kuputuhi o te kōnae.</value>
+  </data>
 </root>

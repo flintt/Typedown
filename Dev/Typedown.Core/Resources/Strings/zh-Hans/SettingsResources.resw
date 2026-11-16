@@ -1133,4 +1133,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>拖动表头里列的边线设置宽度。宽度以表头下一行短横线的长短保存在文件里（其他编辑器照常显示表格），导出时也会带上。</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>&lt;details&gt; 折叠块</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; 连同标题和里面的 Markdown 显示为一个可以展开、收起的块；文件里的写法不变。</value>
+  </data>
 </root>

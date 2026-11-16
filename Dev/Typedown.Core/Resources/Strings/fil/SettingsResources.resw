@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>I-drag ang gilid ng column sa header row para itakda ang lapad. Naiimbak ang lapad sa file bilang mga gitling sa ilalim ng header (karaniwang ipinapakita ng ibang editor ang table) at kasama sa export.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Mga natitiklop na &lt;details&gt; block</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Ang isang &lt;details&gt; block, ang buod nito at ang Markdown sa loob ay ipinapakita bilang isang block na nabubuksan at naisasara; nananatili ang teksto ng file.</value>
+  </data>
 </root>

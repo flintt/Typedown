@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>પહોળાઈ નક્કી કરવા શીર્ષક પંક્તિમાં કૉલમની કિનારી ખેંચો. પહોળાઈ ફાઇલમાં શીર્ષક નીચેના ડૅશ તરીકે રહે છે (અન્ય સંપાદકો કોષ્ટક સામાન્ય રીતે બતાવે છે) અને નિકાસમાં જાય છે.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>સંકેલી શકાય તેવા &lt;details&gt; બ્લોક</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; બ્લોક તેના સારાંશ અને અંદરના Markdown સાથે ખોલી અને બંધ કરી શકાય તેવા એક બ્લોક તરીકે દેખાય છે; ફાઇલનું લખાણ બદલાતું નથી.</value>
+  </data>
 </root>

@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Arrastra o bordo dunha columna na fila de cabeceira para fixar a súa largura. A largura gárdase no ficheiro como os guións baixo a cabeceira (outros editores amosan a táboa como sempre) e pasa ás exportacións.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Bloques &lt;details&gt; pregables</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Un bloque &lt;details&gt;, o seu resumo e o Markdown que contén amósanse como un só bloque que se abre e se pecha; o ficheiro conserva o seu texto.</value>
+  </data>
 </root>

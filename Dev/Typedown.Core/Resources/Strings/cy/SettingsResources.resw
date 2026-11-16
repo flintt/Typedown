@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Llusgwch ymyl colofn yn y rhes pennawd i osod ei lled. Mae'r lled yn cael ei gadw yn y ffeil fel y llinellau toriad o dan y pennawd (mae golygyddion eraill yn dangos y tabl fel arfer) ac yn mynd i'r allforion.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Blociau &lt;details&gt; plygadwy</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Mae bloc &lt;details&gt;, ei grynodeb a’r Markdown ynddo’n cael eu dangos fel un bloc sy’n agor ac yn cau; mae’r ffeil yn cadw ei thestun.</value>
+  </data>
 </root>

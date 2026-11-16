@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>ਚੌੜਾਈ ਤੈਅ ਕਰਨ ਲਈ ਸਿਰਲੇਖ ਕਤਾਰ ਵਿੱਚ ਕਾਲਮ ਦਾ ਕਿਨਾਰਾ ਘਸੀਟੋ। ਚੌੜਾਈ ਫ਼ਾਈਲ ਵਿੱਚ ਸਿਰਲੇਖ ਹੇਠਲੇ ਡੈਸ਼ਾਂ ਵਜੋਂ ਰਹਿੰਦੀ ਹੈ (ਹੋਰ ਸੰਪਾਦਕ ਸਾਰਣੀ ਆਮ ਵਾਂਗ ਦਿਖਾਉਂਦੇ ਹਨ) ਅਤੇ ਨਿਰਯਾਤ ਵਿੱਚ ਜਾਂਦੀ ਹੈ।</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>ਸਮੇਟਣਯੋਗ &lt;details&gt; ਬਲਾਕ</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; ਬਲਾਕ ਆਪਣੇ ਸਾਰ ਅਤੇ ਅੰਦਰਲੇ Markdown ਸਮੇਤ ਖੁੱਲ੍ਹਣ ਅਤੇ ਬੰਦ ਹੋਣ ਵਾਲੇ ਇੱਕ ਬਲਾਕ ਵਜੋਂ ਦਿਖਾਇਆ ਜਾਂਦਾ ਹੈ; ਫ਼ਾਈਲ ਦਾ ਲਿਖਤ ਨਹੀਂ ਬਦਲਦਾ।</value>
+  </data>
 </root>

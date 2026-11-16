@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>見出し行で列の境界をドラッグして幅を設定します。幅は見出しの下の行のハイフンの長さとしてファイルに保存され（他のエディターでは通常どおり表示）、エクスポートにも反映されます。</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>折りたたみ &lt;details&gt; ブロック</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; を要約と中の Markdown ごと、開閉できる 1 つのブロックとして表示します。ファイルの書き方は変わりません。</value>
+  </data>
 </root>

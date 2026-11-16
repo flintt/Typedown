@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>גרור את קצה העמודה בשורת הכותרת כדי לקבוע את רוחבה. הרוחב נשמר בקובץ כמקפים שמתחת לכותרת (עורכים אחרים מציגים את הטבלה כרגיל) ועובר לייצוא.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>בלוקי &lt;details&gt; מתקפלים</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>בלוק &lt;details&gt; עם התקציר וה-Markdown שבתוכו מוצג כבלוק אחד שנפתח ונסגר; הטקסט בקובץ נשאר כפי שנכתב.</value>
+  </data>
 </root>

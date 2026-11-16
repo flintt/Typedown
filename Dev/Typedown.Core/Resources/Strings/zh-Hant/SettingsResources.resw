@@ -1125,4 +1125,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>拖曳標題列中欄的邊線來設定寬度。寬度以標題下一列短橫線的長短保存在檔案裡（其他編輯器照常顯示表格），匯出時也會帶上。</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>&lt;details&gt; 摺疊區塊</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; 連同標題和裡面的 Markdown 顯示為一個可以展開、收合的區塊；檔案裡的寫法不變。</value>
+  </data>
 </root>

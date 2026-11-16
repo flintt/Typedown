@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>প্ৰস্থ ঠিক কৰিবলৈ শিৰোনামৰ শাৰীত স্তম্ভৰ কাষ টানক। প্ৰস্থ ফাইলত শিৰোনামৰ তলৰ ডেছৰ দৈৰ্ঘ্য হিচাপে থাকে (আন সম্পাদকে তালিকা সাধাৰণভাৱে দেখুৱায়) আৰু ৰপ্তানিত যায়।</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>জপাব পৰা &lt;details&gt; ব্লক</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; ব্লক ইয়াৰ সাৰাংশ আৰু ভিতৰৰ Markdown সৈতে খুলিব আৰু বন্ধ কৰিব পৰা এটা ব্লক হিচাপে দেখুওৱা হয়; ফাইলৰ লেখা সলনি নহয়।</value>
+  </data>
 </root>

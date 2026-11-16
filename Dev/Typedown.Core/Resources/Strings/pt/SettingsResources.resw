@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Arraste a borda de uma coluna na linha de cabeçalho para definir sua largura. A largura fica no arquivo como os traços abaixo do cabeçalho (outros editores mostram a tabela normalmente) e vai para as exportações.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Blocos &lt;details&gt; recolhíveis</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Um bloco &lt;details&gt;, o seu resumo e o Markdown dentro dele aparecem como um único bloco que abre e fecha; o ficheiro mantém o seu texto.</value>
+  </data>
 </root>

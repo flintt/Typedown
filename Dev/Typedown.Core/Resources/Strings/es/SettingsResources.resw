@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>Arrastra el borde de una columna en la fila de encabezado para fijar su ancho. El ancho se guarda en el archivo con los guiones bajo el encabezado (otros editores muestran la tabla como siempre) y pasa a las exportaciones.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>Bloques &lt;details&gt; plegables</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>Un bloque &lt;details&gt;, su resumen y el Markdown que contiene se muestran como un solo bloque que se abre y se cierra; el archivo conserva su texto.</value>
+  </data>
 </root>

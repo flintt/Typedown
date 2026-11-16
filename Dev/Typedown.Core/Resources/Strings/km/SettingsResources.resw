@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>អូសគែមជួរឈរក្នុងជួរក្បាលដើម្បីកំណត់ទទឹង។ ទទឹងត្រូវរក្សាទុកក្នុងឯកសារជាសញ្ញាដាសក្រោមក្បាល (កម្មវិធីផ្សេងបង្ហាញតារាងដូចធម្មតា) ហើយទៅក្នុងការនាំចេញ។</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>ប្លុក &lt;details&gt; ដែលអាចបត់បាន</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>ប្លុក &lt;details&gt; រួមជាមួយសេចក្តីសង្ខេប និង Markdown នៅខាងក្នុង ត្រូវបានបង្ហាញជាប្លុកតែមួយដែលអាចបើក និងបិទបាន; អត្ថបទក្នុងឯកសារនៅដដែល។</value>
+  </data>
 </root>

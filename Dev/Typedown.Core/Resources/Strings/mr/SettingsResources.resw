@@ -1096,4 +1096,10 @@
   <data name="Editor.TableColumnWidths.Description" xml:space="preserve">
     <value>रुंदी ठरवण्यासाठी शीर्षक ओळीत स्तंभाची कडा ओढा. रुंदी फाइलमध्ये शीर्षकाखालील डॅशच्या रूपात राहते (इतर संपादक सारणी नेहमीप्रमाणे दाखवतात) आणि निर्यातीत जाते.</value>
   </data>
+  <data name="Editor.DetailsBlocks.Title" xml:space="preserve">
+    <value>घडी घालता येणारे &lt;details&gt; ब्लॉक</value>
+  </data>
+  <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
+    <value>&lt;details&gt; ब्लॉक त्याच्या सारांश आणि आतील Markdown सह उघडता आणि बंद करता येणाऱ्या एका ब्लॉकप्रमाणे दाखवला जातो; फाइलमधील मजकूर बदलत नाही.</value>
+  </data>
 </root>
