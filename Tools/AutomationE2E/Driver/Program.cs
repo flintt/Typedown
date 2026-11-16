@@ -330,6 +330,7 @@ internal static partial class Program
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
+            await Case("KU02 Keep unsaved changes when closing: the web view's browser process ended first (as an update of the app does), the window still closes without a question and the untitled document in a tab not shown comes back with its text", KU02);
             await Case("PS01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", PS01);
             await Case("XM04 the outline's and a link's menus by real right-clicks: Copy link to heading copies [Beta](#beta), Collapse all and Expand all fold and open the outline, Edit link chooses the address and typing replaces it", XM04);
             await Case("XM09 context menus by real right-clicks where XM01 and TM01 do not reach: a heading, a list item, a picture, a plain text file, a folder in the tree, a recent folder on the home page, and the menu key and Shift+F10 in a paragraph", XM09);
@@ -5001,6 +5002,67 @@ internal static partial class Program
             var windowId = await WindowIdOf(after, keptId);
             try { await after.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = false }); } catch { }
             try { await after.Call("document.replace", new { documentId = keptId, baseRevision = await Revision(after, keptId), text = "# KU01\n\nsaved\n" }); await after.Call("document.save", new { documentId = keptId }); await after.Call("document.close", new { documentId = keptId }); } catch (Exception ex) { notes.Add("cleanup titled: " + ex.Message.Split('\n')[0]); }
+            try { await after.Call("document.replace", new { documentId = u, baseRevision = await Revision(after, u), text = "\n" }); await after.Call("document.close", new { documentId = u }); } catch (Exception ex) { notes.Add("cleanup untitled: " + ex.Message.Split('\n')[0]); }
+        }
+    }
+
+    // KU02: Keep unsaved changes when closing on, an untitled document in a tab not shown, and the web view's browser
+    // process ended before the window is closed - as an update of the app does it (hp88, 1.4.2.33, 2026-11-16: the close
+    // could not show the untitled tab to ask about it, said so, and the window stayed, holding the update up). The window
+    // closes without a question, the app exits, and both documents come back at the next start with their text.
+    private static async Task KU02(List<string> notes)
+    {
+        var titled = Fixture("ku02.md", "# KU02\n\nsaved\n");
+        string t, u;
+        using var host = Process.GetProcessById(hostPid);
+        _ = host.Handle;
+        using (var c = await Session("e2e KU02 before"))
+        {
+            t = await Open(c, titled);
+            var windowId = await WindowIdOf(c, t);
+            await c.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = true });
+            u = (string)(await c.Call("document.create", new { text = "# KU02 untitled\n\nkept though the page was gone\n", reveal = "document" }))["documentId"]!;
+            await Task.Delay(1500);
+            await c.Call("document.focus", new { documentId = t });
+            await Task.Delay(1500);
+            // The web view's browser process (msedgewebview2 under the host, with no --type) ended, as an update ends it.
+            var killed = RunHidden("powershell.exe", "-NoProfile -Command \"Get-CimInstance Win32_Process -Filter \\\"Name='msedgewebview2.exe' AND ParentProcessId=" + hostPid + "\\\" | Where-Object { $_.CommandLine -notlike '*--type=*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force; $_.ProcessId }\"");
+            notes.Add("browser process ended: " + killed.Trim());
+            Check(killed.Trim().Length > 0, "the web view's browser process is found and ended");
+            await Task.Delay(300);
+            var handle = await WindowOf(windowId, c);
+            PostMessage(handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+            for (var i = 0; i < 60 && IsWindow(handle); i++) await Task.Delay(250);
+            Check(!IsWindow(handle), "the window closes without asking, its page gone");
+        }
+        Check(host.WaitForExit(20000), "the app exits once its window is closed");
+        notes.Add($"exit code 0x{host.ExitCode:x8}");
+
+        using var after = await StartHostAgain(notes, "e2e KU02 after");
+        JArray documents = new();
+        JToken? kept = null, untitled = null;
+        for (var i = 0; i < 60 && (kept == null || untitled == null); i++)
+        {
+            documents = (JArray)(await after.Call("document.list"))["documents"]!;
+            kept = documents.FirstOrDefault(d => string.Equals((string?)d["path"], titled, StringComparison.OrdinalIgnoreCase));
+            untitled = documents.FirstOrDefault(d => (string)d["documentId"]! == u);
+            if (kept == null || untitled == null) await Task.Delay(250);
+        }
+        notes.Add("after the start: " + string.Join(", ", documents.Select(d => $"{(string?)d["path"] ?? "untitled"} saved={d["saved"]}")));
+        Check(kept != null, "the titled document is open again");
+        Check(untitled != null, "the untitled document is open again, with its id");
+        async Task<string> TextOf(string id) => ((string)(await Get(after, id))["text"]!).Replace("\r\n", "\n");
+        try
+        {
+            Check(await TextOf(u) == "# KU02 untitled\n\nkept though the page was gone\n", "the untitled document has its text");
+            Check(Disk(titled) == "# KU02\n\nsaved\n", "and the titled file was never written");
+        }
+        finally
+        {
+            var keptId = (string?)kept?["documentId"];
+            var windowId = keptId != null ? await WindowIdOf(after, keptId) : null;
+            if (windowId != null) try { await after.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = false }); } catch { }
+            if (keptId != null) try { await after.Call("document.close", new { documentId = keptId }); } catch { }
             try { await after.Call("document.replace", new { documentId = u, baseRevision = await Revision(after, u), text = "\n" }); await after.Call("document.close", new { documentId = u }); } catch (Exception ex) { notes.Add("cleanup untitled: " + ex.Message.Split('\n')[0]); }
         }
     }

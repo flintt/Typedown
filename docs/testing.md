@@ -374,6 +374,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SS01 | the settings in a narrow window: the items end left of the scroll bar, not under it |
 | LS01 | the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About |
 | KU01 | Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question |
+| KU02 | Keep unsaved changes when closing: the web view's browser process ended first (as an update of the app does), the window still closes without a question and the untitled document in a tab not shown comes back with its text |
 | PS01 | the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again |
 | XM04 | the outline's and a link's menus by real right-clicks: Copy link to heading copies [Beta](#beta), Collapse all and Expand all fold and open the outline, Edit link chooses the address and typing replaces it |
 | XM09 | context menus by real right-clicks where XM01 and TM01 do not reach: a heading, a list item, a picture, a plain text file, a folder in the tree, a recent folder on the home page, and the menu key and Shift+F10 in a paragraph |
