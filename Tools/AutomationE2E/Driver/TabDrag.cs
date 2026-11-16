@@ -318,4 +318,43 @@ internal static partial class Program
             try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
         }
     }
+
+    /// <summary>
+    /// TD03: tabs put in close together - eight files opened at once, as a session's tabs are put back - have their looks
+    /// set once they stop coming (and once more after the strip's animation), not every tab twice for each: that was 0.5 s
+    /// of the UI thread and 160 lines of log in a second as hp88 started with 14 tabs (2026-11-16). A tab's states are
+    /// logged only when one is not as set. All eight are there, the last opened shown.
+    /// </summary>
+    private static async Task TD03(List<string> notes)
+    {
+        var folder = FixtureFolder("td03");
+        var paths = Enumerable.Range(1, 8).Select(i => Path.Combine(folder, $"td03-{i}.md")).ToList();
+        for (var i = 0; i < paths.Count; i++) File.WriteAllText(paths[i], $"# td03 document {i + 1}\n");
+        using var c = await Session("e2e TD03");
+        var first = await Open(c, Fixture("td03-start.md", "# td03 start\n"));
+        var windowId = await WindowIdOf(c, first);
+        var window = await WindowOf(windowId, c);
+        await Task.Delay(1500);
+        var passesBefore = LogLines("tabs: states reset on ").Count;
+        var perTabBefore = LogLines(" states CommonStates=").Count;
+        var ids = new List<string>();
+        try
+        {
+            ids.AddRange(await Task.WhenAll(paths.Select(p => Open(c, p))));
+            await Task.Delay(2500);
+            var passes = LogLines("tabs: states reset on ").Skip(passesBefore).ToList();
+            var perTab = LogLines(" states CommonStates=").Count - perTabBefore;
+            notes.Add($"resets after the eight: {passes.Count} ({string.Join(" | ", passes.Select(p => p.Length > 13 ? p.Substring(13) : p))}); tab state lines: {perTab}");
+            Check(passes.Count >= 1 && passes.Count <= 4, "the tabs' looks are set a few times in all, not twice for each tab put in");
+            Check(perTab == 0, "and no tab's states are logged while they are as set");
+            var tabs = Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>()
+                .Where(t => t.Current.Name.Contains("td03-")).ToList();
+            notes.Add("tabs: " + string.Join(", ", tabs.Select(t => t.Current.Name)));
+            Check(paths.All(p => tabs.Any(t => t.Current.Name.Contains(Path.GetFileNameWithoutExtension(p)))), "all eight files have their tabs");
+        }
+        finally
+        {
+            foreach (var id in ids.Append(first)) { try { await c.Call("document.close", new { documentId = id }); } catch { } }
+        }
+    }
 }
