@@ -58,9 +58,11 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
 
     ({ reply } = await apply('|a|b|\n|-|-|\n|1|2|\n', '```ts {title="x.ts"}\nconst a = 1;\n```\n'));
     check(reply.normalization.pendingNormalization === 'none', `fence attributes are kept, so the text normalizes to itself (${reply.normalization.pendingNormalization})`);
-    // Muya still decodes entities in an HTML block (CommonMark example 31): text it would change is unsafe.
+    // An HTML block's entities are kept as written (CommonMark example 31): Muya decoded them, as it did a code block's,
+    // until dfffdd36 (E03) - the text normalizes to itself and is written back as it was.
     ({ reply } = await apply('```ts {title="x.ts"}\nconst a = 1;\n```\n', '<a href="&ouml;&ouml;.html">\n'));
-    check(reply.normalization.pendingNormalization === 'unsafe' && reply.normalization.reasons.includes('html-lost'), `an HTML entity Muya would decode is unsafe (${reply.normalization.reasons})`);
+    check(reply.normalization.pendingNormalization === 'none', `an HTML block's entities are kept, so the text normalizes to itself (${reply.normalization.pendingNormalization} ${reply.normalization.reasons})`);
+    check(await flush() === '<a href="&ouml;&ouml;.html">\n', "the HTML block's entities are written back as written");
 
     // Visual mode: a write that changes a few blocks renders only those. The blocks around them keep their DOM, the
     // reader's cursor and what is on screen; the result is the same page a whole load of the new text draws.
