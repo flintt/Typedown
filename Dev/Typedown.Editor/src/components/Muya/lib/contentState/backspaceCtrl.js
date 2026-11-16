@@ -420,6 +420,23 @@ const backspaceCtrl = ContentState => {
       return tHeadHasContent || tBodyHasContent
     }
 
+    // A <details> block (detailsCtrl): at its summary's start it is taken apart, the summary a paragraph; at the start of
+    // the first block in it the caret goes to the summary's end - the block's text is not joined to its summary.
+    if (block.functionType === 'detailsSummary' && left === 0 && start.key === end.key && start.offset === end.offset) {
+      event.preventDefault()
+      event.stopPropagation()
+      this.unwrapDetails(this.getBlock(block.parent))
+      this.render()
+      this.muya.dispatchChange()
+      return
+    }
+    if (left === 0 && preBlock && preBlock.functionType === 'detailsSummary' && start.key === end.key && start.offset === end.offset) {
+      event.preventDefault()
+      event.stopPropagation()
+      const offset = preBlock.text.length
+      this.cursor = { start: { key: preBlock.key, offset }, end: { key: preBlock.key, offset } }
+      return this.partialRender()
+    }
     if (
       block.type === 'span' &&
       block.functionType === 'paragraphContent' &&

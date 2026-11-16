@@ -815,6 +815,8 @@ class ContentState {
   }
 
   lastInDescendant(block) {
+    // A closed <details> block: its summary, what is in it not shown.
+    if (block.type === 'figure' && block.functionType === 'details' && !block.expanded) return block.children[0]
     if (block.children.length === 0 && HAS_TEXT_BLOCK_REG.test(block.type)) {
       return block
     } else if (block.children.length) {
@@ -846,6 +848,8 @@ class ContentState {
 
   findNextBlockInLocation(block) {
     const parent = this.getParent(block)
+    // Down from a closed <details> block's summary: past the block, what is in it not shown.
+    if (block.functionType === 'detailsSummary' && parent && !parent.expanded) return this.findNextBlockInLocation(parent)
     const nextBlock = this.getNextSibling(block)
 
     if (

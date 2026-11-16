@@ -269,6 +269,8 @@ const enterCtrl = ContentState => {
 
     event.preventDefault()
 
+    // No line break in a <details> block's summary: into what is in it (detailsCtrl).
+    if (block.functionType === 'detailsSummary' && this.leaveDetailsSummary(block)) return
     // Don't allow new lines in language identifiers (GH#569)
     if (block.functionType && block.functionType === 'languageInput') {
       // Jump inside the code block and update code language if necessary
@@ -612,7 +614,9 @@ const enterCtrl = ContentState => {
     const preParagraphBlock = getParagraphBlock(block)
     const blockNeedFocus = this.codeBlockUpdate(preParagraphBlock)
     const tableNeedFocus = this.tableBlockUpdate(preParagraphBlock)
-    const htmlNeedFocus = this.updateHtmlBlock(preParagraphBlock)
+    // "<details>" on its line: a <details> block, before the HTML block it was (detailsCtrl).
+    const detailsNeedFocus = !tableNeedFocus && this.updateDetailsBlock(preParagraphBlock, getParagraphBlock(newBlock))
+    const htmlNeedFocus = !detailsNeedFocus && this.updateHtmlBlock(preParagraphBlock)
     const mathNeedFocus = this.updateMathBlock(preParagraphBlock)
     let cursorBlock
 
@@ -625,6 +629,9 @@ const enterCtrl = ContentState => {
         break
       case !!tableNeedFocus:
         cursorBlock = tableNeedFocus
+        break
+      case !!detailsNeedFocus:
+        cursorBlock = detailsNeedFocus
         break
       case !!htmlNeedFocus:
         cursorBlock = htmlNeedFocus.children[0].children[0] // the second line

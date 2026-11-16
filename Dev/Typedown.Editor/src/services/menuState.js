@@ -64,6 +64,9 @@ const createApplicationMenuState = ({ start, end, affiliation }) => {
       if (b.functionType === 'footnote') {
         state.isFootnote = true
       }
+      if (b.functionType === 'details') {
+        state.affiliation.details = true
+      }
       break
     } else if (isMultiline && /^h{1,6}$/.test(b.type)) {
       // Multiple block elements are selected.

@@ -175,14 +175,24 @@ class ClickEvent {
       // A <details> block's toggle, or a click on its summary: opened or closed, the view's alone - the document is not
       // changed (block.expanded; renderContainerBlock draws it so from then on).
       const detailsToggle = target.closest('.ag-details-toggle')
-      const detailsSummary = !detailsToggle && event.detail < 2 && target.closest('figure[data-role="DETAILS"] > .ag-details-summary')
-      if ((detailsToggle || detailsSummary) && !(detailsSummary && detailsSummary.closest('figure').classList.contains('ag-details-editing'))) {
+      const detailsSummary = !detailsToggle && target.closest('figure[data-role="DETAILS"] > .ag-details-summary')
+      const summaryEditing = detailsSummary && detailsSummary.closest('figure').classList.contains('ag-details-editing')
+      if (detailsToggle || (detailsSummary && !summaryEditing)) {
         const figure = (detailsToggle || detailsSummary).closest('figure')
         const block = figure && contentState.getBlock(figure.id)
         if (block) {
+          clearTimeout(this.detailsClickTimer)
+          if (detailsToggle) {
+            event.preventDefault()
+            event.stopPropagation()
+            contentState.toggleDetails(block, figure)
+            return
+          }
+          // A second click is the double click that edits the summary: the browser has put the caret there.
+          if (event.detail >= 2) return
           event.preventDefault()
           event.stopPropagation()
-          if (event.type === 'click') contentState.toggleDetails(block, figure)
+          this.detailsClickTimer = setTimeout(() => contentState.toggleDetails(block, figure), 260)
           return
         }
       }
@@ -389,6 +399,12 @@ class ClickEvent {
     eventCenter.attachDOMEvent(container, 'mouseover', tableButtonsHandler)
     eventCenter.attachDOMEvent(document, 'selectionchange', activeTableHandler)
     eventCenter.attachDOMEvent(container, 'click', clickHandler)
+    // A first press on a <details> block's summary not being edited puts no caret there (one click opens or closes it);
+    // the second press of a double click does, and edits it.
+    eventCenter.attachDOMEvent(container, 'mousedown', event => {
+      const summary = event.button === 0 && event.target.closest && event.target.closest('figure[data-role="DETAILS"] > .ag-details-summary')
+      if (summary && event.detail < 2 && !summary.closest('figure').classList.contains('ag-details-editing')) event.preventDefault()
+    })
     eventCenter.attachDOMEvent(container, 'contextmenu', clickHandler)
   }
 }

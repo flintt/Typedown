@@ -213,6 +213,7 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
       // Open or closed is the view's alone (block.expanded), not the file's <details open>.
       if (functionType === 'details') {
         if (block.expanded) selector += '.ag-details-open'
+        if (activeBlocks[0] && block.children[0] && activeBlocks[0].key === block.children[0].key) selector += '.ag-details-editing'
         children.unshift(h('span.ag-details-toggle', {
           attrs: { contenteditable: 'false', 'aria-expanded': block.expanded ? 'true' : 'false' }
         }, block.expanded ? '\u25BE' : '\u25B8'))

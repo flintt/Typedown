@@ -562,6 +562,15 @@ const paragraphCtrl = ContentState => {
       return
     }
 
+    // Paragraph > Details block (detailsCtrl): before the check below, which knows no summary to take one apart from.
+    if (paraType === 'details') {
+      if (this.handleDetailsMenu()) {
+        this.render()
+        this.muya.dispatchChange()
+      }
+      return
+    }
+
     // Only allow valid transformations.
     if (!this.isAllowedTransformation(block, paraType, start.key !== end.key)) {
       return
