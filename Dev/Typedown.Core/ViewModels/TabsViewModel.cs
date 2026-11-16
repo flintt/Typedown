@@ -429,8 +429,13 @@ namespace Typedown.Core.ViewModels
             // If the editor did not answer, treat the active document as dirty rather than closing it silently.
             var flushed = await EditorViewModel.FlushContentAsync(keepSource: true);
             // Kept instead of asked about (Settings > Keep unsaved changes when closing): every unsaved document backed up
-            // as it is now - and asked about after all when one could not be, or the editor did not answer.
-            if (flushed && ServiceProvider.GetService<SettingsViewModel>().KeepUnsavedOnClose && await FileViewModel.KeepUnsavedAsync())
+            // as it is now - and asked about after all when one could not be, or the editor did not answer. With no page to
+            // answer (its process gone: an update of the app ends it first, then closes the window), the host's text is
+            // kept: asking needs the page, a tab not shown could not be asked about, and the window stayed - holding the
+            // update up (hp88, 1.4.2.33, 2026-11-16).
+            var keep = ServiceProvider.GetService<SettingsViewModel>().KeepUnsavedOnClose;
+            if (keep && !flushed && EditorViewModel.PageAway) Log.Debug("close: no page to answer; the host's text kept");
+            if (keep && (flushed || EditorViewModel.PageAway) && await FileViewModel.KeepUnsavedAsync())
                 return true;
             foreach (var tab in Tabs.ToList())
             {

@@ -316,6 +316,7 @@ namespace Typedown.Core.ViewModels
             if (startupLoad != null) await startupLoad;
             StartupTiming.Reached("settings ready in the host");
             startupDocumentReady.TrySetResult(true);
+            pageProcessGone = false;
             Log.Debug($"load {LoadId + 1}: the editor page asked for the document again ({System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"})");
             loadText = Markdown;
             return new
@@ -1263,6 +1264,22 @@ namespace Typedown.Core.ViewModels
 
         /// <summary>From the editor page starting to load again until the new page asks for its settings.</summary>
         private bool awaitingNewPage;
+
+        // The web view's process gone (the browser's or the page's), until a new page asks for its settings.
+        private bool pageProcessGone;
+
+        /// <summary>The web view's browser or page process ended under the editor; a new one is being made.</summary>
+        public void OnPageProcessGone()
+        {
+            pageProcessGone = true;
+            Log.Debug("editor: the page's process is gone; the host's text is the document's until a new page has it");
+        }
+
+        /// <summary>
+        /// No page to answer: its process gone, or a new one not asking for its settings yet. Nothing can be typed meanwhile:
+        /// the host's text is the latest there is, but for what was typed in the instant before a process ended.
+        /// </summary>
+        public bool PageAway => pageProcessGone || awaitingNewPage;
 
         /// <summary>Advances every time the editor page starts loading again.</summary>
         public int PageGeneration { get; private set; }

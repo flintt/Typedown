@@ -603,6 +603,8 @@ namespace Typedown.Controls
             CoreWebView2.ProcessFailed += (s, args) =>
             {
                 Core.Utilities.Log.Debug($"editor: web view process failed: {args.ProcessFailedKind} {args.Reason} exit={args.ExitCode}");
+                if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessExited)
+                    DispatcherQueue.TryEnqueueSafe(() => AppViewModel?.EditorViewModel?.OnPageProcessGone());
                 // The whole browser gone takes the web view with it: only a new one brings the editor back.
                 if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited)
                 {
