@@ -165,6 +165,38 @@ namespace Typedown.Services.Automation
                         ["paint"] = editor == null ? null : PaintChain(editor),
                     };
                 })));
+            // The tab strip's tabs as laid out: each tab's place, size, margin and selection, and its template's named parts
+            // (visibility, opacity, size, place in the tab) - why a tab shown reached over its neighbour on one PC and not
+            // another (TD01: 0 px on hp, 4 px on w10 and for a new tab on hp).
+            methods.Add(new MethodDescriptor("test.tabs.layout", null, "test.tabs.layout/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var root = (app.MarkdownEditor as global::Microsoft.UI.Xaml.FrameworkElement)?.XamlRoot?.Content as global::Microsoft.UI.Xaml.UIElement;
+                    var tabs = new Newtonsoft.Json.Linq.JArray();
+                    if (root != null)
+                        foreach (var item in Below(root).OfType<global::Microsoft.UI.Xaml.Controls.TabViewItem>())
+                        {
+                            var at = item.TransformToVisual(root).TransformPoint(default);
+                            var parts = new Newtonsoft.Json.Linq.JArray();
+                            foreach (var part in Below(item).OfType<global::Microsoft.UI.Xaml.FrameworkElement>().Where(e => !string.IsNullOrEmpty(e.Name)))
+                            {
+                                var p = part.TransformToVisual(item).TransformPoint(default);
+                                parts.Add($"{part.Name} {part.Visibility} op={part.Opacity:0.##} {part.ActualWidth:0.#}x{part.ActualHeight:0.#} at {p.X:0.#},{p.Y:0.#} m={part.Margin}");
+                            }
+                            tabs.Add(new Newtonsoft.Json.Linq.JObject
+                            {
+                                ["title"] = (item.DataContext as Core.Models.DocumentTab)?.Title ?? item.Header?.ToString(),
+                                ["selected"] = item.IsSelected,
+                                ["x"] = Math.Round(at.X, 1),
+                                ["width"] = Math.Round(item.ActualWidth, 1),
+                                ["margin"] = item.Margin.ToString(),
+                                ["padding"] = item.Padding.ToString(),
+                                ["scale"] = item.XamlRoot?.RasterizationScale,
+                                ["parts"] = parts,
+                            });
+                        }
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["tabs"] = tabs };
+                })));
             // Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds
             // (caret, Muya's state) when a check fails in the real window and not in the page harness.
             methods.Add(new MethodDescriptor("test.editor.eval", null, "test.editor.eval/1", async (c, ct) =>
@@ -1435,6 +1467,16 @@ namespace Typedown.Services.Automation
                 if (d is Microsoft.UI.Xaml.FrameworkElement e && (e.Opacity < 1 || Background(e) != null))
                     parts.Add($"{Name(e)} op {e.Opacity:0.##} bg {Background(e) ?? "-"}");
             return string.Join(" < ", parts);
+        }
+
+        private static System.Collections.Generic.IEnumerable<global::Microsoft.UI.Xaml.DependencyObject> Below(global::Microsoft.UI.Xaml.DependencyObject root)
+        {
+            for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(root); i++)
+            {
+                var child = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(root, i);
+                yield return child;
+                foreach (var d in Below(child)) yield return d;
+            }
         }
 
         private static string LayoutChain(global::Microsoft.UI.Xaml.FrameworkElement element)
