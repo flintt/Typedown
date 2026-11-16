@@ -38,13 +38,14 @@ The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts pag
 
 **Home page**: a blank tab shows the home page: a new document, open a file or a folder, your favourites, and the files and folders you opened recently. Just start typing to write in the blank document. File → Home (Ctrl+Shift+H) or the ⌂ at the left of the tab bar brings it back without closing anything. It can be turned off under Settings → General → Startup.
 
-**Recent files and favourites**: File → Open Recent lists files and, in its Folders submenu, folders. Each entry shows the name and the folder it is in; hover over it for the full path. A file or folder that is no longer there is greyed. Right-click an entry (or press Delete) to remove it; **Clear Recent Files**, and **Clear recent folders** in the Folders submenu, empty the two lists one at a time. Under **Settings → General** you can turn off **Remember recently opened files**, or empty both lists at once with **Clear recent files and folders**. Right-click a file or folder in the side bar, or a tab, to add it to your favourites, which appear above the file tree. The folder name at the top of the side bar opens a menu to go up a level, to a folder above, or to a favourite or recent folder.
+**Recent files and favourites**: File → Open Recent lists files and, in its Folders submenu, folders. Each entry shows the name and the folder it is in; hover over it for the full path. A file or folder that is no longer there is greyed. Right-click an entry (or press Delete) to remove it; **Clear Recent Files**, and **Clear recent folders** in the Folders submenu, empty the two lists one at a time. Under **Settings → General** you can turn off **Remember recently opened files**, or empty both lists at once with **Clear recent files and folders**. Right-click a file or folder in the side bar, or a tab, to add it to your favourites, which appear above the file tree; for the folder the tree shows, right-click the tree's free space or the folder name at the top of the side bar → **Add to favourites**. A file or folder deleted from the tree (right-click → **Delete**) goes to the Recycle Bin and leaves the tree, an open document too. The folder name at the top of the side bar opens a menu to go up a level, to a folder above, or to a favourite or recent folder.
 
 **Other settings worth knowing**:
 
 - **Settings → Appearance → Compact mode**: the menu bar and the title in the same row
 - **Settings → Appearance → Window animations** (off by default): off, pages, the sidebar and menus appear at once, and the settings open and close faster; on, pages slide in and menus fade
 - **Settings → General → Allow local automation** (off by default): programs you run on this computer can read and edit the open documents; the window title shows when one is connected. **Highlight changes made by programs** briefly highlights the text such a program changed
+- **Settings → General → Release memory when minimized** (off by default): a minimized window's editor gives back the memory it can (about 1 GB with a long document); the window may take a little longer to come back
 
 ---
 
@@ -82,7 +83,7 @@ In Reading Mode the right-click menu only has copying and Select All:
 - **Copy**: keeps the formatting when you paste into Word or an email
 - **Copy as Plain Text**: drops the Markdown markup and copies the text as it looks on the page
 
-While editing, the right-click menu also has **Copy as Markdown** (Ctrl+Shift+C), which copies the raw Markdown.
+While editing, the right-click menu also has **Copy as Markdown** (Ctrl+Shift+C), which copies the raw Markdown. From the keyboard, the menu key or Shift+F10 opens the right-click menu at the caret.
 
 **Copying diagrams, formulas and tables**: hover over a diagram, a math block or a table and a copy button appears at its top right. A diagram is copied as a picture: a picture in Word, and its Markdown again when pasted back here. A formula pasted into Word is an equation you can go on editing; a table pasted into Word or another rich text editor is a table. Right-click a table for **Copy Table** too (not in Source Code Mode).
 
@@ -105,6 +106,12 @@ In visual editing, typing Markdown syntax turns into formatting right away: `## 
 **Dragging list items**: with the pointer over a list item, a handle (⋮⋮) shows left of it; hold the handle and drag the item up or down its list, with the items nested in it; while dragging, move right to put it under the item above, left to take it out a level. It can go into another list in the document too (past paragraphs and headings, or into a list in a quotation), where it takes that list's bullet or numbering; dropped outside the lists, between two paragraphs, it becomes a list of its own, one item long. Dropped right next to a list with the same marker it joins that list (saved, the two would read as one anyway). Near the window's top or bottom edge the page scrolls, faster the closer you are to the edge. A line shows where it will land and at what level (outside the lists the line starts at the text's left edge); Esc drops the drag, and one Ctrl+Z undoes a move, both lists as they were.
 
 **Tables**: select several cells by dragging, then Ctrl+C / Ctrl+X copies or cuts them; pasting onto selected cells (rows and columns copied from Excel, say) fills them cell by cell. Ctrl+A in a cell selects that cell's text first.
+
+**Bold, italic and the other formats** (the right-click menu, the **Format** menu and the shortcuts alike):
+
+- On a word with several formats (`***bold italic***`, `<u>**bold**</u>`), each shows pressed, and the one you press comes off, inner or outer, leaving the others. The same with the hidden marks selected too (Ctrl+A, say).
+- With nothing selected, only the caret, Bold (Italic, Underline, Strikethrough, Inline code and the like too) puts nothing into the document: the button shows pressed and what you type next has the format, as in Word; pressed again, or the caret moved, it is given up. One Ctrl+Z takes out the typing with its format.
+- Enter (or Shift+Enter) at the end of an HTML format such as `<u>…</u>`, `<sub>` or `<sup>` keeps the closing tag with the text on its line; the new line is plain.
 
 | Action | Shortcut |
 |---|---|
