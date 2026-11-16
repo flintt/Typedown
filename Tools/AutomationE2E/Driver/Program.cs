@@ -1985,9 +1985,12 @@ internal static partial class Program
         using var c = await Session("e2e PU01");
         var id = await Open(c, Fixture("pu01.md", "# PU01\n\n```plantuml\nAlice -> Bob: hello\n```\n\nText\n"));
         var windowId = await WindowIdOf(c, id);
+        // An image's address as asked for: an http server's is fetched by the app since PR #3 (its own endpoint, the server's
+        // address in its "src" parameter - the page loads none over http itself).
         const string script = "(() => { const off = document.querySelector('.ag-plantuml-off'); " +
-            "const img = [...document.querySelectorAll('img')].find(i => (i.getAttribute('src') || '').includes('/svg/~h')); " +
-            "return { remote: [...document.querySelectorAll('img')].filter(i => (i.src || '').includes('plantuml.com')).length, src: img ? img.getAttribute('src') : null, " +
+            "const real = i => { const s = i.getAttribute('src') || ''; try { return new URL(s, location.href).searchParams.get('src') || s } catch { return s } }; " +
+            "const img = [...document.querySelectorAll('img')].find(i => real(i).includes('/svg/~h')); " +
+            "return { remote: [...document.querySelectorAll('img')].filter(i => real(i).includes('plantuml.com')).length, src: img ? real(img) : null, " +
             "off: !!off, notice: off ? getComputedStyle(off, '::before').content : null, " +
             // The page's strings under both names: the Windows host answers camel-cased, the stylesheet reads both.
             "strings: ['FirstEditWarning', 'firstEditWarning', 'InputMathFormula', 'inputMathFormula'].map(k => document.documentElement.style.getPropertyValue('--' + k).length) } })()";

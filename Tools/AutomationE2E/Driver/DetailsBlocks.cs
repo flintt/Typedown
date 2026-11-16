@@ -119,6 +119,9 @@ internal static partial class Program
             notes.Add("before Enter: " + before?.ToString(Newtonsoft.Json.Formatting.None));
             Chord("Enter");
             await Task.Delay(400);
+            // And after it, before anything is typed: hp job 627 had a normal caret before Enter and "TitleZ" alone after.
+            var afterEnter = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const s = getSelection(); const e = s.anchorNode && (s.anchorNode.nodeType === 1 ? s.anchorNode : s.anchorNode.parentElement); const b = e && e.closest('.ag-details-summary, .ag-paragraph-content'); return { at: b ? (b.classList.contains('ag-details-summary') ? 'summary' : 'p:' + b.textContent) : (e ? e.tagName : 'none'), figure: !!document.querySelector('#ag-editor-id figure[data-role=\"DETAILS\"]'), text: window.__typedownMuya.getMarkdown() } })()" }))["result"];
+            notes.Add("after Enter: " + afterEnter?.ToString(Newtonsoft.Json.Formatting.None));
             TypeText("Z");
             Check(await Eventually(async () => (await Text()).Contains("\nZHello\n"), 4000), "Enter in the summary: the caret at the start of what is in the block");
             Check(!(await Text()).Contains("Title\n</summary>"), "no line break in the summary");
