@@ -36,6 +36,9 @@ namespace Typedown.ReliabilityTests
         [DataRow("file:///C:/notes/a%20b.png", "image/png")]
         public void AcceptsAbsoluteImageReferencesWithoutDoubleDecoding(string source, string mime)
         {
+            // Windows paths (C:\..., \\server\share): read as Windows reads them only there (the gates run on Linux).
+            if (!OperatingSystem.IsWindows())
+                Assert.Inconclusive("Windows paths are resolved on Windows only.");
             Assert.IsTrue(LocalImageResource.TryResolve(Address(source), Endpoint, "GET", true, out var path, out var contentType));
             Assert.AreEqual(mime, contentType);
             if (source.Contains("%23")) StringAssert.Contains(path, "%23.png");
