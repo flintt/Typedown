@@ -449,7 +449,8 @@ namespace Typedown.Core.Controls
                 if (VisualTreeHelper.GetChildrenCount(item) > 0 && VisualTreeHelper.GetChild(item, 0) is FrameworkElement root)
                 {
                     var groups = VisualStateManager.GetVisualStateGroups(root);
-                    if (!common || groups.Any(g => g.CurrentState == null))
+                    // The foreground's group is in none for the tab shown on Windows 10 (ForegroundNotSet on 11): as it should be.
+                    if (!common || groups.Any(g => g.CurrentState == null && !g.States.Any(s => s.Name.StartsWith("Foreground"))))
                     {
                         odd++;
                         Log.Debug($"tabs: {tab.Title} states {string.Join(", ", groups.Select(g => g.Name + "=" + (g.CurrentState?.Name ?? "-")))} (to {(item.IsSelected ? "Selected" : "Normal")}: {common})");
