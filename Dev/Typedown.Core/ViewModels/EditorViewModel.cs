@@ -169,6 +169,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
             EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("NotDrawn").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
+            EventCenter.GetObservable<EditorEventArgs>("SelectionMarkdown").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("RenderedXhtml").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (xhtmlWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
@@ -1430,6 +1431,27 @@ namespace Typedown.Core.ViewModels
             finally
             {
                 xhtmlWaiters.Remove(token);
+            }
+        }
+
+        /// <summary>
+        /// The text selected, as Markdown (the visual editor's as Copy as Markdown has it, the source's as it is): empty
+        /// when nothing is; null when the page did not answer in time. For the edition (a template's {{selection}}).
+        /// </summary>
+        public async Task<string> SelectionMarkdownAsync(int timeoutMs)
+        {
+            if (MarkdownEditor == null) return null;
+            var token = ++normalizationToken;
+            var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
+            styleWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("QuerySelectionMarkdown", new { token });
+                return await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) == waiter.Task ? waiter.Task.Result?["text"]?.ToString() ?? "" : null;
+            }
+            finally
+            {
+                styleWaiters.Remove(token);
             }
         }
 

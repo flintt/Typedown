@@ -309,6 +309,11 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         if (!editor.hasFocus()) editor.focus()
     }), [editor]);
 
+    // Host -> editor: the selection's text, Markdown as it is here (a template's {{selection}}); nothing selected: ''.
+    useEffect(() => transport.addListener<{ token: number }>('QuerySelectionMarkdown', ({ token }) => {
+        transport.postMessage('SelectionMarkdown', { token, text: editor?.getSelection() ?? '' })
+    }), [editor]);
+
     useEffect(() => transport.addListener('DeleteSelection', () => {
         editor?.replaceSelection('')
     }), [editor]);

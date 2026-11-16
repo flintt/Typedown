@@ -627,7 +627,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // closing draw only the blocks they change, and the match chosen first where it is not drawn yet
         // (ContentState.renderSearch).
         const passive = new Set(['LoadFile', 'SetMarkdown', 'HoldInput', 'ReleaseInput', 'ThemeChanged', 'SettingsChanged', 'LanguageChanged',
-            'OnScroll', 'RestoreScroll', 'FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation',
+            'OnScroll', 'RestoreScroll', 'FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation', 'QuerySelectionMarkdown',
             'Search', 'Find', 'SearchOpenChange', 'FindActivate', 'FindResultsOpen'])
         const hook = (name: string) => { if (muya.renderPending && !passive.has(name) && !name.startsWith('invoke_')) muya.completeRender() }
         beforeHostMessage.add(hook)
@@ -917,6 +917,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         editor?.updateParagraph(type)
     }), [editor]);
 
+    // Host -> editor: the selection as Markdown, as Copy as Markdown has it (a template's {{selection}}); nothing selected: ''.
+    useEffect(() => transport.addListener<{ token: number }>('QuerySelectionMarkdown', ({ token }) => {
+        let text = ''
+        try { text = (editor as any)?.contentState?.getClipBoardData()?.text ?? '' } catch (e) { console.log(e) }
+        transport.postMessage('SelectionMarkdown', { token, text })
+    }), [editor]);
+
     useEffect(() => transport.addListener('InsertParagraph', pos => {
         if (optionsRef.current?.readOnly) return
         markEdited(shownRef)
@@ -1198,7 +1205,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         let over = false
         let told = false
         // Anything the host asks for but these may move the page itself (the outline's jump, its scroll bar dragged).
-        const quiet = new Set(['FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation', 'Find', 'Search', 'FindActivate', 'FindResultsOpen'])
+        const quiet = new Set(['FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation', 'QuerySelectionMarkdown', 'Find', 'Search', 'FindActivate', 'FindResultsOpen'])
         const hostMessage = (name: string) => { if (!quiet.has(name) && !name.startsWith('invoke_')) stop() }
         const stop = () => {
             over = true
