@@ -1300,8 +1300,13 @@ namespace Typedown.Core.ViewModels
             var session = SessionMemory.Load();
             if (session == null || TabsViewModel == null) return false;
             var files = session.Files.Where(f => !TryGetOpenedWindow(f, out _)).ToList();
-            if (files.Count == 0) return false;
-            var activeFile = session.ActiveIndex < session.Files.Count && files.Contains(session.Files[session.ActiveIndex]) ? session.Files[session.ActiveIndex] : files[0];
+            // Closed on an untitled document kept from its backup (Keep unsaved changes when closing): it is the document the
+            // start shows, from its backup, the files' tabs read after it. The first file was shown instead, and the untitled
+            // one switched to once the page had drawn that file - seconds later, a jump the reader saw (hp88, 2026-11-16).
+            var (untitledId, untitledText) = await KeptUntitledAsync(session.ActiveDocumentId);
+            if (files.Count == 0 && untitledId == null) return false;
+            var activeFile = untitledId != null ? null
+                : session.ActiveIndex < session.Files.Count && files.Contains(session.Files[session.ActiveIndex]) ? session.Files[session.ActiveIndex] : files[0];
             // The tabs first, nothing read: they show at once, whatever reading the files waits for (on w10 the strip
             // came only with the active file read, 2.6 s after the window). The active document goes into the pristine
             // untitled tab, which stays where the active file is in the list.
@@ -1315,8 +1320,17 @@ namespace Typedown.Core.ViewModels
                 if (before) TabsViewModel.Tabs.Insert(Math.Max(0, TabsViewModel.Tabs.IndexOf(blank)), placeholder);
                 else TabsViewModel.Tabs.Add(placeholder);
             }
-            Log.Debug($"RestoreSession: {TabsViewModel.Tabs.Count} tab(s) shown, reading {Path.GetFileName(activeFile)}");
+            Log.Debug($"RestoreSession: {TabsViewModel.Tabs.Count} tab(s) shown, {(untitledId != null ? "the untitled document closed on from its backup" : "reading " + Path.GetFileName(activeFile))}");
             StartupTiming.Reached("session tabs shown");
+            if (untitledId != null)
+            {
+                ShowUntitledInBlankTab(untitledId, untitledText);
+                StartupTiming.Reached("session active file read");
+                var waiting = TabsViewModel.Tabs.Count(t => t.Pending);
+                Log.Debug($"RestoreSession: {TabsViewModel.Tabs.Count} tab(s), active the untitled {untitledId}, {waiting} to read after it");
+                if (waiting > 0) sessionLoading = ReadPendingTabsAsync();
+                return true;
+            }
             var loaded = false;
             try
             {
@@ -1461,6 +1475,33 @@ namespace Typedown.Core.ViewModels
 
         private static bool untitledRecoveryDone;
 
+        // The untitled document a session was closed on, from its backup: kept only with Keep unsaved changes when closing
+        // (without it the backups are asked about, after the start); none when it has no backup or it cannot be read.
+        private async Task<(string Id, string Text)> KeptUntitledAsync(string documentId)
+        {
+            if (documentId == null || !SettingsViewModel.KeepUnsavedOnClose) return (null, null);
+            var backup = AutoBackup.UntitledBackups().FirstOrDefault(b => b.documentId == documentId);
+            if (backup.file == null) return (null, null);
+            try { return (documentId, await File.ReadAllTextAsync(backup.file)); }
+            catch (Exception ex) { Log.Debug($"RestoreSession: the untitled {documentId} could not be read: {ex.Message}"); return (null, null); }
+        }
+
+        // An untitled document from its backup put into the blank tab, in the editor: unsaved, its own document id.
+        private void ShowUntitledInBlankTab(string documentId, string text)
+        {
+            TabsViewModel.ActiveTab.RestoreIdentity(documentId);
+            FilePath = null;
+            FileFormat = TextFileFormat.Default;
+            EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
+            EditorViewModel.Markdown = text;
+            EditorViewModel.CurrentHash = Common.SimpleHash(text);
+            EditorViewModel.Saved = false;
+            EditorViewModel.AutoSavedSucc = false;
+            EditorViewModel.FileLoaded = true;
+            EditorViewModel.History.InitHistory(text);
+            TabsViewModel.ActiveTab.BackupHash = EditorViewModel.CurrentHash;
+        }
+
         private async Task<bool> AskToRecover()
         {
             var dialog = AppContentDialog.Create();
@@ -1497,17 +1538,7 @@ namespace Typedown.Core.ViewModels
                 if (TabsViewModel.IsActiveTabBlank)
                 {
                     // Nothing else open (no session): the first one goes into the blank tab, in the editor.
-                    TabsViewModel.ActiveTab.RestoreIdentity(documentId);
-                    FilePath = null;
-                    FileFormat = TextFileFormat.Default;
-                    EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
-                    EditorViewModel.Markdown = text;
-                    EditorViewModel.CurrentHash = Common.SimpleHash(text);
-                    EditorViewModel.Saved = false;
-                    EditorViewModel.AutoSavedSucc = false;
-                    EditorViewModel.FileLoaded = true;
-                    EditorViewModel.History.InitHistory(text);
-                    TabsViewModel.ActiveTab.BackupHash = EditorViewModel.CurrentHash;
+                    ShowUntitledInBlankTab(documentId, text);
                     intoEditor = true;
                     continue;
                 }
