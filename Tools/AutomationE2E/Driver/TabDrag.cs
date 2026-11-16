@@ -89,6 +89,15 @@ internal static partial class Program
         for (var i = 0; i < paths.Count; i++) File.WriteAllText(paths[i], $"# td01 document {i + 1}\n");
         using var c = await Session("e2e TD01");
         var ids = new List<string>();
+        // Three tabs before its own, as other cases leave them: the list then has room past its tabs, the + is drawn after
+        // the last one, and a tab lifted to be dragged took its width out of them - the + went left by a tab while it was
+        // held (w10 jobs 594, 597: after S0 and R01; alone, job 596, it stayed).
+        for (var i = 1; i <= 3; i++)
+        {
+            var pad = Path.Combine(folder, $"td01pad-{i}.md");
+            File.WriteAllText(pad, $"# pad {i}\n");
+            ids.Add(await Open(c, pad));
+        }
         foreach (var path in paths) ids.Add(await Open(c, path));
         var windowId = await WindowIdOf(c, ids[0]);
         var window = await WindowOf(windowId, c);
