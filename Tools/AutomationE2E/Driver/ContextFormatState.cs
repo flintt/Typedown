@@ -16,13 +16,14 @@ internal static partial class Program
     {
         var folder = FixtureFolder("xm05");
         var path = Path.Combine(folder, "xm05.md");
-        File.WriteAllText(path, "# Formats\n\nPlainwordsatthestart then **boldwordshere** then *italicwordshere* end.\n");
+        File.WriteAllText(path, "# Formats\n\nPlainwordsatthestart then **boldwordshere** then *italicwordshere* then <mark>markedwordshere</mark> end.\n");
         using var c = await Session("e2e XM05");
         var id = await Open(c, path);
         var windowId = await WindowIdOf(c, id);
         var window = await WindowOf(windowId, c);
         await Task.Delay(1500);
-        string[] buttons = { "ContextFormatStrong", "ContextFormatEmphasis", "ContextFormatUnderline", "ContextFormatStrikethrough" };
+        // Highlight too (Typedown PR #4, Alex Kay): a toggle as the others.
+        string[] buttons = { "ContextFormatStrong", "ContextFormatEmphasis", "ContextFormatUnderline", "ContextFormatStrikethrough", "ContextFormatHighlight" };
         // Each format button's state as a screen reader has it (its toggle pattern).
         Dictionary<string, bool?> States()
         {
@@ -58,6 +59,11 @@ internal static partial class Program
             var plain = await MenuOn("plain text", "#ag-editor-id p span.ag-plain-text");
             Close(); await Task.Delay(300);
             Check(plain.Values.All(v => v == false), $"in plain text none is pressed ({Show(plain)})");
+
+            // Highlighted text: Highlight pressed, the others not.
+            var marked = await MenuOn("highlighted text", "#ag-editor-id mark");
+            Close(); await Task.Delay(300);
+            Check(marked["ContextFormatHighlight"] == true && marked["ContextFormatStrong"] == false, $"in highlighted text Highlight is pressed, Bold not ({Show(marked)})");
 
             // Bold pressed in bold text: the bold taken off, and the menu there shows it off.
             await MenuOn("bold again", "#ag-editor-id strong");
