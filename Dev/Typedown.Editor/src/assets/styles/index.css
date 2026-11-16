@@ -362,7 +362,20 @@ figure[data-role="HTML"].ag-active .ag-html-preview {
 figure[data-role="DETAILS"] {
   position: relative;
   margin: .5em 0;
-  padding-left: 1.4em;
+  padding-left: 1.6em;
+}
+
+/* While open: one line down its left, from under the summary to its end - drawn on the block, not on each block in it
+   (that broke between them, the user, 2026-11-16). What is in it stays where its own layout puts it, a list's markers
+   included: pulled left, they were drawn over the toggle and the line. */
+figure[data-role="DETAILS"].ag-details-open::after {
+  content: '';
+  position: absolute;
+  left: .55em;
+  top: 1.9em;
+  bottom: .25em;
+  border-left: 2px solid var(--editorColor10);
+  pointer-events: none;
 }
 
 figure[data-role="DETAILS"] > .ag-details-toggle {
@@ -397,11 +410,6 @@ figure[data-role="DETAILS"]:not(.ag-details-open) > :not(.ag-details-toggle):not
   display: none;
 }
 
-figure[data-role="DETAILS"].ag-details-open > :not(.ag-details-toggle):not(.ag-details-summary):not(.ag-front-icon) {
-  border-left: 2px solid var(--editorColor10);
-  padding-left: .8em;
-  margin-left: -.8em;
-}
 
 figure[data-role="FOOTNOTE"] {
   position: relative;
