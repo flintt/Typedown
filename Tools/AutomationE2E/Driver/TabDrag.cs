@@ -310,8 +310,13 @@ internal static partial class Program
                 await Layout("after +");
                 var all = AllTabs();
                 notes.Add("after +: " + string.Join(" | ", all.Select(t => $"{t.name} {t.r.Left:0}-{t.r.Right:0}")));
-                var overlaps = all.Zip(all.Skip(1), (a, b) => (a, b)).Where(p => p.b.r.Left < p.a.r.Right - shownOver - 2).Select(p => $"{p.a.name} / {p.b.name} {p.a.r.Right - p.b.r.Left:0} px").ToList();
-                Check(all.Count == countBefore + 1 && overlaps.Count == 0, $"one tab more, side by side, none over another further than the tab shown reaches ({countBefore} -> {all.Count} tabs; over: {string.Join(", ", overlaps)})");
+                // Side by side as laid out (test.tabs.layout: each tab's place and width in the strip), not by the boxes UI
+                // Automation gives: those took a new tab's foot into its box and not an older tab's, the two drawn alike
+                // (hp jobs 467-604: "4 px over" on hp alone, where the layout had the tabs end to end).
+                var laid = ((Newtonsoft.Json.Linq.JArray)(await c.Call("test.tabs.layout", new { windowId }))["tabs"]!)
+                    .Select(x => (name: (string?)x["title"] ?? "?", left: (double)x["x"]!, right: (double)x["x"]! + (double)x["width"]!)).OrderBy(x => x.left).ToList();
+                var overlaps = laid.Zip(laid.Skip(1), (a, b) => (a, b)).Where(p => p.b.left < p.a.right - 1.5).Select(p => $"{p.a.name} / {p.b.name} {p.a.right - p.b.left:0.#} px").ToList();
+                Check(all.Count == countBefore + 1 && laid.Count == all.Count && overlaps.Count == 0, $"one tab more, side by side as laid out, none over another ({countBefore} -> {all.Count} tabs, {laid.Count} laid out; over: {string.Join(", ", overlaps)})");
                 var plus = FindIn(window, "AddButton")?.Current.BoundingRectangle;
                 notes.Add($"+ at {plus?.Left:0}, the last tab ends at {all.LastOrDefault().r.Right:0}");
                 Check(plus != null && all.Count > 0 && plus.Value.Left >= all.Last().r.Right - 2 && plus.Value.Left <= all.Last().r.Right + 40,
