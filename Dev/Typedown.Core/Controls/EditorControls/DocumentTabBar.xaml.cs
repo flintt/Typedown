@@ -403,20 +403,21 @@ namespace Typedown.Core.Controls
             ResetTabStatesSoon();
         }
 
-        // When the tabs were last changed (put in, taken out, dropped).
-        private long tabsChangedAt;
+        // The tabs' changes (put in, taken out, dropped), counted: the last one's reset is the one done. A count, not the
+        // time - several changes in one tick of the clock (16 ms) each took itself for the last: hp88 started with 8 resets.
+        private int tabsChanges;
 
         // Once the strip is done with the changes, and again once the drop's animation has played - for changes close
         // together (a session's tabs put back one after another, several files opened at once) once in all: each change
         // set every tab twice, 0.5 s of the UI thread as hp88 started with 14 tabs (2026-11-16), while the web view started.
         private async void ResetTabStatesSoon()
         {
-            var at = tabsChangedAt = Environment.TickCount64;
+            var change = ++tabsChanges;
             await System.Threading.Tasks.Task.Delay(150);
-            if (tabsChangedAt != at) return;
+            if (tabsChanges != change) return;
             ResetTabStates();
             await System.Threading.Tasks.Task.Delay(550);
-            if (tabsChangedAt != at) return;
+            if (tabsChanges != change) return;
             ResetTabStates();
         }
 
