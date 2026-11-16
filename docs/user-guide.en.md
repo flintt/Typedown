@@ -141,6 +141,14 @@ The last group on the shortcuts page is **Editing Keys (Not Recommended to Chang
 
 The **Paragraph** menu also lets you insert charts (Flow Chart, Sequence Diagram, Mermaid, PlantUML Diagram, Vega Chart), footnotes, a horizontal line, YAML front matter and more.
 
+**Foldable blocks (`<details>`)**: written as GitHub writes them - `<details>`, a line `<summary>Title</summary>`, a blank line, the Markdown in it, a blank line, `</details>` - one shows as a block that opens and closes, the lists, quotations, code, tables and pictures in it shown and edited as anywhere else.
+
+- **Open and close**: click its title or the triangle left of it. That changes how it is shown, not the file; one written `<details open>` is shown open.
+- **Rename it**: double-click the title. Enter in the title makes no line break: it opens the block and puts the caret in it.
+- **Make one**: **Paragraph > Details block** puts the paragraph the caret is in (or the ones selected) in a new block, the caret in its empty title for you to name it; or type `<details>` on an empty line and press Enter. **Paragraph > Details block** again inside one, or Backspace at the start of its title, takes it apart, what was in it left in place.
+- **The rest**: the arrow keys stop on a closed block's title only; a search, the outline or an undo that lands in a closed block opens it; the outline lists the headings in blocks too. A block copied, or one copied from a web page (GitHub's), is a block again when pasted. Exported to HTML, each keeps how the file has it; to PDF, as a picture and printed, all are open; to Word (Pro), the title is a bold paragraph with what is in the block after it.
+- It is saved as it was written: opened and saved again, the file is unchanged. Only that form is taken; a `<details>` with other attributes (a `class`, say) or without a `</details>` line of its own is shown as an HTML block, as before. To have them as before, turn off **Settings > Editor > Foldable `<details>` blocks**.
+
 PlantUML diagrams are not drawn unless you turn on **Settings → Editor → Draw PlantUML diagrams**, which sends the diagram's source to plantuml.com to be drawn. Put the address of a server of your own in **PlantUML server** below it, and the diagrams' source stays with you.
 
 Mermaid diagrams are drawn by Pele: much faster (about a millisecond each), more kinds of diagram (agentflow and usecase, for example), coloured by the theme. Choose **Mermaid** in **Settings → Editor → Draw Mermaid diagrams with** to have Mermaid draw them, laid out as Mermaid itself does. The exports and the copy button use the one chosen.
