@@ -335,6 +335,8 @@ internal static partial class Program
         var first = await Open(c, Fixture("td03-start.md", "# td03 start\n"));
         var windowId = await WindowIdOf(c, first);
         var window = await WindowOf(windowId, c);
+        // The strip kept with one tab left: hidden then, its resets after Close Others were none (w10 job 590).
+        await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = true });
         await Task.Delay(1500);
         var passesBefore = LogLines("tabs: states reset on ").Count;
         var perTabBefore = LogLines(" states CommonStates=").Count;
@@ -371,6 +373,7 @@ internal static partial class Program
         }
         finally
         {
+            try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
             foreach (var id in ids.Append(first)) { try { await c.Call("document.close", new { documentId = id }); } catch { } }
         }
     }
