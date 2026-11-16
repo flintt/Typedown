@@ -22,7 +22,7 @@ internal static partial class Program
         var windowId = await WindowIdOf(c, id);
         var window = await WindowOf(windowId, c);
         await Task.Delay(1500);
-        // Highlight too (Typedown PR #4, Alex Kay): a toggle as the others.
+        // Highlight too (PR #4, Alex Kay): a toggle as the others.
         string[] buttons = { "ContextFormatStrong", "ContextFormatEmphasis", "ContextFormatUnderline", "ContextFormatStrikethrough", "ContextFormatHighlight" };
         // Each format button's state as a screen reader has it (its toggle pattern).
         Dictionary<string, bool?> States()
