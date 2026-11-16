@@ -300,8 +300,22 @@ namespace Typedown.Core.Controls
             var shift = new TranslateTransform();
             add.RenderTransform = shift;
             double? autoRoom = null;
+            // Under a pressed button (a tab held to be dragged) the + stays: the tab lifted takes its width out of the list's
+            // tabs, and the + went left by a tab while it was held, back when let go (w10 jobs 594, 597). Placed once the
+            // button is up, as the tabs are then.
+            var waiting = false;
+            async void PlaceWhenLetGo()
+            {
+                if (waiting) return;
+                waiting = true;
+                for (var waited = 0; waited < 10000 && PInvoke.GetIsKeyDownNow(Windows.System.VirtualKey.LeftButton); waited += 100)
+                    await System.Threading.Tasks.Task.Delay(100);
+                waiting = false;
+                Place();
+            }
             void Place()
             {
+                if (PInvoke.GetIsKeyDownNow(Windows.System.VirtualKey.LeftButton)) { PlaceWhenLetGo(); return; }
                 var count = list.Items.Count;
                 if (count == 0 || list.ContainerFromIndex(count - 1) is not FrameworkElement last || VisualTreeHelper.GetParent(last) is not UIElement panel) return;
                 var end = panel.TransformToVisual(list).TransformPoint(default).X + last.ActualOffset.X + last.ActualWidth;
