@@ -356,6 +356,8 @@ class ExportHtml {
       isGitlabCompatibilityEnabled: this.options?.isGitlabCompatibilityEnabled ?? false,
       // Settings > Editor > \( \) and \[ \] as formula delimiters: the exports draw them as the editor does.
       bracketMath: !!this.options?.bracketMath,
+      // Settings > Editor > Details blocks (on unless turned off): a <details> block with the Markdown in it rendered.
+      details: this.options?.detailsBlocks !== false,
       baseUrl: this.options?.baseUrl,
       showBlankLines: !!this.options?.showBlankLines,
       // Settings > Editor > Table column widths: the delimiter rows' widths kept in the export (HTML, PDF, Word).

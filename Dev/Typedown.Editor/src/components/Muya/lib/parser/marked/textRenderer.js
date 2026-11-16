@@ -50,4 +50,8 @@ TextRenderer.prototype.br = function () {
   return ''
 }
 
+TextRenderer.prototype.details = function (summary, open, body) {
+  return `<details${open ? ' open' : ''}>\n${summary === null ? '' : `<summary>${summary}</summary>\n`}${body}</details>\n`
+}
+
 export default TextRenderer

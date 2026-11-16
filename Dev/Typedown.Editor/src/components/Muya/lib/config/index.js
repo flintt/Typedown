@@ -273,6 +273,8 @@ export const MUYA_DEFAULT_OPTION = Object.freeze({
   tableColumnWidths: false,
   // Settings > Editor > \( \) and \[ \] as formula delimiters: LaTeX's own delimiters read as formulas, besides $ and $$.
   bracketMath: false,
+  // Settings > Editor > Details blocks: <details> with its summary and the Markdown in it as one block
+  detailsBlocks: true,
   // bullet/list marker width + listIndentation, tab or Daring Fireball Markdown (4 spaces) --> list indentation
   listIndentation: 1,
   frontmatterType: '-',

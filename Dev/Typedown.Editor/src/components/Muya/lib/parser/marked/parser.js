@@ -161,6 +161,17 @@ Parser.prototype.tok = function () {
 
       return this.renderer.blockquote(body)
     }
+    // A <details> block (detailsBlock.js): its summary as written, the blocks in it rendered.
+    case 'details_start': {
+      const { summary, open } = this.token
+      let body = ''
+
+      while (this.next().type !== 'details_end') {
+        body += this.tok()
+      }
+
+      return this.renderer.details(summary, open, body)
+    }
     // All the tokens will be footnotes if it after a footnote_start token. Because we put all footnote token at the end.
     case 'footnote_start': {
       let body = ''

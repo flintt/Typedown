@@ -35,6 +35,7 @@ const importRegister = ContentState => {
       isGitlabCompatibilityEnabled,
       superSubScript,
       bracketMath,
+      detailsBlocks,
       trimUnnecessaryCodeBlockEmptyLines
     } = this.muya.options
 
@@ -43,7 +44,8 @@ const importRegister = ContentState => {
       footnote,
       isGitlabCompatibilityEnabled,
       superSubScript,
-      bracketMath
+      bracketMath,
+      details: !!detailsBlocks
     }).lex(markdown)
 
     let token
@@ -332,6 +334,37 @@ const importRegister = ContentState => {
         }
 
         case 'footnote_end': {
+          parentList.shift()
+          break
+        }
+
+        // A <details> block (parser/marked/detailsBlock.js): its summary an editable line, the Markdown in it its blocks.
+        // How it was written is kept to write it back so (exportMarkdown.normalizeDetails); shown open as written.
+        case 'details_start': {
+          const { open, summary, summaryInline, leadingBlank, trailingBlank } = token
+          block = this.createBlock('figure', {
+            functionType: 'details'
+          })
+          Object.assign(block, {
+            detailsOpen: open,
+            expanded: open,
+            hasSummary: summary !== null,
+            summaryInline,
+            leadingBlank,
+            trailingBlank
+          })
+          this.appendChild(block, this.createBlock('span', {
+            text: summary || '',
+            functionType: 'detailsSummary'
+          }))
+          this.appendChild(parentList[0], block)
+          parentList.unshift(block)
+          break
+        }
+
+        case 'details_end': {
+          // Nothing in it: one empty paragraph to type into.
+          if (parentList[0].children.length === 1) this.appendChild(parentList[0], this.createBlockP())
           parentList.shift()
           break
         }

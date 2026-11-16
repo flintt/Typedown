@@ -209,6 +209,14 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
   } else if (type === 'figure') {
     if (functionType) {
       Object.assign(data.dataset, { role: functionType.toUpperCase() })
+      // A <details> block: its toggle before its summary, the blocks after the summary shown while it is open (index.css).
+      // Open or closed is the view's alone (block.expanded), not the file's <details open>.
+      if (functionType === 'details') {
+        if (block.expanded) selector += '.ag-details-open'
+        children.unshift(h('span.ag-details-toggle', {
+          attrs: { contenteditable: 'false', 'aria-expanded': block.expanded ? 'true' : 'false' }
+        }, block.expanded ? '\u25BE' : '\u25B8'))
+      }
       if (functionType === 'table' && activeBlocks[0] && activeBlocks[0].functionType === 'cellContent') {
         children.unshift(renderTableTools(activeBlocks))
       } else if (functionType !== 'footnote') {

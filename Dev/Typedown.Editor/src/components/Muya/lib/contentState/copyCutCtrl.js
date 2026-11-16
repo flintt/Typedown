@@ -339,7 +339,8 @@ const copyCutCtrl = ContentState => {
             superSubScript: this.muya.options.superSubScript,
             footnote: this.muya.options.footnote,
             isGitlabCompatibilityEnabled: this.muya.options.isGitlabCompatibilityEnabled,
-            bracketMath: this.muya.options.bracketMath
+            bracketMath: this.muya.options.bracketMath,
+            details: this.muya.options.detailsBlocks !== false
           })
         })
         break

@@ -30,6 +30,8 @@ export default {
   math: true,
   // \( \) and \[ \] read as formulas too (Settings > Editor).
   bracketMath: false,
+  // <details> blocks with their Markdown inside (detailsBlock.js)
+  details: false,
   frontMatter: true,
   superSubScript: false,
   footnote: false,

@@ -1,3 +1,4 @@
+import { matchDetails } from './detailsBlock'
 import { normal, gfm, pedantic } from './blockRules'
 import { widthsFromDelimiter } from 'services/tableWidths'
 import options from './options'
@@ -756,6 +757,19 @@ Lexer.prototype.token = function (src, top, container) {
         type: 'list_end'
       })
       continue
+    }
+
+    // <details> with its summary and the Markdown in it, as a block (detailsBlock.js); otherwise the HTML rule below.
+    if (this.options.details) {
+      const details = matchDetails(src)
+      if (details) {
+        src = src.substring(details.length)
+        const { length, body, ...rest } = details
+        this.tokens.push({ type: 'details_start', ...rest })
+        if (body) this.token(body, top)
+        this.tokens.push({ type: 'details_end' })
+        continue
+      }
     }
 
     // html

@@ -76,6 +76,11 @@ Renderer.prototype.code = function (code, infostring, escaped, codeBlockStyle) {
     '</code></pre>\n'
 }
 
+// A <details> block (detailsBlock.js): as GitHub shows one, its summary as written.
+Renderer.prototype.details = function (summary, open, body) {
+  return `<details${open ? ' open' : ''}>\n${summary === null ? '' : `<summary>${summary}</summary>\n`}${body}</details>\n`
+}
+
 Renderer.prototype.blockquote = function (quote) {
   return '<blockquote>\n' + quote + '</blockquote>\n'
 }

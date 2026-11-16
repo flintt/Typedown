@@ -172,6 +172,20 @@ class ClickEvent {
       } else if (rubyText) {
         selectionText(rubyText)
       }
+      // A <details> block's toggle, or a click on its summary: opened or closed, the view's alone - the document is not
+      // changed (block.expanded; renderContainerBlock draws it so from then on).
+      const detailsToggle = target.closest('.ag-details-toggle')
+      const detailsSummary = !detailsToggle && event.detail < 2 && target.closest('figure[data-role="DETAILS"] > .ag-details-summary')
+      if ((detailsToggle || detailsSummary) && !(detailsSummary && detailsSummary.closest('figure').classList.contains('ag-details-editing'))) {
+        const figure = (detailsToggle || detailsSummary).closest('figure')
+        const block = figure && contentState.getBlock(figure.id)
+        if (block) {
+          event.preventDefault()
+          event.stopPropagation()
+          if (event.type === 'click') contentState.toggleDetails(block, figure)
+          return
+        }
+      }
       // A long code block's or table's fold button: folded or opened, and remembered (services/blockFold).
       const foldButton = target.closest('.ag-block-fold')
       if (foldButton) {

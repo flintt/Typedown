@@ -358,6 +358,51 @@ figure[data-role="HTML"].ag-active .ag-html-preview {
   display: none;
 }
 
+/* A <details> block: a toggle, its summary, and while open the blocks in it, set off by a line at their left. */
+figure[data-role="DETAILS"] {
+  position: relative;
+  margin: .5em 0;
+  padding-left: 1.4em;
+}
+
+figure[data-role="DETAILS"] > .ag-details-toggle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.2em;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  color: var(--editorColor50);
+}
+
+figure[data-role="DETAILS"] > .ag-details-summary {
+  display: block;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 1.6em;
+}
+
+figure[data-role="DETAILS"].ag-details-editing > .ag-details-summary {
+  cursor: text;
+}
+
+figure[data-role="DETAILS"] > .ag-details-summary:empty::after {
+  content: var(--detailsSummaryEmpty, '');
+  color: var(--editorColor30);
+  font-weight: normal;
+}
+
+figure[data-role="DETAILS"]:not(.ag-details-open) > :not(.ag-details-toggle):not(.ag-details-summary):not(.ag-front-icon) {
+  display: none;
+}
+
+figure[data-role="DETAILS"].ag-details-open > :not(.ag-details-toggle):not(.ag-details-summary):not(.ag-front-icon) {
+  border-left: 2px solid var(--editorColor10);
+  padding-left: .8em;
+  margin-left: -.8em;
+}
+
 figure[data-role="FOOTNOTE"] {
   position: relative;
   border-radius: 4px;

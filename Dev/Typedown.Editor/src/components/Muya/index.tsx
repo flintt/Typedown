@@ -546,6 +546,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             codeBlockLineNumbers: JSON.stringify(!!o?.codeBlockLineNumbers),
             listIndentation: JSON.stringify(o?.listIndentation ?? null),
             bracketMath: JSON.stringify(!!o?.bracketMath),
+            detailsBlocks: JSON.stringify(o?.detailsBlocks !== false),
             readOnly: JSON.stringify(!!o?.readOnly)
         };
         (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
@@ -739,6 +740,24 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             shownRef.current = null
         })
     }, [editor, props.options?.bracketMath])
+
+    useEffect(() => {
+        // Settings > Editor > Details blocks: <details> with its summary and the Markdown in it as one block, or as before
+        // (an HTML block, the Markdown after it on its own). Read when the text is taken in, so the document shown is taken
+        // in again, as for bracketMath above. On unless turned off.
+        const on = props.options?.detailsBlocks !== false
+        applyOnce(editor, 'detailsBlocks', on, () => {
+            if (!editor) return
+            editor.setOptions({ detailsBlocks: on })
+            const imported = importedRef.current
+            if (!imported) return
+            const exported = editor.getMarkdown()
+            const text = exported === imported.normalized ? imported.source : exported
+            editor.setMarkdown(text, cursorRef.current, true)
+            importedRef.current = { source: text, normalized: editor.getMarkdown() }
+            shownRef.current = null
+        })
+    }, [editor, props.options?.detailsBlocks])
 
     // A column's width dragged by its right edge in the header (Settings > Editor > Table column widths): the column and
     // the next one share what they had; the widths kept as shares and written into the delimiter row (services/tableWidths).

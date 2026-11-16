@@ -113,6 +113,10 @@ class ExportMarkdown {
               result.push(this.normalizeFootnote(block, indent))
               break
             }
+            case 'details': {
+              result.push(this.normalizeDetails(block, indent))
+              break
+            }
             case 'multiplemath': {
               result.push(this.normalizeMultipleMath(block, indent))
               break
@@ -533,6 +537,25 @@ class ExportMarkdown {
     result.push(`${indent}${itemMarker}`)
     result.push(this.translateBlocks2Markdown(children, newIndent, listIndent, tight).substring(newIndent.length))
     return result.join('')
+  }
+
+  // A <details> block written back as it was read (parser/marked/detailsBlock.js): <details> or <details open>, its
+  // summary on its own line or on the <details> line (none when it had none and has none), the blank lines around the
+  // Markdown in it as many as there were. One made in the editor: its summary on its own line, a blank line each side.
+  normalizeDetails(block, indent) {
+    const summary = block.children[0].text
+    const content = block.children.slice(1)
+    const open = `<details${block.detailsOpen ? ' open' : ''}>`
+    const blank = `${indent.trimEnd()}\n`
+    let head
+    if (block.hasSummary === false && summary === '') head = `${indent}${open}\n`
+    else if (block.summaryInline) head = `${indent}${open}<summary>${summary}</summary>\n`
+    else head = `${indent}${open}\n${indent}<summary>${summary}</summary>\n`
+    const empty = content.length === 1 && isEmptyParagraph(content[0])
+    const inner = empty ? '' : this.translateBlocks2Markdown(content, indent)
+    const lead = Number.isInteger(block.leadingBlank) ? block.leadingBlank : 1
+    const trail = Number.isInteger(block.trailingBlank) ? block.trailingBlank : (empty ? 0 : 1)
+    return head + blank.repeat(lead) + inner + blank.repeat(trail) + `${indent}</details>\n`
   }
 
   normalizeFootnote(block, indent) {

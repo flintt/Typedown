@@ -28,6 +28,7 @@ import imageCtrl from './imageCtrl'
 import dragDropCtrl from './dragDropCtrl'
 import listDragCtrl from './listDragCtrl'
 import footnoteCtrl from './footnoteCtrl'
+import detailsCtrl from './detailsCtrl'
 import importMarkdown from '../utils/importMarkdown'
 import Cursor from '../selection/cursor'
 
@@ -58,6 +59,7 @@ const prototypes = [
   dragDropCtrl,
   listDragCtrl,
   footnoteCtrl,
+  detailsCtrl,
   importMarkdown
 ]
 
