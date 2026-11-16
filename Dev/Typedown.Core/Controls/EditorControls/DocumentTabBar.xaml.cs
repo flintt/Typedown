@@ -403,11 +403,20 @@ namespace Typedown.Core.Controls
             ResetTabStatesSoon();
         }
 
-        // Once the strip is done with the move, and again once the drop's animation has played.
+        // When the tabs were last changed (put in, taken out, dropped).
+        private long tabsChangedAt;
+
+        // Once the strip is done with the changes, and again once the drop's animation has played - for changes close
+        // together (a session's tabs put back one after another, several files opened at once) once in all: each change
+        // set every tab twice, 0.5 s of the UI thread as hp88 started with 14 tabs (2026-11-16), while the web view started.
         private async void ResetTabStatesSoon()
         {
-            DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, ResetTabStates);
-            await System.Threading.Tasks.Task.Delay(700);
+            var at = tabsChangedAt = Environment.TickCount64;
+            await System.Threading.Tasks.Task.Delay(150);
+            if (tabsChangedAt != at) return;
+            ResetTabStates();
+            await System.Threading.Tasks.Task.Delay(550);
+            if (tabsChangedAt != at) return;
             ResetTabStates();
         }
 
@@ -420,6 +429,7 @@ namespace Typedown.Core.Controls
             if (Tabs == null) return;
             var tabs = Tabs.Tabs.ToList();
             var shown = tabs.IndexOf(TabView.SelectedItem as DocumentTab);
+            var odd = 0;
             for (var i = 0; i < tabs.Count; i++)
             {
                 var tab = tabs[i];
@@ -434,9 +444,17 @@ namespace Typedown.Core.Controls
                 // The edge a dropped tab kept: its drag-and-drop look, a group of the tab's own with no state set after the
                 // drop (the log of TD01 on w10: "-" for the tab dropped, DragDropVisualNotVisible for the others).
                 VisualStateManager.GoToState(item, "DragDropVisualNotVisible", false);
-                // Which states it is in, by group, for the log: what keeps a dropped tab's edge.
+                // Which states it is in, by group, for the log - a tab with a group in no state, or not put in its own: what
+                // keeps a dropped tab's edge (TD01). Every tab every time was 160 lines in a second as hp88 started.
                 if (VisualTreeHelper.GetChildrenCount(item) > 0 && VisualTreeHelper.GetChild(item, 0) is FrameworkElement root)
-                    Log.Debug($"tabs: {tab.Title} states {string.Join(", ", VisualStateManager.GetVisualStateGroups(root).Select(g => g.Name + "=" + (g.CurrentState?.Name ?? "-")))} (to {(item.IsSelected ? "Selected" : "Normal")}: {common})");
+                {
+                    var groups = VisualStateManager.GetVisualStateGroups(root);
+                    if (!common || groups.Any(g => g.CurrentState == null))
+                    {
+                        odd++;
+                        Log.Debug($"tabs: {tab.Title} states {string.Join(", ", groups.Select(g => g.Name + "=" + (g.CurrentState?.Name ?? "-")))} (to {(item.IsSelected ? "Selected" : "Normal")}: {common})");
+                    }
+                }
                 // A tab dragged is lifted (a translation off the strip, which casts a shadow) and was left lifted: the edge
                 // it kept was that shadow's, darker than the strip (TD01's pictures on w10). Put back down.
                 if (item.IsSelected) continue;
@@ -462,6 +480,7 @@ namespace Typedown.Core.Controls
                     visual.Opacity = 1f;
                 }
             }
+            Log.Debug($"tabs: states reset on {tabs.Count} tabs{(odd > 0 ? $", {odd} not as set" : "")}");
         }
 
         private bool closing;
