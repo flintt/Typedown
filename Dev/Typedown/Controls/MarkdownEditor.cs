@@ -612,14 +612,14 @@ namespace Typedown.Controls
 #endif
         }
 
-        private static bool IsEditorPage(string uri)
-        {
+        private static string EditorPageAddress =>
 #if DEBUG
-            if (uri != null && uri.StartsWith("http://localhost:3000", StringComparison.OrdinalIgnoreCase)) return true;
+            "http://localhost:3000/";
+#else
+            new Uri(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics", "index.html")).AbsoluteUri;
 #endif
-            var index = new Uri(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics", "index.html")).AbsoluteUri;
-            return uri != null && uri.StartsWith(index, StringComparison.OrdinalIgnoreCase);
-        }
+
+        private static bool IsEditorPage(string uri) => WebViewPagePolicy.Matches(uri, EditorPageAddress);
 
         private void LoadStaticResources()
         {
@@ -689,13 +689,23 @@ namespace Typedown.Controls
 
         private void OnWebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
-            Transport.EmitWebViewMessage(this, e.TryGetWebMessageAsString());
+            // Check the sender before decoding or dispatching a native operation. Also refuse messages while an
+            // unexpected document is active, including a message queued by the page that navigation replaced.
+            try
+            {
+                if (!WebViewPagePolicy.CanReceiveMessage(e.Source, CoreWebView2?.Source, EditorPageAddress)) return;
+                Transport.EmitWebViewMessage(this, e.TryGetWebMessageAsString());
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"editor message refused: {ex.GetType().Name}");
+            }
         }
 
         private void OnNewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs args)
         {
             args.Handled = true;
-            if (PInvoke.GetIsKeyDown(VirtualKey.Control))
+            if (args.IsUserInitiated && IsEditorPage(CoreWebView2?.Source) && PInvoke.GetIsKeyDown(VirtualKey.Control))
                 Core.Utilities.Common.OpenUrl(args.Uri);
         }
 

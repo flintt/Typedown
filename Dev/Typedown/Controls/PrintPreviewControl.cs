@@ -63,6 +63,11 @@ namespace Typedown.Controls
                 }
                 webViewController = controller;
                 var coreWebView2 = webViewController.CoreWebView2;
+                tempFile = Core.Utilities.Common.GetTempFileName(".html");
+                var previewAddress = new Uri(tempFile).AbsoluteUri;
+                coreWebView2.NavigationStarting += (_, args) =>
+                    args.Cancel = !WebViewPagePolicy.Matches(args.Uri, previewAddress);
+                coreWebView2.NewWindowRequested += (_, args) => args.Handled = true;
                 coreWebView2.Settings.AreDefaultContextMenusEnabled = false;
                 coreWebView2.Settings.AreDevToolsEnabled = false;
                 coreWebView2.Settings.IsStatusBarEnabled = false;
@@ -71,12 +76,12 @@ namespace Typedown.Controls
                 await coreWebView2.AddScriptToExecuteOnDocumentCreatedAsync("window.addEventListener('afterprint', () => window.chrome.webview.postMessage('afterprint'))");
                 coreWebView2.WebMessageReceived += (s, args) =>
                 {
+                    if (!WebViewPagePolicy.CanReceiveMessage(args.Source, coreWebView2.Source, previewAddress)) return;
                     string message = null;
                     try { message = args.TryGetWebMessageAsString(); } catch { }
                     // Not from inside the browser's own callback: closing the preview disposes this web view.
                     if (message == "afterprint") _ = DispatcherQueue.RunIdleAsync(_ => PrintDismissed?.Invoke());
                 };
-                tempFile = Core.Utilities.Common.GetTempFileName(".html");
                 File.WriteAllText(tempFile, html);
                 // The browser process behind the preview can die (a driver, a renderer bug): say so instead of
                 // leaving a blank preview on screen — "the app crashes when I click print" in the Store reviews
