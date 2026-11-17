@@ -117,13 +117,22 @@ internal static partial class Program
             // "Hello" gone, as if a selection from the summary into "Hello" had been typed over.
             var before = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const s = getSelection(); const where = n => { const e = n && (n.nodeType === 1 ? n : n.parentElement); const b = e && e.closest('.ag-details-summary, .ag-paragraph-content'); return b ? (b.classList.contains('ag-details-summary') ? 'summary' : 'p:' + b.textContent) : (e ? e.tagName : 'none'); }; const c = window.__typedownMuya.contentState.cursor; return { anchor: where(s.anchorNode) + '@' + s.anchorOffset, focus: where(s.focusNode) + '@' + s.focusOffset, collapsed: s.isCollapsed, cursor: c ? c.start.key.slice(0, 6) + ':' + c.start.offset + '-' + c.end.key.slice(0, 6) + ':' + c.end.offset : null, text: window.__typedownMuya.getMarkdown() } })()" }))["result"];
             notes.Add("before Enter: " + before?.ToString(Newtonsoft.Json.Formatting.None));
+            // A recorder on the page from here to Z (hp job 627: "TitleZ" alone, the page's log long gone by then): the keys and
+            // where they landed, the host's messages, and the editor's calls that can take text away - with who called them.
+            await c.Call("test.editor.eval", new { windowId, script = DB02Recorder });
             Chord("Enter");
             await Task.Delay(400);
             // And after it, before anything is typed: hp job 627 had a normal caret before Enter and "TitleZ" alone after.
             var afterEnter = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const s = getSelection(); const e = s.anchorNode && (s.anchorNode.nodeType === 1 ? s.anchorNode : s.anchorNode.parentElement); const b = e && e.closest('.ag-details-summary, .ag-paragraph-content'); return { at: b ? (b.classList.contains('ag-details-summary') ? 'summary' : 'p:' + b.textContent) : (e ? e.tagName : 'none'), figure: !!document.querySelector('#ag-editor-id figure[data-role=\"DETAILS\"]'), text: window.__typedownMuya.getMarkdown() } })()" }))["result"];
             notes.Add("after Enter: " + afterEnter?.ToString(Newtonsoft.Json.Formatting.None));
             TypeText("Z");
-            Check(await Eventually(async () => (await Text()).Contains("\nZHello\n"), 4000), "Enter in the summary: the caret at the start of what is in the block");
+            var typed = await Eventually(async () => (await Text()).Contains("\nZHello\n"), 4000);
+            if (!typed)
+            {
+                notes.Add("text: " + Newtonsoft.Json.JsonConvert.SerializeObject(await Text()));
+                notes.Add("recorded: " + (await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__db02 || null)" }))["result"]);
+            }
+            Check(typed, "Enter in the summary: the caret at the start of what is in the block");
             Check(!(await Text()).Contains("Title\n</summary>"), "no line break in the summary");
 
             // A real double click on the summary edits it.
@@ -148,4 +157,30 @@ internal static partial class Program
             try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
+
+    // DB02's recorder (see there): installed once per page, read back as window.__db02.
+    private const string DB02Recorder = @"(() => {
+        if (window.__db02) { window.__db02.length = 0; return 'reset' }
+        const log = window.__db02 = [];
+        const t0 = performance.now();
+        const muya = window.__typedownMuya, cs = muya && muya.contentState;
+        const where = () => { const s = getSelection(); const n = x => x ? (x.nodeType === 1 ? x : x.parentElement) : null;
+            const d = x => { const e = n(x); return e ? (e.id || e.className || e.tagName).toString().slice(0, 30) + ':' + (x.textContent || '').slice(0, 12) : null };
+            return d(s.anchorNode) + '@' + s.anchorOffset + (s.isCollapsed ? '' : ' -> ' + d(s.focusNode) + '@' + s.focusOffset) };
+        const cur = () => { const c = cs && cs.cursor; return c && c.start ? c.start.key + ':' + c.start.offset + (c.end && (c.end.key !== c.start.key || c.end.offset !== c.start.offset) ? ' -> ' + c.end.key + ':' + c.end.offset : '') : null };
+        const add = (what, extra) => { if (log.length < 200) log.push(Math.round(performance.now() - t0) + ' ' + what + ' | sel ' + where() + ' | cur ' + cur() + (extra ? ' | ' + extra : '')) };
+        const stack = () => (new Error().stack || '').split('\n').slice(3, 7).map(s => s.trim().replace(/\(.*\//, '(')).join(' < ');
+        document.addEventListener('keydown', e => add('keydown ' + e.key + ' on ' + ((e.target && (e.target.id || e.target.className || e.target.tagName)) || '').toString().slice(0, 30) + (e.isComposing ? ' composing' : '')), true);
+        document.addEventListener('keyup', e => add('keyup ' + e.key), true);
+        document.addEventListener('focusin', e => add('focusin ' + ((e.target && (e.target.id || e.target.tagName)) || '')), true);
+        window.addEventListener('blur', () => add('window blur'), true);
+        if (window.chrome && window.chrome.webview) window.chrome.webview.addEventListener('message', e => add('host: ' + String(typeof e.data === 'string' ? e.data : JSON.stringify(e.data)).slice(0, 140)));
+        const wrap = (obj, name, withStack) => { if (!obj || typeof obj[name] !== 'function') return; const f = obj[name];
+            obj[name] = function (...a) { add('call ' + name, withStack ? stack() : ''); const r = f.apply(this, a); add('done ' + name, 'text ' + JSON.stringify(muya.getMarkdown()).slice(0, 90)); return r } };
+        for (const n of ['enterHandler', 'inputHandler', 'backspaceHandler', 'cutHandler', 'leaveDetailsSummary']) wrap(cs, n, false);
+        for (const n of ['unwrapDetails', 'handleDetailsMenu', 'removeBlock']) wrap(cs, n, true);
+        wrap(muya, 'setMarkdown', true);
+        add('installed', 'text ' + JSON.stringify(muya.getMarkdown()).slice(0, 90));
+        return 'installed';
+    })()";
 }
