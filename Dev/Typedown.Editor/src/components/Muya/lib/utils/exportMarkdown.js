@@ -12,6 +12,19 @@
 import { CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA } from '../config'
 import { delimiterDashes } from 'services/tableWidths'
 import { isEmptyParagraph, visibleEmptyParagraphs } from './blankLines'
+import { lazyLinesOf } from './lazyQuoteLines'
+
+// A line that, with no ">", still goes on the paragraph above it in a quote: not blank, and nothing that starts a block
+// or ends the paragraph - a heading, a fence, a quote, a rule or setext underline, a list item, HTML, a table's bar,
+// a definition, math, or four spaces in. Erring on writing the "> ": that keeps the structure, only not the writing.
+function goesOnLazily (line) {
+  const text = line.replace(CURSOR_ANCHOR_DNA, '').replace(CURSOR_FOCUS_DNA, '')
+  return !!text.trim() &&
+    !/^ {4}|^\t/.test(text) &&
+    !/^ {0,3}(?:#{1,6}(?:[ \t]|$)|`{3,}|~{3,}|>|[-*+](?:[ \t]|$)|\d{1,9}[.)](?:[ \t]|$)|<|(?:=+|-+)[ \t]*$|\$\$|\[[^\]]*\]:)/.test(text) &&
+    !/^ {0,3}([-*_])(?:[ \t]*\1){2,}[ \t]*$/.test(text) &&
+    !text.includes('|')
+}
 
 class ExportMarkdown {
   constructor(blocks, listIndentation = 1, isGitlabCompatibilityEnabled = false, { alignTableColumns = true, tableColumnWidths = false } = {}) {
@@ -255,7 +268,13 @@ class ExportMarkdown {
     // it would turn the reader's code block into text.
     const fence = /^( {0,3})(~{3,}|`{3,}(?!.*`))/
     const escape = !indent.includes('>')
-    return lines.map(line => `${indent}${escape ? line.replace(fence, '$1\\$2') : line}`).join('\n') + '\n'
+    // A quote's lazy lines (lexer markLazyLines) written with no ">" again, as the reader wrote them - in a quote only (a
+    // list's indent, or the paragraph taken out of its quote, writes them all), and only a line that still goes on the
+    // paragraph with none: one that would start a block of its own, or underline the paragraph, gets its "> ".
+    const lazy = /^(?:> )+$/.test(indent) ? lazyLinesOf(block, lines.length) : null
+    return lines.map((line, i) => lazy && i > 0 && lazy.includes(i) && goesOnLazily(line)
+      ? line
+      : `${indent}${escape ? line.replace(fence, '$1\\$2') : line}`).join('\n') + '\n'
   }
 
   normalizeHeaderText(block, indent) {

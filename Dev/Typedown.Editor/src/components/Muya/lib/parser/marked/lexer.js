@@ -152,6 +152,28 @@ Lexer.prototype.lex = function (src) {
 // `container` is 'item' for the content of a list item: the blank lines at its start belong to the marker line and
 // the ones at its end are the gap to the next item, which decides whether the list is loose; neither is recorded as
 // a blank-line count (utils/blankLines.js).
+// A quote's lines written with no ">" (lazy lines, the paragraph going on): their indexes in the quote's own paragraphs
+// (lazyLines), for the export to write them so again - written back with "> " each edit of such a paragraph changed a
+// line the reader did not touch (review-matrix's "lazy quote", from afd0b95f on). A nested quote marks its own; a list's
+// paragraphs are not marked (their lines are written with the list's indent).
+function markLazyLines (raw, tokens, start) {
+  const lazy = raw.replace(/\n+$/, '').split('\n').filter(line => line.trim() && !/^ *>/.test(line)).map(line => line.trim())
+  let depth = 0
+  for (let i = start + 1; i < tokens.length && lazy.length; i++) {
+    const token = tokens[i]
+    if (/_start$/.test(token.type)) depth++
+    else if (/_end$/.test(token.type)) depth--
+    else if (depth === 0 && token.type === 'paragraph') {
+      const at = []
+      const lines = token.text.split('\n')
+      lines.forEach((line, k) => {
+        if (k > 0 && lazy.length && line.trim() === lazy[0]) { at.push(k); lazy.shift() }
+      })
+      if (at.length) { token.lazyLines = at; token.lazyLineCount = lines.length }
+    }
+  }
+}
+
 Lexer.prototype.token = function (src, top, container) {
   const {
     footnote,
@@ -501,6 +523,8 @@ Lexer.prototype.token = function (src, top, container) {
     cap = this.rules.blockquote.exec(src)
     if (cap) {
       src = src.substring(cap[0].length)
+      const raw = cap[0]
+      const start = this.tokens.length
 
       this.tokens.push({
         type: 'blockquote_start'
@@ -512,6 +536,7 @@ Lexer.prototype.token = function (src, top, container) {
       // "toplevel" state. This is exactly
       // how markdown.pl works.
       this.token(cap, top)
+      markLazyLines(raw, this.tokens, start)
 
       this.tokens.push({
         type: 'blockquote_end'

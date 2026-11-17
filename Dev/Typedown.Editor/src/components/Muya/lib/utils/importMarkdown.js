@@ -294,7 +294,7 @@ const importRegister = ContentState => {
         case 'paragraph': {
           value = token.text
           block = this.createBlock('p')
-          const contentBlock = this.createBlock('span', {
+          const contentBlock = this.createBlock('span', token.lazyLines ? { text: value, lazyLines: token.lazyLines, lazyLineCount: token.lazyLineCount } : {
             text: value
           })
           this.appendChild(block, contentBlock)

@@ -1,5 +1,6 @@
 import selection from '../selection'
 import { tokenizer } from '../parser'
+import { splitLazyLines, breakLazyLine } from '../utils/lazyQuoteLines'
 
 // Formats closed by the same mark they open with ("**", "~~", "`", "$", "=="), as the tokenizer names them.
 const CLOSED_BY_MARKER = /^(?:strong|em|del|mark|inline_code|inline_math|emoji)$/
@@ -37,6 +38,7 @@ const enterCtrl = ContentState => {
     } else if (offset < text.length) {
       activeLine.text = text.substring(0, offset)
       const newLine = this.createBlock('span', { text: text.substring(offset) })
+      splitLazyLines(activeLine, newLine, text, offset)
       this.prependChild(newBlock, newLine)
     }
     return newBlock
@@ -349,6 +351,7 @@ const enterCtrl = ContentState => {
       let { offset } = start
       const { text, key } = block
       const indent = getIndentSpace(text)
+      breakLazyLine(block, text, offset)
       block.text = text.substring(0, offset) + '\n' + indent + text.substring(offset)
 
       offset += 1 + indent.length
