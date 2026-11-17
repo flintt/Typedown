@@ -238,6 +238,16 @@ function withSourceEnd(muya: any, source: string, text: string, markdown: string
  * does), against the text asked for. The same: nothing ("none"). Else the lines that differ, classified, each with what
  * was asked and what would be written (`changes`, for the error's data).
  */
+// classifyNormalization, and where only the writing differs (spaces at a line's end, a marker of the same kind, a
+// table's padding, a number, blank lines - review.ts wordingOf, which keeps what the marks say): known formatting,
+// written as asked, not refused. The load's prediction and an edit's verdict both: one judged it unknown and the
+// other known formatting (protected-payload-check, from 2e217e97 on).
+function classifyWriting(source: string, normalized: string) {
+    const classified = classifyNormalization(source, normalized)
+    return classified.pendingNormalization === 'unknown' && wordingOf(source) === wordingOf(normalized)
+        ? { ...classified, pendingNormalization: 'knownFormatting' as const } : classified
+}
+
 function editNormalization(muya: any, before: { source: string, normalized: string }, requested: string, exported: string) {
     const merged = keptSource(muya, before, exported)
     if (merged === requested) return { pendingNormalization: 'none' as const, classifierVersion, reasons: [] as string[], normalized: merged, changes: [] }
@@ -247,11 +257,7 @@ function editNormalization(muya: any, before: { source: string, normalized: stri
     let tail = 0
     while (tail < a.length - head && tail < b.length - head && a[a.length - 1 - tail] === b[b.length - 1 - tail]) tail++
     const asked = a.slice(head, a.length - tail).join('\n'), written = b.slice(head, b.length - tail).join('\n')
-    const classified = classifyNormalization(asked, written)
-    // Only the writing differs (spaces at a line's end, a marker of the same kind, a table's padding, a number, blank
-    // lines - review.ts wordingOf, which keeps what the marks say): known formatting, written as asked, not refused.
-    const result = classified.pendingNormalization === 'unknown' && wordingOf(asked) === wordingOf(written)
-        ? { ...classified, pendingNormalization: 'knownFormatting' as const } : classified
+    const result = classifyWriting(asked, written)
     const cut = (t: string) => t.length > 400 ? t.slice(0, 400) + '…' : t
     return { ...result, normalized: merged, changes: [{ line: head + 1, lines: a.length - tail - head, requested: cut(asked), written: cut(written) }] }
 }
@@ -573,7 +579,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 return editNormalization(muya, { source: edit.textBefore, normalized: base }, edit.requested, imported.normalized)
             }
             return markdownRef.current === imported.source
-                ? { ...classifyNormalization(imported.source, imported.normalized), normalized: imported.normalized }
+                ? { ...classifyWriting(imported.source, imported.normalized), normalized: imported.normalized }
                 : { ...classifyNormalization(markdownRef.current, markdownRef.current), normalized: markdownRef.current }
         };
         (window as any).__typedownPendingNormalization = pendingNormalization
