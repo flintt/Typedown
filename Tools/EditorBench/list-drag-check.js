@@ -396,6 +396,24 @@ const { firstDifference, openEditor } = require('./harness');
     await page.mouse.move(t.x, t.y); await page.mouse.down(); await page.mouse.move(t.x + 30, t.y + 40, { steps: 6 }); await page.mouse.up();
     await pause(300);
     report(await page.evaluate(() => window.__typedownMuya.getMarkdown()) === '- alpha\n- beta\n', 'a drag in the text moves nothing', '');
+
+    // The handle in one column for the lists of one level, whatever their marker: a bullet's, narrower than "1." or a
+    // task's box, put it 8 px to the right of theirs (a reader, 2026-11-17). A marker wider than the room ("100.") still
+    // pushes it left, off the marker.
+    await visual('1. one\n2. two\n\n- bullet\n- bullet\n\n- [ ] task\n- [ ] task\n\n98. a\n99. b\n100. wide\n');
+    const handles = [];
+    for (const text of ['one', 'bullet', 'task', 'wide']) {
+      const g = await geometry(text);
+      await page.mouse.move(g.textX, g.y); await pause(200);
+      handles.push(await page.evaluate(text => {
+        const h = document.getElementById('mu-list-drag-handle').getBoundingClientRect();
+        const li = [...document.querySelectorAll('#ag-editor-id li')].find(el => el.textContent.trim() === text);
+        return { text, left: Math.round(h.left), right: Math.round(h.right), textLeft: Math.round(li.querySelector('p, span, div').getBoundingClientRect().left) };
+      }, text));
+    }
+    const [ordered, bullet, task, wide] = handles;
+    report(bullet.left === ordered.left && task.left === ordered.left, 'the handle in one column for an ordered, a bullet and a task list', JSON.stringify(handles));
+    report(wide.left < ordered.left, 'a marker wider than the room ("100.") pushes the handle left of the column', JSON.stringify(wide));
     if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
   } finally {
     await close();

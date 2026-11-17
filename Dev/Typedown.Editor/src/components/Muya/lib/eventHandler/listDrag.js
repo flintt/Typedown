@@ -105,7 +105,15 @@ class ListDrag {
       if (box) left = Math.min(left, box.getBoundingClientRect().left - 4)
       const icon = text.querySelector('.ag-front-icon')
       if (icon && getComputedStyle(icon).display !== 'none') left = Math.min(left, icon.getBoundingClientRect().left - 2)
-      Object.assign(handle.style, { display: 'block', left: `${Math.max(2, left - 18)}px`, top: `${r.top + line / 2 - 10}px` })
+      // In one column for the lists of one level, whatever their marker: a bullet, narrower than "1." or a task's box,
+      // had its handle 8 px to the right of theirs (a reader, 2026-11-17). The column is left of all three; a marker wider
+      // than the room ("100.") still pushes the handle further left. A nested list's column stops at the list's own edge:
+      // further left it is the parent item's indent, and the pointer going to the handle took the parent's.
+      let column = r.left - 2.6 * (parseFloat(style.fontSize) || 16) + 18
+      const list = found.li.parentElement
+      if (list.parentElement.closest('li')) column = Math.max(column, list.getBoundingClientRect().left + 18)
+      left = Math.min(left, column)
+      Object.assign(handle.style, { display: 'block', left: `${Math.max(2, Math.round(left - 18))}px`, top: `${r.top + line / 2 - 10}px` })
     }
 
     eventCenter.attachDOMEvent(container, 'mousemove', event => {
