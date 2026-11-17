@@ -68,7 +68,9 @@ const updateCtrl = ContentState => {
     if (/figure/.test(block.type)) {
       return false
     }
-    if (/cellContent|codeContent|languageInput|footnoteInput/.test(block.functionType)) {
+    // A <details> block's summary neither: its parent is the block, which a heading, list or paragraph made of the
+    // summary's line replaced, what was in it gone (E2E DB02).
+    if (/cellContent|codeContent|languageInput|footnoteInput|detailsSummary/.test(block.functionType)) {
       return false
     }
 

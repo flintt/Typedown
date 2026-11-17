@@ -386,6 +386,27 @@ const pasteCtrl = ContentState => {
       return this.pasteIntoSelectedCells(text, html, type === 'pasteAsPlainText')
     }
 
+    // A <details> block's summary is one line of text: what is pasted goes in as one line, its breaks spaces; a line
+    // break alone is Enter, into the block. Pasted as anything else it made the block a paragraph of the summary, what was
+    // in the block gone - Enter typed with the keyboard outside the page comes in so (TypedElsewhere, E2E DB02).
+    const summary = this.getBlock(this.cursor.start.key)
+    if (summary && summary.functionType === 'detailsSummary' && this.cursor.end.key === summary.key) {
+      const plain = (text || '').replace(/\r\n?/g, '\n')
+      if (!plain.trim() && plain.includes('\n')) {
+        this.leaveDetailsSummary(summary)
+        return
+      }
+      const line = plain.replace(/^\n+|\n+$/g, '').replace(/[ \t]*\n+[ \t]*/g, ' ')
+      const from = Math.min(this.cursor.start.offset, this.cursor.end.offset)
+      const to = Math.max(this.cursor.start.offset, this.cursor.end.offset)
+      summary.text = summary.text.slice(0, from) + line + summary.text.slice(to)
+      const offset = from + line.length
+      this.cursor = { start: { key: summary.key, offset }, end: { key: summary.key, offset } }
+      this.partialRender()
+      this.muya.eventCenter.dispatch('stateChange')
+      return
+    }
+
     // Tab-separated rows pasted outside a table: a table (an HTML table copied beside them goes its own way, below).
     if (type === 'normal' && !/<table/i.test(html || '')) {
       const caretBlock = this.getBlock(this.cursor.start.key)

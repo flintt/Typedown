@@ -157,6 +157,10 @@ jobs:
           node export-anchors-check.js
           node wordcount-mode-check.js
           node wordcount-plain-switch-check.js
+          node details-check.js
+          node details-edit-check.js
+          node details-more-check.js
+          node details-paste-check.js
           node tab-keys-check.js
           node arrow-edge-check.js
           node nested-list-enter-check.js
