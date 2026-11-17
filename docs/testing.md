@@ -204,6 +204,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | MB01 | a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu |
 | WV01 | the editor comes back after its web view's browser process ends: the document on the page again, taking edits |
 | WS01 | local images work with browser isolation and cannot be fetched as text or executed |
+| WS02 | what the page's isolation changes: local audio, video, a local page in a frame, a picture over 32 MB, local files in the person's CSS (noted, not checked) |
 | SF01 | a window opening under the dark theme shows no light frame in its first two seconds on screen |
 | SF03 | a window opening under the light theme shows no dark frame on its way: sampled from the screen for two seconds, none over a quarter dark |
 | SF04 | a cold start restoring three tabs under the light Apricot theme shows no dark frame, Windows' apps dark and light: sampled from the process's start for five seconds |
