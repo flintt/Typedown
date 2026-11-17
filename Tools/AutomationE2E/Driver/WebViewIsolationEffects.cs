@@ -35,11 +35,13 @@ internal static partial class Program
         var page = await Eval(@"(() => {
             const q = s => document.querySelector('#ag-editor-id ' + s);
             const media = e => e ? { src: e.currentSrc || e.src, ready: e.readyState, error: e.error ? e.error.code : null, seconds: isFinite(e.duration) ? Math.round(e.duration * 10) / 10 : null } : 'not in the page';
-            const big = [...document.querySelectorAll('#ag-editor-id img')].find(i => /ws02-big/.test(decodeURIComponent(i.src)));
+            // By its alt: a local picture's address is the app's own (the endpoint since PR #3), not always its file's.
+            const big = [...document.querySelectorAll('#ag-editor-id img')].find(i => i.alt === 'big' || /ws02-big/.test(decodeURIComponent(i.src)));
+            const pictures = [...document.querySelectorAll('#ag-editor-id img')].map(i => (i.alt || '?') + ' ' + i.src.slice(0, 50) + ' ' + i.naturalWidth);
             const f = q('iframe');
             return { origin: location.origin, audio: media(q('audio')), video: media(q('video')),
                 frame: f ? { src: f.src, loaded: !!window.__ws02Frame } : 'not in the page',
-                big: big ? { complete: big.complete, width: big.naturalWidth } : 'not in the page' };
+                big: big ? { complete: big.complete, width: big.naturalWidth } : 'not in the page', pictures };
         })()");
         notes.Add("document: " + page?.ToString(Newtonsoft.Json.Formatting.None));
 
