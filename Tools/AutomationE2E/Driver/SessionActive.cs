@@ -87,7 +87,15 @@ internal static partial class Program
             Check(path2 == null && (text2 ?? "").Contains("SR03 untitled 2"), $"closed on untitled 2, the start shows it with its text ({path2 ?? text2?.Split('\n')[0]})");
             // Shown first, not after another: the start showed the first file, and switched to the untitled one once the
             // page had drawn it - seconds later, a jump the reader saw (hp88, 1.4.2.34, 2026-11-16).
-            var asked = LogLines("the editor page asked for the document again").Skip(askedBefore).FirstOrDefault() ?? "";
+            // The log is written in batches half a second apart: read at once after the start, the line was not there yet,
+            // and the page's first document read as none - the start right all the same (hp jobs 609, 659-661, 2026-11-17).
+            var asked = "";
+            for (var i = 0; i < 20 && asked.Length == 0; i++)
+            {
+                asked = LogLines("the editor page asked for the document again").Skip(askedBefore).FirstOrDefault() ?? "";
+                if (asked.Length == 0) await Task.Delay(250);
+            }
+            await Task.Delay(1000);
             var back = LogLines("back on the untitled document the session was closed on").Count - backBefore;
             notes.Add($"round 2, the page's first document: {(asked.Length > 13 ? asked.Substring(13) : asked)}; switched back afterwards: {back}");
             Check(asked.Contains("(untitled)") && back == 0, "the page's first document is the untitled one closed on, not a file shown before it");
