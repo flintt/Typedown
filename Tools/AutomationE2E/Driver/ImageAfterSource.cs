@@ -44,10 +44,10 @@ internal static partial class Program
         }
         async Task ClickPicture()
         {
-            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const img = [...document.querySelectorAll('#ag-editor-id img')].find(i => /checker\\.jpg$/.test(i.getAttribute('src') || '')); if (!img) return null; img.scrollIntoView({ block: 'center' }); const r = img.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"];
+            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const img = [...document.querySelectorAll('#ag-editor-id img')].find(i => /checker\\.jpg$/.test(new URL(i.src).searchParams.get('src') || new URL(i.src).pathname)); if (!img) return null; img.scrollIntoView({ block: 'center' }); const r = img.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"];
             if (at == null || at.Type != JTokenType.Object) throw new CaseFailed("no picture on the page to click");
             await Task.Delay(500);
-            at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const img = [...document.querySelectorAll('#ag-editor-id img')].find(i => /checker\\.jpg$/.test(i.getAttribute('src') || '')); const r = img.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+            at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const img = [...document.querySelectorAll('#ag-editor-id img')].find(i => /checker\\.jpg$/.test(new URL(i.src).searchParams.get('src') || new URL(i.src).pathname)); const r = img.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
             await Click(window, (int)screen["x"]!, (int)screen["y"]!);
             await Task.Delay(1000);

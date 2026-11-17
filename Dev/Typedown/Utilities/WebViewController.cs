@@ -66,7 +66,9 @@ namespace Typedown.Utilities
                 commandLineArgs.Add("--remote-debugging-port=9222");
 #endif
                 var options = new CoreWebView2EnvironmentOptions { AdditionalBrowserArguments = string.Join(" ", commandLineArgs) };
-                var userDataFolder = Path.Combine(Core.Config.LocalAppDataFolder, "WebView2");
+                // A running older build may still use the insecure browser switches. Its environment cannot be
+                // reused with different arguments, so keep the isolated browser cache separate from that build.
+                var userDataFolder = Path.Combine(Core.Config.LocalAppDataFolder, "WebView2Isolated");
                 Directory.CreateDirectory(userDataFolder);
                 environmentTask = task = CoreWebView2Environment.CreateWithOptionsAsync(null, userDataFolder, options).AsTask();
                 var environment = await task;

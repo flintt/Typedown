@@ -154,6 +154,7 @@ export const loadImage = async (url, detectContentType = false) => {
   }
   return new Promise((resolve, reject) => {
     const image = new Image()
+    if (hostedImageSource(url)) image.crossOrigin = 'anonymous'
     image.onload = () => {
       resolve({
         url,
@@ -223,38 +224,10 @@ export const getPageTitle = url => {
   return Promise.race([promise, timer])
 }
 
-export const checkImageContentType = url => {
-  const req = new XMLHttpRequest()
-  let settle
-  const promise = new Promise((resolve, reject) => {
-    settle = resolve
-  })
-  const handler = () => {
-    if (req.readyState === XMLHttpRequest.DONE) {
-      if (req.status === 200) {
-        const contentType = req.getResponseHeader('Content-Type')
-        // Any picture type, with or without parameters ("image/svg+xml;charset=utf-8").
-        if (/^image\/[\w.+-]+\s*(?:;|$)/i.test(contentType || '')) {
-          settle(true)
-        } else {
-          settle(false)
-        }
-      } else if (req.status === 405) { // status 405 means method not allowed, and just return true.(Solve issue#1297)
-        settle(true)
-      } else {
-        settle(false)
-      }
-    }
-  }
-  const handleError = () => {
-    settle(false)
-  }
-  req.open('HEAD', url)
-  req.onreadystatechange = handler
-  req.onerror = handleError
-  req.send()
-
-  return promise
+export const checkImageContentType = async url => {
+  // Dragged web links use the same image-decoder check as ordinary remote images. A cross-origin HEAD needs
+  // CORS permission even when the browser can display the picture, and stopped working with normal isolation.
+  try { await loadImage(getImageInfo(url).src); return true } catch { return false }
 }
 
 /**
@@ -263,17 +236,18 @@ export const checkImageContentType = url => {
  * @param {string} src Image url
  * @param {string} basePath Base path; used on desktop to fix the relative image path.
  */
-import { resolveLocalPath, absoluteImageUrls } from 'services/localPaths'
+import { resolveLocalPath, absoluteImageUrls, localImageUrl, httpImageUrl, hostedImageSource } from 'services/localPaths'
 export { resolveLocalPath, absoluteImageUrls }
 
 export const getImageInfo = (src, basePath = window.basePath) => {
   const imageExtension = IMAGE_EXT_REG.test(src)
   const isUrl = URL_REG.test(src) || (imageExtension && /^file:\/\/.+/.test(src))
 
-  if (src.length > 0 && !URL_REG.test(src) && process.env.NODE_ENV === 'development') {
+  const local = localImageUrl(src, basePath) || httpImageUrl(src)
+  if (local) {
     return {
       isUnknownType: !imageExtension,
-      src: 'http://local-file-access/?src=' + encodeURIComponent(src)
+      src: local
     }
   }
 

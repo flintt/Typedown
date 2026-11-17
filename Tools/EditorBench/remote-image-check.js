@@ -4,8 +4,7 @@
 // BMP or an "application/octet-stream" picture were all marked failed although the browser draws them. The picture
 // itself is the test now: a page or a missing file is still marked failed.
 //
-// The web is stubbed by request interception (no network); the browser runs with the host's switches
-// (Config.WebView2Args), as the page does in WebView2.
+// The web is stubbed by request interception (no network), with the browser's normal security protections.
 const fs = require('fs');
 const path = require('path');
 const { openEditor } = require('./harness');
@@ -47,7 +46,7 @@ const failed = ['example.com/page', 'missing.png'];
 const doc = Object.keys(web).map((url, i) => `![p${i}](${url})`).join('\n\n') + '\n';
 
 (async () => {
-  const { page, mode, flush, close } = await openEditor({ browserArgs: ['--disable-web-security', '--allow-file-access-from-files'] });
+  const { page, mode, flush, close } = await openEditor();
   let ok = true;
   const check = (c, label) => { console.log(`${c ? 'PASS' : 'FAIL'} ${label}`); ok = ok && c; };
   try {

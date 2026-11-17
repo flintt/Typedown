@@ -1,5 +1,6 @@
 import { CLASS_OR_ID } from '../../../config'
 import { getImageInfo } from '../../../utils'
+import { hostedImageSource } from 'services/localPaths'
 
 // reference_image
 export default function referenceImage (h, cursor, block, token, outerClass) {
@@ -36,7 +37,7 @@ export default function referenceImage (h, cursor, block, token, outerClass) {
   return isSuccess
     ? [
       h(selector, tag),
-      h(`img.${CLASS_OR_ID.AG_COPY_REMOVE}`, { props: { alt, src: domsrc, title } })
+      h(`img.${CLASS_OR_ID.AG_COPY_REMOVE}`, { props: { ...(hostedImageSource(domsrc) ? { crossOrigin: 'anonymous' } : {}), alt, src: domsrc, title } })
     ]
     : [h(selector, tag)]
 }

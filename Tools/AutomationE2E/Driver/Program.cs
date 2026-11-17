@@ -159,6 +159,7 @@ internal static partial class Program
             await Case("FS03 in full screen the pointer at the top edge reveals the menu bar every time, and it hides when the pointer leaves", FS03);
             await Case("MB01 a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu", MB01);
             await Case("WV01 the editor comes back after its web view's browser process ends: the document on the page again, taking edits", WV01);
+            await Case("WS01 local images work with browser isolation and cannot be fetched as text or executed", WS01);
             await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
             await Case("SF03 a window opening under the light theme shows no dark frame on its way: sampled from the screen for two seconds, none over a quarter dark", SF03);
             await Case("SF04 a cold start restoring three tabs under the light Apricot theme shows no dark frame, Windows' apps dark and light: sampled from the process's start for five seconds", SF04);
@@ -3008,7 +3009,8 @@ internal static partial class Program
             await Task.Delay(200);
             Keys(("ctrl", (ushort)0x5A));
             await Task.Delay(1000);
-            Check((string)(await Get(c, id))["text"]! == edited, "Ctrl+Z in reading mode leaves the document as it was");
+            var afterUndo = (string)(await Get(c, id))["text"]!;
+            Check(afterUndo == edited, $"Ctrl+Z in reading mode leaves the document as it was (expected {JsonConvert.SerializeObject(edited)}, got {JsonConvert.SerializeObject(afterUndo)})");
             // Edit > Undo, clicked the way a screen reader clicks it: this one went to the history directly.
             await InvokeMenuBarItem(window, "UndoItem");
             await Task.Delay(1000);
@@ -3066,7 +3068,8 @@ internal static partial class Program
                 // its PNG's twice as many pixels. The two PNGs are the same file, which Word embeds once.
                 // Sizes within 0.2 pt: Word's point sizes follow the display's scale (hp gave 0.9 and 22.6x15.1 where w10 gives 0.8 and 22.5x15).
                 var sizes = System.Text.RegularExpressions.Regex.Matches(word.detail ?? "", @"type 3 ([\d.]+)x([\d.]+)pt").Select(m => (W: double.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture), H: double.Parse(m.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture))).ToList();
-                bool Near(int i, double w, double h) => i < sizes.Count && Math.Abs(sizes[i].W - w) <= 0.2 && Math.Abs(sizes[i].H - h) <= 0.2;
+                // Decimal values at the inclusive boundary (0.8 - 0.6) exceed 0.2 by floating-point roundoff.
+                bool Near(int i, double w, double h) => i < sizes.Count && Math.Abs(sizes[i].W - w) <= 0.2 + 1e-9 && Math.Abs(sizes[i].H - h) <= 0.2 + 1e-9;
                 Check(sizes.Count == 3 && Near(0, 0.8, 0.8) && Near(1, 22.5, 15) && Near(2, 0.8, 0.8) && word.media == 2, "Word: every picture of the copy is in the pasted document, the SVG at its size");
             }
             else

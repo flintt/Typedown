@@ -1,6 +1,7 @@
 import { getUniqueId, loadImage } from '../../../utils'
 import { insertAfter, operateClassName } from '../../../utils/domManipulate'
 import { CLASS_OR_ID } from '../../../config'
+import { hostedImageSource } from 'services/localPaths'
 
 export default function loadImageAsync (imageInfo, attrs, className, imageClass) {
   const { src } = imageInfo
@@ -30,10 +31,11 @@ export default function loadImageAsync (imageInfo, attrs, className, imageClass)
       .then(({ url, width, height }) => {
         const imageText = document.querySelector(`#${id}`)
         const img = document.createElement('img')
+        if (hostedImageSource(src)) img.crossOrigin = 'anonymous'
         let dispMsec = Date.now()
         let touchMsec = dispMsec
-        if (/^file:\/\//.test(src)) {
-          domsrc = url + '?msec=' + dispMsec
+        if (/^file:\/\//.test(src) || hostedImageSource(src)) {
+          domsrc = url + (url.includes('?') ? '&' : '?') + 'msec=' + dispMsec
         } else {
           domsrc = url
         }
