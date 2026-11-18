@@ -859,6 +859,17 @@ internal static partial class Program
 
     private static string Disk(string path) => new UTF8Encoding(false).GetString(File.ReadAllBytes(path));
 
+    private static string Lines(string? text) => (text ?? "").Replace("\r\n", "\n").Replace('\r', '\n');
+
+    private static string RunHidden(string file, string arguments, int timeoutMs = 30000)
+    {
+        using var p = Process.Start(new ProcessStartInfo(file, arguments) { UseShellExecute = false, CreateNoWindow = true, RedirectStandardOutput = true, RedirectStandardError = true })!;
+        var output = p.StandardOutput.ReadToEndAsync();
+        var error = p.StandardError.ReadToEndAsync();
+        if (!p.WaitForExit(timeoutMs)) { try { p.Kill(true); } catch { } }
+        return output.Result + error.Result;
+    }
+
     private static async Task<string> Open(Client c, string path) => (string)(await c.Call("document.open", new { path, reveal = "document" }))["documentId"]!;
 
     private static async Task<JToken> Get(Client c, string id) => await c.Call("document.get", new { documentId = id, consistency = "latest", include = new[] { "text" } });
