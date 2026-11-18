@@ -25,14 +25,15 @@
 		<UseRidGraph>true</UseRidGraph>
 		<SelfContained>true</SelfContained>
 		<!-- The Windows App SDK runtime travels with the app: the installer and portable builds have no package to
-		     depend on, and the MSIX then needs no framework package installed beside it. The Store upload alone is
-		     built with WindowsAppSDKSelfContained=false (build.yml, Tools/dev/hp-store-upload.ps1): it names the
-		     framework package and the Store installs it. -->
+		     depend on, and the MSIX then needs no framework package installed beside it. A framework-dependent Store
+		     upload (hp-store-upload.ps1 -FrameworkDependent) was tried and put aside on 2026-11-14: smaller to upload,
+		     but the Store downloads the runtime on first install, so customers download about as much (docs/todo.md). -->
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-		<!-- Not the Windows App SDK's DeploymentManager at start, which it turns on for a framework-dependent MSIX (the
-		     Store upload): it wants the runtime's Main and Singleton packages too, and without them, or the right to
-		     install them, it ended the process before a line of ours ran (vm104, a clean Windows 10, 2026-11-14). They
-		     serve push notifications, app lifecycle activation and widgets, none of which this app uses. -->
+		<!-- Not the Windows App SDK's DeploymentManager at start, which it turns on for a framework-dependent MSIX: it
+		     wants the runtime's Main and Singleton packages too, and without them, or the right to install them, it
+		     ended the process before a line of ours ran (vm104, a clean Windows 10, 2026-11-14). They serve push
+		     notifications, app lifecycle activation and widgets, none of which this app uses. Without effect while the
+		     runtime travels with the app. -->
 		<WindowsAppSdkDeploymentManagerInitialize>false</WindowsAppSdkDeploymentManagerInitialize>
 		<WindowsPackageType Condition="'$(WindowsPackageType)' == ''">None</WindowsPackageType>
 		<EnableMsixTooling>true</EnableMsixTooling>
