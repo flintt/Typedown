@@ -15,6 +15,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         public TocPage()
         {
             InitializeComponent();
+            // The drag over the rows and the drop, handled or not by the tree's own list (it takes them, even not reordering:
+            // set in XAML, these never ran - run 682).
+            TreeView.AddHandler(DragOverEvent, new DragEventHandler(OnTreeDragOver), true);
+            TreeView.AddHandler(DragLeaveEvent, new DragEventHandler(OnTreeDragLeave), true);
+            TreeView.AddHandler(DropEvent, new DragEventHandler(OnTreeDrop), true);
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -324,7 +329,12 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var node = args.Items.Count == 1 ? FindNode(TreeView.RootNodes, (ContentOf(args.Items[0]) as Models.TocTreeItem)?.TocItem?.Slug) : null;
             if (node == null || Editor == null || settings == null || settings.ReadOnly || settings.SourceCode) { args.Cancel = true; return; }
             dragged = node;
+            shownDrop = null;
+            Utilities.Log.Debug($"outline: drag of {SlugOf(node)} begun");
         }
+
+        // What the last drag over showed, so the log says each change once.
+        private string shownDrop;
 
         private void OnDragItemsCompleted(TreeView sender, TreeViewDragItemsCompletedEventArgs args)
         {
@@ -399,6 +409,9 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var drop = Allowed(e);
             e.AcceptedOperation = drop != null ? Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move : Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
             ShowDrop(drop);
+            var said = drop is { } d ? $"{d.where} {SlugOf(d.to)}" : "nowhere";
+            if (dragged != null && said != shownDrop) Utilities.Log.Debug($"outline: drag over: {said}");
+            shownDrop = said;
         }
 
         private void OnTreeDragLeave(object sender, DragEventArgs e) => ShowDrop(null);
@@ -408,7 +421,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var drop = Allowed(e);
             var from = SlugOf(dragged);
             ShowDrop(null);
-            if (drop is not { } d || from == null || SlugOf(d.to) is not string to) return;
+            if (drop is not { } d || from == null || SlugOf(d.to) is not string to) { Utilities.Log.Debug($"outline: section {from} dropped nowhere"); return; }
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
             Utilities.Log.Debug($"outline: section {from} dropped {d.where} {to}");
             Editor?.MoveSection(from, to, d.where);
