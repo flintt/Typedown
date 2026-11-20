@@ -885,7 +885,8 @@ class Muya {
       const rect = element.getBoundingClientRect()
       if (rect.top < 0 || rect.bottom > window.innerHeight) window.scrollBy(0, rect.top - window.innerHeight / 3)
     }
-    this.dispatchSelectionChange()
+    // (Reading mode has no caret to report: it threw "expected cursor but cursor is null".)
+    if (!this.options.readOnly) this.dispatchSelectionChange()
   }
 
   /**

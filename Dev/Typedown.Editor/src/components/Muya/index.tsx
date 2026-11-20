@@ -81,7 +81,7 @@ import { noteScroll, recentScrolls } from 'services/scrollWriters'
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults'
 import { previewOf } from 'services/findPreview'
 import { markStartup } from 'services/startupMarks'
-import { actOnRevision, registerReviewView, reviewActive, reviewAtTarget, reviewLabels } from 'services/reviewSession'
+import { actOnRevision, registerReviewView, reviewActive, reviewAtTarget, reviewLabels, reviewReadingChanged } from 'services/reviewSession'
 import { ghostsOf, leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
 import { ghostLayer, tagLayer } from 'services/reviewGhosts'
 import { wordingOf } from 'services/review'
@@ -1661,6 +1661,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 const element = document.querySelector(`#ag-editor-id [data-rid="${id}"], #ag-editor-id [data-del-above-rid="${id}"], #ag-editor-id [data-del-below-rid="${id}"]`)
                 return element ? element.getBoundingClientRect() : null
             },
+            readOnly: () => !!muya.options?.readOnly,
             revisionOf(element) {
                 const marked = element.closest('#ag-editor-id [data-rid], #ag-editor-id [data-del-above-rid], #ag-editor-id [data-del-below-rid]')
                 return marked ? marked.getAttribute('data-rid') ?? marked.getAttribute('data-del-above-rid') ?? marked.getAttribute('data-del-below-rid') : null
@@ -1726,6 +1727,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // Re-render so the Markdown markers and the editing affordances of the active block disappear (and come
         // back with the caret when reading mode is switched off) instead of waiting for the next edit.
         applyOnce(editor, 'readOnly', readOnly, () => editor?.contentState?.render(!readOnly, true))
+        // Review's buttons are not for reading mode (they accept and reject).
+        reviewReadingChanged()
     }, [editor, props.options?.readOnly])
 
     // A paste the browser does itself (Ctrl+V reaching the page while the host's shortcut did not take it) put the

@@ -37,7 +37,14 @@ export interface ReviewView {
     rectOf(id: string): DOMRect | null
     /** The revision under an element (a mark the mouse is on), or null. */
     revisionOf(element: Element): string | null
+    /** Reading mode: the revisions are shown and gone through, none accepted or rejected (no caret either). */
+    readOnly?(): boolean
 }
+
+const reading = () => !!view?.readOnly?.()
+
+// Reading mode has no caret: next and previous go on from the revision they went to last.
+let readingAt: string | null = null
 
 let view: ReviewView | null = null
 
@@ -295,7 +302,8 @@ const byId = (id: string | null) => (id && state.revisions.find(r => r.id === id
  */
 export function reviewAtTarget(target: Element | null): { revision: string | null, source: string | null, ghost: boolean } | null {
     if (!state.on || !target) return null
-    const id = view?.revisionOf(target) ?? null
+    // Reading mode: no revision for the menu's Accept and Reject (still whether it is a deleted block, which is not text).
+    const id = reading() ? null : view?.revisionOf(target) ?? null
     const r = byId(id)
     return { revision: r ? r.id : null, source: r?.source ?? null, ghost: !!target.closest('.ag-review-ghost') }
 }
@@ -303,7 +311,7 @@ export function reviewAtTarget(target: Element | null): { revision: string | nul
 /** The menu's Accept this, Reject this, Accept all from this source: on the revision right-clicked. */
 export function actOnRevision(id: string, how: 'accept' | 'reject' | 'acceptSource') {
     const r = byId(id)
-    if (!state.on || !r) return
+    if (!state.on || !r || reading()) return
     if (how === 'accept') accept([r])
     else if (how === 'reject') reject([r])
     else accept(shown().filter(x => x.source === r.source))
@@ -315,10 +323,14 @@ function atCaret(): Revision | null {
 }
 
 function go(back: boolean) {
-    const offset = view?.caretOffset() ?? (back ? Number.MAX_SAFE_INTEGER : -1)
+    const readOnly = reading()
+    const from = readOnly ? byId(readingAt)?.curStart : view?.caretOffset()
+    const offset = from ?? (back ? Number.MAX_SAFE_INTEGER : -1)
     const r = nextRevision(shown(), offset, back)
     if (!r) return
     view?.setCaret(r.curStart)
+    // Reading mode: brought into view and outlined, with no buttons.
+    if (readOnly) { readingAt = r.id; markCurrent(r.id); return }
     // The caret is in it now: its buttons, even for the one just typed in (the reader went to it).
     quietUntilOther = null
     setTimeout(() => showActionsFor(r.id), 0)
@@ -331,6 +343,10 @@ export function command(name: string, source?: string | null) {
     switch (name) {
         case 'next': return go(false)
         case 'previous': return go(true)
+    }
+    // Reading mode only looks: next and previous, nothing accepted or rejected.
+    if (reading()) return
+    switch (name) {
         case 'accept': { const r = atCaret(); if (r) accept([r]); return }
         case 'reject': { const r = atCaret(); if (r) reject([r]); return }
         case 'acceptAll': return accept(of(shown()))
@@ -342,7 +358,7 @@ export function command(name: string, source?: string | null) {
 export function onReviewKey(e: KeyboardEvent): boolean {
     if (!state.on || !e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return false
     const name = e.key === 'ArrowDown' ? 'next' : e.key === 'ArrowUp' ? 'previous' : e.key === 'Enter' ? 'accept' : e.key === 'Backspace' ? 'reject' : null
-    if (!name) return false
+    if (!name || (reading() && (name === 'accept' || name === 'reject'))) return false
     e.preventDefault()
     e.stopPropagation()
     command(name)
@@ -400,9 +416,15 @@ function hideActions() {
     if (actions) actions.style.display = 'none'
 }
 
+/** Reading mode switched on or off: the buttons up go, and next starts again from the top (or the caret). */
+export function reviewReadingChanged() {
+    readingAt = null
+    hideActions()
+}
+
 /** The buttons at the right end of the revision's line, in the margin beside the text where there is room. */
 export function showActionsFor(id: string | null) {
-    if (!state.on || !id || !state.show || id === quietUntilOther) return hideActions()
+    if (!state.on || !id || !state.show || id === quietUntilOther || reading()) return hideActions()
     const rect = view?.rectOf(id)
     if (!rect) return hideActions()
     const el = actionsElement()
@@ -468,7 +490,7 @@ let hoverTimer = 0
 /** Wires the caret, the mouse and the keys to the buttons; once for the page. */
 export function installReviewActions() {
     document.addEventListener('selectionchange', () => {
-        if (!state.on) return
+        if (!state.on || reading()) return
         const r = atCaret()
         if (!r) { if (actionsFor && !hovering) hideActions(); quietUntilOther = null; return }
         if (r.id !== actionsFor && r.id !== quietUntilOther) showActionsFor(r.id)
@@ -482,7 +504,8 @@ export function installReviewActions() {
     }, true)
     window.addEventListener('keydown', e => { onReviewKey(e) }, true)
     document.addEventListener('mouseover', e => {
-        if (!state.on || !view) return
+        // (Reading mode: no buttons, and the revision next or previous went to stays outlined.)
+        if (!state.on || !view || reading()) return
         const target = e.target as Element
         if (actions && actions.contains(target)) { clearTimeout(hoverTimer); return }
         const id = target instanceof Element ? view.revisionOf(target) : null

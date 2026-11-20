@@ -189,6 +189,7 @@ jobs:
           node key-matrix-check.js
           node review-check.js
           node review-layout-check.js
+          node review-reading-check.js
           node heading-click-check.js
           node fold-check.js
           node block-buttons-check.js
