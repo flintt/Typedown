@@ -55,13 +55,12 @@ internal static partial class Program
             var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.hiddenRun && l.textContent.includes('two')); const r = li.getBoundingClientRect(); const x = Math.round(r.left + 20), y = Math.round(r.top + r.height / 2); const e = document.elementFromPoint(x, y); return { x, y, box: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)], there: e ? e.tagName + '#' + e.id + '.' + String(e.className).slice(0, 30) : null } })()" }))["result"]!;
             notes.Add("the line: " + at.ToString(Newtonsoft.Json.Formatting.None));
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
-            // Physical pixels, as the screen point is: without this the window's place came out wrong and the click landed
-            // 40 px up and left of the line (runs 686-689, the page got it at 102,92 for 142,132).
+            // Click takes the point on the screen as it is: the window's place taken off it, the click landed 40 px up and
+            // left of the line (runs 686-691, the page got it at 102,92 for 142,132).
             SetProcessDpiAwarenessContext(new IntPtr(-4));
-            GetWindowRect(window, out var rc);
             // What the page gets of the click (run 686: a real click there did not open the run).
             await c.Call("test.editor.eval", new { windowId, script = "(() => { window.__hd01 = []; for (const t of ['pointerdown', 'mousedown', 'click']) document.addEventListener(t, e => window.__hd01.push(t + ' ' + e.target.tagName + '#' + (e.target.id || '') + '.' + String(e.target.className || '').slice(0, 40) + ' at ' + e.clientX + ',' + e.clientY), true); return true })()" });
-            await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
+            await Click(window, (int)screen["x"]!, (int)screen["y"]!);
             await Eventually(async () => Height(s = await Shown(), "three") > 0, 4000, 200);
             notes.Add($"clicked at page {at.ToString(Newtonsoft.Json.Formatting.None)}, screen {screen.ToString(Newtonsoft.Json.Formatting.None)}: the page got {(string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__hd01 || [])" }))["result"]}");
             notes.Add("shot, after the click (opened, with its line to fold it again): " + Screenshot("HD01-2-opened"));
