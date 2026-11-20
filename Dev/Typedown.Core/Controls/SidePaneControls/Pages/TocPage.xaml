@@ -32,8 +32,20 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <!-- Why a heading dropped in the outline did not move its section (a few seconds; read out by screen readers). -->
+        <TextBlock
+            x:Name="MoveNotice"
+            Grid.Row="1"
+            AutomationProperties.AutomationId="TocMoveNotice"
+            AutomationProperties.LiveSetting="Assertive"
+            Visibility="Collapsed"
+            Margin="12,0,8,4"
+            FontSize="12"
+            TextWrapping="Wrap"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,2" Spacing="2">
             <Button Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnExpandAllClick" ToolTipService.ToolTip="{u:LocaleString Key=TocPane.ExpandAll}">
                 <FontIcon FontSize="12" Glyph="&#xe70d;"/>
@@ -42,10 +54,16 @@
                 <FontIcon FontSize="12" Glyph="&#xe70e;"/>
             </Button>
         </StackPanel>
-        <muxc:TreeView 
+        <!-- A heading dragged moves its section in the document (TocPage.xaml.cs, OnDragItemsCompleted); the visual editor only. -->
+        <muxc:TreeView
             x:Name="TreeView"
-            Grid.Row="1"
+            Grid.Row="2"
             ItemTemplate="{StaticResource TocItemTemplate}"
+            CanDragItems="True"
+            CanReorderItems="True"
+            AllowDrop="True"
+            DragItemsStarting="OnDragItemsStarting"
+            DragItemsCompleted="OnDragItemsCompleted"
             ItemInvoked="OnItemInvoked"
             Expanding="OnNodeExpanding"
             Collapsed="OnNodeCollapsed"

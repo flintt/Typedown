@@ -997,6 +997,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>Kopakina katoa</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>Kāore i nekehia: ka hipa tētahi upoko i te taumata 6.</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>Kāore i nekehia: e kore e taea te neke i tētahi wāhanga ki roto i a ia anō.</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Whākina katoa</value>
   </data>

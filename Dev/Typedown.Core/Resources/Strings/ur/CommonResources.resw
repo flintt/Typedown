@@ -997,6 +997,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>سب سمیٹیں</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>منتقل نہیں ہوا: ایک سرخی سطح 6 سے آگے چلی جائے گی۔</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>منتقل نہیں ہوا: کسی حصے کو اس کے اپنے اندر نہیں لے جایا جا سکتا۔</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>سب پھیلائیں</value>
   </data>

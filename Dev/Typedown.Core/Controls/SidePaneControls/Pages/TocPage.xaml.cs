@@ -27,6 +27,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             {
                 watched.OutlineHighlighted += OnOutlineHighlighted;
                 watched.OutlineUpdated += OnOutlineUpdated;
+                watched.SectionMoved += OnSectionMoved;
             }
             OnOutlineUpdated();
             // The heading marked while the pane was away (closed, or the window's page rebuilt): its rows are made anew here
@@ -303,12 +304,89 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnCollapseAllClick(object sender, RoutedEventArgs e) => SetExpanded(TreeView.RootNodes, false);
 
+        // ---- a heading dragged: its section moved in the document (the user's 28, 2026-11-20, as Obsidian does) ----
+        // The tree moves the row itself as it is dropped; where it landed says what to ask of the page: after the row above
+        // it (its sibling, after its whole section), else before the row below it, else into the row it went under. The page
+        // moves the text (contentState/sectionMoveCtrl.js) and its outline comes back the usual way; refused, the rows are
+        // put back as the outline has them and the reason shown.
+
+        private (TreeViewNode parent, int index) dragFrom;
+
+        private static string SlugOf(TreeViewNode node) => (node?.Content as Models.TocTreeItem)?.TocItem?.Slug;
+
+        private (TreeViewNode parent, int index) PlaceOf(TreeViewNode node)
+        {
+            var parent = node.Parent?.Content is Models.TocTreeItem ? node.Parent : null;
+            return (parent, (parent?.Children ?? TreeView.RootNodes).IndexOf(node));
+        }
+
+        private void OnDragItemsStarting(TreeView sender, TreeViewDragItemsStartingEventArgs args)
+        {
+            // The text is moved: not in reading mode, and not in source mode (its outline is the text's lines, no blocks).
+            var settings = ViewModel?.SettingsViewModel;
+            var node = args.Items.Count == 1 ? FindNode(TreeView.RootNodes, (ContentOf(args.Items[0]) as Models.TocTreeItem)?.TocItem?.Slug) : null;
+            if (node == null || Editor == null || settings == null || settings.ReadOnly || settings.SourceCode) { args.Cancel = true; return; }
+            dragFrom = PlaceOf(node);
+        }
+
+        private void OnDragItemsCompleted(TreeView sender, TreeViewDragItemsCompletedEventArgs args)
+        {
+            var slug = args.Items.Count == 1 ? (ContentOf(args.Items[0]) as Models.TocTreeItem)?.TocItem?.Slug : null;
+            var node = FindNode(TreeView.RootNodes, slug);
+            if (node == null || args.DropResult != Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move) { PutBack(); return; }
+            var (parent, index) = PlaceOf(node);
+            if (parent == dragFrom.parent && index == dragFrom.index) return;
+            var siblings = parent?.Children ?? TreeView.RootNodes;
+            string to, where;
+            if (index > 0) { to = SlugOf(siblings[index - 1]); where = "after"; }
+            else if (index >= 0 && index + 1 < siblings.Count) { to = SlugOf(siblings[index + 1]); where = "before"; }
+            else if (parent != null) { to = SlugOf(parent); where = "inside"; }
+            else { PutBack(); return; }
+            if (to == null) { PutBack(); return; }
+            Utilities.Log.Debug($"outline: section {slug} dropped {where} {to}");
+            Editor.MoveSection(slug, to, where);
+        }
+
+        // The rows as the outline has them (the tree's own move undone).
+        private void PutBack()
+        {
+            try { if (Editor?.Toc is { } toc) Reconcile(TreeView.RootNodes, toc.Children); }
+            catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not put the rows back: {ex.Message}"); }
+        }
+
+        private Microsoft.UI.Dispatching.DispatcherQueueTimer noticeTimer;
+
+        private void OnSectionMoved(bool moved, string reason)
+        {
+            if (moved) return;
+            PutBack();
+            var text = reason switch
+            {
+                "tooDeep" => Utilities.Locale.GetString("TocPane.MoveTooDeep"),
+                "ownSection" => Utilities.Locale.GetString("TocPane.MoveIntoItself"),
+                _ => null,
+            };
+            Utilities.Log.Debug($"outline: section not moved ({reason})");
+            if (string.IsNullOrEmpty(text)) return;
+            MoveNotice.Text = text;
+            MoveNotice.Visibility = Visibility.Visible;
+            noticeTimer ??= DispatcherQueue.CreateTimer();
+            noticeTimer.Interval = System.TimeSpan.FromSeconds(5);
+            noticeTimer.IsRepeating = false;
+            noticeTimer.Tick -= OnNoticeTimer;
+            noticeTimer.Tick += OnNoticeTimer;
+            noticeTimer.Start();
+        }
+
+        private void OnNoticeTimer(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object e) => MoveNotice.Visibility = Visibility.Collapsed;
+
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             if (watched != null)
             {
                 watched.OutlineHighlighted -= OnOutlineHighlighted;
                 watched.OutlineUpdated -= OnOutlineUpdated;
+                watched.SectionMoved -= OnSectionMoved;
             }
             watched = null;
             shownToc = null;

@@ -997,6 +997,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>அனைத்தையும் சுருக்கு</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>நகர்த்தப்படவில்லை: ஒரு தலைப்பு நிலை 6-ஐத் தாண்டும்.</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>நகர்த்தப்படவில்லை: ஒரு பகுதியை அதனுள்ளேயே நகர்த்த முடியாது.</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>அனைத்தையும் விரி</value>
   </data>

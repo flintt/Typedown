@@ -984,6 +984,14 @@
     <value>全部摺疊</value>
     <comment>大纲/全部折叠</comment>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>未移動：標題會超過 6 級。</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>未移動：章節不能放進它自己裡面。</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="QuoteIncrease" xml:space="preserve">
     <value>增加引用層級</value>
     <comment>段落/增加引用层级</comment>

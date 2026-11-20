@@ -976,6 +976,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>Alle einklappen</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>Nicht verschoben: Eine Überschrift würde über Ebene 6 hinausgehen.</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>Nicht verschoben: Ein Abschnitt kann nicht in sich selbst verschoben werden.</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="QuoteIncrease" xml:space="preserve">
     <value>Zitatebene erhöhen</value>
   </data>

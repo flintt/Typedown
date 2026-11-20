@@ -997,6 +997,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>सभी संक्षिप्त करें</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>नहीं ले जाया गया: एक शीर्षक स्तर 6 से आगे चला जाएगा।</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>नहीं ले जाया गया: कोई अनुभाग अपने ही भीतर नहीं जा सकता।</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>सभी विस्तृत करें</value>
   </data>

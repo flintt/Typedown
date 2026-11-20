@@ -997,6 +997,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>Ahenda kõik</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>Ei teisaldatud: pealkiri läheks üle 6. taseme.</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>Ei teisaldatud: jaotist ei saa teisaldada iseenda sisse.</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Laienda kõik</value>
   </data>

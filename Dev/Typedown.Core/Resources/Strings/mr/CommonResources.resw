@@ -997,6 +997,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>सर्व संकुचित करा</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>हलवले नाही: एखादे शीर्षक स्तर 6 च्या पुढे जाईल.</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>हलवले नाही: विभाग स्वतःच्या आत जाऊ शकत नाही.</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>सर्व विस्तृत करा</value>
   </data>

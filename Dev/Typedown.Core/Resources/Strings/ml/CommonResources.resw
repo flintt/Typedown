@@ -997,6 +997,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>എല്ലാം ചുരുക്കുക</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>നീക്കിയില്ല: ഒരു തലക്കെട്ട് ലെവൽ 6 കടക്കും.</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>നീക്കിയില്ല: ഒരു വിഭാഗം അതിനുള്ളിലേക്കുതന്നെ നീക്കാനാവില്ല.</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>എല്ലാം വികസിപ്പിക്കുക</value>
   </data>

@@ -918,6 +918,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>Recolher tudo</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>Não movido: um título passaria do nível 6.</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>Não movido: uma seção não pode ir para dentro de si mesma.</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="QuoteIncrease" xml:space="preserve">
     <value>Aumentar nível de citação</value>
   </data>

@@ -997,6 +997,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>ସବୁ ସଂକୁଚିତ କରନ୍ତୁ</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>ଘୁଞ୍ଚାଯାଇନାହିଁ: ଏକ ଶୀର୍ଷକ ସ୍ତର 6 ଅତିକ୍ରମ କରିବ।</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>ଘୁଞ୍ଚାଯାଇନାହିଁ: ଏକ ବିଭାଗ ନିଜ ଭିତରକୁ ଯାଇପାରିବ ନାହିଁ।</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>ସବୁ ବିସ୍ତାର କରନ୍ତୁ</value>
   </data>

@@ -976,6 +976,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>すべて折りたたむ</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>移動しませんでした：見出しがレベル 6 を超えます。</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>移動しませんでした：セクションをそれ自身の中には移動できません。</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="QuoteIncrease" xml:space="preserve">
     <value>引用レベルを上げる</value>
   </data>

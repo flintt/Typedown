@@ -976,6 +976,14 @@
   <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>모두 접기</value>
   </data>
+  <data name="TocPane.MoveTooDeep" xml:space="preserve">
+    <value>이동하지 않음: 제목이 6단계를 넘게 됩니다.</value>
+    <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
+  </data>
+  <data name="TocPane.MoveIntoItself" xml:space="preserve">
+    <value>이동하지 않음: 섹션을 자기 자신 안으로 옮길 수 없습니다.</value>
+    <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>
+  </data>
   <data name="QuoteIncrease" xml:space="preserve">
     <value>인용 수준 늘리기</value>
   </data>
