@@ -988,6 +988,14 @@
   <data name="ReadOnlyMode" xml:space="preserve">
     <value>Režim čítania</value>
   </data>
+  <data name="HideDoneInReading" xml:space="preserve">
+    <value>Skryť hotové položky v režime čítania</value>
+    <comment>视图/阅读模式下隐藏整项删除线和已勾选的任务</comment>
+  </data>
+  <data name="HideDoneRun" xml:space="preserve">
+    <value>Skryté: {0} · Zobraziť</value>
+    <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
+  </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Hľadať v priečinku</value>
   </data>

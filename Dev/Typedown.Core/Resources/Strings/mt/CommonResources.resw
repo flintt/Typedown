@@ -988,6 +988,14 @@
   <data name="ReadOnlyMode" xml:space="preserve">
     <value>Modalità ta' qari</value>
   </data>
+  <data name="HideDoneInReading" xml:space="preserve">
+    <value>Aħbi l-oġġetti lesti fil-modalità tal-qari</value>
+    <comment>视图/阅读模式下隐藏整项删除线和已勾选的任务</comment>
+  </data>
+  <data name="HideDoneRun" xml:space="preserve">
+    <value>{0} moħbija · Uri</value>
+    <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
+  </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Fittex fil-kartella</value>
   </data>

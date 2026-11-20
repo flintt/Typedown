@@ -339,6 +339,8 @@ namespace Typedown.Core.ViewModels
                 Settings.ShowBlankLines,
                 Settings.JoinSoftBreaks,
                 Settings.BracketMath,
+                Settings.HideDoneInReading,
+                HideDoneLabel = Locale.GetString("HideDoneRun"),
                 Settings.DetailsBlocks,
                 Settings.CodeBlockLineNumbers,
                 Settings.ScrollPastEnd,

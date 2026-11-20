@@ -988,6 +988,14 @@
   <data name="ReadOnlyMode" xml:space="preserve">
     <value>ಓದುವ ಮೋಡ್</value>
   </data>
+  <data name="HideDoneInReading" xml:space="preserve">
+    <value>ಓದುವ ಮೋಡ್‌ನಲ್ಲಿ ಮುಗಿದ ಅಂಶಗಳನ್ನು ಮರೆಮಾಡಿ</value>
+    <comment>视图/阅读模式下隐藏整项删除线和已勾选的任务</comment>
+  </data>
+  <data name="HideDoneRun" xml:space="preserve">
+    <value>{0} ಮರೆಮಾಡಲಾಗಿದೆ · ತೋರಿಸಿ</value>
+    <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
+  </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>ಫೋಲ್ಡರ್‌ನಲ್ಲಿ ಹುಡುಕಿ</value>
   </data>
