@@ -15,11 +15,6 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         public TocPage()
         {
             InitializeComponent();
-            // The drag over the rows and the drop, handled or not by the tree's own list (it takes them, even not reordering:
-            // set in XAML, these never ran - run 682).
-            TreeView.AddHandler(DragOverEvent, new DragEventHandler(OnTreeDragOver), true);
-            TreeView.AddHandler(DragLeaveEvent, new DragEventHandler(OnTreeDragLeave), true);
-            TreeView.AddHandler(DropEvent, new DragEventHandler(OnTreeDrop), true);
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -330,6 +325,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             if (node == null || Editor == null || settings == null || settings.ReadOnly || settings.SourceCode) { args.Cancel = true; return; }
             dragged = node;
             shownDrop = null;
+            DropSurface.Visibility = Visibility.Visible;
             Utilities.Log.Debug($"outline: drag of {SlugOf(node)} begun");
         }
 
@@ -340,6 +336,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             dragged = null;
             ShowDrop(null);
+            DropSurface.Visibility = Visibility.Collapsed;
         }
 
         private static bool Within(TreeViewNode node, TreeViewNode ancestor)

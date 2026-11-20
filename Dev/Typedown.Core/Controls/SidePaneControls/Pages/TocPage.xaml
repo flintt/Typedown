@@ -62,7 +62,7 @@
             ItemTemplate="{StaticResource TocItemTemplate}"
             CanDragItems="True"
             CanReorderItems="False"
-            AllowDrop="True"
+            AllowDrop="False"
             DragItemsStarting="OnDragItemsStarting"
             DragItemsCompleted="OnDragItemsCompleted"
             ItemInvoked="OnItemInvoked"
@@ -76,6 +76,17 @@
                 </TransitionCollection>
             </muxc:TreeView.ItemContainerTransitions>
         </muxc:TreeView>
+        <!-- Over the rows while a heading is dragged, and only then: the drag over and the drop come here. On the tree they
+             never came to a drop - its own list took it (runs 682, 683: the drag over said where, nothing was dropped). -->
+        <Border
+            x:Name="DropSurface"
+            Grid.Row="2"
+            Background="Transparent"
+            AllowDrop="True"
+            Visibility="Collapsed"
+            DragOver="OnTreeDragOver"
+            DragLeave="OnTreeDragLeave"
+            Drop="OnTreeDrop"/>
         <!-- Where a dragged heading would land: a line before or after a row, a box around the row it would go into. -->
         <Canvas Grid.Row="2" IsHitTestVisible="False">
             <Rectangle x:Name="DropLine" Height="2" Visibility="Collapsed" Fill="{ThemeResource AccentFillColorDefaultBrush}"/>
