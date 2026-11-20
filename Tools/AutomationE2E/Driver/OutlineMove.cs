@@ -43,13 +43,14 @@ internal static partial class Program
         {
             var from = Row(heading);
             var to = Row(onto);
-            var asked = LogLines("outline: section").Count;
+            var asked = LogLines("outline: ").Count;
             SetProcessDpiAwarenessContext(new IntPtr(-4));
             await Drag(window, ((int)(from.Left + 40), (int)(from.Top + from.Height / 2)), ((int)(to.Left + 40), (int)(to.Top + to.Height * at)), steps: 20);
             var text = await TextWhen(t => t != original);
             await Task.Delay(500);
-            var log = LogLines("outline: section").Skip(asked).LastOrDefault() ?? "(nothing asked)";
-            notes.Add($"{heading} dropped at {at:0.##} of {onto}'s row: {text.Replace("\n", "\\n")}; {log[Math.Max(0, log.IndexOf("outline:", StringComparison.Ordinal))..]}");
+            // The drag as the host logged it: begun, each place it showed, the drop.
+            var logged = LogLines("outline: ").Skip(asked).Select(l => l[Math.Max(0, l.IndexOf("outline:", StringComparison.Ordinal))..]).ToList();
+            notes.Add($"{heading} dropped at {at:0.##} of {onto}'s row: {text.Replace("\n", "\\n")}; host: {(logged.Count > 0 ? string.Join(" | ", logged) : "(nothing)")}");
             return text;
         }
         async Task Undo(string what)
