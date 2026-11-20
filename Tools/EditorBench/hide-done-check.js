@@ -15,7 +15,7 @@ const { openEditor } = require('./harness');
     const shown = () => page.evaluate(() => {
         // Its own text, without the lists in it and the marks reading mode hides (~~).
         // (Of its content lines: a paragraph's hidden "P" icon is text too.)
-        const own = el => { const c = el.cloneNode(true); c.querySelectorAll('ul, ol, .ag-hide').forEach(x => x.remove()); return [...c.querySelectorAll('.ag-paragraph-content')].map(p => p.textContent).join('').trim(); };
+        const own = el => { const c = el.cloneNode(true); c.querySelectorAll('ul, ol, .ag-hide, .ag-gray').forEach(x => x.remove()); return [...c.querySelectorAll('.ag-paragraph-content')].map(p => p.textContent).join('').trim(); };
         const out = {};
         for (const el of document.querySelectorAll('#ag-editor-id li, #ag-editor-id p:not(li p)')) {
             const r = el.getBoundingClientRect();
@@ -53,11 +53,16 @@ const { openEditor } = require('./harness');
         check(s['two']?.height > 0 && s['three']?.height > 0 && !s['two']?.run, 'clicked, the run opens', { two: s['two'], three: s['three'] });
         check(s['done task']?.run === '1 hidden · Show', 'the other runs stay folded', s['done task']);
 
-        // The visual editor: nothing hidden. The text never changed.
+        // The visual editor hides too (one switch, the user's call - hide-done-edit-check); off, nothing anywhere. The text
+        // never changed.
+        await settings({ hideDone: false });
+        await pause(400);
+        s = await shown();
+        check(Object.values(s).every(b => b.height > 0 && !b.run), 'the switch off: nothing hidden', s);
         await mode(false, false);
         await pause(400);
         s = await shown();
-        check(Object.values(s).every(b => b.height > 0 && !b.run), 'visual editor: nothing hidden', s);
+        check(Object.values(s).every(b => b.height > 0 && !b.run), 'the switch off, the visual editor: nothing hidden', s);
         check((await flush()) === md, 'the text is unchanged', await flush());
         check(errors.length === 0, 'no page errors', errors);
     } catch (e) {

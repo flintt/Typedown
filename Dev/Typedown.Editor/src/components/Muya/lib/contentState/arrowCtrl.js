@@ -123,8 +123,11 @@ const arrowCtrl = ContentState => {
     const paragraph = findNearestParagraph(node)
     const id = paragraph.id
     const block = this.getBlock(id)
-    const preBlock = this.findPreBlockInLocation(block)
-    const nextBlock = this.findNextBlockInLocation(block)
+    // Past the blocks folded away by Hide Done Items (services/hideDone.ts): the caret never goes into what is not shown.
+    let preBlock = this.findPreBlockInLocation(block)
+    while (preBlock && this.isHiddenDone(preBlock)) preBlock = this.findPreBlockInLocation(preBlock)
+    let nextBlock = this.findNextBlockInLocation(block)
+    while (nextBlock && this.isHiddenDone(nextBlock)) nextBlock = this.findNextBlockInLocation(nextBlock)
     const { start, end } = selection.getCursorRange()
     const { topOffset, bottomOffset } = selection.getCursorYOffset(paragraph)
     if (!start || !end) {

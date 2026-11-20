@@ -1,4 +1,4 @@
-// Reading mode hides what is done (the user's 18, 2026-11-20; docs/todo.md 2026-11-20 用户清单): with the setting on, a
+// Hide Done Items, in reading mode and the visual editor (the user's 18, 2026-11-20; docs/todo.md 2026-11-20 用户清单): on, a
 // list item or paragraph struck through whole and a ticked task are folded away - each run of them one line, "N hidden ·
 // Show", that opens it. Only what is drawn changes, never the text. An ordered list keeps its numbers: the hidden items
 // stay list items of no height, still counted. A paragraph with a few words struck stays; a hidden item takes the items
@@ -31,7 +31,8 @@ function struck(el: Element): boolean {
         for (let n = walker.nextNode(); n; n = walker.nextNode()) {
             if (!n.textContent?.trim()) continue
             const parent = n.parentElement
-            if (parent?.closest('.ag-hide')) continue
+            // The marks, hidden (.ag-hide) or shown in the block with the caret (.ag-gray): not words.
+            if (parent?.closest('.ag-hide, .ag-gray')) continue
             if (!parent?.closest('del')) return false
             any = true
         }
@@ -55,7 +56,10 @@ export function applyHideDone() {
         el.classList.remove(DONE, FIRST)
         delete (el as HTMLElement).dataset.hiddenRun
     })
-    if (!on || !reading()) return
+    if (!on) return
+    // The visual editor too (one switch for both, the user's call): the run with the caret in it is shown - an item just
+    // ticked or struck stays under the caret until it goes elsewhere.
+    const caret = reading() ? null : window.getSelection()?.anchorNode ?? null
     // Document order: a list item before the ones in it, so one hidden takes those along (they are not looked at).
     const hidden: Element[] = []
     const taken = new Set<Element>()
@@ -76,6 +80,7 @@ export function applyHideDone() {
     }
     for (const run of runs) {
         if (opened.has(run[0].id)) continue
+        if (caret && editor.contains(caret) && run.some(el => el.contains(caret))) continue
         run.forEach(el => el.classList.add(DONE))
         run[0].classList.add(FIRST)
         ;(run[0] as HTMLElement).dataset.hiddenRun = label.replace('{0}', String(run.length))
@@ -87,7 +92,7 @@ function schedule() {
     frame = requestAnimationFrame(() => { frame = 0; applyHideDone() })
 }
 
-/** The setting (Settings > View: hide what is done in reading mode) and the run's line ("{0} hidden · Show"). */
+/** The setting (View > Hide Done Items) and the run's line ("{0} hidden · Show"). */
 export function setHideDone(value: boolean, text?: string) {
     on = value
     if (text) label = text
@@ -96,9 +101,11 @@ export function setHideDone(value: boolean, text?: string) {
         const editor = document.getElementById('ag-editor-id')
         // Drawn again: marked again (the marks are classes, no change to the tree, so this does not wake itself).
         if (editor) new MutationObserver(() => { if (on) schedule() }).observe(editor, { childList: true, subtree: true, characterData: true })
+        // The caret moved (the visual editor): the run it is in shown, the one it left folded.
+        document.addEventListener('selectionchange', () => { if (on && !reading()) schedule() })
         // A run's line opens it.
         document.addEventListener('click', e => {
-            if (!on || !reading()) return
+            if (!on) return
             const first = (e.target as Element | null)?.closest?.(`#ag-editor-id .${FIRST}`)
             if (!first) return
             e.preventDefault()

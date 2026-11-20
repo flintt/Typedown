@@ -169,6 +169,22 @@ const backspaceCtrl = ContentState => {
 
     const startBlock = this.getBlock(start.key)
     const endBlock = this.getBlock(end.key)
+    // Hide Done Items (services/hideDone.ts): at the start of the block after a fold, Backspace does not join it to a hidden
+    // item - the caret goes to the end of the block shown before the fold, nothing changed.
+    if (startBlock && start.key === end.key && start.offset === 0 && end.offset === 0) {
+      const pre = this.findPreBlockInLocation(startBlock)
+      if (pre && this.isHiddenDone(pre)) {
+        event.preventDefault()
+        let shown = pre
+        while (shown && this.isHiddenDone(shown)) shown = this.findPreBlockInLocation(shown)
+        if (shown) {
+          const position = { key: shown.key, offset: shown.text.length }
+          this.cursor = { start: position, end: position }
+          this.render()
+        }
+        return
+      }
+    }
     const maybeLastRow = this.getParent(endBlock)
     const startOutmostBlock = this.findOutMostBlock(startBlock)
     const endOutmostBlock = this.findOutMostBlock(endBlock)

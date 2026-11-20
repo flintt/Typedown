@@ -1465,9 +1465,9 @@ body.read-only #ag-editor-id {
   caret-color: transparent;
 }
 
-/* Reading mode hiding what is done (services/hideDone.ts): a run's blocks of no height - list items still list items, so
+/* Hide Done Items, reading mode and the visual editor (services/hideDone.ts): a run's blocks of no height - list items still list items, so
    an ordered list's numbers stay - and its first one the line that opens it. */
-body.read-only #ag-editor-id .td-done:not(.td-done-first) {
+#ag-editor-id .td-done:not(.td-done-first) {
   height: 0;
   margin-top: 0;
   margin-bottom: 0;
@@ -1476,19 +1476,19 @@ body.read-only #ag-editor-id .td-done:not(.td-done-first) {
   overflow: hidden;
   visibility: hidden;
 }
-body.read-only #ag-editor-id .td-done-first > * {
+#ag-editor-id .td-done-first > * {
   display: none;
 }
-body.read-only #ag-editor-id li.td-done-first::marker {
+#ag-editor-id li.td-done-first::marker {
   content: '';
 }
-body.read-only #ag-editor-id .td-done-first::before {
+#ag-editor-id .td-done-first::before {
   content: attr(data-hidden-run);
   font-size: 0.85em;
   color: var(--editorColor50, rgba(127, 127, 127, 0.8));
   cursor: pointer;
 }
-body.read-only #ag-editor-id .td-done-first:hover::before {
+#ag-editor-id .td-done-first:hover::before {
   text-decoration: underline;
 }
 
