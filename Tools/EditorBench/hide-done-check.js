@@ -54,13 +54,19 @@ const { openEditor } = require('./harness');
         check(s['done task']?.run === '1 hidden · Show', 'the other runs stay folded', s['done task']);
 
         // The opened run has a line over it that folds it again (the user, 2026-11-20).
-        const collapse = await page.evaluate(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.collapseRun); if (!li) return null; const r = li.getBoundingClientRect(); return { text: li.dataset.collapseRun, x: r.left + 10, y: r.top + 6 }; });
-        check(collapse?.text === '2 shown · Hide', 'the opened run: a line "2 shown · Hide" over it', collapse);
+        // At the right end of the item's first line, the item's text still on that line by its number.
+        const collapse = await page.evaluate(() => {
+            const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.collapseRun); if (!li) return null;
+            const r = li.getBoundingClientRect(), text = li.querySelector('.ag-paragraph-content').getBoundingClientRect();
+            const x = r.right - 8, y = r.top + 8, e = document.elementFromPoint(x, y);
+            return { text: li.dataset.collapseRun, x, y, textOnFirstLine: text.top - r.top < 8, there: e ? e.tagName + '#' + e.id + '.' + String(e.className).slice(0, 40) : null, li: li.id };
+        });
+        check(collapse?.text === '2 shown · Hide' && collapse.textOnFirstLine, 'the opened run: "2 shown · Hide" at the end of its first line, its text not pushed down', collapse);
         if (collapse) {
             await page.mouse.click(collapse.x, collapse.y);
             await pause(300);
             s = await shown();
-            check(s['two']?.run === '2 hidden · Show' && s['three']?.height === 0, 'clicked, the run folds again', { two: s['two'], three: s['three'] });
+            check(s['two']?.run === '2 hidden · Show' && s['three']?.height === 0, 'clicked, the run folds again', { two: s['two'], three: s['three'], collapse });
         }
 
         // The visual editor hides too (one switch, the user's call - hide-done-edit-check); off, nothing anywhere. The text
