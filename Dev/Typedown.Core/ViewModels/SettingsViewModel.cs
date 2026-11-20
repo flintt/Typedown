@@ -157,7 +157,7 @@ namespace Typedown.Core.ViewModels
         /// shown; the text, the visual editor, exports and copies are not touched. Off by default. The user, 2026-11-20 (an
         /// ordered list of many struck-through items took long scrolling).
         /// </summary>
-        public bool HideDoneInReading { get => GetSettingValue(false); set => SetSettingValue(value); }
+        public bool HideDone { get => GetSettingValue(false); set => SetSettingValue(value); }
 
         /// <summary>
         /// A &lt;details&gt; block with its &lt;summary&gt; and the Markdown in it shown and edited as one block, opened and closed
@@ -470,7 +470,7 @@ namespace Typedown.Core.ViewModels
             "ShowBlankLines",
             "JoinSoftBreaks",
             "BracketMath",
-            "HideDoneInReading",
+            "HideDone",
             "DetailsBlocks",
             "CodeBlockLineNumbers",
             "ScrollPastEnd",

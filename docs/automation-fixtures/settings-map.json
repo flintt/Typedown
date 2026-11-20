@@ -941,7 +941,7 @@
         "ShowBlankLines",
         "JoinSoftBreaks",
         "BracketMath",
-        "HideDoneInReading",
+        "HideDone",
         "DetailsBlocks",
         "WarnFirstEditRewrite",
         "CodeBlockLineNumbers",

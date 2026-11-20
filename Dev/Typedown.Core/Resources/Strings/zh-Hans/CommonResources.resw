@@ -953,9 +953,9 @@
     <value>阅读模式</value>
     <comment>阅读模式</comment>
   </data>
-  <data name="HideDoneInReading" xml:space="preserve">
-    <value>阅读模式下隐藏已完成和已删除的内容</value>
-    <comment>视图/阅读模式下隐藏整项删除线和已勾选的任务</comment>
+  <data name="HideDone" xml:space="preserve">
+    <value>隐藏已完成和已删除的内容</value>
+    <comment>视图/隐藏整项删除线和已勾选的任务（阅读和可视编辑都管）</comment>
   </data>
   <data name="HideDoneRun" xml:space="preserve">
     <value>已隐藏 {0} 项 · 显示</value>

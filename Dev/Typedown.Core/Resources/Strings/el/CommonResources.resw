@@ -988,9 +988,9 @@
   <data name="ReadOnlyMode" xml:space="preserve">
     <value>Λειτουργία ανάγνωσης</value>
   </data>
-  <data name="HideDoneInReading" xml:space="preserve">
-    <value>Απόκρυψη ολοκληρωμένων στοιχείων στη λειτουργία ανάγνωσης</value>
-    <comment>视图/阅读模式下隐藏整项删除线和已勾选的任务</comment>
+  <data name="HideDone" xml:space="preserve">
+    <value>Απόκρυψη ολοκληρωμένων στοιχείων</value>
+    <comment>视图/隐藏整项删除线和已勾选的任务（阅读和可视编辑都管）</comment>
   </data>
   <data name="HideDoneRun" xml:space="preserve">
     <value>Κρυφά: {0} · Εμφάνιση</value>

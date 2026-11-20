@@ -32,7 +32,7 @@ const { openEditor } = require('./harness');
         const before = await shown();
         check(Object.values(before).every(b => b.height > 0 && !b.run), 'reading mode, setting off: nothing hidden', before);
 
-        await settings({ hideDoneInReading: true, hideDoneLabel: '{0} hidden · Show' });
+        await settings({ hideDone: true, hideDoneLabel: '{0} hidden · Show' });
         await pause(500);
         let s = await shown();
         check(s['two']?.run === '2 hidden · Show', 'two struck items in a row: one line for both', s['two']);

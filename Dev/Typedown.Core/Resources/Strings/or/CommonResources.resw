@@ -988,9 +988,9 @@
   <data name="ReadOnlyMode" xml:space="preserve">
     <value>ପଢ଼ିବା ମୋଡ୍</value>
   </data>
-  <data name="HideDoneInReading" xml:space="preserve">
-    <value>ପଢ଼ିବା ମୋଡରେ ସମ୍ପୂର୍ଣ୍ଣ ଆଇଟମ ଲୁଚାନ୍ତୁ</value>
-    <comment>视图/阅读模式下隐藏整项删除线和已勾选的任务</comment>
+  <data name="HideDone" xml:space="preserve">
+    <value>ସମ୍ପୂର୍ଣ୍ଣ ଆଇଟମ ଲୁଚାନ୍ତୁ</value>
+    <comment>视图/隐藏整项删除线和已勾选的任务（阅读和可视编辑都管）</comment>
   </data>
   <data name="HideDoneRun" xml:space="preserve">
     <value>{0} ଲୁଚାଯାଇଛି · ଦେଖାନ୍ତୁ</value>

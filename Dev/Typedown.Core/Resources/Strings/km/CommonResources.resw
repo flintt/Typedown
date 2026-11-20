@@ -988,9 +988,9 @@
   <data name="ReadOnlyMode" xml:space="preserve">
     <value>របៀបអាន</value>
   </data>
-  <data name="HideDoneInReading" xml:space="preserve">
-    <value>លាក់ធាតុដែលបានបញ្ចប់ក្នុងរបៀបអាន</value>
-    <comment>视图/阅读模式下隐藏整项删除线和已勾选的任务</comment>
+  <data name="HideDone" xml:space="preserve">
+    <value>លាក់ធាតុដែលបានបញ្ចប់</value>
+    <comment>视图/隐藏整项删除线和已勾选的任务（阅读和可视编辑都管）</comment>
   </data>
   <data name="HideDoneRun" xml:space="preserve">
     <value>បានលាក់ {0} · បង្ហាញ</value>

@@ -988,9 +988,9 @@
   <data name="ReadOnlyMode" xml:space="preserve">
     <value>Bralni način</value>
   </data>
-  <data name="HideDoneInReading" xml:space="preserve">
-    <value>Skrij opravljene elemente v načinu branja</value>
-    <comment>视图/阅读模式下隐藏整项删除线和已勾选的任务</comment>
+  <data name="HideDone" xml:space="preserve">
+    <value>Skrij opravljene elemente</value>
+    <comment>视图/隐藏整项删除线和已勾选的任务（阅读和可视编辑都管）</comment>
   </data>
   <data name="HideDoneRun" xml:space="preserve">
     <value>Skrito: {0} · Pokaži</value>
