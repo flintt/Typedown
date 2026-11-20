@@ -67,6 +67,18 @@ internal static partial class Program
             Check(Height(s, "two") > 0 && Height(s, "three") > 0, "clicked, the run opens");
             Check(Run(s, "done task") != null, "the other runs stay folded");
 
+            // "2 shown · Hide" at the right end of the opened run's first line: a real click folds it again.
+            var back = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.collapseRun); if (!li) return null; const r = li.getBoundingClientRect(); return { x: Math.round(r.right - 8), y: Math.round(r.top + 8), text: li.dataset.collapseRun } })()" }))["result"];
+            Check(back is JObject, "the opened run has its line to fold it again");
+            if (back is JObject b)
+            {
+                notes.Add("the line to fold: " + b.ToString(Newtonsoft.Json.Formatting.None));
+                var point = await c.Call("test.editor.screenPoint", new { windowId, x = (int)b["x"]!, y = (int)b["y"]! });
+                await Click(window, (int)point["x"]!, (int)point["y"]!);
+                await Eventually(async () => Height(s = await Shown(), "three") == 0, 4000, 200);
+                Check(Run(s, "two") != null && Height(s, "three") == 0, "clicked, the run folds again");
+            }
+
             // The text never changed. The visual editor folds too (the caret elsewhere); off again, nothing hidden.
             Check((string)(await Get(c, id))["text"]! == original, "the text is unchanged");
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
