@@ -36,12 +36,13 @@ internal static partial class Program
             await Eventually(async () => holds(t = await Text()), 5000, 200);
             return t;
         }
-        // Dropped just under a row (after it, its sibling) or onto its middle (into it).
+        // Dropped onto a row's middle (into it), or below the last row, in the empty space (after it, at the top level): the
+        // tree takes a drop on a row's lower edge as into it too (run 679: A became B's sub-section).
         async Task DragRow(string heading, string onto, bool into)
         {
             var from = Row(heading);
             var to = Row(onto);
-            var y = into ? to.Top + to.Height / 2 : to.Bottom - 3;
+            var y = into ? to.Top + to.Height / 2 : to.Bottom + 14;
             SetProcessDpiAwarenessContext(new IntPtr(-4));
             await Drag(window, ((int)(from.Left + 40), (int)(from.Top + from.Height / 2)), ((int)(to.Left + 40), (int)y), steps: 20);
             await Task.Delay(800);
@@ -53,7 +54,7 @@ internal static partial class Program
             SetProcessDpiAwarenessContext(new IntPtr(-4));
             notes.Add($"rows: A {Row("A")}, A1 {Row("A1")}, B {Row("B")}");
 
-            // A below B: after B's section, its sub-section with it.
+            // A below B (the last row): after B's section, its sub-section with it.
             await DragRow("A", "B", into: false);
             var after = await TextWhen(t => t != original);
             notes.Add("A dropped below B: " + after.Replace("\n", "\\n"));
