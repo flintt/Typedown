@@ -57,7 +57,7 @@ internal static partial class Program
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
             GetWindowRect(window, out var rc);
             // What the page gets of the click (run 686: a real click there did not open the run).
-            await c.Call("test.editor.eval", new { windowId, script = "(() => { window.__hd01 = []; for (const t of ['pointerdown', 'mousedown', 'click']) document.addEventListener(t, e => window.__hd01.push(t + ' ' + e.target.tagName + '#' + (e.target.id || '') + '.' + String(e.target.className || '').slice(0, 40)), true); return true })()" });
+            await c.Call("test.editor.eval", new { windowId, script = "(() => { window.__hd01 = []; for (const t of ['pointerdown', 'mousedown', 'click']) document.addEventListener(t, e => window.__hd01.push(t + ' ' + e.target.tagName + '#' + (e.target.id || '') + '.' + String(e.target.className || '').slice(0, 40) + ' at ' + e.clientX + ',' + e.clientY), true); return true })()" });
             await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
             await Eventually(async () => Height(s = await Shown(), "three") > 0, 4000, 200);
             notes.Add($"clicked at page {at.ToString(Newtonsoft.Json.Formatting.None)}, screen {screen.ToString(Newtonsoft.Json.Formatting.None)}: the page got {(string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__hd01 || [])" }))["result"]}");
