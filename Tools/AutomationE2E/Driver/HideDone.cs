@@ -48,9 +48,12 @@ internal static partial class Program
             Check(Height(s, "one") > 0 && Height(s, "four") > 0, "the items around stay");
             Check(Run(s, "done task") != null && Height(s, "open task") > 0, "a ticked task folded, an open one shown");
             Check(Height(s, "Some partly struck.") > 0 && Run(s, "Some partly struck.") == null, "a paragraph with a few words struck stays");
+            notes.Add("shot, reading mode folded: " + Screenshot("HD01-1-reading-folded"));
 
             // A real click on the line opens its run.
-            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.hiddenRun && l.textContent.includes('two')); const r = li.getBoundingClientRect(); return { x: Math.round(r.left + 20), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+            // The line's box, and what the page has at the point clicked (run 687: the click came to the editor itself).
+            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.hiddenRun && l.textContent.includes('two')); const r = li.getBoundingClientRect(); const x = Math.round(r.left + 20), y = Math.round(r.top + r.height / 2); const e = document.elementFromPoint(x, y); return { x, y, box: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)], there: e ? e.tagName + '#' + e.id + '.' + String(e.className).slice(0, 30) : null } })()" }))["result"]!;
+            notes.Add("the line: " + at.ToString(Newtonsoft.Json.Formatting.None));
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
             GetWindowRect(window, out var rc);
             // What the page gets of the click (run 686: a real click there did not open the run).
@@ -58,13 +61,15 @@ internal static partial class Program
             await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
             await Eventually(async () => Height(s = await Shown(), "three") > 0, 4000, 200);
             notes.Add($"clicked at page {at.ToString(Newtonsoft.Json.Formatting.None)}, screen {screen.ToString(Newtonsoft.Json.Formatting.None)}: the page got {(string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__hd01 || [])" }))["result"]}");
+            notes.Add("shot, after the click (opened, with its line to fold it again): " + Screenshot("HD01-2-opened"));
             Check(Height(s, "two") > 0 && Height(s, "three") > 0, "clicked, the run opens");
             Check(Run(s, "done task") != null, "the other runs stay folded");
 
-            // The text never changed; off again, nothing hidden.
+            // The text never changed. The visual editor folds too (the caret elsewhere); off again, nothing hidden.
             Check((string)(await Get(c, id))["text"]! == original, "the text is unchanged");
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
-            await Task.Delay(400);
+            await Task.Delay(800);
+            notes.Add("shot, the visual editor folded: " + Screenshot("HD01-3-visual-folded"));
             await InvokeMenuBarItem(window, "HideDoneItem");
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = true });
             await Task.Delay(800);

@@ -39,13 +39,15 @@ internal static partial class Program
         }
         // A heading's row dragged to a point on another row (0 its top, 1 its bottom, more is below it), the text noted with
         // what the host asked of the page.
-        async Task<string> DragRow(string heading, string onto, double at)
+        async Task<string> DragRow(string heading, string onto, double at, string? shot = null)
         {
             var from = Row(heading);
             var to = Row(onto);
             var asked = LogLines("outline: ").Count;
             SetProcessDpiAwarenessContext(new IntPtr(-4));
-            await Drag(window, ((int)(from.Left + 40), (int)(from.Top + from.Height / 2)), ((int)(to.Left + 40), (int)(to.Top + to.Height * at)), steps: 20);
+            // A picture while the row is held there: the line or the box the outline shows (for the user, 2026-11-20).
+            Func<Task>? held = shot == null ? null : async () => { await Task.Delay(300); notes.Add($"shot, {shot}: {Screenshot("OL07-" + shot)}"); };
+            await Drag(window, ((int)(from.Left + 40), (int)(from.Top + from.Height / 2)), ((int)(to.Left + 40), (int)(to.Top + to.Height * at)), steps: 20, whileHeld: held);
             var text = await TextWhen(t => t != original);
             await Task.Delay(500);
             // The drag as the host logged it: begun, each place it showed, the drop.
@@ -80,7 +82,8 @@ internal static partial class Program
             };
             foreach (var (drag, onto, at, expected, what) in cases)
             {
-                var text = await DragRow(drag, onto, at);
+                var shot = at == 0.5 ? "into-box" : at == 0.85 && drag == "A" ? "after-line" : at == 0.15 ? "before-line" : null;
+                var text = await DragRow(drag, onto, at, shot);
                 Check(text == expected, what);
                 if (text != original) await Undo(what);
             }
