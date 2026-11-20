@@ -54,18 +54,34 @@ internal static partial class Program
             SetProcessDpiAwarenessContext(new IntPtr(-4));
             notes.Add($"rows: A {Row("A")}, A1 {Row("A1")}, B {Row("B")}");
 
-            // A below B (the last row): after B's section, its sub-section with it.
-            await DragRow("A", "B", into: false);
-            var after = await TextWhen(t => t != original);
-            notes.Add("A dropped below B: " + after.Replace("\n", "\\n"));
-            Check(after == "# B\n\nb text\n\n# A\n\na text\n\n## A1\n\na1 text\n", "A dropped below B: A's section, A1 with it, after B");
-
-            // One Ctrl+Z: back as it was.
-            await c.Call("test.editor.focus", new { windowId });
-            await Task.Delay(150);
-            Chord("Ctrl+Z");
-            var undone = await TextWhen(t => t == original);
-            Check(undone == original, "one Ctrl+Z puts the section back");
+            // Where on B's row a drop of A lands (runs 679, 680: its lower edge and the space below the last row both put A
+            // into B): each drop point tried on the document as it was, the text and what the host asked noted.
+            const string afterB = "# B\n\nb text\n\n# A\n\na text\n\n## A1\n\na1 text\n";
+            const string intoB = "# B\n\nb text\n\n## A\n\na text\n\n### A1\n\na1 text\n";
+            var results = new Dictionary<string, string>();
+            foreach (var (name, at) in new (string, double)[] { ("top edge", 0.08), ("upper quarter", 0.25), ("middle", 0.5), ("lower quarter", 0.75), ("below", 1.45) })
+            {
+                var a = Row("A");
+                var b = Row("B");
+                var asked = LogLines("outline: section").Count;
+                await Drag(window, ((int)(a.Left + 40), (int)(a.Top + a.Height / 2)), ((int)(b.Left + 40), (int)(b.Top + b.Height * at)), steps: 20);
+                var text = await TextWhen(t => t != original);
+                await Task.Delay(500);
+                var log = LogLines("outline: section").Skip(asked).LastOrDefault() ?? "(nothing asked)";
+                results[name] = text == afterB ? "after B" : text == intoB ? "into B" : text == original ? "unchanged" : text.Replace("\n", "\\n");
+                notes.Add($"A dropped at B's {name}: {results[name]}; {log[(log.IndexOf("outline:", StringComparison.Ordinal))..]}");
+                if (text != original)
+                {
+                    await c.Call("test.editor.focus", new { windowId });
+                    await Task.Delay(150);
+                    Chord("Ctrl+Z");
+                    var undone = await TextWhen(t => t == original);
+                    Check(undone == original, $"after the drop at B's {name}, one Ctrl+Z puts the section back");
+                    await Task.Delay(600);
+                }
+            }
+            Check(results.Values.Contains("after B"), "a drop somewhere on or below B puts A after B, at its level");
+            Check(results["middle"] == "into B", "a drop on B's middle puts A into B, a level down");
 
             // B onto A: into A as its last sub-section, a level down.
             await DragRow("B", "A", into: true);
