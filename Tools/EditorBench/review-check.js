@@ -192,7 +192,14 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         await pause(900);
         const shownFor = await page.evaluate(() => document.getElementById('td-review-actions')?.dataset.for);
         check(shownFor === strips[1].rid, 'over the middle strip, the buttons are for it', { shownFor, strips });
+        // Hover alone outlines nothing (the borders got in the way of reading, the user's 16); the pointer on the buttons
+        // outlines what they act on, and off them again nothing.
+        const outlinedIds = () => page.evaluate(() => [...new Set([...document.querySelectorAll('.td-review-current')].map(e => e.getAttribute('data-rid') || e.getAttribute('data-del-above-rid') || e.getAttribute('data-del-below-rid')))]);
+        check((await outlinedIds()).length === 0, 'hovering a revision outlines nothing', await outlinedIds());
         const cross = await page.evaluate(() => { const b = document.querySelector('#td-review-actions .td-review-reject').getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; });
+        await page.mouse.move(cross.x, cross.y, { steps: 4 });
+        await pause(200);
+        check(JSON.stringify(await outlinedIds()) === JSON.stringify([strips[1].rid]), 'the pointer on the buttons outlines the revision they are for', await outlinedIds());
         await page.mouse.click(cross.x, cross.y);
         await pause(500);
         const afterReject = await flush();

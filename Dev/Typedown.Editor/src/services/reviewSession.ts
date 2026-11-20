@@ -333,7 +333,7 @@ function go(back: boolean) {
     if (readOnly) { readingAt = r.id; markCurrent(r.id); return }
     // The caret is in it now: its buttons, even for the one just typed in (the reader went to it).
     quietUntilOther = null
-    setTimeout(() => showActionsFor(r.id), 0)
+    setTimeout(() => showActionsFor(r.id, true), 0)
 }
 
 /** The host's commands (its status bar, its menus): next, previous, accept, reject, acceptAll, rejectAll. */
@@ -394,12 +394,18 @@ function actionsElement() {
         button('td-review-accept', '✓', () => { const r = byId(actionsFor); if (r) accept([r]) }),
         button('td-review-reject', '✗', () => { const r = byId(actionsFor); if (r) reject([r]) }),
     )
+    // The pointer on the buttons: the revision they act on outlined while it is there.
+    actions.addEventListener('mouseenter', () => markCurrent(actionsFor))
+    actions.addEventListener('mouseleave', () => markCurrent(outlined ? actionsFor : null))
     document.body.appendChild(actions)
     return actions
 }
 
-// The revision the buttons are for is outlined: with several revisions on one line, which one they act on.
+// The revision the buttons are for is outlined - with several revisions on one line, which one they act on - only when
+// next or previous went to it or the pointer is on the buttons: outlined on hover too, the borders got in the way of
+// reading (the user, 2026-11-20, 16).
 const CURRENT = 'td-review-current'
+let outlined = false
 
 function markCurrent(id: string | null) {
     document.querySelectorAll('.' + CURRENT).forEach(e => e.classList.remove(CURRENT))
@@ -412,6 +418,7 @@ function markCurrent(id: string | null) {
 
 function hideActions() {
     actionsFor = null
+    outlined = false
     markCurrent(null)
     if (actions) actions.style.display = 'none'
 }
@@ -422,9 +429,13 @@ export function reviewReadingChanged() {
     hideActions()
 }
 
-/** The buttons at the right end of the revision's line, in the margin beside the text where there is room. */
-export function showActionsFor(id: string | null) {
+/**
+ * The buttons at the right end of the revision's line, in the margin beside the text where there is room. `outline`:
+ * the revision outlined too (next and previous); not given, it stays as it was for the same revision (a scroll).
+ */
+export function showActionsFor(id: string | null, outline?: boolean) {
     if (!state.on || !id || !state.show || id === quietUntilOther || reading()) return hideActions()
+    outlined = outline ?? (id === actionsFor && outlined)
     const rect = view?.rectOf(id)
     if (!rect) return hideActions()
     const el = actionsElement()
@@ -443,7 +454,7 @@ export function showActionsFor(id: string | null) {
         meta.textContent = [who, format, revisionTime(r.time, state.labels.locale)].filter(Boolean).join(' · ')
         meta.title = [who, new Date(r.time).toLocaleString(state.labels.locale || undefined), r.session ? `#${r.session}` : ''].filter(Boolean).join(' · ')
     } else meta.textContent = ''
-    markCurrent(id)
+    markCurrent(outlined ? id : null)
     el.style.display = 'flex'
     const editor = document.querySelector('#ag-editor-id') ?? document.querySelector('.CodeMirror-lines')
     const column = editor?.getBoundingClientRect()
