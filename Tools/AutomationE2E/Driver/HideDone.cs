@@ -53,8 +53,11 @@ internal static partial class Program
             var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.hiddenRun && l.textContent.includes('two')); const r = li.getBoundingClientRect(); return { x: Math.round(r.left + 20), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
             GetWindowRect(window, out var rc);
+            // What the page gets of the click (run 686: a real click there did not open the run).
+            await c.Call("test.editor.eval", new { windowId, script = "(() => { window.__hd01 = []; for (const t of ['pointerdown', 'mousedown', 'click']) document.addEventListener(t, e => window.__hd01.push(t + ' ' + e.target.tagName + '#' + (e.target.id || '') + '.' + String(e.target.className || '').slice(0, 40)), true); return true })()" });
             await Click(window, (int)screen["x"]! - rc.Left, (int)screen["y"]! - rc.Top);
             await Eventually(async () => Height(s = await Shown(), "three") > 0, 4000, 200);
+            notes.Add($"clicked at page {at.ToString(Newtonsoft.Json.Formatting.None)}, screen {screen.ToString(Newtonsoft.Json.Formatting.None)}: the page got {(string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__hd01 || [])" }))["result"]}");
             Check(Height(s, "two") > 0 && Height(s, "three") > 0, "clicked, the run opens");
             Check(Run(s, "done task") != null, "the other runs stay folded");
 
