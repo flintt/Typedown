@@ -191,6 +191,7 @@ jobs:
           node review-layout-check.js
           node review-reading-check.js
           node outline-move-check.js
+          node hide-done-check.js
           node heading-click-check.js
           node fold-check.js
           node block-buttons-check.js

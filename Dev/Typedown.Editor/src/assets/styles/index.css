@@ -1465,6 +1465,33 @@ body.read-only #ag-editor-id {
   caret-color: transparent;
 }
 
+/* Reading mode hiding what is done (services/hideDone.ts): a run's blocks of no height - list items still list items, so
+   an ordered list's numbers stay - and its first one the line that opens it. */
+body.read-only #ag-editor-id .td-done:not(.td-done-first) {
+  height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+body.read-only #ag-editor-id .td-done-first > * {
+  display: none;
+}
+body.read-only #ag-editor-id li.td-done-first::marker {
+  content: '';
+}
+body.read-only #ag-editor-id .td-done-first::before {
+  content: attr(data-hidden-run);
+  font-size: 0.85em;
+  color: var(--editorColor50, rgba(127, 127, 127, 0.8));
+  cursor: pointer;
+}
+body.read-only #ag-editor-id .td-done-first:hover::before {
+  text-decoration: underline;
+}
+
 /* Reading mode renders the document and nothing else: no caret, no editing hints and no hover affordances.
    The active-block rules above already hide the table drag bars, the tool bar and the language input; these
    cover what does not depend on the active block. */

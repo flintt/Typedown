@@ -13,9 +13,11 @@ const { openEditor } = require('./harness');
     const settings = o => page.evaluate(o => window.__deliver('SettingsChanged', o), o);
     // What shows of each block by its own text: its height, and the line standing for a hidden run.
     const shown = () => page.evaluate(() => {
-        const own = el => [...el.childNodes].filter(n => !(n.nodeType === 1 && /^(UL|OL)$/.test(n.tagName))).map(n => n.textContent).join('').trim();
+        // Its own text, without the lists in it and the marks reading mode hides (~~).
+        // (Of its content lines: a paragraph's hidden "P" icon is text too.)
+        const own = el => { const c = el.cloneNode(true); c.querySelectorAll('ul, ol, .ag-hide').forEach(x => x.remove()); return [...c.querySelectorAll('.ag-paragraph-content')].map(p => p.textContent).join('').trim(); };
         const out = {};
-        for (const el of document.querySelectorAll('#ag-editor-id li, #ag-editor-id > .ag-paragraph, #ag-editor-id > p')) {
+        for (const el of document.querySelectorAll('#ag-editor-id li, #ag-editor-id p:not(li p)')) {
             const r = el.getBoundingClientRect();
             out[own(el)] = { height: Math.round(r.height), display: getComputedStyle(el).display, run: el.dataset.hiddenRun || null };
         }
@@ -40,7 +42,7 @@ const { openEditor } = require('./harness');
         check(four === 4, 'four keeps its number (the hidden items are counted)', four);
         check(s['done task']?.run === '1 hidden · Show' && s['open task']?.height > 0, 'a ticked task hidden, an open one shown', { done: s['done task'], open: s['open task'] });
         const partly = Object.keys(s).find(k => k.startsWith('Some'));
-        check(partly && s[partly].height > 0 && !s[partly].run, 'a paragraph with a few words struck stays', s[partly]);
+        check(partly && s[partly].height > 0 && !s[partly].run, 'a paragraph with a few words struck stays', partly ? s[partly] : Object.keys(s));
         check(s['Whole paragraph struck.']?.run === '1 hidden · Show', 'a paragraph struck through whole is hidden', s['Whole paragraph struck.']);
 
         // The line opens its run.

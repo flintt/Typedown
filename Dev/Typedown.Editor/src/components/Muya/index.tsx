@@ -80,6 +80,7 @@ import 'components/Muya/themes/default.css'
 import { noteScroll, recentScrolls } from 'services/scrollWriters'
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults'
 import { previewOf } from 'services/findPreview'
+import { setHideDone } from 'services/hideDone'
 import { markStartup } from 'services/startupMarks'
 import { actOnRevision, registerReviewView, reviewActive, reviewAtTarget, reviewLabels, reviewReadingChanged } from 'services/reviewSession'
 import { ghostsOf, leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
@@ -1743,6 +1744,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // Review's buttons are not for reading mode (they accept and reject).
         reviewReadingChanged()
     }, [editor, props.options?.readOnly])
+
+    // Reading mode hides what is done when the reader asks (services/hideDone.ts): after the effect above has drawn the
+    // document for reading.
+    useEffect(() => {
+        if (editor) setHideDone(props.options?.hideDoneInReading === true, props.options?.hideDoneLabel)
+    }, [editor, props.options?.readOnly, props.options?.hideDoneInReading, props.options?.hideDoneLabel])
 
     // A paste the browser does itself (Ctrl+V reaching the page while the host's shortcut did not take it) put the
     // clipboard's HTML straight into the document, as foreign elements Muya does not know and never reports: the
