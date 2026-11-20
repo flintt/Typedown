@@ -116,12 +116,8 @@ export function setHideDone(value: boolean, text?: string, collapseText?: string
         document.addEventListener('click', e => {
             if (!on) return
             const target = e.target as Element | null
-            // A real click on the line came to the editor itself, though the line is what is at the point (the app on
-            // w10, runs 686-688): what is at the point is asked too.
-            const under = target?.closest?.(`.${FIRST}, .${OPENED}`) ? [] : document.elementsFromPoint(e.clientX, e.clientY)
-            const first = target?.closest?.(`#ag-editor-id .${FIRST}`) ?? under.find(el => el.matches(`#ag-editor-id .${FIRST}`)) ?? null
-            // An opened run's line is its first block's own box, not the text in it: the topmost element there.
-            const back = target?.matches?.(`#ag-editor-id .${OPENED}`) ? target : under[0]?.matches(`#ag-editor-id .${OPENED}`) ? under[0] : null
+            const first = target?.closest?.(`#ag-editor-id .${FIRST}`)
+            const back = target?.matches?.(`#ag-editor-id .${OPENED}`) ? target : null
             if (!first && !back) return
             e.preventDefault()
             e.stopPropagation()
