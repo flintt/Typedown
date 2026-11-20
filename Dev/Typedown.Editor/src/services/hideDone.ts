@@ -6,9 +6,12 @@
 
 const DONE = 'td-done'
 const FIRST = 'td-done-first'
+// An opened run's first block: the line over it folds the run again (the user, 2026-11-20).
+const OPENED = 'td-done-opened'
 
 let on = false
 let label = '{0}'
+let collapseLabel = '{0}'
 // Runs opened, by their first block's id.
 const opened = new Set<string>()
 let installed = false
@@ -52,9 +55,10 @@ function done(el: Element): boolean {
 export function applyHideDone() {
     const editor = document.getElementById('ag-editor-id')
     if (!editor) return
-    editor.querySelectorAll(`.${DONE}`).forEach(el => {
-        el.classList.remove(DONE, FIRST)
+    editor.querySelectorAll(`.${DONE}, .${OPENED}`).forEach(el => {
+        el.classList.remove(DONE, FIRST, OPENED)
         delete (el as HTMLElement).dataset.hiddenRun
+        delete (el as HTMLElement).dataset.collapseRun
     })
     if (!on) return
     // The visual editor too (one switch for both, the user's call): the run with the caret in it is shown - an item just
@@ -79,7 +83,11 @@ export function applyHideDone() {
         else runs.push([el])
     }
     for (const run of runs) {
-        if (opened.has(run[0].id)) continue
+        if (opened.has(run[0].id)) {
+            run[0].classList.add(OPENED)
+            ;(run[0] as HTMLElement).dataset.collapseRun = collapseLabel.replace('{0}', String(run.length))
+            continue
+        }
         if (caret && editor.contains(caret) && run.some(el => el.contains(caret))) continue
         run.forEach(el => el.classList.add(DONE))
         run[0].classList.add(FIRST)
@@ -92,10 +100,11 @@ function schedule() {
     frame = requestAnimationFrame(() => { frame = 0; applyHideDone() })
 }
 
-/** The setting (View > Hide Done Items) and the run's line ("{0} hidden · Show"). */
-export function setHideDone(value: boolean, text?: string) {
+/** The setting (View > Hide Done Items), the run's line ("{0} hidden · Show") and an opened run's ("{0} shown · Hide"). */
+export function setHideDone(value: boolean, text?: string, collapseText?: string) {
     on = value
     if (text) label = text
+    if (collapseText) collapseLabel = collapseText
     if (!installed) {
         installed = true
         const editor = document.getElementById('ag-editor-id')
@@ -103,14 +112,17 @@ export function setHideDone(value: boolean, text?: string) {
         if (editor) new MutationObserver(() => { if (on) schedule() }).observe(editor, { childList: true, subtree: true, characterData: true })
         // The caret moved (the visual editor): the run it is in shown, the one it left folded.
         document.addEventListener('selectionchange', () => { if (on && !reading()) schedule() })
-        // A run's line opens it.
+        // A run's line opens it; an opened run's line (its first block's own box, not its text) folds it again.
         document.addEventListener('click', e => {
             if (!on) return
-            const first = (e.target as Element | null)?.closest?.(`#ag-editor-id .${FIRST}`)
-            if (!first) return
+            const target = e.target as Element | null
+            const first = target?.closest?.(`#ag-editor-id .${FIRST}`)
+            const back = target?.matches?.(`#ag-editor-id .${OPENED}`) ? target : null
+            if (!first && !back) return
             e.preventDefault()
             e.stopPropagation()
-            opened.add(first.id)
+            if (first) opened.add(first.id)
+            else opened.delete(back!.id)
             applyHideDone()
         }, true)
     }

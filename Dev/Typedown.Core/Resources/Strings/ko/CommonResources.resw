@@ -959,6 +959,10 @@
     <value>{0}개 숨김 · 표시</value>
     <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
   </data>
+  <data name="HideDoneCollapse" xml:space="preserve">
+    <value>{0}개 표시됨 · 숨기기</value>
+    <comment>隐藏已完成的内容/展开后那一段顶上的一行，{0} 是项数，点它再折回去</comment>
+  </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>열린 폴더가 없습니다. 파일이나 폴더를 열면 여기에 표시됩니다.</value>
   </data>

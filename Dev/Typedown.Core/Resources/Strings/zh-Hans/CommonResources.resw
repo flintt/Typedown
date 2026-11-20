@@ -961,6 +961,10 @@
     <value>已隐藏 {0} 项 · 显示</value>
     <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
   </data>
+  <data name="HideDoneCollapse" xml:space="preserve">
+    <value>已显示 {0} 项 · 收起</value>
+    <comment>隐藏已完成的内容/展开后那一段顶上的一行，{0} 是项数，点它再折回去</comment>
+  </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>未打开文件夹。打开文件或文件夹后在此浏览。</value>
     <comment>文件栏/未打开文件夹</comment>

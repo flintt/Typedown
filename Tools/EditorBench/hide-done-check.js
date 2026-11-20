@@ -32,7 +32,7 @@ const { openEditor } = require('./harness');
         const before = await shown();
         check(Object.values(before).every(b => b.height > 0 && !b.run), 'reading mode, setting off: nothing hidden', before);
 
-        await settings({ hideDone: true, hideDoneLabel: '{0} hidden · Show' });
+        await settings({ hideDone: true, hideDoneLabel: '{0} hidden · Show', hideDoneCollapseLabel: '{0} shown · Hide' });
         await pause(500);
         let s = await shown();
         check(s['two']?.run === '2 hidden · Show', 'two struck items in a row: one line for both', s['two']);
@@ -52,6 +52,16 @@ const { openEditor } = require('./harness');
         s = await shown();
         check(s['two']?.height > 0 && s['three']?.height > 0 && !s['two']?.run, 'clicked, the run opens', { two: s['two'], three: s['three'] });
         check(s['done task']?.run === '1 hidden · Show', 'the other runs stay folded', s['done task']);
+
+        // The opened run has a line over it that folds it again (the user, 2026-11-20).
+        const collapse = await page.evaluate(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.collapseRun); if (!li) return null; const r = li.getBoundingClientRect(); return { text: li.dataset.collapseRun, x: r.left + 10, y: r.top + 6 }; });
+        check(collapse?.text === '2 shown · Hide', 'the opened run: a line "2 shown · Hide" over it', collapse);
+        if (collapse) {
+            await page.mouse.click(collapse.x, collapse.y);
+            await pause(300);
+            s = await shown();
+            check(s['two']?.run === '2 hidden · Show' && s['three']?.height === 0, 'clicked, the run folds again', { two: s['two'], three: s['three'] });
+        }
 
         // The visual editor hides too (one switch, the user's call - hide-done-edit-check); off, nothing anywhere. The text
         // never changed.

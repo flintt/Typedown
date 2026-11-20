@@ -959,6 +959,10 @@
     <value>Скрыто: {0} · Показать</value>
     <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
   </data>
+  <data name="HideDoneCollapse" xml:space="preserve">
+    <value>Показано: {0} · Скрыть</value>
+    <comment>隐藏已完成的内容/展开后那一段顶上的一行，{0} 是项数，点它再折回去</comment>
+  </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Папка не открыта. Откройте файл или папку, чтобы просматривать её здесь.</value>
   </data>

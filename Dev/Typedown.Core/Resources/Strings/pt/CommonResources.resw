@@ -901,6 +901,10 @@
     <value>{0} ocultos · Mostrar</value>
     <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
   </data>
+  <data name="HideDoneCollapse" xml:space="preserve">
+    <value>{0} mostrados · Ocultar</value>
+    <comment>隐藏已完成的内容/展开后那一段顶上的一行，{0} 是项数，点它再折回去</comment>
+  </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nenhuma pasta aberta. Abra um arquivo ou uma pasta para navegar aqui.</value>
   </data>

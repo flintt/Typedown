@@ -959,6 +959,10 @@
     <value>{0} 件を非表示 · 表示</value>
     <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
   </data>
+  <data name="HideDoneCollapse" xml:space="preserve">
+    <value>{0} 件を表示中 · 隠す</value>
+    <comment>隐藏已完成的内容/展开后那一段顶上的一行，{0} 是项数，点它再折回去</comment>
+  </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>フォルダーが開かれていません。ファイルまたはフォルダーを開くとここに表示されます。</value>
   </data>

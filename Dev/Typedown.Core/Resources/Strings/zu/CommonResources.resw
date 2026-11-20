@@ -996,6 +996,10 @@
     <value>{0} kufihliwe · Bonisa</value>
     <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
   </data>
+  <data name="HideDoneCollapse" xml:space="preserve">
+    <value>{0} kuboniswa · Fihla</value>
+    <comment>隐藏已完成的内容/展开后那一段顶上的一行，{0} 是项数，点它再折回去</comment>
+  </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Sesha efoldeni</value>
   </data>

@@ -1491,6 +1491,18 @@ body.read-only #ag-editor-id {
 #ag-editor-id .td-done-first:hover::before {
   text-decoration: underline;
 }
+/* An opened run: a line over its first block that folds it again. */
+#ag-editor-id .td-done-opened::before {
+  content: attr(data-collapse-run);
+  display: block;
+  font-size: 0.85em;
+  color: var(--editorColor50, rgba(127, 127, 127, 0.8));
+  cursor: pointer;
+  user-select: none;
+}
+#ag-editor-id .td-done-opened:hover::before {
+  text-decoration: underline;
+}
 
 /* Reading mode renders the document and nothing else: no caret, no editing hints and no hover affordances.
    The active-block rules above already hide the table drag bars, the tool bar and the language input; these

@@ -959,6 +959,10 @@
     <value>{0} nascosti · Mostra</value>
     <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>
   </data>
+  <data name="HideDoneCollapse" xml:space="preserve">
+    <value>{0} mostrati · Nascondi</value>
+    <comment>隐藏已完成的内容/展开后那一段顶上的一行，{0} 是项数，点它再折回去</comment>
+  </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nessuna cartella aperta. Apri un file o una cartella per sfogliarla qui.</value>
   </data>
