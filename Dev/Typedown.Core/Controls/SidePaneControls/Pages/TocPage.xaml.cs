@@ -1,6 +1,7 @@
 ﻿using Typedown.Core.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Typedown.Core.Utilities;
 
 namespace Typedown.Core.Controls.SidePanelControls.Pages
@@ -305,20 +306,16 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnCollapseAllClick(object sender, RoutedEventArgs e) => SetExpanded(TreeView.RootNodes, false);
 
         // ---- a heading dragged: its section moved in the document (the user's 28, 2026-11-20, as Obsidian does) ----
-        // The tree moves the row itself as it is dropped; where it landed says what to ask of the page: after the row above
-        // it (its sibling, after its whole section), else before the row below it, else into the row it went under. The page
-        // moves the text (contentState/sectionMoveCtrl.js) and its outline comes back the usual way; refused, the rows are
-        // put back as the outline has them and the reason shown.
+        // The tree does not reorder its rows (left to it, any drop near a row put the heading into that row - runs 679-681 -
+        // so nothing could go after a heading at its level). Where on the row under the pointer the drop is says it: its upper
+        // third before it, its middle into it (its last sub-section), its lower third after it - after its whole section, or,
+        // an open row with rows under it, before the first of those, where the line shows; below the last row, after the
+        // last section. A line or a box shows it while dragging. The page moves the text (contentState/sectionMoveCtrl.js)
+        // and its outline comes back the usual way; refused, the reason shows.
 
-        private (TreeViewNode parent, int index) dragFrom;
+        private TreeViewNode dragged;
 
         private static string SlugOf(TreeViewNode node) => (node?.Content as Models.TocTreeItem)?.TocItem?.Slug;
-
-        private (TreeViewNode parent, int index) PlaceOf(TreeViewNode node)
-        {
-            var parent = node.Parent?.Content is Models.TocTreeItem ? node.Parent : null;
-            return (parent, (parent?.Children ?? TreeView.RootNodes).IndexOf(node));
-        }
 
         private void OnDragItemsStarting(TreeView sender, TreeViewDragItemsStartingEventArgs args)
         {
@@ -326,25 +323,95 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var settings = ViewModel?.SettingsViewModel;
             var node = args.Items.Count == 1 ? FindNode(TreeView.RootNodes, (ContentOf(args.Items[0]) as Models.TocTreeItem)?.TocItem?.Slug) : null;
             if (node == null || Editor == null || settings == null || settings.ReadOnly || settings.SourceCode) { args.Cancel = true; return; }
-            dragFrom = PlaceOf(node);
+            dragged = node;
         }
 
         private void OnDragItemsCompleted(TreeView sender, TreeViewDragItemsCompletedEventArgs args)
         {
-            var slug = args.Items.Count == 1 ? (ContentOf(args.Items[0]) as Models.TocTreeItem)?.TocItem?.Slug : null;
-            var node = FindNode(TreeView.RootNodes, slug);
-            if (node == null || args.DropResult != Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move) { PutBack(); return; }
-            var (parent, index) = PlaceOf(node);
-            if (parent == dragFrom.parent && index == dragFrom.index) return;
-            var siblings = parent?.Children ?? TreeView.RootNodes;
-            string to, where;
-            if (index > 0) { to = SlugOf(siblings[index - 1]); where = "after"; }
-            else if (index >= 0 && index + 1 < siblings.Count) { to = SlugOf(siblings[index + 1]); where = "before"; }
-            else if (parent != null) { to = SlugOf(parent); where = "inside"; }
-            else { PutBack(); return; }
-            if (to == null) { PutBack(); return; }
-            Utilities.Log.Debug($"outline: section {slug} dropped {where} {to}");
-            Editor.MoveSection(slug, to, where);
+            dragged = null;
+            ShowDrop(null);
+        }
+
+        private static bool Within(TreeViewNode node, TreeViewNode ancestor)
+        {
+            for (; node != null; node = node.Parent) if (node == ancestor) return true;
+            return false;
+        }
+
+        /// <summary>Where a drop at <paramref name="at"/> (in the tree's coordinates) would put the dragged heading.</summary>
+        private (TreeViewNode to, string where, Windows.Foundation.Rect row, double line)? DropAt(Windows.Foundation.Point at)
+        {
+            var inWindow = TreeView.TransformToVisual(null).TransformPoint(at);
+            foreach (var element in VisualTreeHelper.FindElementsInHostCoordinates(inWindow, TreeView))
+            {
+                if (element is not TreeViewItem item || TreeView.NodeFromContainer(item) is not TreeViewNode node) continue;
+                var row = item.TransformToVisual(TreeView).TransformBounds(new Windows.Foundation.Rect(0, 0, item.ActualWidth, item.ActualHeight));
+                var part = (at.Y - row.Top) / System.Math.Max(1, row.Height);
+                if (part < 1 / 3.0) return (node, "before", row, row.Top);
+                if (part <= 2 / 3.0) return (node, "inside", row, 0);
+                if (node.IsExpanded && node.Children.Count > 0) return (node.Children[0], "before", row, row.Bottom);
+                return (node, "after", row, row.Bottom);
+            }
+            // Below the last row: after the last section.
+            if (TreeView.RootNodes.Count > 0)
+            {
+                var lastNode = TreeView.RootNodes[^1];
+                var shown = lastNode;
+                while (shown.IsExpanded && shown.Children.Count > 0) shown = shown.Children[^1];
+                if (TreeView.ContainerFromNode(shown) is TreeViewItem bottom)
+                {
+                    var row = bottom.TransformToVisual(TreeView).TransformBounds(new Windows.Foundation.Rect(0, 0, bottom.ActualWidth, bottom.ActualHeight));
+                    if (at.Y > row.Bottom) return (lastNode, "after", row, row.Bottom);
+                }
+            }
+            return null;
+        }
+
+        private void ShowDrop((TreeViewNode to, string where, Windows.Foundation.Rect row, double line)? drop)
+        {
+            DropLine.Visibility = DropInto.Visibility = Visibility.Collapsed;
+            if (drop is not { } d) return;
+            if (d.where == "inside")
+            {
+                Canvas.SetLeft(DropInto, d.row.Left + 2);
+                Canvas.SetTop(DropInto, d.row.Top + 1);
+                DropInto.Width = System.Math.Max(0, d.row.Width - 4);
+                DropInto.Height = System.Math.Max(0, d.row.Height - 2);
+                DropInto.Visibility = Visibility.Visible;
+                return;
+            }
+            Canvas.SetLeft(DropLine, d.row.Left + 8);
+            Canvas.SetTop(DropLine, d.line - 1);
+            DropLine.Width = System.Math.Max(0, d.row.Width - 16);
+            DropLine.Visibility = Visibility.Visible;
+        }
+
+        private (TreeViewNode to, string where, Windows.Foundation.Rect row, double line)? Allowed(DragEventArgs e)
+        {
+            if (dragged == null) return null;
+            var drop = DropAt(e.GetPosition(TreeView));
+            // Not into the dragged heading's own section (the page would refuse it).
+            return drop is { } d && !Within(d.to, dragged) ? drop : null;
+        }
+
+        private void OnTreeDragOver(object sender, DragEventArgs e)
+        {
+            var drop = Allowed(e);
+            e.AcceptedOperation = drop != null ? Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move : Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
+            ShowDrop(drop);
+        }
+
+        private void OnTreeDragLeave(object sender, DragEventArgs e) => ShowDrop(null);
+
+        private void OnTreeDrop(object sender, DragEventArgs e)
+        {
+            var drop = Allowed(e);
+            var from = SlugOf(dragged);
+            ShowDrop(null);
+            if (drop is not { } d || from == null || SlugOf(d.to) is not string to) return;
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
+            Utilities.Log.Debug($"outline: section {from} dropped {d.where} {to}");
+            Editor?.MoveSection(from, to, d.where);
         }
 
         // The rows as the outline has them (the tree's own move undone).

@@ -54,16 +54,20 @@
                 <FontIcon FontSize="12" Glyph="&#xe70e;"/>
             </Button>
         </StackPanel>
-        <!-- A heading dragged moves its section in the document (TocPage.xaml.cs, OnDragItemsCompleted); the visual editor only. -->
+        <!-- A heading dragged moves its section in the document; the visual editor only. The tree does not reorder its rows
+             itself: where on a row the drop is says before it, into it or after it (TocPage.xaml.cs, OnTreeDragOver). -->
         <muxc:TreeView
             x:Name="TreeView"
             Grid.Row="2"
             ItemTemplate="{StaticResource TocItemTemplate}"
             CanDragItems="True"
-            CanReorderItems="True"
+            CanReorderItems="False"
             AllowDrop="True"
             DragItemsStarting="OnDragItemsStarting"
             DragItemsCompleted="OnDragItemsCompleted"
+            DragOver="OnTreeDragOver"
+            DragLeave="OnTreeDragLeave"
+            Drop="OnTreeDrop"
             ItemInvoked="OnItemInvoked"
             Expanding="OnNodeExpanding"
             Collapsed="OnNodeCollapsed"
@@ -75,5 +79,10 @@
                 </TransitionCollection>
             </muxc:TreeView.ItemContainerTransitions>
         </muxc:TreeView>
+        <!-- Where a dragged heading would land: a line before or after a row, a box around the row it would go into. -->
+        <Canvas Grid.Row="2" IsHitTestVisible="False">
+            <Rectangle x:Name="DropLine" Height="2" Visibility="Collapsed" Fill="{ThemeResource AccentFillColorDefaultBrush}"/>
+            <Border x:Name="DropInto" Visibility="Collapsed" BorderThickness="1" CornerRadius="4" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}"/>
+        </Canvas>
     </Grid>
 </Page>
