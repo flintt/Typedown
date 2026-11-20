@@ -6,9 +6,10 @@ using System.Windows.Automation;
 
 /// <summary>
 /// OL07 (the user's 28, 2026-11-20): a heading dragged in the outline moves its section in the document, as Obsidian does -
-/// by real drags with the mouse, checked by the document's text: A dropped below B goes after B's section with its
-/// sub-section A1; one Ctrl+Z puts it back; B dropped onto A goes into A as its last sub-section, a level down; in reading
-/// mode a drag moves nothing.
+/// by real drags with the mouse, checked by the document's text. Where on a row the drop is says where it goes: the row's
+/// upper third before it, its middle into it (its last sub-section, a level down), its lower third after it (an open row:
+/// before its first sub-section, where the line shows), below the last row after the last section. One Ctrl+Z puts each
+/// back. In reading mode a drag moves nothing.
 /// </summary>
 internal static partial class Program
 {
@@ -36,16 +37,28 @@ internal static partial class Program
             await Eventually(async () => holds(t = await Text()), 5000, 200);
             return t;
         }
-        // Dropped onto a row's middle (into it), or below the last row, in the empty space (after it, at the top level): the
-        // tree takes a drop on a row's lower edge as into it too (run 679: A became B's sub-section).
-        async Task DragRow(string heading, string onto, bool into)
+        // A heading's row dragged to a point on another row (0 its top, 1 its bottom, more is below it), the text noted with
+        // what the host asked of the page.
+        async Task<string> DragRow(string heading, string onto, double at)
         {
             var from = Row(heading);
             var to = Row(onto);
-            var y = into ? to.Top + to.Height / 2 : to.Bottom + 14;
+            var asked = LogLines("outline: section").Count;
             SetProcessDpiAwarenessContext(new IntPtr(-4));
-            await Drag(window, ((int)(from.Left + 40), (int)(from.Top + from.Height / 2)), ((int)(to.Left + 40), (int)y), steps: 20);
-            await Task.Delay(800);
+            await Drag(window, ((int)(from.Left + 40), (int)(from.Top + from.Height / 2)), ((int)(to.Left + 40), (int)(to.Top + to.Height * at)), steps: 20);
+            var text = await TextWhen(t => t != original);
+            await Task.Delay(500);
+            var log = LogLines("outline: section").Skip(asked).LastOrDefault() ?? "(nothing asked)";
+            notes.Add($"{heading} dropped at {at:0.##} of {onto}'s row: {text.Replace("\n", "\\n")}; {log[Math.Max(0, log.IndexOf("outline:", StringComparison.Ordinal))..]}");
+            return text;
+        }
+        async Task Undo(string what)
+        {
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(150);
+            Chord("Ctrl+Z");
+            Check(await TextWhen(t => t == original) == original, $"{what}: one Ctrl+Z puts it back");
+            await Task.Delay(600);
         }
         try
         {
@@ -54,51 +67,27 @@ internal static partial class Program
             SetProcessDpiAwarenessContext(new IntPtr(-4));
             notes.Add($"rows: A {Row("A")}, A1 {Row("A1")}, B {Row("B")}");
 
-            // Where on B's row a drop of A lands (runs 679, 680: its lower edge and the space below the last row both put A
-            // into B): each drop point tried on the document as it was, the text and what the host asked noted.
-            const string afterB = "# B\n\nb text\n\n# A\n\na text\n\n## A1\n\na1 text\n";
-            const string intoB = "# B\n\nb text\n\n## A\n\na text\n\n### A1\n\na1 text\n";
-            var results = new Dictionary<string, string>();
-            foreach (var (name, at) in new (string, double)[] { ("top edge", 0.08), ("upper quarter", 0.25), ("middle", 0.5), ("lower quarter", 0.75), ("below", 1.45) })
+            // Where on a row the drop is says where the section goes (runs 679-681: the tree's own reordering put every drop
+            // into the row). A is open, with A1 under it.
+            var cases = new (string drag, string onto, double at, string expected, string what)[]
             {
-                var a = Row("A");
-                var b = Row("B");
-                var asked = LogLines("outline: section").Count;
-                await Drag(window, ((int)(a.Left + 40), (int)(a.Top + a.Height / 2)), ((int)(b.Left + 40), (int)(b.Top + b.Height * at)), steps: 20);
-                var text = await TextWhen(t => t != original);
-                await Task.Delay(500);
-                var log = LogLines("outline: section").Skip(asked).LastOrDefault() ?? "(nothing asked)";
-                results[name] = text == afterB ? "after B" : text == intoB ? "into B" : text == original ? "unchanged" : text.Replace("\n", "\\n");
-                notes.Add($"A dropped at B's {name}: {results[name]}; {log[(log.IndexOf("outline:", StringComparison.Ordinal))..]}");
-                if (text != original)
-                {
-                    await c.Call("test.editor.focus", new { windowId });
-                    await Task.Delay(150);
-                    Chord("Ctrl+Z");
-                    var undone = await TextWhen(t => t == original);
-                    Check(undone == original, $"after the drop at B's {name}, one Ctrl+Z puts the section back");
-                    await Task.Delay(600);
-                }
+                ("B", "A", 0.15, "# B\n\nb text\n\n# A\n\na text\n\n## A1\n\na1 text\n", "B on A's upper third: before A"),
+                ("B", "A", 0.5, "# A\n\na text\n\n## A1\n\na1 text\n\n## B\n\nb text\n", "B on A's middle: into A, its last sub-section a level down"),
+                ("B", "A", 0.85, "# A\n\na text\n\n## B\n\nb text\n\n## A1\n\na1 text\n", "B on A's lower third (A open): before A1, where the line shows"),
+                ("A", "B", 0.85, "# B\n\nb text\n\n# A\n\na text\n\n## A1\n\na1 text\n", "A on B's lower third: after B, A1 with it"),
+                ("A", "B", 1.6, "# B\n\nb text\n\n# A\n\na text\n\n## A1\n\na1 text\n", "A below the last row: after B"),
+            };
+            foreach (var (drag, onto, at, expected, what) in cases)
+            {
+                var text = await DragRow(drag, onto, at);
+                Check(text == expected, what);
+                if (text != original) await Undo(what);
             }
-            Check(results.Values.Contains("after B"), "a drop somewhere on or below B puts A after B, at its level");
-            Check(results["middle"] == "into B", "a drop on B's middle puts A into B, a level down");
-
-            // B onto A: into A as its last sub-section, a level down.
-            await DragRow("B", "A", into: true);
-            var into = await TextWhen(t => t != original);
-            notes.Add("B dropped onto A: " + into.Replace("\n", "\\n"));
-            Check(into == "# A\n\na text\n\n## A1\n\na1 text\n\n## B\n\nb text\n", "B dropped onto A: A's last sub-section, at level 2");
-            var rows = (await c.Call("test.outline.state", new { windowId }))["rows"];
-            notes.Add("outline after: " + rows?.ToString(Newtonsoft.Json.Formatting.None));
 
             // Reading mode: a drag moves nothing.
-            await c.Call("test.editor.focus", new { windowId });
-            Chord("Ctrl+Z");
-            await TextWhen(t => t == original);
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = true });
             await Task.Delay(800);
-            await DragRow("A", "B", into: false);
-            await Task.Delay(800);
+            await DragRow("A", "B", 0.85);
             Check(await Text() == original, "reading mode: a drag moves nothing");
         }
         finally
