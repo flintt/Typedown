@@ -89,6 +89,9 @@ export function applyHideDone() {
             continue
         }
         if (caret && editor.contains(caret) && run.some(el => el.contains(caret))) continue
+        // A search's match in it: shown while the search is on (in reading mode nothing else would show it - the match is
+        // still in the struck text).
+        if (run.some(el => el.querySelector('.ag-highlight, .ag-selection'))) continue
         run.forEach(el => el.classList.add(DONE))
         run[0].classList.add(FIRST)
         ;(run[0] as HTMLElement).dataset.hiddenRun = label.replace('{0}', String(run.length))

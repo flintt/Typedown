@@ -16,7 +16,7 @@ const { openEditor } = require('./harness');
         const own = el => { const c = el.cloneNode(true); c.querySelectorAll('ul, ol, .ag-hide, .ag-gray').forEach(x => x.remove()); return [...c.querySelectorAll('.ag-paragraph-content')].map(p => p.textContent).join('').trim(); };
         const out = {};
         for (const el of document.querySelectorAll('#ag-editor-id li, #ag-editor-id p:not(li p)'))
-            out[own(el)] = { height: Math.round(el.getBoundingClientRect().height), run: el.dataset.hiddenRun || null };
+            out[own(el)] = { height: Math.round(el.getBoundingClientRect().height), run: el.dataset.hiddenRun || null, done: el.classList.contains('td-done') };
         return out;
     });
     // The caret put in the block whose text has `needle`, at its start or end.
@@ -110,6 +110,22 @@ const { openEditor } = require('./harness');
         await caretAt('End.', true);
         s = await shown();
         check(s['two']?.run != null, 'the caret gone out: folded again', s['two']);
+
+        // A search whose match is folded away opens that run (the reading mode's too).
+        // (A word in the middle of the item too: "hre" in "three", the highlight inside the struck text.)
+        for (const [reading, word] of [[false, 'three'], [true, 'three'], [false, 'hre'], [true, 'hre']]) {
+            await fresh();
+            if (reading) await mode(false, true);
+            await pause(300);
+            check((await shown())['three']?.height === 0, `${reading ? 'reading mode' : 'visual editor'}: "three" folded before the search`);
+            await page.evaluate(word => window.__typedownMuya.search(word, { isCaseSensitive: false, isWholeWord: false, isRegexp: false, selectHighlight: true }), word);
+            await pause(500);
+            s = await shown();
+            const highlight = await page.evaluate(() => { const h = document.querySelector('#ag-editor-id .ag-highlight, #ag-editor-id .ag-selection'); return h ? Math.round(h.getBoundingClientRect().height) : null; });
+            check(s['three']?.height > 0 && s['three']?.done === false && highlight > 0, `${reading ? 'reading mode' : 'visual editor'}, "${word}": the search's match folded away is shown`, { two: s['two'], three: s['three'], highlight });
+            await page.evaluate(() => window.__typedownMuya.search('', { isCaseSensitive: false, isWholeWord: false, isRegexp: false }));
+            if (reading) await mode(false, false);
+        }
 
         check(errors.length === 0, 'no page errors', errors);
     } catch (e) {
