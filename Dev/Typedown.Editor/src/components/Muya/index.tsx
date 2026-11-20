@@ -919,6 +919,19 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
     }), [editor, scrollToElement, props.options?.readOnly, onOutlineCurrent]);
 
+    // Host -> editor: a heading dragged in the outline, its section moved (contentState/sectionMoveCtrl.js). The reply says
+    // whether it was, and if not why, so the outline can go back as it was.
+    useEffect(() => transport.addListener<{ from: string, to: string, where: string, token?: number }>('MoveSection', ({ from, to, where, token }) => {
+        let result: { ok: boolean, reason?: string }
+        try {
+            result = (editor as any)?.contentState?.moveSection(from, to, where) ?? { ok: false, reason: 'noEditor' }
+        } catch (err) {
+            console.log(err)
+            result = { ok: false, reason: 'failed' }
+        }
+        transport.postMessage('SectionMoved', { ...result, from, token })
+    }), [editor]);
+
     // Host -> editor (File > Check Document, and before an export): the formulas and diagrams the page could not draw
     // (PlantUML switched off is one too: the export shows its note, not the diagram), each by its kind and the first line
     // of its source, which the host finds it by; and each heading's anchor and text, which a link's #fragment is matched
