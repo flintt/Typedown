@@ -32,7 +32,7 @@ const { openEditor } = require('./harness');
         const before = await shown();
         check(Object.values(before).every(b => b.height > 0 && !b.run), 'reading mode, setting off: nothing hidden', before);
 
-        await settings({ hideDone: true, hideDoneLabel: '{0} hidden · Show', hideDoneCollapseLabel: '{0} shown · Hide' });
+        await settings({ hideDone: true, hideDoneLabel: '{0} hidden · Show' });
         await pause(500);
         let s = await shown();
         check(s['two']?.run === '2 hidden · Show', 'two struck items in a row: one line for both', s['two']);
@@ -53,21 +53,13 @@ const { openEditor } = require('./harness');
         check(s['two']?.height > 0 && s['three']?.height > 0 && !s['two']?.run, 'clicked, the run opens', { two: s['two'], three: s['three'] });
         check(s['done task']?.run === '1 hidden · Show', 'the other runs stay folded', s['done task']);
 
-        // The opened run has a line over it that folds it again (the user, 2026-11-20).
-        // At the right end of the item's first line, the item's text still on that line by its number.
-        const collapse = await page.evaluate(() => {
-            const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.collapseRun); if (!li) return null;
-            const r = li.getBoundingClientRect(), text = li.querySelector('.ag-paragraph-content').getBoundingClientRect();
-            const x = r.right - 8, y = r.top + 8, e = document.elementFromPoint(x, y);
-            return { text: li.dataset.collapseRun, x, y, textOnFirstLine: text.top - r.top < 8, there: e ? e.tagName + '#' + e.id + '.' + String(e.className).slice(0, 40) : null, li: li.id };
-        });
-        check(collapse?.text === '2 shown · Hide' && collapse.textOnFirstLine, 'the opened run: "2 shown · Hide" at the end of its first line, its text not pushed down', collapse);
-        if (collapse) {
-            await page.mouse.click(collapse.x, collapse.y);
-            await pause(300);
-            s = await shown();
-            check(s['two']?.run === '2 hidden · Show' && s['three']?.height === 0, 'clicked, the run folds again', { two: s['two'], three: s['three'], collapse });
-        }
+        // Opened for a while (the user, 2026-11-21): a click elsewhere folds it again; there is no line to fold it.
+        check(!(await page.evaluate(() => !!document.querySelector('#ag-editor-id [data-collapse-run]'))), 'the opened run has no line to fold it');
+        const elsewhere = await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.includes('four')); const r = e.getBoundingClientRect(); return { x: r.left + 4, y: r.top + r.height / 2 }; });
+        await page.mouse.click(elsewhere.x, elsewhere.y);
+        await pause(300);
+        s = await shown();
+        check(s['two']?.run === '2 hidden · Show' && s['three']?.height === 0, 'a click elsewhere folds it again', { two: s['two'], three: s['three'] });
 
         // The visual editor hides too (one switch, the user's call - hide-done-edit-check); off, nothing anywhere. The text
         // never changed.

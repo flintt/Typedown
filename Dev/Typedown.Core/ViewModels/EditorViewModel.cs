@@ -343,7 +343,6 @@ namespace Typedown.Core.ViewModels
                 Settings.BracketMath,
                 Settings.HideDone,
                 HideDoneLabel = Locale.GetString("HideDoneRun"),
-                HideDoneCollapseLabel = Locale.GetString("HideDoneCollapse"),
                 Settings.DetailsBlocks,
                 Settings.CodeBlockLineNumbers,
                 Settings.ScrollPastEnd,

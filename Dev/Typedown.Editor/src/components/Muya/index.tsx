@@ -1754,8 +1754,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Reading mode hides what is done when the reader asks (services/hideDone.ts): after the effect above has drawn the
     // document for reading.
     useEffect(() => {
-        if (editor) setHideDone(props.options?.hideDone === true, props.options?.hideDoneLabel, props.options?.hideDoneCollapseLabel)
-    }, [editor, props.options?.readOnly, props.options?.hideDone, props.options?.hideDoneLabel, props.options?.hideDoneCollapseLabel])
+        if (editor) setHideDone(props.options?.hideDone === true, props.options?.hideDoneLabel)
+    }, [editor, props.options?.readOnly, props.options?.hideDone, props.options?.hideDoneLabel])
 
     // A paste the browser does itself (Ctrl+V reaching the page while the host's shortcut did not take it) put the
     // clipboard's HTML straight into the document, as foreign elements Muya does not know and never reports: the

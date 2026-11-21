@@ -4,18 +4,21 @@ import transport from 'services/transport'
 // list item or paragraph struck through whole and a ticked task are folded away - each run of them one line, "N hidden ·
 // Show", that opens it. Only what is drawn changes, never the text. An ordered list keeps its numbers: the hidden items
 // stay list items of no height, still counted. A paragraph with a few words struck stays; a hidden item takes the items
-// in it along. Drawn again (an edit, the long document's next part), the marks are made again; a run opened stays open.
+// in it along. Drawn again (an edit, the long document's next part), the marks are made again. A run's line opens it for
+// a while: a click elsewhere, or the caret going elsewhere, folds it again (the user, 2026-11-21).
 
 const DONE = 'td-done'
 const FIRST = 'td-done-first'
-// An opened run's first block: the line over it folds the run again (the user, 2026-11-20).
-const OPENED = 'td-done-opened'
 
 let on = false
 let label = '{0}'
-let collapseLabel = '{0}'
-// Runs opened, by their first block's id.
-const opened = new Set<string>()
+// The run opened by its line, by its first block's id; its blocks' ids; the caret when it was opened (still there, the
+// run stays open).
+let shownRun: string | null = null
+let shownRunIds: string[] = []
+let shownCaret: Node | null = null
+// A press on a run's line taken: its button up and click are not the editor's.
+let swallow = false
 let installed = false
 let frame = 0
 // The run the caret is in, by its first block's id: shown (kept while there is a selection rather than a caret).
@@ -85,7 +88,7 @@ export function applyHideDone() {
     mark(editor)
     const folds = foldsOf(editor)
     if (folds !== lastFolds) {
-        say(`folds: ${editor.querySelectorAll(`.${FIRST}`).length} folded, ${editor.querySelectorAll(`.${OPENED}`).length} opened, caret's run ${caretRun ?? 'none'}`)
+        say(`folds: ${editor.querySelectorAll(`.${FIRST}`).length} folded, opened ${shownRun ?? 'none'}, caret's run ${caretRun ?? 'none'}`)
         if (before && before.element.isConnected) {
             const now = before.element.getBoundingClientRect()
             const moved = Math.round(now.top + window.scrollY - before.top)
@@ -107,9 +110,9 @@ function remember(element: Element | null) {
     kept = element ? { element, top: element.getBoundingClientRect().top + window.scrollY } : null
 }
 
-// What is folded and opened: what a change of moves the lines below it.
+// What is folded: what a change of moves the lines below it.
 function foldsOf(editor: HTMLElement): string {
-    return [...editor.querySelectorAll(`.${DONE}, .${OPENED}`)].map(el => (el.classList.contains(OPENED) ? 'o' : '') + el.id).join(' ')
+    return [...editor.querySelectorAll(`.${DONE}`)].map(el => el.id).join(' ')
 }
 
 // What Hide Done Items did, in the app's log (its folds changing, a scroll to keep the caret's line): a jump the reader
@@ -136,10 +139,9 @@ function lineToKeep(editor: HTMLElement): Element | null {
 }
 
 function mark(editor: HTMLElement) {
-    editor.querySelectorAll(`.${DONE}, .${OPENED}`).forEach(el => {
-        el.classList.remove(DONE, FIRST, OPENED)
+    editor.querySelectorAll(`.${DONE}`).forEach(el => {
+        el.classList.remove(DONE, FIRST)
         delete (el as HTMLElement).dataset.hiddenRun
-        delete (el as HTMLElement).dataset.collapseRun
     })
     if (!on) return
     // The visual editor too (one switch for both, the user's call): the run with the caret in it is shown - an item just
@@ -168,10 +170,12 @@ function mark(editor: HTMLElement) {
         else runs.push([el])
     }
     if (caret && editor.contains(caret)) caretRun = runs.find(run => run.some(el => el.contains(caret)))?.[0].id ?? null
+    // The run opened by its line folds again once the caret has gone elsewhere (a key moving it out; a click elsewhere
+    // folds it at once, below).
+    if (shownRun && caret && editor.contains(caret) && caret !== shownCaret && !shownRunIds.some(id => document.getElementById(id)?.contains(caret))) shownRun = null
     for (const run of runs) {
-        if (opened.has(run[0].id)) {
-            run[0].classList.add(OPENED)
-            ;(run[0] as HTMLElement).dataset.collapseRun = collapseLabel.replace('{0}', String(run.length))
+        if (shownRun && run[0].id === shownRun) {
+            shownRunIds = run.map(el => el.id)
             continue
         }
         if (caretRun && run[0].id === caretRun) continue
@@ -196,8 +200,8 @@ function schedule() {
     })
 }
 
-/** The setting (View > Hide Done Items), the run's line ("{0} hidden · Show") and an opened run's ("{0} shown · Hide"). */
-export function setHideDone(value: boolean, text?: string, collapseText?: string) {
+/** The setting (View > Hide Done Items) and the run's line ("{0} hidden · Show"). */
+export function setHideDone(value: boolean, text?: string) {
     // Turned on or off: the caret's line kept from where it is now (nothing was marked while off).
     const editor = document.getElementById('ag-editor-id')
     if (value !== on && editor) {
@@ -206,26 +210,48 @@ export function setHideDone(value: boolean, text?: string, collapseText?: string
     }
     on = value
     if (text) label = text
-    if (collapseText) collapseLabel = collapseText
     if (!installed) {
         installed = true
         // The caret moved (the visual editor): the run it is in shown, the one it left folded.
         document.addEventListener('selectionchange', () => { if (on && !reading()) schedule() })
-        // A run's line opens it; an opened run's line (its first block's own box, not its text) folds it again.
-        document.addEventListener('click', e => {
-            if (!on) return
+        // On the button going down, before the editor puts the caret anywhere: a run's line opens it for a while, the
+        // caret left where it was. Handled at the click, the editor had put the caret in the run already and the line was
+        // gone - it opened for good now and then, till a line at its right edge folded it, and the other times only till
+        // the next click (the user, 2026-11-21). A press elsewhere: the line pressed kept where it is on the screen,
+        // measured now, before anything moves (it jumped as the run above it folded), and a run opened folds unless the
+        // press is in it.
+        document.addEventListener('mousedown', e => {
+            const editor = document.getElementById('ag-editor-id')
             const target = e.target as Element | null
-            const first = target?.closest?.(`#ag-editor-id .${FIRST}`)
-            const back = target?.matches?.(`#ag-editor-id .${OPENED}`) ? target : null
-            if (!first && !back) return
-            e.preventDefault()
-            e.stopPropagation()
-            // The line clicked stays where it is: what opens goes on below it.
-            remember(first ?? back)
-            if (first) opened.add(first.id)
-            else opened.delete(back!.id)
-            applyHideDone()
+            if (!on || !editor || !target || !editor.contains(target)) return
+            const first = target.closest(`.${FIRST}`)
+            if (first) {
+                e.preventDefault()
+                e.stopPropagation()
+                // Its button up and its click are this press's too: let through, the editor put the caret back where it
+                // had been and went there - the page scrolled away from the run just opened.
+                swallow = true
+                remember(first)
+                shownRun = first.id
+                shownRunIds = [first.id]
+                shownCaret = window.getSelection()?.anchorNode ?? null
+                applyHideDone()
+                return
+            }
+            remember(target.closest('.ag-paragraph-content') ?? target.closest('li, p'))
+            if (shownRun && !shownRunIds.some(id => document.getElementById(id)?.contains(target))) {
+                shownRun = null
+                applyHideDone()
+            }
         }, true)
+        for (const kind of ['mouseup', 'click']) {
+            document.addEventListener(kind, e => {
+                if (!swallow) return
+                e.preventDefault()
+                e.stopPropagation()
+                if (kind === 'click') swallow = false
+            }, true)
+        }
     }
     applyHideDone()
 }

@@ -1491,26 +1491,6 @@ body.read-only #ag-editor-id {
 #ag-editor-id .td-done-first:hover::before {
   text-decoration: underline;
 }
-/* An opened run: at the right end of its first block's first line, what folds it again - not a line of its own, which
-   pushed the item's text under its number (the pictures for the user, 2026-11-20). */
-#ag-editor-id .td-done-opened {
-  position: relative;
-}
-#ag-editor-id .td-done-opened::before {
-  content: attr(data-collapse-run);
-  position: absolute;
-  right: 0;
-  top: 0.3em;
-  /* Over the item's text line, which spans the width (a click there came to the text). */
-  z-index: 1;
-  font-size: 0.85em;
-  color: var(--editorColor50, rgba(127, 127, 127, 0.8));
-  cursor: pointer;
-  user-select: none;
-}
-#ag-editor-id .td-done-opened:hover::before {
-  text-decoration: underline;
-}
 
 /* Reading mode renders the document and nothing else: no caret, no editing hints and no hover affordances.
    The active-block rules above already hide the table drag bars, the tool bar and the language input; these
