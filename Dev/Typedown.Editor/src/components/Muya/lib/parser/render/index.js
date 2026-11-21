@@ -171,6 +171,9 @@ class StateRender {
     } else if (key === start.key && key !== end.key) {
       return conflict([tokenStart, tokenEnd], [start.offset, start.offset])
     } else if (key !== start.key && key === end.key) {
+      // A selection that only reaches this block's start (a triple click takes the line break, up to the next line's
+      // start) takes none of its text: its marks stay hidden (the user's list, 2026-11-21, 31).
+      if (end.offset === 0) return false
       return conflict([tokenStart, tokenEnd], [end.offset, end.offset])
     } else {
       return conflict([tokenStart, tokenEnd], [start.offset, start.offset]) ||
