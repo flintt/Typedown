@@ -237,6 +237,43 @@ const { openEditor } = require('./harness');
         const selTops = await page.evaluate(() => { window.__hdSelOn = false; return [...new Set(window.__hdSel)]; });
         check(selTops.length === 1, 'Ctrl+A in steps (the app\'s SelectAll) by a folded run: nothing moves on the screen', selTops);
 
+        // A list item dragged up past a fold (the user, trial 1.4.3.6: up it jumped about, and some places could not be
+        // dropped on): the folded items are no places - their text, not drawn, measured at the window's top and threw the
+        // line there. Dropped just above "two" (under the fold's line), it goes after the folded items, before "two",
+        // where its line showed.
+        await mode(true, false);
+        await load('- one\n- ~~x~~\n- ~~y~~\n- two\n- three\n- four\n');
+        await mode(false, false);
+        await page.evaluate(() => window.__deliver('SettingsChanged', { hideDone: true, hideDoneLabel: '{0} hidden · Show' }));
+        await caretAt('three', true);
+        await pause(300);
+        const textOf = word => page.evaluate(word => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === word); const r = e.getBoundingClientRect(); return { x: r.left + 4, y: r.top + r.height / 2, top: r.top }; }, word);
+        const from = await textOf('four');
+        const to = await textOf('two');
+        await page.mouse.move(from.x, from.y);
+        await pause(200);
+        const handle = await page.evaluate(() => { const h = document.getElementById('mu-list-drag-handle'); if (!h) return null; const r = h.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+        check(!!handle, 'the drag handle comes over "four"', handle);
+        if (handle) {
+            await page.mouse.move(handle.x, handle.y);
+            await page.mouse.down();
+            await page.mouse.move(handle.x + 2, handle.y - 6, { steps: 2 });
+            const lines = [];
+            for (const dy of [40, 20, 8, 3]) {
+                await page.mouse.move(handle.x, to.top + 3 + (dy > 3 ? -dy : 0), { steps: 4 });
+                await pause(80);
+                lines.push(await page.evaluate(() => { const g = [...document.body.children].find(e => e.dataset && e.dataset.place); return g ? Math.round(parseFloat(g.style.top)) : null; }));
+            }
+            await page.mouse.move(handle.x, to.top + 3, { steps: 2 });
+            await pause(100);
+            const finalLine = await page.evaluate(() => { const g = [...document.body.children].find(e => e.dataset && e.dataset.place); return g ? Math.round(parseFloat(g.style.top)) : null; });
+            await page.mouse.up();
+            await pause(500);
+            check(lines.every(t => t === null || t > 20) && finalLine !== null && Math.abs(finalLine - (to.top - 2)) <= 3, 'dragged up past the fold: the line never at the window\'s top, by "two" at the end', { lines, finalLine, two: Math.round(to.top) });
+            const dropped = await page.evaluate(() => window.__typedownMuya.getMarkdown());
+            check(dropped === '- one\n- ~~x~~\n- ~~y~~\n- four\n- two\n- three\n', 'dropped above "two": after the folded items, before "two"', dropped);
+        }
+
         // A search whose match is folded away opens that run (the reading mode's too).
         // (A word in the middle of the item too: "hre" in "three", the highlight inside the struck text.)
         for (const [reading, word] of [[false, 'three'], [true, 'three'], [false, 'hre'], [true, 'hre']]) {

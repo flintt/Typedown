@@ -157,6 +157,9 @@ const listDragCtrl = ContentState => {
     const root = this.muya.container
     return [...root.querySelectorAll('li')].filter(el => {
       if (el === draggedEl || draggedEl.contains(el) || !el.id) return false
+      // Not an item folded away by Hide Done Items (services/hideDone.ts): its text, not drawn, measured at the window's
+      // top - the line jumped there and the search by halves missed places (dragging up, the user's trial 1.4.3.6).
+      if (el.closest('.td-done')) return false
       const block = this.getBlock(el.id)
       return !!block && block.type === 'li'
     })
@@ -185,6 +188,10 @@ const listDragCtrl = ContentState => {
   // A place in a list: after prevEl (none: at the list's top), before nextEl (none: at its end).
   ContentState.prototype.listDropIn = function (listEl, prevEl, nextEl) {
     const drag = this.listDrag
+    // Folded items right before the place (Hide Done Items): it goes after them, where its line shows - under the fold's
+    // line, by the next item; after the item before the fold it went in among them.
+    const folded = nextEl ? nextEl.previousElementSibling : [...listEl.children].pop()
+    if (folded && folded.tagName === 'LI' && folded.classList.contains('td-done') && folded !== prevEl) prevEl = folded
     const prev = prevEl && this.getBlock(prevEl.id)
     const next = nextEl && this.getBlock(nextEl.id)
     const maxDepth = prev ? this.listItemDepth(prev) + 1 : 0
