@@ -207,6 +207,8 @@ namespace Typedown.Core.ViewModels
             // What the page's scroll hold saw after a load: asked for, ended at, why it stopped, and the viewport
             // it started with — a viewport of no height is a page loaded before its window was there.
             EventCenter.GetObservable<EditorEventArgs>("ScrollSettled").Subscribe(x => Log.Debug($"settle: {x.Args}"));
+            // View > Hide Done Items: its folds changing and a scroll to keep the caret's line (services/hideDone.ts).
+            EventCenter.GetObservable<EditorEventArgs>("HideDoneLog").Subscribe(x => Log.Debug($"hide done: {x.Args?["what"]}"));
             // The page going far with nobody at it while a long document is drawn, and what the drawing knew then.
             // The page: the first visual edit of this load may rewrite part of it (or no longer: 10 s gone, reading mode).
             // Shown only for the load on screen; a later load has taken the card away already (NoteLoad).

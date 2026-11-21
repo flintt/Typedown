@@ -177,6 +177,37 @@ const { openEditor } = require('./harness');
         const off = await endOnScreen();
         check(Math.abs(off - before) <= 1, 'turned off: the caret\'s line where it was', { before, off });
 
+        // Scrolled down, the folds above the window: clicks in the paragraphs below move nothing on the screen at any frame
+        // (the user, trial 1.4.3.4: a click still jumped - the check above looks at the place in the document, which a
+        // scroll does not change; this one at the place on the screen).
+        const above = `${filler(10)}\n\n1. one\n2. ~~two~~\n3. ~~three~~\n4. four\n\n${filler(40)}\n\nEnd.\n\n${filler(20)}\n`;
+        await mode(true, false);
+        await load(above);
+        await mode(false, false);
+        await page.evaluate(() => window.__deliver('SettingsChanged', { hideDone: true, hideDoneLabel: '{0} hidden · Show' }));
+        await caretAt('End.', true);
+        await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'End.'); window.scrollBy(0, e.getBoundingClientRect().top - window.innerHeight / 2); });
+        await pause(400);
+        await page.evaluate(() => {
+            window.__hdScreen = [];
+            const tick = () => {
+                if (!window.__hdScreenOn) return;
+                const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.startsWith('Filler line 30.'));
+                window.__hdScreen.push({ top: e ? Math.round(e.getBoundingClientRect().top) : null, y: Math.round(window.scrollY) });
+                requestAnimationFrame(tick);
+            };
+            window.__hdScreenOn = true;
+            requestAnimationFrame(tick);
+        });
+        for (const word of ['Filler line 25.', 'Filler line 35.', 'End.', 'Filler line 28.']) {
+            const at = await page.evaluate(word => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.startsWith(word)); const r = e.getBoundingClientRect(); return { x: r.left + 4, y: r.top + r.height / 2 }; }, word);
+            await page.mouse.click(at.x, at.y);
+            await pause(300);
+        }
+        const screen = await page.evaluate(() => { window.__hdScreenOn = false; return window.__hdScreen; });
+        const tops = [...new Set(screen.map(f => f.top))], ys = [...new Set(screen.map(f => f.y))];
+        check(screen.length > 10 && screen[0].y > 0 && tops.length === 1, 'scrolled down, folds above: clicks below move nothing on the screen at any frame', { frames: screen.length, tops, scrollY: ys });
+
         // A search whose match is folded away opens that run (the reading mode's too).
         // (A word in the middle of the item too: "hre" in "three", the highlight inside the struck text.)
         for (const [reading, word] of [[false, 'three'], [true, 'three'], [false, 'hre'], [true, 'hre']]) {

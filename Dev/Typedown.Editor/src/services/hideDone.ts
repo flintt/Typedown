@@ -1,3 +1,5 @@
+import transport from 'services/transport'
+
 // Hide Done Items, in reading mode and the visual editor (the user's 18, 2026-11-20; docs/todo.md 2026-11-20 用户清单): on, a
 // list item or paragraph struck through whole and a ticked task are folded away - each run of them one line, "N hidden ·
 // Show", that opens it. Only what is drawn changes, never the text. An ordered list keeps its numbers: the hidden items
@@ -74,15 +76,46 @@ export function applyHideDone() {
         observer.observe(editor, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class'] })
         watched = editor
     }
-    // The caret's line (reading mode: the first line on the screen) kept where it is on the screen: the folds made or
-    // opened above it moved it (turning the switch on took the caret's line up, the user, 2026-11-21).
-    const anchor = lineToKeep(editor)
-    const anchorTop = anchor?.getBoundingClientRect().top
+    // The caret's line (reading mode: the first line on the screen) kept where it is on the screen when the folds change
+    // above it (turning the switch on took the caret's line up, the user, 2026-11-21) - and only then. Its place is the
+    // one the last marking left (in the document, which a scroll does not change): measured here, after the editor had
+    // drawn a block anew and taken the marks off, it was the place with the done items showing, and putting the marks
+    // back then scrolled the page by their height - a click jumped (the user, trial 1.4.3.4).
+    const before = kept
     mark(editor)
-    if (anchor && anchorTop !== undefined && anchor.isConnected) {
-        const now = anchor.getBoundingClientRect()
-        if (now.height > 0 && Math.abs(now.top - anchorTop) >= 1) window.scrollBy(0, now.top - anchorTop)
+    const folds = foldsOf(editor)
+    if (folds !== lastFolds) {
+        say(`folds: ${editor.querySelectorAll(`.${FIRST}`).length} folded, ${editor.querySelectorAll(`.${OPENED}`).length} opened, caret's run ${caretRun ?? 'none'}`)
+        if (before && before.element.isConnected) {
+            const now = before.element.getBoundingClientRect()
+            const moved = Math.round(now.top + window.scrollY - before.top)
+            if (now.height > 0 && Math.abs(moved) >= 1) {
+                window.scrollBy(0, moved)
+                say(`kept "${(before.element.textContent || '').slice(0, 24)}" in its place: scrolled ${moved} px (to ${Math.round(window.scrollY)})`)
+            }
+        }
+        lastFolds = folds
     }
+    remember(lineToKeep(editor))
+}
+
+// The line kept in its place, where it is in the document after the last marking; and the folds then.
+let kept: { element: Element, top: number } | null = null
+let lastFolds = ''
+
+function remember(element: Element | null) {
+    kept = element ? { element, top: element.getBoundingClientRect().top + window.scrollY } : null
+}
+
+// What is folded and opened: what a change of moves the lines below it.
+function foldsOf(editor: HTMLElement): string {
+    return [...editor.querySelectorAll(`.${DONE}, .${OPENED}`)].map(el => (el.classList.contains(OPENED) ? 'o' : '') + el.id).join(' ')
+}
+
+// What Hide Done Items did, in the app's log (its folds changing, a scroll to keep the caret's line): a jump the reader
+// sees can be told from it.
+function say(what: string) {
+    try { transport.postMessage('HideDoneLog', { what }) } catch (err) { console.log(err) }
 }
 
 // The line to keep in its place: the caret's in the visual editor when it is on the screen, else the first on the screen.
@@ -158,6 +191,12 @@ function schedule() {
 
 /** The setting (View > Hide Done Items), the run's line ("{0} hidden · Show") and an opened run's ("{0} shown · Hide"). */
 export function setHideDone(value: boolean, text?: string, collapseText?: string) {
+    // Turned on or off: the caret's line kept from where it is now (nothing was marked while off).
+    const editor = document.getElementById('ag-editor-id')
+    if (value !== on && editor) {
+        remember(lineToKeep(editor))
+        say(`turned ${value ? 'on' : 'off'}`)
+    }
     on = value
     if (text) label = text
     if (collapseText) collapseLabel = collapseText
@@ -174,6 +213,8 @@ export function setHideDone(value: boolean, text?: string, collapseText?: string
             if (!first && !back) return
             e.preventDefault()
             e.stopPropagation()
+            // The line clicked stays where it is: what opens goes on below it.
+            remember(first ?? back)
             if (first) opened.add(first.id)
             else opened.delete(back!.id)
             applyHideDone()
