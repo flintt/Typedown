@@ -13,6 +13,62 @@ using System.Windows.Automation;
 /// </summary>
 internal static partial class Program
 {
+    /// <summary>
+    /// OL08 (the user's 32, 2026-11-21): a drag in the outline opened File > Open Folder's picker now and then. The user's
+    /// settings had that shortcut stored as no key at all (Modifiers 0, Key 0) and it was taken as a shortcut; a drag's
+    /// start has the system send a key event of no key, which matched it. With the shortcut stored so, a real drag opens
+    /// nothing, and no key is taken as a shortcut.
+    /// </summary>
+    private static async Task OL08(List<string> notes)
+    {
+        const string original = "# A\n\na text\n\n# B\n\nb text\n";
+        using var c = await Session("e2e OL08");
+        var id = await Open(c, Fixture("ol08.md", original));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        System.Windows.Rect Row(string heading)
+        {
+            foreach (AutomationElement item in Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TreeItem)))
+                if (Deep.First(item, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Text))?.Current.Name == heading) return item.Current.BoundingRectangle;
+            throw new CaseFailed($"no outline row '{heading}' {Screenshot("OL08-no-row")}");
+        }
+        var pickers = LogLines("picker: shown").Count;
+        var taken = LogLines("None+None taken as a shortcut").Count;
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "ShortcutOpenFolder", value = new { Modifiers = 0, Key = 0 } });
+            await c.Call("window.setView", new { windowId, mode = "visual", bounds = new { x = 40, y = 40, width = 1300, height = 850 }, sidePane = new { open = true, page = "outline" } });
+            await Task.Delay(1200);
+            SetProcessDpiAwarenessContext(new IntPtr(-4));
+            for (var i = 0; i < 3; i++)
+            {
+                var a = Row("A");
+                var b = Row("B");
+                await Drag(window, ((int)(a.Left + 40), (int)(a.Top + a.Height / 2)), ((int)(b.Left + 40), (int)(b.Top + b.Height * 0.5)), steps: 20);
+                await Task.Delay(1000);
+                if (LogLines("picker: shown").Count > pickers)
+                {
+                    // The picker is the system's own window: closed, or it holds everything after.
+                    notes.Add("picker shown: " + Screenshot("OL08-picker"));
+                    Send(Key(0x1B, false), Key(0x1B, true));
+                    await Task.Delay(800);
+                    break;
+                }
+                await c.Call("test.editor.focus", new { windowId });
+                Chord("Ctrl+Z");
+                await Task.Delay(600);
+            }
+            notes.Add($"pickers {LogLines("picker: shown").Count - pickers}, empty keys taken {LogLines("None+None taken as a shortcut").Count - taken}");
+            Check(LogLines("picker: shown").Count == pickers, "three outline drags with Open Folder's shortcut stored as no key: no picker");
+            Check(LogLines("None+None taken as a shortcut").Count == taken, "no key event of no key taken as a shortcut");
+        }
+        finally
+        {
+            try { await c.Call("test.settings.set", new { windowId, name = "ShortcutOpenFolder", value = (object?)null }); } catch { }
+            try { await c.Call("document.close", new { documentId = id, discard = true }); } catch { }
+        }
+    }
+
     private static async Task OL07(List<string> notes)
     {
         const string original = "# A\n\na text\n\n## A1\n\na1 text\n\n# B\n\nb text\n";
