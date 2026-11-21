@@ -1010,7 +1010,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             selectDocument(editor?.container)
             return
         }
+        // Selecting moves nothing on the screen. A step's selection ending in an item folded away by Hide Done Items (of no
+        // height) had the page go to show it: the text jumped (the user, trial 1.4.3.6); a word processor's select-all
+        // does not scroll either.
+        const x = window.scrollX, y = window.scrollY
         editor?.selectAll(!!optionsRef.current?.selectAllInSteps)
+        window.scrollTo(x, y)
+        requestAnimationFrame(() => { if (window.scrollY !== y || window.scrollX !== x) window.scrollTo(x, y) })
     }), [editor]);
 
     useEffect(() => transport.addListener<any>('Copy', arg => {

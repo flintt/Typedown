@@ -184,9 +184,16 @@ function mark(editor: HTMLElement) {
     }
 }
 
+// The caret moved: marked again in the next frame, the line it went to kept in its place - not the one it left (a click
+// into a run opened it and the page scrolled 253 px to keep the line clicked away from, the user's trial 1.4.3.6).
 function schedule() {
     if (frame) return
-    frame = requestAnimationFrame(() => { frame = 0; applyHideDone() })
+    frame = requestAnimationFrame(() => {
+        frame = 0
+        const editor = document.getElementById('ag-editor-id')
+        if (editor && on) remember(lineToKeep(editor))
+        applyHideDone()
+    })
 }
 
 /** The setting (View > Hide Done Items), the run's line ("{0} hidden · Show") and an opened run's ("{0} shown · Hide"). */

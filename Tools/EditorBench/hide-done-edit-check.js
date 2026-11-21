@@ -208,6 +208,35 @@ const { openEditor } = require('./harness');
         const tops = [...new Set(screen.map(f => f.top))], ys = [...new Set(screen.map(f => f.y))];
         check(screen.length > 10 && screen[0].y > 0 && tops.length === 1, 'scrolled down, folds above: clicks below move nothing on the screen at any frame', { frames: screen.length, tops, scrollY: ys });
 
+        // Ctrl+A as the app sends it (the host's SelectAll, in steps: the line, the item, the list...) on an item near the
+        // end of a list whose last items are folded: nothing moves on the screen (the user, trial 1.4.3.6: the page jumped
+        // - a step's selection ended in a folded item, of no height, and the page went there to show it).
+        const bottom = `${filler(30)}\n\n- a\n- b\n- target item\n- ~~done x~~\n- ~~done y~~\n\n${filler(30)}\n`;
+        await mode(true, false);
+        await load(bottom);
+        await mode(false, false);
+        await page.evaluate(() => window.__deliver('SettingsChanged', { hideDone: true, hideDoneLabel: '{0} hidden · Show', selectAllInSteps: true }));
+        await caretAt('target item', true);
+        await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'target item'); window.scrollBy(0, e.getBoundingClientRect().top - window.innerHeight / 2); });
+        await pause(400);
+        await page.evaluate(() => {
+            window.__hdSel = [];
+            const tick = () => {
+                if (!window.__hdSelOn) return;
+                const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'target item');
+                window.__hdSel.push(e ? Math.round(e.getBoundingClientRect().top) : null);
+                requestAnimationFrame(tick);
+            };
+            window.__hdSelOn = true;
+            requestAnimationFrame(tick);
+        });
+        for (let i = 0; i < 4; i++) {
+            await page.evaluate(() => window.__deliver('SelectAll'));
+            await pause(300);
+        }
+        const selTops = await page.evaluate(() => { window.__hdSelOn = false; return [...new Set(window.__hdSel)]; });
+        check(selTops.length === 1, 'Ctrl+A in steps (the app\'s SelectAll) by a folded run: nothing moves on the screen', selTops);
+
         // A search whose match is folded away opens that run (the reading mode's too).
         // (A word in the middle of the item too: "hre" in "three", the highlight inside the struck text.)
         for (const [reading, word] of [[false, 'three'], [true, 'three'], [false, 'hre'], [true, 'hre']]) {
