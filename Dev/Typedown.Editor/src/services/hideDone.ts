@@ -95,8 +95,8 @@ export function applyHideDone() {
             if (now.height > 0 && Math.abs(moved) >= 1) {
                 window.scrollBy(0, moved)
                 say(`kept "${(before.element.textContent || '').slice(0, 24)}" in its place: scrolled ${moved} px (to ${Math.round(window.scrollY)})`)
-            }
-        }
+            } else if (now.height === 0) say(`not kept: "${(before.element.textContent || '').slice(0, 24)}" is folded away`)
+        } else say(before ? `not kept: "${(before.element.textContent || '').slice(0, 24)}" was drawn anew` : 'not kept: no line to keep')
         lastFolds = folds
     }
     remember(lineToKeep(editor))
@@ -238,10 +238,20 @@ export function setHideDone(value: boolean, text?: string) {
                 applyHideDone()
                 return
             }
-            remember(target.closest('.ag-paragraph-content') ?? target.closest('li, p'))
+            const pressed = target.closest('.ag-paragraph-content') ?? target.closest('li, p')
+            remember(pressed)
             if (shownRun && !shownRunIds.some(id => document.getElementById(id)?.contains(target))) {
                 shownRun = null
+                // Where the line pressed is on the screen as the run folds, and the next two frames: a jump the reader
+                // still sees after it says which step moved it (the user, 1.4.3.9: "in some cases" it jumped).
+                const at = () => pressed && pressed.isConnected ? Math.round(pressed.getBoundingClientRect().top) : 'gone'
+                const before = at()
                 applyHideDone()
+                const after = at()
+                requestAnimationFrame(() => {
+                    const one = at(), y1 = Math.round(window.scrollY)
+                    requestAnimationFrame(() => say(`pressed below a run opened: "${(pressed?.textContent || '').slice(0, 20)}" at ${before}, ${after} as it folded, ${one} a frame on (scroll ${y1}), ${at()} two frames on (scroll ${Math.round(window.scrollY)})`))
+                })
             }
         }, true)
         for (const kind of ['mouseup', 'click']) {

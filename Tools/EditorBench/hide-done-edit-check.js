@@ -309,6 +309,32 @@ const { openEditor } = require('./harness');
         check(rounds.length === 5 && rounds.every(r => r.opened && r.folded), 'the fold\'s line clicked five times: opened every time, folded again by a click below every time', rounds);
         check(rounds.every(r => r.tops && r.tops.length === 1 && Math.abs(r.tops[0] - r.before) <= 1), 'the line clicked below stays where it was on the screen at every frame', rounds);
 
+        // The same with the opened run's top scrolled out of the window (opened, then the page scrolled on): the browser's
+        // own scroll anchoring may move the page for what folds above the window - with ours, twice (the user, 1.4.3.9:
+        // "in some cases" a click below still jumped).
+        {
+            await page.evaluate(() => window.scrollTo(0, 0));
+            const line = await page.evaluate(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.dataset.hiddenRun); li.scrollIntoView({ block: 'center' }); const r = li.getBoundingClientRect(); return { x: r.left + 10, y: r.top + r.height / 2 }; });
+            await pause(200);
+            await page.mouse.click(line.x, line.y);
+            await pause(300);
+            // The run's top half above the window: scrolled till "three" (its last item) is the window's first line.
+            await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.includes('three')); window.scrollBy(0, e.getBoundingClientRect().top - 4); });
+            await pause(300);
+            const four = await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'four'); const r = e.getBoundingClientRect(); return { x: r.left + 6, y: r.top + r.height / 2, top: Math.round(r.top), runTop: Math.round([...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.includes('two')).getBoundingClientRect().top) }; });
+            await page.evaluate(() => {
+                window.__hdOff = [];
+                const tick = () => { if (!window.__hdOffOn) return; const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'four'); window.__hdOff.push(e ? Math.round(e.getBoundingClientRect().top) : null); requestAnimationFrame(tick); };
+                window.__hdOffOn = true;
+                requestAnimationFrame(tick);
+            });
+            await page.mouse.click(four.x, four.y);
+            await pause(400);
+            const tops = await page.evaluate(() => { window.__hdOffOn = false; return [...new Set(window.__hdOff)]; });
+            const folded = (await shown())['three']?.height === 0;
+            check(folded && four.runTop < 0 && tops.length === 1 && Math.abs(tops[0] - four.top) <= 1, 'the opened run\'s top out of the window: a click below folds it, the line clicked stays on the screen at every frame', { folded, four, tops });
+        }
+
         // A search whose match is folded away opens that run (the reading mode's too).
         // (A word in the middle of the item too: "hre" in "three", the highlight inside the struck text.)
         for (const [reading, word] of [[false, 'three'], [true, 'three'], [false, 'hre'], [true, 'hre']]) {
