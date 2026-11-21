@@ -23,9 +23,15 @@ internal static partial class Program
     {
         const string original = "# A\n\na text\n\n# B\n\nb text\n";
         using var c = await Session("e2e OL08");
-        var id = await Open(c, Fixture("ol08.md", original));
-        var windowId = await WindowIdOf(c, id);
+        var first = await Open(c, Fixture("ol08-first.md", "# First\n"));
+        var firstWindow = await WindowIdOf(c, first);
+        // The menu bar registers its shortcuts as it loads: the shortcut set first, then a window of its own opened with
+        // the document (set on a window open already, nothing took the empty key - run 694 passed before the fix).
+        await c.Call("test.settings.set", new { windowId = firstWindow, name = "ShortcutOpenFolder", value = new { Modifiers = 0, Key = 0 } });
+        var opened = await c.Call("test.window.open", new { path = Fixture("ol08.md", original) });
+        var windowId = (string)opened["windowId"]!;
         var window = await WindowOf(windowId, c);
+        await Task.Delay(1500);
         System.Windows.Rect Row(string heading)
         {
             foreach (AutomationElement item in Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TreeItem)))
@@ -36,7 +42,6 @@ internal static partial class Program
         var taken = LogLines("None+None taken as a shortcut").Count;
         try
         {
-            await c.Call("test.settings.set", new { windowId, name = "ShortcutOpenFolder", value = new { Modifiers = 0, Key = 0 } });
             await c.Call("window.setView", new { windowId, mode = "visual", bounds = new { x = 40, y = 40, width = 1300, height = 850 }, sidePane = new { open = true, page = "outline" } });
             await Task.Delay(1200);
             SetProcessDpiAwarenessContext(new IntPtr(-4));
@@ -64,8 +69,10 @@ internal static partial class Program
         }
         finally
         {
-            try { await c.Call("test.settings.set", new { windowId, name = "ShortcutOpenFolder", value = (object?)null }); } catch { }
-            try { await c.Call("document.close", new { documentId = id, discard = true }); } catch { }
+            PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero); // WM_CLOSE: the window of its own
+            await Task.Delay(1500);
+            try { await c.Call("test.settings.set", new { windowId = firstWindow, name = "ShortcutOpenFolder", value = (object?)null }); } catch { }
+            try { await c.Call("document.close", new { documentId = first, discard = true }); } catch { }
         }
     }
 
