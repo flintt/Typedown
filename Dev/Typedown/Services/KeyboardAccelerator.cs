@@ -88,6 +88,9 @@ namespace Typedown.Services
         private bool OnKeyBoardEvent(PInvoke.KBDLLHOOKSTRUCT args, bool repeat)
         {
             var key = (VirtualKey)args.vkCode;
+            // A key event of no key (the system sends one as a drag begins) is no shortcut: it matched one stored as no
+            // key at all, and an outline drag opened File > Open Folder's picker (the user's 32, 2026-11-21).
+            if (key == VirtualKey.None) return false;
             var modifiers = GetVirtualKeyModifiers();
             var eventArgs = new KeyEventArgs(key, modifiers) { IsRepeat = repeat };
             foreach (var action in globalRegistered)
@@ -121,7 +124,8 @@ namespace Typedown.Services
 
         public IDisposable Register(ShortcutKey key, EventHandler<KeyEventArgs> handler)
         {
-            if (key == null || handler == null)
+            // A shortcut stored as no key (Modifiers 0, Key 0 - one cleared in the settings, as the user's on hp) is none.
+            if (key == null || key.Key == VirtualKey.None || handler == null)
                 return Disposable.Empty;
             if (!registeredDictionary.ContainsKey(key))
                 registeredDictionary.Add(key, new());
