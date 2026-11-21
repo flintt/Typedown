@@ -1,8 +1,8 @@
 // Bold, italic, strikethrough and highlight show their markers only with the caret at one of them (the user's list,
 // 2026-11-11, 9): a click in the middle of a bold word showed the ** on either side and the text moved under the
 // pointer. With the caret in the middle the markers stay hidden; at the token's edge, between a marker and the text,
-// or with a selection touching it they show; a link's and a code span's are as before (shown with the caret anywhere
-// in them). Each position clicked as a reader does, with the real mouse, after placing the caret by the model too.
+// or with a selection that takes in a marker they show - a selection of its text alone does not (2026-11-21); a link's
+// and a code span's are as before (shown with the caret anywhere in them). Each position clicked as a reader does, with the real mouse, after placing the caret by the model too.
 //
 //   node inline-marks-edge-check.js
 const { openEditor } = require('./harness');
@@ -44,8 +44,20 @@ const line = 'Start **bold word** then *italic word* and ~~struck word~~ and ==m
       check(await shown(tag), `${tag}: the caret right before the closing marker shows them`);
       await place(tokenStart); await pause(80);
       check(await shown(tag), `${tag}: the caret right before the opening marker shows them`);
+      // A selection shows them only when it takes in a marker (the user, 2026-11-21: part of a long struck paragraph
+      // selected showed its markers far away, and the line moved; a double-clicked word too).
       await place(middle - 1, middle + 2); await pause(80);
-      check(await shown(tag), `${tag}: a selection in its text shows them`);
+      check(!(await shown(tag)), `${tag}: a selection in its text leaves them hidden`);
+      await place(textStart, textEnd); await pause(80);
+      check(!(await shown(tag)), `${tag}: its text selected exactly (a double click) leaves them hidden`);
+      await place(tokenStart, textEnd + open.length); await pause(80);
+      check(await shown(tag), `${tag}: a selection taking in the whole token, markers and all, shows them`);
+      await place(tokenStart, textStart + 2); await pause(80);
+      check(await shown(tag), `${tag}: a selection from before its opening marker shows them`);
+      if (open.length > 1) {
+        await place(tokenStart + 1, middle); await pause(80);
+        check(await shown(tag), `${tag}: a selection with an end between its marker's characters shows them`);
+      }
       await place(0); await pause(80);
       check(!(await shown(tag)), `${tag}: the caret elsewhere hides them`);
     }

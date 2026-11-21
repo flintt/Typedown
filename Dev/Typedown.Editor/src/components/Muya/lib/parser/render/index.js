@@ -193,12 +193,36 @@ class StateRender {
 
   checkAtEdges(block, token, cursor) {
     const { start, end } = cursor
-    if (!start || !end || start.key !== end.key || start.offset !== end.offset) return this.checkConflicted(block, token, cursor)
+    if (!start || !end) return this.checkConflicted(block, token, cursor)
+    if (start.key !== end.key || start.offset !== end.offset) return this.selectionTakesMarker(block, token, cursor)
     if (this.muya.options.readOnly || start.key !== block.key) return false
     const { start: tokenStart, end: tokenEnd } = token.range
     const length = token.marker.length
     const at = start.offset
     return conflict([tokenStart, tokenStart + length], [at, at]) || conflict([tokenEnd - length, tokenEnd], [at, at])
+  }
+
+  // A selection shows a bold, italic, struck or highlighted token's markers only when it takes in a marker's characters
+  // (the user, 2026-11-21): part of a long struck paragraph selected showed its ~~ far away and moved the line; a word
+  // double-clicked too. Within one block, the selected span against the markers; a selection going on into another
+  // block, by its end in this one only - one end inside a marker's characters - so a selection over several lines (a
+  // triple click, Ctrl+A) moves none of them.
+  selectionTakesMarker(block, token, cursor) {
+    if (this.muya.options.readOnly) return false
+    const { start, end } = cursor
+    const { start: tokenStart, end: tokenEnd } = token.range
+    const length = token.marker.length
+    const opening = [tokenStart, tokenStart + length]
+    const closing = [tokenEnd - length, tokenEnd]
+    const overlaps = ([a, b], [from, to]) => from < b && to > a
+    const insideMarker = at => (at > opening[0] && at < opening[1]) || (at > closing[0] && at < closing[1])
+    if (start.key === block.key && end.key === block.key) {
+      const span = [Math.min(start.offset, end.offset), Math.max(start.offset, end.offset)]
+      return overlaps(opening, span) || overlaps(closing, span)
+    }
+    if (start.key === block.key) return insideMarker(start.offset)
+    if (end.key === block.key) return insideMarker(end.offset)
+    return false
   }
 
   getHighlightClassName(active, review) {
