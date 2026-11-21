@@ -111,6 +111,72 @@ const { openEditor } = require('./harness');
         s = await shown();
         check(s['two']?.run != null, 'the caret gone out: folded again', s['two']);
 
+        // Every frame watched (a loop of animation frames, which run before each paint): a frame where "three" was not folded,
+        // or where "End." stood elsewhere, is one the reader saw jump or flash (the user, 2026-11-21, trial 1.4.3.2: Ctrl+A
+        // made the document jump; a click now and then flashed).
+        const watch = () => page.evaluate(() => {
+            window.__hdFrames = [];
+            const end = () => [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(e => e.textContent === 'End.');
+            const tick = () => {
+                if (!window.__hdWatching) return;
+                const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.textContent.includes('three'));
+                const e = end();
+                const sel = getSelection(), at = sel.anchorNode && (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement);
+                const folded = !!li && li.classList.contains('td-done');
+                window.__hdFrames.push({ folded, end: e ? Math.round(e.getBoundingClientRect().top + window.scrollY) : null,
+                    why: folded ? undefined : { caret: at ? (at.closest('.ag-paragraph-content') || at).textContent.slice(0, 20) : null, collapsed: sel.isCollapsed, liClass: li ? li.className : 'gone' } });
+                requestAnimationFrame(tick);
+            };
+            window.__hdWatching = true;
+            requestAnimationFrame(tick);
+        });
+        const watched = () => page.evaluate(() => { window.__hdWatching = false; return window.__hdFrames; });
+        const summary = frames => ({ frames: frames.length, unfolded: frames.filter(f => !f.folded).length, ends: [...new Set(frames.map(f => f.end))], why: [...new Set(frames.filter(f => !f.folded).map(f => JSON.stringify(f.why)))] });
+
+        // Ctrl+A step by step (the line, then the whole) changes no fold: a selection is not the caret.
+        await fresh();
+        await watch();
+        for (let i = 0; i < 3; i++) {
+            await page.keyboard.down('Control'); await page.keyboard.press('KeyA'); await page.keyboard.up('Control');
+            await pause(300);
+        }
+        let frames = summary(await watched());
+        check(frames.frames > 10 && frames.unfolded === 0 && frames.ends.length === 1, 'Ctrl+A three times: the fold never opens, nothing moves at any frame', frames);
+
+        // Clicks in other paragraphs draw blocks again: the folded items stay folded at every frame.
+        await fresh();
+        await watch();
+        for (const word of ['one', 'four', 'End.', 'one', 'four']) {
+            const at = await page.evaluate(word => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.includes(word)); const r = e.getBoundingClientRect(); return { x: r.left + 4, y: r.top + r.height / 2 }; }, word);
+            await page.mouse.click(at.x, at.y);
+            await pause(250);
+        }
+        frames = summary(await watched());
+        check(frames.frames > 10 && frames.unfolded === 0 && frames.ends.length === 1, 'clicks in other paragraphs: folded at every frame, nothing moves', frames);
+
+        // Turned on (and off), the caret's line stays where it is on the screen: the items folding above it took it up (the
+        // user, 2026-11-21). A long document, the caret on "End." in the middle of the window; reading mode keeps its top
+        // line the same way.
+        const filler = n => Array.from({ length: n }, (_, i) => `Filler line ${i + 1}.`).join('\n\n');
+        const long = `${filler(30)}\n\n1. one\n2. ~~two~~\n3. ~~three~~\n4. ~~more~~\n5. four\n\nEnd.\n\n${filler(30)}\n`;
+        await mode(true, false);
+        await load(long);
+        await mode(false, false);
+        await page.evaluate(() => window.__deliver('SettingsChanged', { hideDone: false }));
+        await caretAt('End.', true);
+        await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'End.'); window.scrollBy(0, e.getBoundingClientRect().top - window.innerHeight / 2); });
+        await pause(300);
+        const endOnScreen = () => page.evaluate(() => Math.round([...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'End.').getBoundingClientRect().top));
+        const before = await endOnScreen();
+        await page.evaluate(() => window.__deliver('SettingsChanged', { hideDone: true, hideDoneLabel: '{0} hidden · Show' }));
+        await pause(400);
+        const on = await endOnScreen();
+        check((await shown())['three']?.height === 0 && Math.abs(on - before) <= 1, 'turned on: the folds made, the caret\'s line where it was on the screen', { before, on });
+        await page.evaluate(() => window.__deliver('SettingsChanged', { hideDone: false }));
+        await pause(400);
+        const off = await endOnScreen();
+        check(Math.abs(off - before) <= 1, 'turned off: the caret\'s line where it was', { before, off });
+
         // A search whose match is folded away opens that run (the reading mode's too).
         // (A word in the middle of the item too: "hre" in "three", the highlight inside the struck text.)
         for (const [reading, word] of [[false, 'three'], [true, 'three'], [false, 'hre'], [true, 'hre']]) {
