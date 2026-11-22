@@ -89,7 +89,7 @@ internal static partial class Program
             var firstWhites = await WhitesWhile(window, async () =>
             {
                 await InvokeMenuBarItem(window, "ScratchpadItem");
-                await Eventually(async () => (bool?)(s = await State())["shown"] == true, 5000, 50);
+                await Eventually(async () => (bool?)(s = await State())["shown"] == true && (bool?)s["cloaked"] == false, 5000, 50);
             });
             notes.Add($"near-white points right of the window as it first showed, picture by picture: {string.Join(" ", firstWhites)}");
             Check(firstWhites.Count > 5 && firstWhites.Max() < 300, $"it comes up with no flash of white (the most near-white points in a picture: {(firstWhites.Count > 0 ? firstWhites.Max() : -1)}, {firstWhites.Count} pictures)");
@@ -151,7 +151,7 @@ internal static partial class Program
             Check((bool?)(await State())["shown"] == false, "its x hides it");
             await Front();
             Chord("Ctrl+Shift+J");
-            await Eventually(async () => (bool?)(await State())["shown"] == true, 4000, 200);
+            await Eventually(async () => (bool?)(await State())["shown"] == true && (bool?)(await State())["cloaked"] == false, 4000, 100);
             Check((bool?)(await State())["shown"] == true, "its key shows it again");
 
             // Typed in, as a person types.
@@ -173,7 +173,7 @@ internal static partial class Program
             var againWhites = await WhitesWhile(window, async () =>
             {
                 Chord("Ctrl+Shift+J");
-                await Eventually(async () => (bool?)(await State())["shown"] == true, 4000, 50);
+                await Eventually(async () => (bool?)(await State())["shown"] == true && (bool?)(await State())["cloaked"] == false, 4000, 50);
             });
             notes.Add($"near-white points as its key showed it again: {string.Join(" ", againWhites)}");
             Check(againWhites.Count > 5 && againWhites.Max() < 300, $"shown again by its key with no flash of white (most near-white points in a picture: {(againWhites.Count > 0 ? againWhites.Max() : -1)})");
@@ -196,6 +196,8 @@ internal static partial class Program
             s = await State();
             Check((string?)s["text"] == "first note\n\nkeep this line", "the selection added at the end, a blank line before it: " + s["text"]);
             Check((bool?)s["shown"] == true, "and the scratchpad shown");
+            await Eventually(async () => (bool?)(await State())["cloaked"] == false, 3000, 100);
+            Check((bool?)(await State())["cloaked"] == false, "on the screen (uncloaked) once drawn");
 
             // Its pin let go: behind the other windows from then on, kept as a setting.
             var pin = FindIn(pad, "ScratchpadTopmost");
@@ -219,7 +221,7 @@ internal static partial class Program
             await Task.Delay(300);
             Chord("Ctrl+Shift+J");
             JObject s2 = new();
-            await Eventually(async () => (bool?)(s2 = (JObject)await again.Call("test.scratchpad.state", new { windowId = w2 }))["shown"] == true, 6000, 200);
+            await Eventually(async () => (bool?)(s2 = (JObject)await again.Call("test.scratchpad.state", new { windowId = w2 }))["shown"] == true && (bool?)s2["cloaked"] == false, 6000, 100);
             Check((string?)s2["text"] == "first note\n\nkeep this line", "after a restart: the text as it was: " + s2["text"]);
             Check((bool?)s2["topmost"] == false, "the pin as it was");
             GetWindowRect(new IntPtr((long)s2["hwnd"]!), out var after);
