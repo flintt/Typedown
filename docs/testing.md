@@ -359,6 +359,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | OL04 | measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have it laid out |
 | OL05 | Ctrl+Tab to a document of 3000 headings with the outline shown, letters typed straight after: every one reaches that document |
 | OL06 | a plain text document has no outline: from a .md to a .txt (a # line, a ```md block's heading in it) the outline empties, back to the .md it is its headings again; written into, the pane closed and opened, a .md with none |
+| SK01 | the scratchpad: off, its key does nothing; on, View > Scratchpad shows a window of its own over the others; typed text kept when hidden and shown again (its key in it and in the main window, Esc); Put in Scratchpad adds the selection at the end; its pin lets it go behind; the text, the pin and its place kept over a restart |
 | HD01 | View > Hide Done Items in the real menu: in reading mode items struck through whole and ticked tasks fold, each run one line a real click opens; an ordered list keeps its numbers; a paragraph with a few words struck stays; the text unchanged; off, nothing hidden |
 | OL08 | a drag in the outline with File > Open Folder's shortcut stored as no key: no picker opens, no key of no key is taken as a shortcut (the user's 32) |
 | OL07 | a heading dragged in the outline moves its section: A dropped below B goes after B's section with its sub-section, one Ctrl+Z puts it back, B dropped onto A becomes A's last sub-section a level down; in reading mode a drag moves nothing |
@@ -445,6 +446,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.edition.get` | `name`, `windowId` | A state of the edition's (Edition.TestGet), as a string; an error when the edition has no such name. | TestHostHooks.cs |
 | `test.editor.reload` | `windowId` | Reloads the window's editor page, as the application does after a page error or a crashed web process. | TestHostHooks.cs |
 | `test.window.handle` | `windowId` | The window's native handle (HWND), for UI Automation and window messages from the driver. | TestHostHooks.cs |
+| `test.scratchpad.state` | `windowId` | The scratchpad (the user's 33): shown, its window's handle, over the others, its text - read on the UI thread of the window named. | TestHostHooks.cs |
+| `test.scratchpad.set` | `windowId`, `text?` | Its text set (a case starting from nothing), written to disk at once. | TestHostHooks.cs |
 | `test.window.menuTitles` | `windowId` | The titles of the window's menu bar, as drawn: the menu follows the interface language. | TestHostHooks.cs |
 | `test.window.texts` | `windowId` | Every text the window's own controls show (not the editor page's): what a reader sees of the interface, to find words left in another language. Collapsed parts are left out. | TestHostHooks.cs |
 | `test.window.statusTexts` | `windowId` | The texts the status bar shows (its save state among them), in the order of the visual tree. | TestHostHooks.cs |
