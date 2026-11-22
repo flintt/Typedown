@@ -278,6 +278,18 @@ export function setHideDone(value: boolean, text?: string) {
             const target = e.target as Element | null
             if (!on || !editor || !target || !editor.contains(target)) return
             const first = target.closest(`.${FIRST}`)
+            // A third press on a line: the line selected here. The browser's own takes the paragraph to the start of
+            // the next, and with a fold there (nothing in it to select) it selected nothing (the user's 36, 2026-11-22).
+            const tripled = !first && e.detail >= 3 ? target.closest('.ag-paragraph-content') : null
+            if (tripled) {
+                e.preventDefault()
+                const range = document.createRange()
+                range.selectNodeContents(tripled)
+                const selection = window.getSelection()
+                selection?.removeAllRanges()
+                selection?.addRange(range)
+                return
+            }
             if (first) {
                 e.preventDefault()
                 e.stopPropagation()

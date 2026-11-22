@@ -237,6 +237,31 @@ const { openEditor } = require('./harness');
         const selTops = await page.evaluate(() => { window.__hdSelOn = false; return [...new Set(window.__hdSel)]; });
         check(selTops.length === 1, 'Ctrl+A in steps (the app\'s SelectAll) by a folded run: nothing moves on the screen', selTops);
 
+        // A paragraph with folds above and below it, triple-clicked: the paragraph selected, as one with none around it
+        // (the user's 36, 2026-11-22: it could not be selected so). The visual editor and reading mode.
+        for (const reading of [false, true]) {
+            await mode(true, false);
+            await load(`${filler(20)}\n\n- ~~done 1~~\n- ~~done 2~~\n\nThe paragraph between the folds.\n\n- ~~done 3~~\n- ~~done 4~~\n\nA paragraph with none around it.\n\n${filler(20)}\n`);
+            await mode(false, reading);
+            await page.evaluate(() => window.__deliver('SettingsChanged', { hideDone: true, hideDoneLabel: '{0} hidden · Show' }));
+            await caretAt('A paragraph with none around it.', true);
+            await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.includes('between the folds')); window.scrollBy(0, e.getBoundingClientRect().top - window.innerHeight / 2); });
+            await pause(400);
+            const triple = async (needle) => {
+                const at = await page.evaluate(n => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.includes(n)); const r = e.getBoundingClientRect(); return { x: r.left + 40, y: r.top + r.height / 2 }; }, needle);
+                await page.mouse.click(at.x, at.y, { clickCount: 1 });
+                await page.mouse.click(at.x, at.y, { clickCount: 2 });
+                await page.mouse.click(at.x, at.y, { clickCount: 3 });
+                await pause(400);
+                return page.evaluate(() => ({ selected: String(window.getSelection()).trim(), folds: document.querySelectorAll('#ag-editor-id .td-done-first').length }));
+            };
+            const alone = await triple('none around it');
+            const between = await triple('between the folds');
+            const where = reading ? 'reading mode' : 'visual editor';
+            check(alone.selected === 'A paragraph with none around it.', `${where}: triple-click on a paragraph with no fold around it selects it`, alone);
+            check(between.selected === 'The paragraph between the folds.' && between.folds === 2, `${where}: triple-click on a paragraph between two folds selects it, the folds stay folded`, between);
+        }
+
         // Ctrl+A on an item, then struck through (the user, trial 1.4.3.11 on x280: it jumped - the item, redrawn by the
         // format, was folded away at once under the selection, and the line kept in place was the one drawn before, gone,
         // so nothing was kept): selected, it stays shown and nothing moves; a click on a line below folds it, and that
