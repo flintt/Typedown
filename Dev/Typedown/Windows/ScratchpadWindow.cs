@@ -225,6 +225,11 @@ namespace Typedown.Windows
             }
             SetTopmost(pin.IsChecked == true);
             shown = true;
+            // Off the screen till its content is drawn: shown at once it was white a moment, then its colours, and its
+            // frame came off as it was seen (the user, 2026-11-22: "a flash of white" as its key shows it). As the main
+            // window comes up (MainWindow.ShowAfterFirstFrame): cloaked, shown, the next frame drawn, uncloaked.
+            SetCloaked(true);
+            UncloakAfterFrame();
             Activate();
             // Its frame taken off once it is on the screen: taken off before, the window never showed (w10 job 702 - shown,
             // by what it said, with nothing on the screen where it was).
@@ -244,6 +249,38 @@ namespace Typedown.Windows
             box.Select(box.Text.Length, 0);
             UpdateRegions();
             Log.Debug($"scratchpad: shown ({box.Text.Length} characters, on top {pin.IsChecked == true})");
+        }
+
+        private void SetCloaked(bool cloaked)
+        {
+            uint value = cloaked ? 1u : 0u;
+            var result = PInvoke.DwmSetWindowAttribute(Handle, PInvoke.DwmWindowAttribute.DWMWA_CLOAK, ref value, sizeof(uint));
+            if (result != 0) Log.Debug($"scratchpad: cloak {cloaked} refused (0x{result:x8})");
+        }
+
+        private int showing;
+
+        // Uncloaked once a frame has been drawn with its content (Rendered), or after a second whatever happens.
+        private void UncloakAfterFrame()
+        {
+            var turn = ++showing;
+            var done = false;
+            void Uncloak(string why)
+            {
+                if (done || turn != showing) return;
+                done = true;
+                CompositionTarget.Rendered -= OnRendered;
+                SetCloaked(false);
+                Log.Debug($"scratchpad: on the screen after {why}");
+            }
+            void OnRendered(object sender, RenderedEventArgs e) => Uncloak("its content drawn");
+            CompositionTarget.Rendered += OnRendered;
+            root.InvalidateArrange();
+            var guard = DispatcherQueue.CreateTimer();
+            guard.Interval = TimeSpan.FromSeconds(1);
+            guard.IsRepeating = false;
+            guard.TickSafe((_, _) => Uncloak("a second waited for it"));
+            guard.Start();
         }
 
         // Where it was the last time; the first time, on the right of the main window's screen, a third of its height.
