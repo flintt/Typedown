@@ -229,6 +229,12 @@ namespace Typedown.Windows
             {
                 framed = true;
                 if (AppWindow.Presenter is OverlappedPresenter presenter) presenter.SetBorderAndTitleBar(false, false);
+                // The sizing frame it keeps taken off too: Windows 10 drew it as a white band along the top (w10 job 703's
+                // shot). Its edges size it still - the border regions (UpdateRegions).
+                const int WS_THICKFRAME = 0x00040000, WS_DLGFRAME = 0x00400000;
+                var style = PInvoke.GetWindowLong(Handle, PInvoke.WindowLongFlags.GWL_STYLE);
+                PInvoke.SetWindowLong(Handle, PInvoke.WindowLongFlags.GWL_STYLE, style & ~(WS_THICKFRAME | WS_DLGFRAME));
+                PInvoke.SetWindowPos(Handle, 0, 0, 0, 0, 0, PInvoke.SetWindowPosFlags.SWP_FRAMECHANGED | PInvoke.SetWindowPosFlags.SWP_NOMOVE | PInvoke.SetWindowPosFlags.SWP_NOSIZE | PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOACTIVATE);
                 AppWindow.IsShownInSwitchers = false;
             }
             PInvoke.SetForegroundWindow(Handle);
