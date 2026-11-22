@@ -255,8 +255,11 @@ namespace Typedown.Windows
             Log.Debug($"scratchpad: shown ({box.Text.Length} characters, on top {pin.IsChecked == true})");
         }
 
+        private bool cloakedNow;
+
         private void SetCloaked(bool cloaked)
         {
+            cloakedNow = cloaked;
             uint value = cloaked ? 1u : 0u;
             var result = PInvoke.DwmSetWindowAttribute(Handle, PInvoke.DwmWindowAttribute.DWMWA_CLOAK, ref value, sizeof(uint));
             if (result != 0) Log.Debug($"scratchpad: cloak {cloaked} refused (0x{result:x8})");
@@ -264,7 +267,8 @@ namespace Typedown.Windows
 
         private int showing;
 
-        // Uncloaked once a frame has been drawn with its content (Rendered), or after a second whatever happens.
+        // Uncloaked once a frame has been drawn with its content (Rendered), or after 300 ms whatever happens: shown again
+        // with nothing changed, XAML drew no frame, and it stayed cloaked a whole second (w10 job 708).
         private void UncloakAfterFrame()
         {
             var turn = ++showing;
@@ -281,9 +285,9 @@ namespace Typedown.Windows
             CompositionTarget.Rendered += OnRendered;
             root.InvalidateArrange();
             var guard = DispatcherQueue.CreateTimer();
-            guard.Interval = TimeSpan.FromSeconds(1);
+            guard.Interval = TimeSpan.FromMilliseconds(300);
             guard.IsRepeating = false;
-            guard.TickSafe((_, _) => Uncloak("a second waited for it"));
+            guard.TickSafe((_, _) => Uncloak("300 ms waited for it"));
             guard.Start();
         }
 
@@ -503,6 +507,7 @@ namespace Typedown.Windows
             topmost = instance?.AppWindow.Presenter is OverlappedPresenter p && p.IsAlwaysOnTop,
             inSwitchers = instance?.AppWindow.IsShownInSwitchers ?? true,
             visible = instance != null && PInvoke.IsWindowVisible(instance.Handle),
+            cloaked = instance?.cloakedNow == true,
             bounds = instance == null ? null : $"{instance.AppWindow.Position.X},{instance.AppWindow.Position.Y} {instance.AppWindow.Size.Width}x{instance.AppWindow.Size.Height}",
             background = instance == null ? null : Hex(instance.paper.Color),
             foreground = instance == null ? null : Hex(instance.ink.Color),
