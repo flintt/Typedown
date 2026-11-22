@@ -218,7 +218,7 @@ namespace Typedown.Windows
             settings.ScratchpadPlacement = placement;
         }
 
-        private DispatcherQueueTimer saveSoon;
+        private Microsoft.UI.Dispatching.DispatcherQueueTimer saveSoon;
 
         // Moved or resized: saved a moment after it stops (not every step of a drag).
         private void SavePlacementSoon()
