@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Automation;
 using Newtonsoft.Json.Linq;
@@ -15,6 +16,44 @@ using Newtonsoft.Json.Linq;
 internal static partial class Program
 {
     [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "GetWindowLongW")] private static extern int GetWindowStyle(IntPtr window, int index);
+
+    /// <summary>
+    /// The screen right of the main window watched while something is done and a while after: in each picture taken, how
+    /// many points (every 6 px) are near white. The test PC's desktop is black and the theme dark: the scratchpad coming
+    /// up white for a moment (the user, 2026-11-22: "a flash of white" as its key shows it) is a picture with many.
+    /// </summary>
+    private static async Task<List<int>> WhitesWhile(IntPtr main, Func<Task> act, int afterMs = 700)
+    {
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        GetWindowRect(main, out var m);
+        var screen = System.Windows.Forms.Screen.PrimaryScreen!.Bounds;
+        int x0 = Math.Min(screen.Width - 50, m.Right + 4), width = screen.Width - x0, height = screen.Height - 60;
+        var counts = new List<int>();
+        var stop = false;
+        var sampler = Task.Run(() =>
+        {
+            using var bitmap = new System.Drawing.Bitmap(width, height);
+            using var g = System.Drawing.Graphics.FromImage(bitmap);
+            while (!stop)
+            {
+                g.CopyFromScreen(x0, 0, 0, 0, new System.Drawing.Size(width, height));
+                var n = 0;
+                for (var y = 0; y < height; y += 6)
+                    for (var x = 0; x < width; x += 6)
+                    {
+                        var p = bitmap.GetPixel(x, y);
+                        if (p.R > 230 && p.G > 230 && p.B > 230) n++;
+                    }
+                lock (counts) counts.Add(n);
+            }
+        });
+        await act();
+        await Task.Delay(afterMs);
+        stop = true;
+        await sampler;
+        return counts;
+    }
+
 
     private static async Task SK01(List<string> notes)
     {
@@ -46,9 +85,14 @@ internal static partial class Program
             // On: View > Scratchpad, the real menu.
             await c.Call("test.settings.set", new { windowId, name = "ScratchpadEnabled", value = true });
             await Task.Delay(300);
-            await InvokeMenuBarItem(window, "ScratchpadItem");
             JObject s = new();
-            await Eventually(async () => (bool?)(s = await State())["shown"] == true, 5000, 200);
+            var firstWhites = await WhitesWhile(window, async () =>
+            {
+                await InvokeMenuBarItem(window, "ScratchpadItem");
+                await Eventually(async () => (bool?)(s = await State())["shown"] == true, 5000, 50);
+            });
+            notes.Add($"near-white points right of the window as it first showed, picture by picture: {string.Join(" ", firstWhites)}");
+            Check(firstWhites.Count > 5 && firstWhites.Max() < 300, $"it comes up with no flash of white (the most near-white points in a picture: {(firstWhites.Count > 0 ? firstWhites.Max() : -1)}, {firstWhites.Count} pictures)");
             notes.Add("shown: " + s.ToString(Newtonsoft.Json.Formatting.None));
             Check((bool?)s["shown"] == true, "View > Scratchpad shows it");
             Check((bool?)s["topmost"] == true, "over the other windows by default");
@@ -126,8 +170,13 @@ internal static partial class Program
             await Eventually(async () => (bool?)(await State())["shown"] == false, 4000, 200);
             Check((bool?)(await State())["shown"] == false, "Ctrl+Shift+J in it hides it");
             await Front();
-            Chord("Ctrl+Shift+J");
-            await Eventually(async () => (bool?)(await State())["shown"] == true, 4000, 200);
+            var againWhites = await WhitesWhile(window, async () =>
+            {
+                Chord("Ctrl+Shift+J");
+                await Eventually(async () => (bool?)(await State())["shown"] == true, 4000, 50);
+            });
+            notes.Add($"near-white points as its key showed it again: {string.Join(" ", againWhites)}");
+            Check(againWhites.Count > 5 && againWhites.Max() < 300, $"shown again by its key with no flash of white (most near-white points in a picture: {(againWhites.Count > 0 ? againWhites.Max() : -1)})");
             s = await State();
             Check((bool?)s["shown"] == true && (string?)s["text"] == "first note", "Ctrl+Shift+J in the main window shows it again, the text kept: " + s.ToString(Newtonsoft.Json.Formatting.None));
             Chord("Esc");
