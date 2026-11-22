@@ -76,7 +76,7 @@ namespace Typedown.Core.Services
         /// <summary>The text set (typed in a window's text box: <paramref name="source"/> is that box).</summary>
         public void SetText(string value, object source = null)
         {
-            value ??= "";
+            value = Lines(value);
             lock (gate)
             {
                 if (EnsureLoaded() == value) return;
@@ -90,6 +90,7 @@ namespace Typedown.Core.Services
         public void Append(string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return;
+            value = Lines(value);
             lock (gate)
             {
                 var now = EnsureLoaded();
@@ -99,6 +100,12 @@ namespace Typedown.Core.Services
             }
             RaiseChanged(null);
         }
+
+        /// <summary>
+        /// Its lines ended with \n: a WinUI text box gives every line break back as \r, and what it showed came back so
+        /// (\n\n put in was \r\r after a restart, E2E SK01 on w10 job 700).
+        /// </summary>
+        public static string Lines(string value) => (value ?? "").Replace("\r\n", "\n").Replace('\r', '\n');
 
         /// <summary>Done when the text is on disk (a change waiting for its half second written now).</summary>
         public Task FlushAsync()

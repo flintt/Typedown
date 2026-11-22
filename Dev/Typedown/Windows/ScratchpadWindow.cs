@@ -265,7 +265,7 @@ namespace Typedown.Windows
             void Apply()
             {
                 var text = Scratchpad.Shared.Text;
-                if (box.Text == text) return;
+                if (ScratchpadStore.Lines(box.Text) == text) return;
                 var caret = box.SelectionStart;
                 box.Text = text;
                 box.Select(Math.Min(caret, text.Length), 0);
