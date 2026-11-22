@@ -46,6 +46,7 @@ namespace Typedown.Windows
         private readonly CompositeDisposable shownWith = new();
         private bool shown;
         private bool placed;
+        private bool framed;
 
         // The colours, one brush each: a theme changed only changes their colour (the text box's template took its
         // resources once; new brushes would not reach it).
@@ -125,9 +126,7 @@ namespace Typedown.Windows
                 presenter.IsResizable = true;
                 presenter.PreferredMinimumWidth = 220;
                 presenter.PreferredMinimumHeight = 160;
-                presenter.SetBorderAndTitleBar(false, false);
             }
-            AppWindow.IsShownInSwitchers = false;
             root.SizeChanged += (s, e) => UpdateRegions();
             bar.SizeChanged += (s, e) => UpdateRegions();
             root.ActualThemeChanged += (s, e) => ApplyColours();
@@ -224,6 +223,14 @@ namespace Typedown.Windows
             SetTopmost(pin.IsChecked == true);
             shown = true;
             Activate();
+            // Its frame taken off once it is on the screen: taken off before, the window never showed (w10 job 702 - shown,
+            // by what it said, with nothing on the screen where it was).
+            if (!framed)
+            {
+                framed = true;
+                if (AppWindow.Presenter is OverlappedPresenter presenter) presenter.SetBorderAndTitleBar(false, false);
+                AppWindow.IsShownInSwitchers = false;
+            }
             PInvoke.SetForegroundWindow(Handle);
             box.Focus(FocusState.Programmatic);
             box.Select(box.Text.Length, 0);
@@ -374,6 +381,8 @@ namespace Typedown.Windows
             hwnd = instance == null ? 0L : (long)instance.Handle,
             topmost = instance?.AppWindow.Presenter is OverlappedPresenter p && p.IsAlwaysOnTop,
             inSwitchers = instance?.AppWindow.IsShownInSwitchers ?? true,
+            visible = instance != null && PInvoke.IsWindowVisible(instance.Handle),
+            bounds = instance == null ? null : $"{instance.AppWindow.Position.X},{instance.AppWindow.Position.Y} {instance.AppWindow.Size.Width}x{instance.AppWindow.Size.Height}",
             background = instance == null ? null : Hex(instance.paper.Color),
             foreground = instance == null ? null : Hex(instance.ink.Color),
             text = Scratchpad.Shared.Text,
