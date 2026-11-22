@@ -9,10 +9,13 @@ using Newtonsoft.Json.Linq;
 /// window and tab. Off by default: its key does nothing. On (Settings > General): View > Scratchpad (the real menu) shows
 /// it over the other windows; what is typed in it stays when it is hidden and shown again (its key from the main window,
 /// its key and Esc in it); the editor's Put in Scratchpad adds the selection at its end; its pin lets it go behind; the
-/// text, the pin and its place are there after the app is started again.
+/// text, the pin and its place are there after the app is started again. Without the system's frame and not in the
+/// taskbar (the user, 2026-11-22): its own bar drags it, its edges size it, its x hides it.
 /// </summary>
 internal static partial class Program
 {
+    [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "GetWindowLongW")] private static extern int GetWindowStyle(IntPtr window, int index);
+
     private static async Task SK01(List<string> notes)
     {
         const string original = "# SK01\n\nkeep this line\n\nanother line\n";
@@ -51,6 +54,56 @@ internal static partial class Program
             Check((bool?)s["topmost"] == true, "over the other windows by default");
             var pad = new IntPtr((long)s["hwnd"]!);
             Check(pad != IntPtr.Zero && pad != window, "a window of its own");
+
+            // No frame of the system's, not in the taskbar (nor Alt+Tab).
+            const int WS_CAPTION = 0x00C00000, WS_THICKFRAME = 0x00040000;
+            var style = GetWindowStyle(pad, -16);
+            Check((style & (WS_CAPTION | WS_THICKFRAME)) == 0, $"no title bar or frame of the system's (style 0x{style:X8})");
+            Check((bool?)s["inSwitchers"] == false, "not in the taskbar");
+            notes.Add("shot, borderless: " + Screenshot("SK01-0-borderless"));
+
+            // Its bar dragged by a real mouse moves it; its right and bottom edges dragged size it; all in physical pixels.
+            SetProcessDpiAwarenessContext(new IntPtr(-4));
+            GetWindowRect(pad, out var r0);
+            await Drag(pad, (r0.Left + 30, r0.Top + 12), (r0.Left + 30 - 120, r0.Top + 12 + 70));
+            await Task.Delay(400);
+            GetWindowRect(pad, out var r1);
+            Check(Math.Abs(r1.Left - (r0.Left - 120)) <= 4 && Math.Abs(r1.Top - (r0.Top + 70)) <= 4 && r1.Right - r1.Left == r0.Right - r0.Left,
+                $"its bar dragged moves it ({r0.Left},{r0.Top} -> {r1.Left},{r1.Top}, wanted {r0.Left - 120},{r0.Top + 70})");
+            await Drag(pad, (r1.Right - 2, (r1.Top + r1.Bottom) / 2), (r1.Right - 2 + 80, (r1.Top + r1.Bottom) / 2));
+            await Task.Delay(400);
+            GetWindowRect(pad, out var r2);
+            Check(Math.Abs((r2.Right - r2.Left) - (r1.Right - r1.Left + 80)) <= 6 && r2.Left == r1.Left, $"its right edge dragged makes it wider ({r1.Right - r1.Left} -> {r2.Right - r2.Left})");
+            await Drag(pad, ((r2.Left + r2.Right) / 2, r2.Bottom - 2), ((r2.Left + r2.Right) / 2, r2.Bottom - 2 + 60));
+            await Task.Delay(400);
+            GetWindowRect(pad, out var r3);
+            Check(Math.Abs((r3.Bottom - r3.Top) - (r2.Bottom - r2.Top + 60)) <= 6 && r3.Top == r2.Top, $"its bottom edge dragged makes it taller ({r2.Bottom - r2.Top} -> {r3.Bottom - r3.Top})");
+
+            // In the custom theme's colours, at once (the user, 2026-11-22): Dracula's panels and text; none again, its own.
+            var themeBefore = (string?)(await c.Call("test.settings.get", new { windowId, name = "CustomTheme" }))["value"];
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "dracula" });
+            await Eventually(async () => (string?)(await State())["background"] == "#343746", 4000, 200);
+            s = await State();
+            Check((string?)s["background"] == "#343746" && (string?)s["foreground"] == "#F8F8F2", $"under Dracula: its panels' colour and its text ({s["background"]}, {s["foreground"]})");
+            notes.Add("shot, under Dracula: " + Screenshot("SK01-2-dracula"));
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = themeBefore ?? "" });
+            await Eventually(async () => (string?)(await State())["background"] != "#343746", 4000, 200);
+            Check((string?)(await State())["background"] != "#343746", "the theme taken off: its own colours again");
+
+            // Its x hides it; its key shows it again.
+            var close = FindIn(pad, "ScratchpadClose");
+            Check(close != null, "its x");
+            if (close != null)
+            {
+                var (cx, cy) = CenterOf(close);
+                await Click(pad, cx, cy);
+            }
+            await Eventually(async () => (bool?)(await State())["shown"] == false, 4000, 200);
+            Check((bool?)(await State())["shown"] == false, "its x hides it");
+            await Front();
+            Chord("Ctrl+Shift+J");
+            await Eventually(async () => (bool?)(await State())["shown"] == true, 4000, 200);
+            Check((bool?)(await State())["shown"] == true, "its key shows it again");
 
             // Typed in, as a person types.
             var box = FindIn(pad, "ScratchpadText");
