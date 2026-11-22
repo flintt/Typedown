@@ -135,6 +135,10 @@ namespace Typedown.Windows
                 Grid.SetRowSpan(grip, 2);
                 root.Children.Add(grip);
             }
+            // No opening and closing animation of the system's: it showed the window before its content (white on the
+            // user's x280, a slower Windows 10 laptop - a flash as its key shows it); a small window has no need of it.
+            uint noTransitions = 1;
+            PInvoke.DwmSetWindowAttribute(Handle, (PInvoke.DwmWindowAttribute)3 /* DWMWA_TRANSITIONS_FORCEDISABLED */, ref noTransitions, sizeof(uint));
             root.SizeChanged += (s, e) => UpdateRegions();
             bar.SizeChanged += (s, e) => UpdateRegions();
             root.ActualThemeChanged += (s, e) => ApplyColours();
