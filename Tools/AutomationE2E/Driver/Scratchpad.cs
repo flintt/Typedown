@@ -55,12 +55,16 @@ internal static partial class Program
             var pad = new IntPtr((long)s["hwnd"]!);
             Check(pad != IntPtr.Zero && pad != window, "a window of its own");
 
-            // No frame of the system's, not in the taskbar (nor Alt+Tab).
-            const int WS_CAPTION = 0x00C00000, WS_THICKFRAME = 0x00040000;
+            // On the screen, with no title bar of the system's (its thick frame stays: the system sizes it by its edges), not
+            // in the taskbar (nor Alt+Tab).
+            await Task.Delay(600);
+            s = await State();
+            notes.Add("shot, borderless: " + Screenshot("SK01-0-borderless") + " " + s.ToString(Newtonsoft.Json.Formatting.None));
+            Check((bool?)s["visible"] == true, "it is on the screen: " + s["bounds"]);
+            const int WS_CAPTION = 0x00C00000;
             var style = GetWindowStyle(pad, -16);
-            Check((style & (WS_CAPTION | WS_THICKFRAME)) == 0, $"no title bar or frame of the system's (style 0x{style:X8})");
+            Check((style & WS_CAPTION) != WS_CAPTION, $"no title bar of the system's (style 0x{style:X8})");
             Check((bool?)s["inSwitchers"] == false, "not in the taskbar");
-            notes.Add("shot, borderless: " + Screenshot("SK01-0-borderless"));
 
             // Its bar dragged by a real mouse moves it; its right and bottom edges dragged size it; all in physical pixels.
             SetProcessDpiAwarenessContext(new IntPtr(-4));
