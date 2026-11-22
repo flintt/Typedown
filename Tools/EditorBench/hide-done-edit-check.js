@@ -237,6 +237,52 @@ const { openEditor } = require('./harness');
         const selTops = await page.evaluate(() => { window.__hdSelOn = false; return [...new Set(window.__hdSel)]; });
         check(selTops.length === 1, 'Ctrl+A in steps (the app\'s SelectAll) by a folded run: nothing moves on the screen', selTops);
 
+        // Ctrl+A on an item, then struck through (the user, trial 1.4.3.11 on x280: it jumped - the item, redrawn by the
+        // format, was folded away at once under the selection, and the line kept in place was the one drawn before, gone,
+        // so nothing was kept): selected, it stays shown and nothing moves; a click on a line below folds it, and that
+        // line stays where it is on the screen.
+        const strike = `${filler(30)}\n\n- a\n- ~~done 1~~\n- target item\n- below it\n\n${filler(30)}\n`;
+        await mode(true, false);
+        await load(strike);
+        await mode(false, false);
+        await page.evaluate(() => window.__deliver('SettingsChanged', { hideDone: true, hideDoneLabel: '{0} hidden · Show', selectAllInSteps: true }));
+        await caretAt('target item', true);
+        await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'target item'); window.scrollBy(0, e.getBoundingClientRect().top - window.innerHeight / 2); });
+        await pause(400);
+        const watchBelow = () => page.evaluate(() => {
+            window.__hdBelow = [];
+            const tick = () => {
+                if (!window.__hdBelowOn) return;
+                const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'below it');
+                window.__hdBelow.push(e ? Math.round(e.getBoundingClientRect().top) : null);
+                requestAnimationFrame(tick);
+            };
+            window.__hdBelowOn = true;
+            requestAnimationFrame(tick);
+        });
+        const stopBelow = () => page.evaluate(() => { window.__hdBelowOn = false; return [...new Set(window.__hdBelow)]; });
+        await watchBelow();
+        await page.evaluate(() => window.__deliver('SelectAll'));
+        await pause(300);
+        await page.evaluate(() => window.__deliver('Format', 'del'));
+        await pause(500);
+        const struckTops = await stopBelow();
+        const struckState = await page.evaluate(() => {
+            const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.textContent.includes('target item'));
+            return { height: li ? Math.round(li.getBoundingClientRect().height) : -1, struck: !!li?.querySelector('del'), selection: String(window.getSelection()) };
+        });
+        check(struckState.struck, 'Ctrl+A then strike through: the item is struck', struckState);
+        check(struckState.height > 0, 'struck while selected, it stays shown (folded once the caret goes elsewhere)', struckState);
+        check(struckTops.length === 1, 'Ctrl+A then strike through: the line below does not move on the screen at any frame', struckTops);
+        const belowAt = await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent === 'below it'); const r = e.getBoundingClientRect(); return { x: r.left + 6, y: r.top + r.height / 2, top: Math.round(r.top) }; });
+        await watchBelow();
+        await page.mouse.click(belowAt.x, belowAt.y);
+        await pause(500);
+        const foldTops = await stopBelow();
+        const folded = await page.evaluate(() => { const li = [...document.querySelectorAll('#ag-editor-id li')].find(l => l.textContent.includes('target item')); return li ? Math.round(li.getBoundingClientRect().height) : -1; });
+        check(folded === 0, 'a click below: the struck item folds', { folded });
+        check(foldTops.length === 1 && Math.abs(foldTops[0] - belowAt.top) <= 1, 'and the line clicked stays where it is on the screen at every frame', { before: belowAt.top, tops: foldTops });
+
         // A list item dragged up past a fold (the user, trial 1.4.3.6: up it jumped about, and some places could not be
         // dropped on): the folded items are no places - their text, not drawn, measured at the window's top and threw the
         // line there. Dropped just above "two" (under the fold's line), it goes after the folded items, before "two",

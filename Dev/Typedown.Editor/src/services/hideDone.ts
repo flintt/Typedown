@@ -89,13 +89,14 @@ export function applyHideDone() {
     const folds = foldsOf(editor)
     if (folds !== lastFolds) {
         say(`folds: ${editor.querySelectorAll(`.${FIRST}`).length} folded, opened ${shownRun ?? 'none'}, caret's run ${caretRun ?? 'none'}`)
-        if (before && before.element.isConnected) {
-            const now = before.element.getBoundingClientRect()
+        const line = before ? keptNow(before) : null
+        if (before && line) {
+            const now = line.getBoundingClientRect()
             const moved = Math.round(now.top + window.scrollY - before.top)
             if (now.height > 0 && Math.abs(moved) >= 1) {
                 window.scrollBy(0, moved)
-                say(`kept "${(before.element.textContent || '').slice(0, 24)}" in its place: scrolled ${moved} px (to ${Math.round(window.scrollY)})`)
-            } else if (now.height === 0) say(`not kept: "${(before.element.textContent || '').slice(0, 24)}" is folded away`)
+                say(`kept "${(line.textContent || '').slice(0, 24)}"${line === before.element ? '' : ' (drawn anew)'} in its place: scrolled ${moved} px (to ${Math.round(window.scrollY)})`)
+            } else if (now.height === 0) say(`not kept: "${(line.textContent || '').slice(0, 24)}" is folded away`)
         } else say(before ? `not kept: "${(before.element.textContent || '').slice(0, 24)}" was drawn anew` : 'not kept: no line to keep')
         lastFolds = folds
     }
@@ -103,11 +104,20 @@ export function applyHideDone() {
 }
 
 // The line kept in its place, where it is in the document after the last marking; and the folds then.
-let kept: { element: Element, top: number } | null = null
+let kept: { element: Element, top: number, block: string | null } | null = null
 let lastFolds = ''
 
 function remember(element: Element | null) {
-    kept = element ? { element, top: element.getBoundingClientRect().top + window.scrollY } : null
+    kept = element ? { element, top: element.getBoundingClientRect().top + window.scrollY, block: element.closest('[id]')?.id ?? null } : null
+}
+
+// The line kept, or the one drawn in its place: a format redraws the block, and the line kept was gone - nothing was kept
+// and the page jumped (the user's x280, trial 1.4.3.11: "drawn anew" each time).
+function keptNow(before: { element: Element, block: string | null }): Element | null {
+    if (before.element.isConnected) return before.element
+    const block = before.block ? document.getElementById(before.block) : null
+    if (!block) return null
+    return block.matches('.ag-paragraph-content') ? block : block.querySelector('.ag-paragraph-content') ?? block
 }
 
 // What is folded: what a change of moves the lines below it.
@@ -119,6 +129,40 @@ function foldsOf(editor: HTMLElement): string {
 // sees can be told from it.
 function say(what: string) {
     try { transport.postMessage('HideDoneLog', { what }) } catch (err) { console.log(err) }
+}
+
+// The content line a node is in.
+function lineOf(node: Node | null | undefined): Element | null {
+    return (node?.nodeType === 1 ? node as Element : node?.parentElement)?.closest('.ag-paragraph-content') ?? null
+}
+
+// Who scrolls the page in the next frames (a press below a run opened: the page went 2742 px up a frame after the fold,
+// by no scroll of ours - the user's x280, trial 1.4.3.11): each call, where from, in the log.
+let watchingScrolls = 0
+function watchScrolls() {
+    const w = window as any
+    if (!w.__hdScrollsWrapped) {
+        w.__hdScrollsWrapped = true
+        const from = () => (new Error().stack || '').split('\n').slice(2, 6).map(l => l.trim().replace(/\(?https?:\/\/[^)]*\//, '(')).join(' < ')
+        const wrap = (target: any, name: string, what: string) => {
+            const original = target[name]
+            target[name] = function (this: any, ...args: any[]) {
+                if (watchingScrolls) say(`scrolled by ${what}(${args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(', ')}) at ${Math.round(window.scrollY)}: ${from()}`)
+                return original.apply(this, args)
+            }
+        }
+        wrap(window, 'scrollTo', 'scrollTo')
+        wrap(window, 'scrollBy', 'scrollBy')
+        wrap(Element.prototype, 'scrollIntoView', 'scrollIntoView')
+        wrap(Element.prototype, 'scrollIntoViewIfNeeded', 'scrollIntoViewIfNeeded')
+        let last = window.scrollY
+        window.addEventListener('scroll', () => {
+            if (watchingScrolls && Math.abs(window.scrollY - last) > 200) say(`the page went from ${Math.round(last)} to ${Math.round(window.scrollY)} (no call above: the browser's own, or scrollTop set)`)
+            last = window.scrollY
+        }, { passive: true })
+    }
+    watchingScrolls++
+    setTimeout(() => { watchingScrolls-- }, 600)
 }
 
 // The line to keep in its place: the caret's in the visual editor when it is on the screen, else the first on the screen.
@@ -170,6 +214,15 @@ function mark(editor: HTMLElement) {
         else runs.push([el])
     }
     if (caret && editor.contains(caret)) caretRun = runs.find(run => run.some(el => el.contains(caret)))?.[0].id ?? null
+    // A selection within one line (Ctrl+A's first step, a word double-clicked) whose line is in a run: that run shown, as
+    // the caret's - a line selected and struck through (Ctrl+A, then the strike's key) was folded away at once under
+    // the selection, and what was below jumped up (the user, trial 1.4.3.11 on x280). A selection over more lines (Ctrl+A
+    // taken further) opens nothing.
+    const within = !reading() && selection && !selection.isCollapsed ? lineOf(selection.anchorNode) : null
+    if (within && within === lineOf(selection!.focusNode) && editor.contains(within)) {
+        const run = runs.find(r => r.some(el => el.contains(within)))
+        if (run) caretRun = run[0].id
+    }
     // The run opened by its line folds again once the caret has gone elsewhere (a key moving it out; a click elsewhere
     // folds it at once, below).
     if (shownRun && caret && editor.contains(caret) && caret !== shownCaret && !shownRunIds.some(id => document.getElementById(id)?.contains(caret))) shownRun = null
@@ -246,6 +299,7 @@ export function setHideDone(value: boolean, text?: string) {
                 // still sees after it says which step moved it (the user, 1.4.3.9: "in some cases" it jumped).
                 const at = () => pressed && pressed.isConnected ? Math.round(pressed.getBoundingClientRect().top) : 'gone'
                 const before = at()
+                watchScrolls()
                 applyHideDone()
                 const after = at()
                 requestAnimationFrame(() => {
