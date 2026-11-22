@@ -123,9 +123,17 @@ namespace Typedown.Windows
             {
                 presenter.IsMaximizable = false;
                 presenter.IsMinimizable = false;
-                presenter.IsResizable = true;
+                // Not sized by the system: a window it sizes keeps a sizing frame, which Windows 10 draws as a white
+                // band along the top (w10 jobs 703-704; taken off, the presenter put it back). Its own grips size it.
+                presenter.IsResizable = false;
                 presenter.PreferredMinimumWidth = 220;
                 presenter.PreferredMinimumHeight = 160;
+            }
+            foreach (var side in new[] { Grip.Side.Left, Grip.Side.Right, Grip.Side.Bottom, Grip.Side.Corner })
+            {
+                var grip = new Grip(this, side);
+                Grid.SetRowSpan(grip, 2);
+                root.Children.Add(grip);
             }
             root.SizeChanged += (s, e) => UpdateRegions();
             bar.SizeChanged += (s, e) => UpdateRegions();
@@ -142,7 +150,7 @@ namespace Typedown.Windows
 
         private nint Handle => WinRT.Interop.WindowNative.GetWindowHandle(this);
 
-        // Its bar, less its buttons, drags it; a strip along each edge sizes it - in the window's physical pixels.
+        // Its bar, less its buttons and the grips at its sides, drags it - in the window's physical pixels.
         private void UpdateRegions()
         {
             if (root.XamlRoot == null) return;
@@ -150,14 +158,9 @@ namespace Typedown.Windows
             {
                 var scale = root.XamlRoot.RasterizationScale;
                 int Px(double v) => (int)Math.Round(v * scale);
-                int width = Px(root.ActualWidth), height = Px(root.ActualHeight), edge = Px(5);
-                var source = InputNonClientPointerSource.GetForWindowId(AppWindow.Id);
-                var caption = Px(bar.ActualWidth - buttons.ActualWidth - buttons.Margin.Right);
-                source.SetRegionRects(NonClientRegionKind.Caption, new[] { new RectInt32(0, edge, Math.Max(0, caption), Math.Max(0, Px(bar.ActualHeight) - edge)) });
-                source.SetRegionRects(NonClientRegionKind.TopBorder, new[] { new RectInt32(0, 0, width, edge) });
-                source.SetRegionRects(NonClientRegionKind.BottomBorder, new[] { new RectInt32(0, height - edge, width, edge) });
-                source.SetRegionRects(NonClientRegionKind.LeftBorder, new[] { new RectInt32(0, 0, edge, height) });
-                source.SetRegionRects(NonClientRegionKind.RightBorder, new[] { new RectInt32(width - edge, 0, edge, height) });
+                var caption = Px(bar.ActualWidth - buttons.ActualWidth - buttons.Margin.Right) - Px(Grip.Size);
+                InputNonClientPointerSource.GetForWindowId(AppWindow.Id).SetRegionRects(NonClientRegionKind.Caption,
+                    new[] { new RectInt32(Px(Grip.Size), 0, Math.Max(0, caption - Px(Grip.Size)), Px(bar.ActualHeight)) });
             }
             catch (Exception ex)
             {
@@ -229,12 +232,6 @@ namespace Typedown.Windows
             {
                 framed = true;
                 if (AppWindow.Presenter is OverlappedPresenter presenter) presenter.SetBorderAndTitleBar(false, false);
-                // The sizing frame it keeps taken off too: Windows 10 drew it as a white band along the top (w10 job 703's
-                // shot). Its edges size it still - the border regions (UpdateRegions).
-                const int WS_THICKFRAME = 0x00040000, WS_DLGFRAME = 0x00400000;
-                var style = PInvoke.GetWindowLong(Handle, PInvoke.WindowLongFlags.GWL_STYLE);
-                PInvoke.SetWindowLong(Handle, PInvoke.WindowLongFlags.GWL_STYLE, style & ~(WS_THICKFRAME | WS_DLGFRAME));
-                PInvoke.SetWindowPos(Handle, 0, 0, 0, 0, 0, PInvoke.SetWindowPosFlags.SWP_FRAMECHANGED | PInvoke.SetWindowPosFlags.SWP_NOMOVE | PInvoke.SetWindowPosFlags.SWP_NOSIZE | PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOACTIVATE);
                 AppWindow.IsShownInSwitchers = false;
             }
             PInvoke.SetForegroundWindow(Handle);
@@ -378,6 +375,78 @@ namespace Typedown.Windows
             }
             if (DispatcherQueue.HasThreadAccess) Apply();
             else DispatcherQueue.TryEnqueueSafe(Apply);
+        }
+
+        /// <summary>
+        /// A strip along an edge (or the corner) that sizes the window as it is dragged, with the sizing pointer over it:
+        /// the window is not sized by the system (no sizing frame, see the constructor).
+        /// </summary>
+        private sealed class Grip : Grid
+        {
+            public const double Size = 5;
+            public enum Side { Left, Right, Bottom, Corner }
+
+            private readonly ScratchpadWindow window;
+            private readonly Side side;
+            private PInvoke.POINT start;
+            private RectInt32 from;
+            private bool dragging;
+
+            public Grip(ScratchpadWindow window, Side side)
+            {
+                this.window = window;
+                this.side = side;
+                Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+                switch (side)
+                {
+                    case Side.Left: Width = Size; HorizontalAlignment = HorizontalAlignment.Left; break;
+                    case Side.Right: Width = Size; HorizontalAlignment = HorizontalAlignment.Right; break;
+                    case Side.Bottom: Height = Size; VerticalAlignment = VerticalAlignment.Bottom; break;
+                    case Side.Corner: Width = Height = 3 * Size; HorizontalAlignment = HorizontalAlignment.Right; VerticalAlignment = VerticalAlignment.Bottom; break;
+                }
+                ProtectedCursor = InputSystemCursor.Create(side switch
+                {
+                    Side.Bottom => InputSystemCursorShape.SizeNorthSouth,
+                    Side.Corner => InputSystemCursorShape.SizeNorthwestSoutheast,
+                    _ => InputSystemCursorShape.SizeWestEast,
+                });
+                PointerPressed += (s, e) =>
+                {
+                    if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) return;
+                    PInvoke.GetCursorPos(out start);
+                    var p = window.AppWindow.Position;
+                    var z = window.AppWindow.Size;
+                    from = new RectInt32(p.X, p.Y, z.Width, z.Height);
+                    dragging = CapturePointer(e.Pointer);
+                    e.Handled = true;
+                };
+                PointerMoved += (s, e) =>
+                {
+                    if (!dragging) return;
+                    PInvoke.GetCursorPos(out var now);
+                    int dx = now.X - start.X, dy = now.Y - start.Y;
+                    var scale = XamlRoot?.RasterizationScale ?? 1;
+                    int minW = (int)(220 * scale), minH = (int)(160 * scale);
+                    var r = from;
+                    if (side is Side.Right or Side.Corner) r.Width = Math.Max(minW, from.Width + dx);
+                    if (side is Side.Bottom or Side.Corner) r.Height = Math.Max(minH, from.Height + dy);
+                    if (side == Side.Left)
+                    {
+                        r.Width = Math.Max(minW, from.Width - dx);
+                        r.X = from.X + from.Width - r.Width;
+                    }
+                    window.AppWindow.MoveAndResize(r);
+                    e.Handled = true;
+                };
+                void End(object s, PointerRoutedEventArgs e)
+                {
+                    if (!dragging) return;
+                    dragging = false;
+                    ReleasePointerCapture(e.Pointer);
+                }
+                PointerReleased += End;
+                PointerCaptureLost += (s, e) => dragging = false;
+            }
         }
 
         /// <summary>For the test host: shown, its window, on top, in the taskbar, its colours, the text.</summary>
