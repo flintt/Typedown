@@ -61,9 +61,9 @@ internal static partial class Program
             s = await State();
             notes.Add("shot, borderless: " + Screenshot("SK01-0-borderless") + " " + s.ToString(Newtonsoft.Json.Formatting.None));
             Check((bool?)s["visible"] == true, "it is on the screen: " + s["bounds"]);
-            const int WS_CAPTION = 0x00C00000;
+            const int WS_CAPTION = 0x00C00000, WS_THICKFRAME = 0x00040000;
             var style = GetWindowStyle(pad, -16);
-            Check((style & WS_CAPTION) != WS_CAPTION, $"no title bar of the system's (style 0x{style:X8})");
+            Check((style & (WS_CAPTION | WS_THICKFRAME)) == 0, $"no title bar or frame of the system's - Windows 10 drew its sizing frame as a white band (style 0x{style:X8})");
             Check((bool?)s["inSwitchers"] == false, "not in the taskbar");
 
             // Its bar dragged by a real mouse moves it; its right and bottom edges dragged size it; all in physical pixels.
@@ -97,6 +97,7 @@ internal static partial class Program
             // Its x hides it; its key shows it again.
             var close = FindIn(pad, "ScratchpadClose");
             Check(close != null, "its x");
+            notes.Add("shot, moved and sized: " + Screenshot("SK01-0b-moved"));
             if (close != null)
             {
                 var (cx, cy) = CenterOf(close);
