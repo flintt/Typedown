@@ -373,6 +373,14 @@
     <value>„ახალი ბუფერიდან“ სხვა პროგრამებშიც</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>შავი ფურცელი</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>პატარა ფანჯარა ცოტა ხნით შესანახი ტექსტისთვის, ერთი და იგივე ყველა ფანჯარასა და ჩანართში. ხედი &gt; შავი ფურცელი ან მისი მალსახმობი აჩვენებს და მალავს მას.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>ფანჯრის ჩაკეცვისას რედაქტორი აბრუნებს იმ მეხსიერებას, რაც შეუძლია (გრძელ დოკუმენტზე დაახლოებით ერთი გიგაბაიტი); ფანჯრის აღდგენას შეიძლება ცოტა მეტი დრო დასჭირდეს.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

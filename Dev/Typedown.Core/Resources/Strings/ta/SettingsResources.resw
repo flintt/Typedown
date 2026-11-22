@@ -373,6 +373,14 @@
     <value>பிற நிரல்களிலும் «கிளிப்போர்டிலிருந்து புதியது»</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>குறிப்பேடு</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>சிறிது நேரம் வைத்திருக்கும் உரைக்கான சிறிய சாளரம், எல்லா சாளரங்களிலும் தாவல்களிலும் ஒன்றே. காட்சி &gt; குறிப்பேடு அல்லது அதன் குறுக்குவழி அதைக் காட்டி மறைக்கும்.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>சாளரம் சிறிதாக்கப்படும்போது, திருத்தி முடிந்த நினைவகத்தைத் திருப்பித் தரும் (நீண்ட ஆவணத்தில் சுமார் ஒரு ஜிகாபைட்); சாளரத்தை மீட்டெடுக்கச் சற்று அதிக நேரம் ஆகலாம்.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

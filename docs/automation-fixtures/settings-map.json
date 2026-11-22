@@ -839,7 +839,9 @@
       "reason": "layout: whether the folder pane's favourites group is folded, and which status bar items the person turned off; details of the window, not preferences worth a program's change",
       "windows": [
         "FavoritesExpanded",
-        "StatusBarHiddenItems"
+        "StatusBarHiddenItems",
+        "ScratchpadTopmost",
+        "ScratchpadPlacement"
       ]
     },
     {
@@ -942,6 +944,7 @@
         "JoinSoftBreaks",
         "BracketMath",
         "HideDone",
+        "ScratchpadEnabled",
         "DetailsBlocks",
         "WarnFirstEditRewrite",
         "CodeBlockLineNumbers",

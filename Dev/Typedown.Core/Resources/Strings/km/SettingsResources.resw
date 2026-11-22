@@ -373,6 +373,14 @@
     <value>«ថ្មីពីក្ដារតម្បៀតខ្ទាស់» ក្នុងកម្មវិធីផ្សេងៗផងដែរ</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>ក្រដាសព្រាង</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>បង្អួចតូចមួយសម្រាប់អត្ថបទដែលរក្សាទុកមួយរយៈ ដូចគ្នានៅគ្រប់បង្អួច និងផ្ទាំង។ ទិដ្ឋភាព &gt; ក្រដាសព្រាង ឬផ្លូវកាត់របស់វា បង្ហាញ និងលាក់វា។</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>ពេលបង្រួមបង្អួច កម្មវិធីកែសម្រួលនឹងប្រគល់អង្គចងចាំដែលអាចប្រគល់បាន (ប្រហែលមួយជីកាបៃសម្រាប់ឯកសារវែង); ការស្ដារបង្អួចវិញអាចយឺតបន្តិច។</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

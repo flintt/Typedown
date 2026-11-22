@@ -373,6 +373,14 @@
     <value>다른 프로그램에서도 '클립보드에서 새로 만들기'</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>스크래치패드</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>텍스트를 잠시 보관하는 작은 창으로, 모든 창과 탭에서 공유됩니다. 보기 &gt; 스크래치패드 또는 해당 바로 가기 키로 표시하거나 숨깁니다.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>창을 최소화하면 편집기가 돌려줄 수 있는 메모리를 반환합니다(긴 문서에서는 약 1GB). 창을 다시 여는 데 조금 더 걸릴 수 있습니다.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

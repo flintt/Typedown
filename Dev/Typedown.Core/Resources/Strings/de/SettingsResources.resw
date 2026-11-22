@@ -373,6 +373,14 @@
     <value>„Neu aus Zwischenablage“ auch in anderen Programmen</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Notizblock</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Ein kleines Fenster für Text, den Sie eine Weile aufheben, in allen Fenstern und Tabs derselbe. Ansicht &gt; Notizblock oder das Tastenkürzel blendet es ein und aus.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Wird ein Fenster minimiert, gibt der Editor den Speicher frei, den er kann (bei einem langen Dokument etwa ein Gigabyte); das Wiederherstellen des Fensters kann einen Moment länger dauern.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

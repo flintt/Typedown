@@ -373,6 +373,14 @@
     <value>„Új a vágólapról” más programokban is</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Jegyzettömb</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Kis ablak egy ideig megőrzendő szövegnek, minden ablakban és lapon ugyanaz. A Nézet &gt; Jegyzettömb vagy a billentyűparancsa megjeleníti és elrejti.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Ha egy ablakot kis méretre állít, a szerkesztő visszaadja a nélkülözhető memóriát (hosszú dokumentumnál kb. egy gigabájtot); az ablak visszaállítása kicsit tovább tarthat.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

@@ -316,6 +316,19 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.window.handle", null, "test.window.handle/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["hwnd"] = app.MainWindow.ToInt64() })));
+            // The scratchpad (the user's 33): shown, its window's handle, over the others, its text - read on the UI thread
+            // of the window named.
+            methods.Add(new MethodDescriptor("test.scratchpad.state", null, "test.scratchpad.state/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                    (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(global::Typedown.Windows.ScratchpadWindow.State()))));
+            // Its text set (a case starting from nothing), written to disk at once.
+            methods.Add(new MethodDescriptor("test.scratchpad.set", null, "test.scratchpad.set/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    Core.Services.Scratchpad.Shared.SetText(c.Params.OptionalString("text") ?? "");
+                    Core.Services.Scratchpad.Shared.FlushAsync().Wait(2000);
+                    return (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(global::Typedown.Windows.ScratchpadWindow.State());
+                })));
             // The titles of the window's menu bar, as drawn: the menu follows the interface language.
             methods.Add(new MethodDescriptor("test.window.menuTitles", null, "test.window.menuTitles/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>

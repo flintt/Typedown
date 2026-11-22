@@ -373,6 +373,14 @@
     <value>ਹੋਰ ਪ੍ਰੋਗਰਾਮਾਂ ਵਿੱਚ ਵੀ «ਕਲਿੱਪਬੋਰਡ ਤੋਂ ਨਵਾਂ»</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>ਸਕ੍ਰੈਚਪੈਡ</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>ਕੁਝ ਦੇਰ ਰੱਖੀ ਜਾਣ ਵਾਲੀ ਲਿਖਤ ਲਈ ਇੱਕ ਛੋਟੀ ਵਿੰਡੋ, ਸਾਰੀਆਂ ਵਿੰਡੋਆਂ ਅਤੇ ਟੈਬਾਂ ਵਿੱਚ ਇੱਕੋ। ਵੇਖੋ &gt; ਸਕ੍ਰੈਚਪੈਡ ਜਾਂ ਇਸਦਾ ਸ਼ਾਰਟਕੱਟ ਇਸਨੂੰ ਦਿਖਾਉਂਦਾ ਅਤੇ ਲੁਕਾਉਂਦਾ ਹੈ।</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>ਵਿੰਡੋ ਛੋਟੀ ਕਰਨ 'ਤੇ ਸੰਪਾਦਕ ਜਿੰਨੀ ਹੋ ਸਕੇ ਮੈਮੋਰੀ ਵਾਪਸ ਕਰਦਾ ਹੈ (ਲੰਬੇ ਦਸਤਾਵੇਜ਼ ਵਿੱਚ ਲਗਭਗ ਇੱਕ ਗੀਗਾਬਾਈਟ); ਵਿੰਡੋ ਵਾਪਸ ਲਿਆਉਣ ਵਿੱਚ ਥੋੜ੍ਹਾ ਵੱਧ ਸਮਾਂ ਲੱਗ ਸਕਦਾ ਹੈ।</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

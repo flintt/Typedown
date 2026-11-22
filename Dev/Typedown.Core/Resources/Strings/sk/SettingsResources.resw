@@ -373,6 +373,14 @@
     <value>„Nový zo schránky“ aj v iných programoch</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Poznámkový blok</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Malé okno na text, ktorý chcete chvíľu uchovať, rovnaké vo všetkých oknách a kartách. Zobraziť &gt; Poznámkový blok alebo jeho skratka ho zobrazí a skryje.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Keď sa okno minimalizuje, editor vráti pamäť, ktorú môže (pri dlhom dokumente asi gigabajt); obnovenie okna môže chvíľu dlhšie trvať.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

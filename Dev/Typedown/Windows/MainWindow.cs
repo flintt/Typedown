@@ -673,8 +673,12 @@ namespace Typedown.Windows
             catch (Exception ex) { Log.Debug($"window closing: hiding it: {ex.Message}"); }
             try
             {
+                // The last window: the scratchpad hidden with it, its place saved (a setting) before the settings are written.
+                if (!allWindows.Any(x => x != this && !x.IsGoingAway)) ScratchpadWindow.OnLastMainWindowClosed();
                 // Window placement is itself a setting. Do not let process shutdown cut off the queued atomic write.
                 await AppViewModel.SettingsViewModel.FlushSettingsAsync();
+                // The scratchpad's text too (written half a second after the last key otherwise).
+                await Core.Services.Scratchpad.Shared.FlushAsync();
             }
             catch (Exception ex) { Log.WriteLocal("WindowClosing", "settings: " + ex); }
             isCloseable = true;

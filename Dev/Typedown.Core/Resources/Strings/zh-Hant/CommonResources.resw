@@ -957,6 +957,22 @@
     <value>隱藏已完成和已刪除的內容</value>
     <comment>视图/隐藏整项删除线和已勾选的任务（阅读和可视编辑都管）</comment>
   </data>
+  <data name="Scratchpad" xml:space="preserve">
+    <value>暫存區</value>
+    <comment>视图/暂存区（独立小窗口，所有窗口和标签共用）；也是它的窗口标题</comment>
+  </data>
+  <data name="ScratchpadTopmost" xml:space="preserve">
+    <value>置頂</value>
+    <comment>暂存区窗口的置顶按钮</comment>
+  </data>
+  <data name="ScratchpadPlaceholder" xml:space="preserve">
+    <value>暫時放一些文字</value>
+    <comment>暂存区文本框空着时的提示</comment>
+  </data>
+  <data name="PutInScratchpad" xml:space="preserve">
+    <value>放入暫存區</value>
+    <comment>编辑器右键：把选中内容放到暂存区末尾</comment>
+  </data>
   <data name="HideDoneRun" xml:space="preserve">
     <value>已隱藏 {0} 項 · 顯示</value>
     <comment>阅读模式/连续被隐藏的几项缩成的一行，{0} 是项数，点它展开</comment>

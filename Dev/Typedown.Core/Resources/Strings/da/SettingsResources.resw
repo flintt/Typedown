@@ -373,6 +373,14 @@
     <value>Ny fra udklipsholder også i andre programmer</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Kladdeblok</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Et lille vindue til tekst, du gemmer et stykke tid, det samme i alle vinduer og faner. Vis &gt; Kladdeblok eller genvejen viser og skjuler det.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Når et vindue minimeres, giver editoren den hukommelse tilbage, den kan (omkring en gigabyte med et langt dokument); det kan tage et øjeblik længere at gendanne vinduet.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

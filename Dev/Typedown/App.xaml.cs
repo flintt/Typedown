@@ -132,6 +132,9 @@ namespace Typedown
             Services.Automation.AutomationService.Initialize();
             // New from Clipboard from other programs: registered only when Settings > General has it on.
             Services.GlobalShortcut.Initialize(window.DispatcherQueue);
+            // The scratchpad's window, the app's own (View > Scratchpad, Put in Scratchpad; Settings > General has it on).
+            Core.Services.Scratchpad.Toggle = ScratchpadWindow.Toggle;
+            Core.Services.Scratchpad.Show = ScratchpadWindow.ShowIt;
             // The daily look for a newer release, where Settings > About has it on and the edition has a feed.
             _ = Core.Services.UpdateCheck.CheckAutomaticallyAsync(window.AppViewModel);
         }

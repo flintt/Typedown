@@ -18,6 +18,8 @@
     <!-- What is struck through whole and the ticked tasks folded away, in reading mode and (to come) the visual editor -
          one switch for both (the user, 2026-11-20; the page's services/hideDone.ts). -->
     <ToggleMenuFlyoutItem x:Name="HideDoneItem" AutomationProperties.AutomationId="HideDoneItem" Text="{u:LocaleString Key=HideDone}" IsChecked="{x:Bind Settings.HideDone, Mode=TwoWay}"/>
+    <!-- The scratchpad's window, the same for every window and tab - there with it on (Settings > General; the user's 33). -->
+    <MenuFlyoutItem x:Name="ScratchpadItem" AutomationProperties.AutomationId="ScratchpadItem" Text="{u:LocaleString Key=Scratchpad}" Command="{x:Bind ViewModel.EditorViewModel.ToggleScratchpadCommand}" Visibility="{x:Bind Settings.ScratchpadEnabled, Mode=OneWay}"/>
     <MenuFlyoutSeparator/>
     <ToggleMenuFlyoutItem x:Name="StatusBarItem" Text="{u:LocaleString Key=StatusBar}" IsChecked="{x:Bind Settings.StatusBarOpen, Mode=TwoWay}"/>
     <ToggleMenuFlyoutItem x:Name="FullScreenItem" Text="{u:LocaleString Key=FullScreen}" IsChecked="{x:Bind ViewModel.UIViewModel.IsFullScreen, Mode=TwoWay}"/>

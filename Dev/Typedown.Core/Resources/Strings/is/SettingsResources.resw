@@ -373,6 +373,14 @@
     <value>Nýtt af klippiborði líka í öðrum forritum</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Krotblað</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Lítill gluggi fyrir texta sem þú geymir um stund, sá sami í öllum gluggum og flipum. Skoða &gt; Krotblað eða flýtilykill þess sýnir það og felur.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Þegar gluggi er lágmarkaður skilar ritillinn því minni sem hann getur (um gígabæti með löngu skjali); það getur tekið aðeins lengri tíma að endurheimta gluggann.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

@@ -158,6 +158,16 @@
      "schema": "test.editor.style/1"
     },
     {
+     "name": "test.scratchpad.set",
+     "scope": null,
+     "schema": "test.scratchpad.set/1"
+    },
+    {
+     "name": "test.scratchpad.state",
+     "scope": null,
+     "schema": "test.scratchpad.state/1"
+    },
+    {
      "name": "test.settings.get",
      "scope": null,
      "schema": "test.settings.get/1"

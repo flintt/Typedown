@@ -373,6 +373,14 @@
     <value>ఇతర ప్రోగ్రామ్‌లలో కూడా «క్లిప్‌బోర్డ్ నుండి కొత్తది»</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>స్క్రాచ్‌ప్యాడ్</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>కొంతసేపు ఉంచే వచనం కోసం ఒక చిన్న విండో, అన్ని విండోలు మరియు ట్యాబ్‌లలో ఒకటే. వీక్షణ &gt; స్క్రాచ్‌ప్యాడ్ లేదా దాని సత్వరమార్గం దాన్ని చూపుతుంది, దాచుతుంది.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>విండోను కనిష్టీకరించినప్పుడు, ఎడిటర్ వీలైనంత మెమరీని తిరిగి ఇస్తుంది (పొడవైన పత్రంతో సుమారు ఒక గిగాబైట్); విండోను తిరిగి తెచ్చేందుకు కొంచెం ఎక్కువ సమయం పట్టవచ్చు.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

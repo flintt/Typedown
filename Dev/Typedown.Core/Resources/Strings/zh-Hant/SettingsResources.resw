@@ -389,6 +389,14 @@
     <value>在其他程式中也能「從剪貼簿新增」</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>暫存區</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>一個小視窗，暫時放一些文字，所有視窗和分頁共用一份。用「檢視 &gt; 暫存區」或它的快速鍵顯示和隱藏。</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>視窗最小化時，編輯器交還能交還的記憶體（長文件約 1 GB）；還原視窗時可能稍慢一點。</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

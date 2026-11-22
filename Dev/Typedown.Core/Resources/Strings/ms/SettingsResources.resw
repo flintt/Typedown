@@ -373,6 +373,14 @@
     <value>Baharu daripada Papan Klip dalam program lain juga</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Pad conteng</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Tetingkap kecil untuk teks yang disimpan seketika, sama dalam semua tetingkap dan tab. Paparan &gt; Pad conteng atau pintasannya menunjukkan dan menyembunyikannya.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Apabila tetingkap diminimumkan, editor memulangkan memori yang boleh (kira-kira satu gigabait bagi dokumen panjang); memulihkan tetingkap mungkin mengambil masa sedikit lebih lama.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

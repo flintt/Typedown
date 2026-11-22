@@ -112,6 +112,10 @@ namespace Typedown.Core.ViewModels
         public Command<string> PasteCommand { get; } = new();
         public Command<string> CopyCommand { get; } = new();
         public Command<Unit> CopyTableCommand { get; } = new();
+        /// <summary>The selection, as Markdown, added at the end of the scratchpad, which is shown (the user's 33).</summary>
+        public Command<Unit> PutInScratchpadCommand { get; } = new();
+        /// <summary>View > Scratchpad: its window shown or hidden - only with it on (Settings > General; its key is still registered).</summary>
+        public Command<Unit> ToggleScratchpadCommand { get; } = new();
 
         /// <summary>The menu's items for the object right-clicked, done by the page on it: copyCode, copyBlock, openLink, removeLink.</summary>
         public Command<string> ContextMenuActionCommand { get; } = new();
@@ -263,6 +267,8 @@ namespace Typedown.Core.ViewModels
             CutCommand.OnExecute.Subscribe(x => Cut(x));
             CopyCommand.OnExecute.Subscribe(x => Copy(x));
             CopyTableCommand.OnExecute.Subscribe(_ => CopyTable());
+            PutInScratchpadCommand.OnExecute.Subscribe(_ => PutInScratchpad());
+            ToggleScratchpadCommand.OnExecute.Subscribe(_ => { if (Settings.ScratchpadEnabled) Scratchpad.Toggle(); });
             ContextMenuActionCommand.OnExecute.Subscribe(action => MarkdownEditor?.PostMessage("ContextMenuAction", new { action }));
             CopyLinkAddressCommand.OnExecute.Subscribe(_ =>
             {
@@ -1464,6 +1470,15 @@ namespace Typedown.Core.ViewModels
             {
                 xhtmlWaiters.Remove(token);
             }
+        }
+
+        private async void PutInScratchpad()
+        {
+            var text = await SelectionMarkdownAsync(2000);
+            Log.Debug($"scratchpad: put in {(text == null ? "nothing (the page did not answer)" : $"{text.Length} characters")}");
+            if (string.IsNullOrWhiteSpace(text) || !Settings.ScratchpadEnabled) return;
+            Scratchpad.Shared.Append(text);
+            Scratchpad.Show();
         }
 
         /// <summary>

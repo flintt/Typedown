@@ -373,6 +373,14 @@
     <value>Nieuw van klembord ook in andere programma's</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Kladblok</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Een klein venster voor tekst die u even bewaart, hetzelfde in alle vensters en tabbladen. Beeld &gt; Kladblok of de sneltoets toont en verbergt het.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Als een venster wordt geminimaliseerd, geeft de editor het geheugen terug dat hij kan (ongeveer een gigabyte bij een lang document); het herstellen van het venster kan iets langer duren.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

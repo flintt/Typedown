@@ -373,6 +373,14 @@
     <value>બીજા પ્રોગ્રામમાં પણ «ક્લિપબોર્ડમાંથી નવું»</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>સ્ક્રેચપેડ</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>થોડો સમય રાખવાના લખાણ માટે નાની વિન્ડો, બધી વિન્ડો અને ટૅબમાં એક જ. દૃશ્ય &gt; સ્ક્રેચપેડ અથવા તેનો શૉર્ટકટ તેને બતાવે અને છુપાવે છે.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>વિન્ડો નાની કરતાં સંપાદક શક્ય એટલી મેમરી પાછી આપે છે (લાંબા દસ્તાવેજમાં લગભગ એક ગીગાબાઇટ); વિન્ડો પાછી લાવવામાં થોડો વધુ સમય લાગી શકે.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

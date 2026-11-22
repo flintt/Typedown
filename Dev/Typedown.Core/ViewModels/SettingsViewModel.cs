@@ -358,6 +358,15 @@ namespace Typedown.Core.ViewModels
         /// it takes the key from every other program.
         /// </summary>
         public bool GlobalNewFromClipboard { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// The scratchpad (the user's 33, 2026-11-22): a small window of its own for passages kept for a while, the same in
+        /// every window and tab (Services.Scratchpad). Off unless chosen: on, View > Scratchpad and its shortcut show it.
+        /// </summary>
+        public bool ScratchpadEnabled { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>The scratchpad's window over the other windows (its own Keep on top button).</summary>
+        public bool ScratchpadTopmost { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>Where the scratchpad's window was, and its size (one for the app, not a window's).</summary>
+        public PInvoke.WINDOWPLACEMENT? ScratchpadPlacement { get => GetSettingValue<PInvoke.WINDOWPLACEMENT?>(null); set => SetSettingValue(value); }
         /// <summary>Settings > About: the release feed looked at once a day, a newer release said in a card (Services.UpdateCheck). Off unless chosen.</summary>
         public bool CheckForUpdatesAutomatically { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>When the daily check last had an answer (round-trip time), so a day passes before the next.</summary>

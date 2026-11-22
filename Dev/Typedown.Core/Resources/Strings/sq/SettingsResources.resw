@@ -373,6 +373,14 @@
     <value>«I ri nga kujtesa e fragmenteve» edhe në programe të tjera</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Fletore shënimesh</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Një dritare e vogël për tekst që e mbani për pak kohë, e njëjta në të gjitha dritaret dhe skedat. Pamja &gt; Fletore shënimesh ose shkurtorja e saj e shfaq dhe e fsheh.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Kur një dritare minimizohet, redaktuesi kthen memorien që mundet (rreth një gigabajt me një dokument të gjatë); rikthimi i dritares mund të zgjasë pak më shumë.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

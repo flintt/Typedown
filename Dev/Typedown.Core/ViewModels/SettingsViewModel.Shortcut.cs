@@ -239,6 +239,10 @@ namespace Typedown.Core.ViewModels
         [Locale("View", "SidePane")]
         public ShortcutKey ShortcutSidePane { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.L)); set => SetSettingValue(value); }
 
+        // Free in the app (Ctrl+Shift+J); it works only with the scratchpad on (Settings > General).
+        [Locale("View", "Scratchpad")]
+        public ShortcutKey ShortcutScratchpad { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.J)); set => SetSettingValue(value); }
+
         [Locale("View", "SourceCodeMode")]
         public ShortcutKey ShortcutSourceCodeMode { get => GetSettingValue<ShortcutKey>(new(Mod.Control, (Key)191)); set => SetSettingValue(value); }
 

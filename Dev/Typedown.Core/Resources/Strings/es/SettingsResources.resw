@@ -373,6 +373,14 @@
     <value>«Nuevo desde el portapapeles» también en otros programas</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Bloc de notas</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Una ventana pequeña para guardar texto un rato, la misma en todas las ventanas y pestañas. Ver &gt; Bloc de notas o su atajo la muestra y la oculta.</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Al minimizar una ventana, el editor devuelve la memoria que puede (cerca de un gigabyte con un documento largo); restaurar la ventana puede tardar un poco más.</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>

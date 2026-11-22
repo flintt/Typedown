@@ -373,6 +373,14 @@
     <value>«Նոր սեղմատախտակից» նաև այլ ծրագրերում</value>
     <comment>通用/在其他程序中也能从剪贴板新建</comment>
   </data>
+  <data name="General.Scratchpad.Title" xml:space="preserve">
+    <value>Սևագիր</value>
+    <comment>通用/暂存区开关</comment>
+  </data>
+  <data name="General.Scratchpad.Description" xml:space="preserve">
+    <value>Փոքր պատուհան որոշ ժամանակ պահվող տեքստի համար՝ նույնը բոլոր պատուհաններում և ներդիրներում։ Տեսք &gt; Սևագիր կամ դրա դյուրանցումը ցույց է տալիս և թաքցնում այն։</value>
+    <comment>通用/暂存区开关的说明</comment>
+  </data>
   <data name="General.ReleaseMemoryWhenMinimized.Description" xml:space="preserve">
     <value>Երբ պատուհանը փոքրացվում է, խմբագրիչը վերադարձնում է հնարավոր հիշողությունը (երկար փաստաթղթի դեպքում մոտ մեկ գիգաբայթ). պատուհանի վերականգնումը կարող է մի փոքր ավելի երկար տևել։</value>
     <comment>通用/窗口最小化时，编辑器交还能交还的内存（长文档约 1 GB）；还原窗口时可能稍慢一点</comment>
