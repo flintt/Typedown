@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.UI.Dispatching;
 using Typedown.Core.Interfaces;
+using Typedown.Core.Utilities;
 using Typedown.Utilities;
+using DataPackage = global::Windows.ApplicationModel.DataTransfer.DataPackage;
 
 namespace Typedown.Services
 {
@@ -12,14 +15,24 @@ namespace Typedown.Services
     {
         public bool ContainsText(TextDataFormat format)
         {
-            var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
-            return format switch
+            // Another program holding the clipboard (0x800401D0) throws here too: nothing to paste now, rather than an
+            // error dialog for Ctrl+V (the user, 2026-11-22).
+            try
             {
-                TextDataFormat.Text or TextDataFormat.UnicodeText => view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text),
-                TextDataFormat.Html => view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.Html),
-                TextDataFormat.Rtf => view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.Rtf),
-                _ => false,
-            };
+                var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
+                return format switch
+                {
+                    TextDataFormat.Text or TextDataFormat.UnicodeText => view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text),
+                    TextDataFormat.Html => view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.Html),
+                    TextDataFormat.Rtf => view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.Rtf),
+                    _ => false,
+                };
+            }
+            catch (Exception ex)
+            {
+                Core.Utilities.Log.Debug($"clipboard: could not be read ({ex.HResult:x8}): {ex.Message}");
+                return false;
+            }
         }
 
         public async Task<string> GetTextAsync(TextDataFormat format)
@@ -28,14 +41,22 @@ namespace Typedown.Services
             {
                 return "";
             }
-            var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
-            return format switch
+            try
             {
-                TextDataFormat.Text or TextDataFormat.UnicodeText => await view.GetTextAsync(),
-                TextDataFormat.Html => await view.GetHtmlFormatAsync(),
-                TextDataFormat.Rtf => await view.GetRtfAsync(),
-                _ => throw new NotImplementedException(),
-            };
+                var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
+                return format switch
+                {
+                    TextDataFormat.Text or TextDataFormat.UnicodeText => await view.GetTextAsync(),
+                    TextDataFormat.Html => await view.GetHtmlFormatAsync(),
+                    TextDataFormat.Rtf => await view.GetRtfAsync(),
+                    _ => throw new NotImplementedException(),
+                };
+            }
+            catch (Exception ex) when (ex is not NotImplementedException)
+            {
+                Core.Utilities.Log.Debug($"clipboard: could not be read ({ex.HResult:x8}): {ex.Message}");
+                return "";
+            }
         }
 
         public async Task SetFileDropListAsync(StringCollection fileDropList)
@@ -53,49 +74,185 @@ namespace Typedown.Services
 
         public async Task<StringCollection> GetFileDropListAsync()
         {
-            var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
-            if (view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
+            var fileDropList = new StringCollection();
+            try
             {
-                var storageItems = await view.GetStorageItemsAsync();
-                var fileDropList = new StringCollection();
-                foreach (var item in storageItems)
+                var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
+                if (view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems))
                 {
-                    fileDropList.Add(item.Path);
+                    var storageItems = await view.GetStorageItemsAsync();
+                    foreach (var item in storageItems)
+                    {
+                        fileDropList.Add(item.Path);
+                    }
                 }
-                return fileDropList;
             }
-            return new StringCollection();
+            catch (Exception ex)
+            {
+                Core.Utilities.Log.Debug($"clipboard: could not be read ({ex.HResult:x8}): {ex.Message}");
+            }
+            return fileDropList;
         }
 
         public async Task<IClipboardImage> GetImageAsync()
         {
-            var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
-            if (view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.Bitmap))
+            try
             {
-                var bitmapStreamRef = await view.GetBitmapAsync();
-                return new ClipboardImage(bitmapStreamRef);
+                var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
+                if (view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.Bitmap))
+                {
+                    var bitmapStreamRef = await view.GetBitmapAsync();
+                    return new ClipboardImage(bitmapStreamRef);
+                }
+            }
+            catch (Exception ex)
+            {
+                Core.Utilities.Log.Debug($"clipboard: could not be read ({ex.HResult:x8}): {ex.Message}");
             }
             return null;
         }
 
         /// <summary>
-        /// The clipboard written, tried again a few times while another program holds it (CLIPBRD_E_CANT_OPEN: a clipboard
-        /// manager, a remote desktop session reading it): Copy and Cut did nothing then. Throws if it stays held.
+        /// The clipboard written, tried again while another program holds it (CLIPBRD_E_CANT_OPEN - 0x800401D0 "OpenClipboard
+        /// 失败": a clipboard manager, a remote desktop session reading it): Copy and Cut did nothing then, and the last
+        /// attempt ended in an error dialog over the document (the user, 2026-11-22). Tried at once a few times, then in the
+        /// background for a few seconds: a copy lands as soon as the other program lets the clipboard go, and one that never
+        /// lands is written in the log, with nothing shown.
         /// </summary>
-        private static void SetContent(global::Windows.ApplicationModel.DataTransfer.DataPackage dataPackage)
+        private void SetContent(DataPackage dataPackage)
         {
-            for (var attempt = 1; ; attempt++)
+            Exception held = null;
+            for (var attempt = 1; attempt <= ImmediateWrites; attempt++)
             {
                 try
                 {
                     global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+                    ClearPending();
                     return;
                 }
-                catch (System.Runtime.InteropServices.COMException ex) when (attempt < 6)
+                catch (Exception ex)
                 {
-                    Core.Utilities.Log.Debug($"clipboard: held by another program ({ex.HResult:x8}), attempt {attempt}");
-                    System.Threading.Thread.Sleep(40 * attempt);
+                    if (!HeldByAnotherProgram(ex))
+                    {
+                        // Not the clipboard's being held (the data itself refused, say): said in the log, as before.
+                        Core.Utilities.Log.Debug($"clipboard: not written ({ex.HResult:x8}): {ex.Message}");
+                        return;
+                    }
+                    held = ex;
+                    if (attempt < ImmediateWrites) System.Threading.Thread.Sleep(20 * attempt);
                 }
+            }
+            KeepForASecondTry(dataPackage, held);
+        }
+
+        /// <summary>Writes tried at once, with a short wait between them: the holds that are over in a moment (a copy made by another program just now).</summary>
+        private const int ImmediateWrites = 3;
+
+        /// <summary>How long a write held by another program is tried again in the background, and how often.</summary>
+        private static readonly TimeSpan RetryFor = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan RetryEvery = TimeSpan.FromMilliseconds(120);
+
+        /// <summary>HRESULT of CLIPBRD_E_CANT_OPEN ("OpenClipboard 失败"): the clipboard is open in another program.</summary>
+        private const int ClipbrdCannotOpen = unchecked((int)0x800401D0);
+
+        private static bool HeldByAnotherProgram(Exception ex)
+        {
+            for (var e = ex; e != null; e = e.InnerException)
+                if (e.HResult == ClipbrdCannotOpen) return true;
+            return false;
+        }
+
+        // The write not made: the last one only (a later copy that lands takes its place, from any window - the clipboard is
+        // one), with the moment it stops being tried.
+        private static readonly object retryGate = new();
+        private static DataPackage pendingContent;
+        private static DateTime pendingUntil;
+        private static bool retrying;
+        private DispatcherQueue dispatcher;
+        private DispatcherQueueTimer retryTimer;
+
+        private void KeepForASecondTry(DataPackage dataPackage, Exception error)
+        {
+            lock (retryGate)
+            {
+                pendingContent = dataPackage;
+                pendingUntil = DateTime.UtcNow.Add(RetryFor);
+                if (retrying) return;
+                retrying = true;
+            }
+            Core.Utilities.Log.Debug($"clipboard: held by another program ({error.HResult:x8}); tried again in the background for {RetryFor.TotalSeconds:0} s");
+            var queue = dispatcher ??= DispatcherQueue.GetForCurrentThread();
+            if (queue == null)
+            {
+                // No window thread to go back to (a call from nowhere the window could be): the copy is not made.
+                lock (retryGate) { pendingContent = null; retrying = false; }
+                return;
+            }
+            if (retryTimer == null)
+            {
+                retryTimer = queue.CreateTimer();
+                retryTimer.IsRepeating = true;
+                retryTimer.Interval = RetryEvery;
+                retryTimer.TickSafe((_, _) => RetryWrite());
+            }
+            retryTimer.Start();
+        }
+
+        // A copy written (or replaced by another): nothing left to retry.
+        private void ClearPending()
+        {
+            lock (retryGate)
+            {
+                pendingContent = null;
+                retrying = false;
+            }
+            retryTimer?.Stop();
+        }
+
+        private void RetryWrite()
+        {
+            DataPackage dataPackage;
+            lock (retryGate) dataPackage = pendingContent;
+            if (dataPackage == null)
+            {
+                retryTimer?.Stop();
+                return;
+            }
+            if (DateTime.UtcNow > pendingUntil)
+            {
+                lock (retryGate)
+                {
+                    if (pendingContent == dataPackage) pendingContent = null;
+                    retrying = false;
+                }
+                retryTimer?.Stop();
+                Core.Utilities.Log.Debug("clipboard: still held by another program; the copy was not made");
+                return;
+            }
+            try
+            {
+                global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+                lock (retryGate)
+                {
+                    if (pendingContent == dataPackage) pendingContent = null;
+                    retrying = false;
+                }
+                retryTimer?.Stop();
+                Core.Utilities.Log.Debug("clipboard: the copy written once the other program let the clipboard go");
+            }
+            catch (Exception ex) when (HeldByAnotherProgram(ex))
+            {
+                // Still held: looked at again on the next tick.
+            }
+            catch (Exception ex)
+            {
+                lock (retryGate)
+                {
+                    if (pendingContent == dataPackage) pendingContent = null;
+                    retrying = false;
+                }
+                retryTimer?.Stop();
+                Core.Utilities.Log.Debug($"clipboard: the copy could not be written ({ex.HResult:x8}): {ex.Message}");
             }
         }
 

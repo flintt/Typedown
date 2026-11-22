@@ -313,7 +313,16 @@ namespace Typedown.Core.ViewModels
         /// still unsaved, the next time - with the last session's tabs.
         /// </summary>
         public bool KeepUnsavedOnClose { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>The open file is watched and reloaded when another program changes it (Settings > General).</summary>
         public bool AutoReload { get => GetSettingValue(true); set => SetSettingValue(value); }
+
+        /// <summary>
+        /// Settings > General, under Auto reload: a file changed on disk is confirmed before it replaces the document -
+        /// whether or not the reader has changes of their own (the question offers Keep mine or Reload). Off: the disk's
+        /// version is loaded with nothing asked, even over unsaved changes, which stay a copy and one undo step back
+        /// (the user, 2026-11-22). On unless turned off; the name is from when it covered a document with nothing unsaved
+        /// only, and settings files, the automation tests and settings-map.json keep it.
+        /// </summary>
         public bool AskBeforeReload { get => GetSettingValue(true); set => SetSettingValue(value); }
         public AppTheme AppTheme { get => GetSettingValue(AppTheme.Default); set => SetSettingValue(value); }
         public string Language { get => GetSettingValue("default"); set => SetSettingValue(value); }

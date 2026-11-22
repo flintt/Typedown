@@ -358,11 +358,11 @@
     <comment>通用/外部修改时自动刷新</comment>
   </data>
   <data name="General.AskBeforeReload.Description" xml:space="preserve">
-    <value>關閉後僅在有未儲存變更時詢問，否則直接重新載入</value>
+    <value>開啟時先詢問是否重新載入；關閉後不彈窗，直接與磁碟上的檔案同步，未儲存的變更會存為副本，按 Ctrl+Z 可找回</value>
     <comment>通用/外部修改时询问</comment>
   </data>
   <data name="General.AskBeforeReload.Title" xml:space="preserve">
-    <value>重新載入前詢問</value>
+    <value>磁碟檔案變更時彈出確認視窗</value>
     <comment>通用/外部修改时询问</comment>
   </data>
   <data name="General.Custom" xml:space="preserve">

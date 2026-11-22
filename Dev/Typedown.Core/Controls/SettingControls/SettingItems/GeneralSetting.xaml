@@ -99,7 +99,7 @@
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xe8bd;"/>
             </controls:NormalSettingItem.Icon>
-            <ToggleSwitch IsOn="{x:Bind Settings.AskBeforeReload, Mode=TwoWay}"/>
+            <ToggleSwitch AutomationProperties.AutomationId="AskBeforeReload" IsOn="{x:Bind Settings.AskBeforeReload, Mode=TwoWay}"/>
         </controls:NormalSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=General.OpenFilesInNewTab.Title}" Description="{u:LocaleString Key=General.OpenFilesInNewTab.Description}">
             <controls:NormalSettingItem.Icon>

@@ -382,11 +382,11 @@
     <comment>通用/外部修改时自动刷新</comment>
   </data>
   <data name="General.AskBeforeReload.Description" xml:space="preserve">
-    <value>关闭后仅在有未保存更改时询问，否则直接重新加载</value>
+    <value>打开时先询问是否重新加载；关闭后不弹窗，直接与磁盘上的文件同步，未保存的更改会存为副本，按 Ctrl+Z 可找回</value>
     <comment>通用/外部修改时询问</comment>
   </data>
   <data name="General.AskBeforeReload.Title" xml:space="preserve">
-    <value>重新加载前询问</value>
+    <value>磁盘文件变更时弹出确认窗口</value>
     <comment>通用/外部修改时询问</comment>
   </data>
   <data name="General.Custom" xml:space="preserve">

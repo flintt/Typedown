@@ -8,10 +8,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Typedown.Automation;
 
 /// <summary>
 /// CB01 and CB02: the copy buttons of a display formula and of a table (the page's ContentState.copyBlock), and the
-/// context menu's Copy table, used with the real mouse in the dark theme, as DG03 uses a diagram's.
+/// context menu's Copy table, used with the real mouse in the dark theme, as DG03 uses a diagram's. CB03: Ctrl+C while
+/// another program holds the clipboard, which Windows refuses (0x800401D0); the app retries in the background and shows
+/// no error dialog (the user, 2026-11-22).
 /// </summary>
 internal static partial class Program
 {
@@ -218,6 +221,70 @@ internal static partial class Program
         {
             Send(Key(0x1B, false), Key(0x1B, true));
             if (themeBefore != null) await c.Call("test.settings.set", new { windowId, name = "AppTheme", value = themeBefore });
+        }
+    }
+
+    /// <summary>
+    /// CB03: Ctrl+C while another program holds the clipboard open (a clipboard manager, a remote desktop client reading it):
+    /// Windows refuses the write with CLIPBRD_E_CANT_OPEN (0x800401D0, "OpenClipboard 失败"), and the app used to give up
+    /// after about half a second and put that error in a dialog over the document (the user, 2026-11-22). It now tries
+    /// at once a few times, then in the background for a few seconds, and says nothing. Held longer than the old attempts
+    /// were over: no dialog is shown, and the selection's copy lands as soon as the clipboard is let go.
+    /// </summary>
+    private static async Task CB03(List<string> notes)
+    {
+        using var c = await Session("e2e CB03");
+        const string words = "held by another program";
+        var path = Fixture("cb03.md", "# CB03\n\n" + words + "\n");
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var text = (string)(await Get(c, id))["text"]!;
+        string? Eval(JToken r) => (string?)r["result"];
+        try
+        {
+            // Something else on the clipboard before, so a copy that did nothing - or never landed - shows.
+            SetClipboardText("before the copy");
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(300);
+            // Select all in steps (on by default): the paragraph first, then more; the document in the end.
+            for (var press = 0; press < 4; press++) { Keys(("ctrl", (ushort)0x41)); await Task.Delay(250); }
+            var selected = Eval(await c.Call("test.editor.eval", new { windowId, script = "String(window.getSelection()?.toString() ?? '')" }));
+            notes.Add($"selected: {JsonConvert.SerializeObject(selected)}");
+            Check(selected?.Contains(words) == true, "the document is selected");
+
+            // The clipboard taken by this process: Windows refuses OpenClipboard to every other program until it is let go.
+            var holding = false;
+            for (var i = 0; i < 10 && !holding; i++) { holding = OpenClipboard(IntPtr.Zero); if (!holding) Thread.Sleep(50); }
+            Check(holding, "the test holds the clipboard open");
+            try
+            {
+                Keys(("ctrl", (ushort)0x43));
+                // Held longer than the app's attempts at once (three, about 60 ms): the old write gave up here and asked.
+                await Task.Delay(1500);
+                JToken? asked = null;
+                try { asked = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
+                notes.Add($"held: {(asked == null ? "nothing asked" : $"asked '{asked["title"]}' / '{asked["content"]}'")}");
+                Check(asked == null, "the clipboard held longer than the attempts at once, no \"OpenClipboard 失败 (0x800401D0)\" dialog is shown");
+            }
+            finally { CloseClipboard(); }
+
+            // Let go: the copy the app kept for a second try lands without anything asked.
+            string? copy = null;
+            for (var i = 0; i < 40 && !(copy?.Contains(words) ?? false); i++) { await Task.Delay(200); copy = ClipboardText(); }
+            notes.Add($"after the clipboard is let go: {JsonConvert.SerializeObject(copy)}");
+            Check(copy?.Contains(words) == true, "the copy lands once the other program lets the clipboard go");
+            JToken? after = null;
+            try { after = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
+            Check(after == null, "and nothing is asked for it either");
+            Check((string)(await Get(c, id))["text"]! == text, "the document is as it was");
+        }
+        finally
+        {
+            Send(Key(0x1B, false), Key(0x1B, true));
+            try { await c.Call("test.dialogs.dismiss"); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
 
