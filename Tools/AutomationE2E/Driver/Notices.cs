@@ -36,8 +36,12 @@ internal static partial class Program
             await Task.Delay(500);
             var s = await State();
             Check(((JArray)s["entries"]!).Count == 0 && (int)s["unread"]! == 0, "no notices to start with: " + s.ToString(Newtonsoft.Json.Formatting.None));
-            Check(FindIn(window, "StatusBarNotices") != null, "the status bar has its bell");
-            Check(FindIn(window, "StatusBarNoticesUnread") == null, "no dot with nothing unread");
+            // The dot is a shape, which UI Automation does not see (hp job 717): the bell's name says how many are unread.
+            var bell = FindIn(window, "StatusBarNotices");
+            Check(bell != null, "the status bar has its bell");
+            await Task.Delay(300);
+            var readName = FindIn(window, "StatusBarNotices")!.Current.Name;
+            notes.Add("the bell, nothing unread: " + readName);
 
             // An export's card, as it was: its text, Open, Open file location, close.
             await c.Call("test.settings.set", new { windowId, name = "AfterExport", value = 1 });
@@ -53,8 +57,9 @@ internal static partial class Program
             Check((string?)first["key"] == "export" && (bool?)first["quiet"] == false && ((JArray)first["actions"]!).Select(a => (string?)a).SequenceEqual(new[] { "ExportNoticeOpen", "ExportNoticeFolder" }),
                 "its line in the list, with its two buttons: " + first.ToString(Newtonsoft.Json.Formatting.None));
             Check((int)s["unread"]! == 1, "one unread");
-            await Eventually(async () => { await Task.CompletedTask; return FindIn(window, "StatusBarNoticesUnread") != null; }, 3000, 200);
-            Check(FindIn(window, "StatusBarNoticesUnread") != null, "the bell has its dot");
+            string BellName() => FindIn(window, "StatusBarNotices")?.Current.Name ?? "";
+            await Eventually(async () => { await Task.CompletedTask; return BellName() != readName; }, 3000, 200);
+            Check(BellName() != readName && BellName().Contains('1'), "the bell says one is unread: " + BellName());
             notes.Add("shot, the export's card and the bell's dot: " + Screenshot("NF01-1-card"));
             Invoke(FindIn(window, "ExportNoticeClose")!);
             await Eventually(async () => !((JArray)(await State())["cards"]!).Any(k => (string?)k == "export"), 3000, 200);
@@ -82,7 +87,8 @@ internal static partial class Program
             notes.Add("shot, the list: " + Screenshot("NF01-2-list"));
             await Eventually(async () => (int)(await State())["unread"]! == 0, 3000, 200);
             Check((int)(await State())["unread"]! == 0, "opened: nothing unread");
-            Check(FindIn(window, "StatusBarNoticesUnread") == null, "and no dot");
+            await Eventually(async () => { await Task.CompletedTask; return BellName() == readName; }, 3000, 200);
+            Check(BellName() == readName, "and the bell no longer says any are: " + BellName());
 
             // Clear all.
             Invoke(FindAnywhereInHost(window, "NoticesClear")!);
