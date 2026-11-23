@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; ബ്ലോക്ക് അതിന്റെ സംഗ്രഹവും ഉള്ളിലെ Markdown-ഉം ചേർത്ത് തുറക്കാനും അടയ്ക്കാനും കഴിയുന്ന ഒറ്റ ബ്ലോക്കായി കാണിക്കുന്നു; ഫയലിലെ വാചകം മാറുന്നില്ല.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>സംരക്ഷിക്കാത്ത മാറ്റങ്ങൾ ഉണ്ടെങ്കിലും ഡിസ്കിൽ മാറിയ ഫയൽ വീണ്ടും ലോഡ് ചെയ്യുക</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“വീണ്ടും ലോഡ് ചെയ്യും മുമ്പ് ചോദിക്കുക” ഓഫായിരിക്കുമ്പോൾ: സംരക്ഷിക്കാത്ത മാറ്റങ്ങൾ ഉണ്ടെങ്കിലും ചോദിക്കാതെ ഡിസ്കിലെ പതിപ്പ് ലോഡ് ചെയ്യും; മാറ്റങ്ങൾ പകർപ്പായി സൂക്ഷിക്കും, ഒരു പഴയപടിയാക്കലിൽ തിരികെ ലഭിക്കും</value>
   </data>
 </root>

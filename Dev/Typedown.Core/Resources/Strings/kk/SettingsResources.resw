@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; блогы қысқаша атауымен және ішіндегі Markdown-мен бірге ашылып-жабылатын бір блок ретінде көрсетіледі; файлдағы мәтін өзгермейді.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Сақталмаған өзгерістер болса да, дискіде өзгерген файлды қайта жүктеу</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>«Қайта жүктеу алдында сұрау» өшірулі болса: сақталмаған өзгерістер болса да, дискідегі нұсқа сұраусыз жүктеледі; өзгерістер көшірме ретінде сақталып, бір болдырмаумен қайтарылады</value>
   </data>
 </root>

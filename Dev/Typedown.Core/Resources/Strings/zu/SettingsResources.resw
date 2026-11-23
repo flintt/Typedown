@@ -1111,9 +1111,9 @@
     <value>Ibhulokhi le-&lt;details&gt;, isifinyezo salo ne-Markdown ekulo kuboniswa njengebhulokhi elilodwa elivuleka livaleke; umbhalo wefayela uhlala unjalo.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Layisha kabusha ifayela elishintshe kudiski noma kunezinguquko ezingagciniwe</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Uma u-“Buza ngaphambi kokulayisha kabusha” uvaliwe: inguqulo esediski ilayishwa ngaphandle kokubuza noma kunezinguquko ezingagciniwe; zigcinwa njengekhophi futhi zibuya ngokuhlehlisa kanye</value>
   </data>
 </root>

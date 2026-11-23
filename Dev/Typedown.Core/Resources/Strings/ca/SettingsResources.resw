@@ -1111,9 +1111,9 @@
     <value>Un bloc &lt;details&gt;, el seu resum i el Markdown que conté es mostren com un sol bloc que s’obre i es tanca; el fitxer conserva el seu text.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Torna a carregar un fitxer canviat al disc fins i tot amb canvis sense desar</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Amb «Pregunta abans de tornar a carregar» desactivat: la versió del disc es carrega sense preguntar fins i tot amb canvis sense desar, que es guarden com a còpia i es recuperen amb un desfer</value>
   </data>
 </root>

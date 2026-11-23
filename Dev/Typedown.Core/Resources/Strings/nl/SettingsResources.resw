@@ -1111,9 +1111,9 @@
     <value>Een &lt;details&gt;-blok, de samenvatting en de Markdown erin worden getoond als één blok dat open en dicht kan; het bestand houdt zijn tekst.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Een bestand dat op schijf is gewijzigd opnieuw laden, ook met niet-opgeslagen wijzigingen</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Met “Vragen voor herladen” uit: de versie op schijf wordt zonder vraag geladen, ook met niet-opgeslagen wijzigingen; die worden als kopie bewaard en komen terug met één keer ongedaan maken</value>
   </data>
 </root>

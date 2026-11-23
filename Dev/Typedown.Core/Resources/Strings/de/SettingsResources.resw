@@ -1111,9 +1111,9 @@
     <value>Ein &lt;details&gt;-Block wird mit Zusammenfassung und dem Markdown darin als ein Block angezeigt, der sich auf- und zuklappen lässt; die Datei behält ihren Text.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Auf dem Datenträger geänderte Datei auch bei ungespeicherten Änderungen neu laden</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Bei ausgeschaltetem „Vor dem Neuladen fragen“: Die Fassung vom Datenträger wird ohne Rückfrage geladen, auch bei ungespeicherten Änderungen; diese werden als Kopie aufbewahrt und sind mit einem Rückgängig-Schritt zurück</value>
   </data>
 </root>

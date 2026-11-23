@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; ਬਲਾਕ ਆਪਣੇ ਸਾਰ ਅਤੇ ਅੰਦਰਲੇ Markdown ਸਮੇਤ ਖੁੱਲ੍ਹਣ ਅਤੇ ਬੰਦ ਹੋਣ ਵਾਲੇ ਇੱਕ ਬਲਾਕ ਵਜੋਂ ਦਿਖਾਇਆ ਜਾਂਦਾ ਹੈ; ਫ਼ਾਈਲ ਦਾ ਲਿਖਤ ਨਹੀਂ ਬਦਲਦਾ।</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>ਨਾ ਸੰਭਾਲੀਆਂ ਤਬਦੀਲੀਆਂ ਹੋਣ ਤਾਂ ਵੀ ਡਿਸਕ ਉੱਤੇ ਬਦਲੀ ਫ਼ਾਈਲ ਮੁੜ ਲੋਡ ਕਰੋ</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“ਮੁੜ ਲੋਡ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਪੁੱਛੋ” ਬੰਦ ਹੋਣ ’ਤੇ: ਨਾ ਸੰਭਾਲੀਆਂ ਤਬਦੀਲੀਆਂ ਹੋਣ ਤਾਂ ਵੀ ਬਿਨਾਂ ਪੁੱਛੇ ਡਿਸਕ ਦਾ ਸੰਸਕਰਣ ਲੋਡ ਹੁੰਦਾ ਹੈ; ਤਬਦੀਲੀਆਂ ਕਾਪੀ ਵਜੋਂ ਰੱਖੀਆਂ ਜਾਂਦੀਆਂ ਹਨ ਅਤੇ ਇੱਕ ਵਾਰ ਵਾਪਸ ਲੈਣ ਨਾਲ ਮੁੜ ਆਉਂਦੀਆਂ ਹਨ</value>
   </data>
 </root>

@@ -1458,6 +1458,6 @@
     <value>জপাব পৰা ব্লক</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>কপি নহ’ল: আন এটা প্ৰগ্ৰামে ক্লিপব’ৰ্ড ধৰি ৰাখিছে</value>
   </data>
 </root>

@@ -1111,9 +1111,9 @@
     <value>Bir &lt;details&gt; bloğu, özeti ve içindeki Markdown açılıp kapanabilen tek bir blok olarak gösterilir; dosyanın metni değişmez.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Kaydedilmemiş değişiklikler olsa da diskte değişen dosyayı yeniden yükle</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“Yeniden yüklemeden önce sor” kapalıyken: kaydedilmemiş değişiklikler olsa da diskteki sürüm sormadan yüklenir; değişiklikler kopya olarak saklanır ve bir geri almayla geri gelir</value>
   </data>
 </root>

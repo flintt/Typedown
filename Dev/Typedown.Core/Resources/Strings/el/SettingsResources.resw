@@ -1111,9 +1111,9 @@
     <value>Ένα μπλοκ &lt;details&gt;, η σύνοψή του και το Markdown μέσα του εμφανίζονται ως ένα μπλοκ που ανοίγει και κλείνει· το κείμενο του αρχείου μένει ως έχει.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Επαναφόρτωση αρχείου που άλλαξε στον δίσκο ακόμη και με μη αποθηκευμένες αλλαγές</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Με το «Ερώτηση πριν την επαναφόρτωση» ανενεργό: η έκδοση του δίσκου φορτώνεται χωρίς ερώτηση ακόμη και με μη αποθηκευμένες αλλαγές· αυτές κρατιούνται ως αντίγραφο και επανέρχονται με μία αναίρεση</value>
   </data>
 </root>

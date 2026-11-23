@@ -1111,9 +1111,9 @@
     <value>Blok &lt;details&gt; wraz z podsumowaniem i Markdownem w środku jest pokazywany jako jeden blok, który można rozwinąć i zwinąć; plik zachowuje swój tekst.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Wczytaj ponownie plik zmieniony na dysku nawet przy niezapisanych zmianach</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Gdy „Pytaj przed przeładowaniem” jest wyłączone: wersja z dysku jest wczytywana bez pytania nawet przy niezapisanych zmianach; zostają one zachowane jako kopia i wracają po jednym cofnięciu</value>
   </data>
 </root>

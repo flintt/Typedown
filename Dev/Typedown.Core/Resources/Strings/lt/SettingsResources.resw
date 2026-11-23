@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; blokas su santrauka ir jame esančiu Markdown rodomas kaip vienas atveriamas ir suskleidžiamas blokas; failo tekstas nesikeičia.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Iš naujo įkelti diske pakeistą failą net su neįrašytais pakeitimais</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Kai „Klausti prieš įkeliant iš naujo“ išjungta: disko versija įkeliama neklausiant net su neįrašytais pakeitimais; jie išsaugomi kaip kopija ir grąžinami vienu atšaukimu</value>
   </data>
 </root>

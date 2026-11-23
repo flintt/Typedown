@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; બ્લોક તેના સારાંશ અને અંદરના Markdown સાથે ખોલી અને બંધ કરી શકાય તેવા એક બ્લોક તરીકે દેખાય છે; ફાઇલનું લખાણ બદલાતું નથી.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>સાચવ્યા વગરના ફેરફારો હોય તો પણ ડિસ્ક પર બદલાયેલી ફાઇલ ફરી લોડ કરો</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“ફરી લોડ કરતા પહેલાં પૂછો” બંધ હોય ત્યારે: સાચવ્યા વગરના ફેરફારો હોય તો પણ પૂછ્યા વિના ડિસ્ક પરનું સંસ્કરણ લોડ થાય છે; ફેરફારો નકલ તરીકે રહે છે અને એક પૂર્વવત્‌થી પાછા આવે છે</value>
   </data>
 </root>

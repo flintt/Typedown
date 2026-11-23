@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; ব্লক ইয়াৰ সাৰাংশ আৰু ভিতৰৰ Markdown সৈতে খুলিব আৰু বন্ধ কৰিব পৰা এটা ব্লক হিচাপে দেখুওৱা হয়; ফাইলৰ লেখা সলনি নহয়।</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>অসংৰক্ষিত সলনি থাকিলেও ডিস্কত সলনি হোৱা ফাইল পুনৰ লোড কৰক</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“পুনৰ ল'ড কৰাৰ আগতে সোধক” বন্ধ থাকিলে: অসংৰক্ষিত সলনি থাকিলেও নুসুধাকৈ ডিস্কৰ সংস্কৰণ লোড হয়; সলনিবোৰ কপি হিচাপে ৰখা হয় আৰু এবাৰ আনডু কৰিলে ঘূৰি আহে</value>
   </data>
 </root>

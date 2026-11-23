@@ -1458,6 +1458,6 @@
     <value>Blok lipat</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Salinan tidak dibuat: program lain sedang memegang papan keratan</value>
   </data>
 </root>

@@ -1111,9 +1111,9 @@
     <value>Blokk &lt;details&gt;, is-sommarju tiegħu u l-Markdown li fih jintwerew bħala blokk wieħed li jinfetaħ u jingħalaq; il-fajl iżomm it-test tiegħu.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Erġa’ tella’ fajl li nbidel fuq id-diska anke b’tibdiliet mhux salvati</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Meta “Staqsi qabel ma terġa' tagħbi” ikun mitfi: il-verżjoni tad-diska titgħabba mingħajr mistoqsija anke b’tibdiliet mhux salvati; dawn jinżammu bħala kopja u jerġgħu lura b’undo wieħed</value>
   </data>
 </root>

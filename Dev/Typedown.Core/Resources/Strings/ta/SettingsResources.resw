@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; தொகுதி அதன் சுருக்கம் மற்றும் உள்ளே உள்ள Markdown உடன் திறந்து மூடக்கூடிய ஒரே தொகுதியாகக் காட்டப்படும்; கோப்பின் உரை மாறாது.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>சேமிக்காத மாற்றங்கள் இருந்தாலும் வட்டில் மாறிய கோப்பை மீண்டும் ஏற்று</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“மீள்ஏற்றும் முன் கேள்” அணைக்கப்பட்டிருந்தால்: சேமிக்காத மாற்றங்கள் இருந்தாலும் கேட்காமல் வட்டின் பதிப்பு ஏற்றப்படும்; மாற்றங்கள் நகலாக வைக்கப்படும், ஒரு செயல்தவிர்ப்பில் திரும்ப வரும்</value>
   </data>
 </root>

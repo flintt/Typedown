@@ -1458,6 +1458,6 @@
     <value>Bloc pliabil</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Copierea nu s-a făcut: alt program ține ocupat clipboardul</value>
   </data>
 </root>

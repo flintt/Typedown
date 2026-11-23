@@ -1111,9 +1111,9 @@
     <value>Blok &lt;details&gt;, ringkasannya, dan Markdown di dalamnya ditampilkan sebagai satu blok yang dapat dibuka dan ditutup; teks berkas tetap seperti ditulis.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Muat ulang file yang berubah di disk meski ada perubahan yang belum disimpan</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Saat “Tanya sebelum memuat ulang” mati: versi di disk dimuat tanpa bertanya meski ada perubahan yang belum disimpan; perubahan itu disimpan sebagai salinan dan bisa kembali dengan satu urungkan</value>
   </data>
 </root>

@@ -1458,6 +1458,6 @@
     <value>Khối thu gọn</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Không sao chép được: một chương trình khác đang giữ bảng tạm</value>
   </data>
 </root>

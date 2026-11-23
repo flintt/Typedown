@@ -1458,6 +1458,6 @@
     <value>ভাঁজযোগ্য ব্লক</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>কপি হয়নি: অন্য একটি প্রোগ্রাম ক্লিপবোর্ড ধরে রেখেছে</value>
   </data>
 </root>

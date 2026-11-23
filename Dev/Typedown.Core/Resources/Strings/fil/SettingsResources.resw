@@ -1111,9 +1111,9 @@
     <value>Ang isang &lt;details&gt; block, ang buod nito at ang Markdown sa loob ay ipinapakita bilang isang block na nabubuksan at naisasara; nananatili ang teksto ng file.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>I-reload ang file na nagbago sa disk kahit may hindi pa naka-save na pagbabago</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Kapag naka-off ang “Magtanong bago mag-reload”: ilo-load ang bersyon sa disk nang walang tanong kahit may hindi naka-save na pagbabago; itatabi ang mga ito bilang kopya at maibabalik sa isang undo</value>
   </data>
 </root>

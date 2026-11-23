@@ -1458,6 +1458,6 @@
     <value>Katlanabilir blok</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Kopyalanamadı: pano başka bir program tarafından tutuluyor</value>
   </data>
 </root>

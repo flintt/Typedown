@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; を要約と中の Markdown ごと、開閉できる 1 つのブロックとして表示します。ファイルの書き方は変わりません。</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>未保存の変更があってもディスク上で変更されたファイルを再読み込みする</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>「再読み込み前に確認する」がオフのとき: 未保存の変更があっても確認せずにディスク上の版を読み込みます。変更はコピーとして保存され、元に戻す 1 回で戻せます</value>
   </data>
 </root>

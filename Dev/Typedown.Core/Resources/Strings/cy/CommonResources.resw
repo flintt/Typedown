@@ -1458,6 +1458,6 @@
     <value>Bloc plygadwy</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Ni wnaed y copi: mae rhaglen arall yn dal y clipfwrdd</value>
   </data>
 </root>

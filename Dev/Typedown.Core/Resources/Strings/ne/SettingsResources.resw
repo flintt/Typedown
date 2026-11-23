@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; ब्लक यसको सारांश र भित्रको Markdown सहित खोल्न र बन्द गर्न मिल्ने एउटै ब्लकका रूपमा देखाइन्छ; फाइलको पाठ उस्तै रहन्छ।</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>सुरक्षित नगरिएका परिवर्तन भए पनि डिस्कमा परिवर्तन भएको फाइल फेरि लोड गर्नुहोस्</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“पुनः लोड गर्नुअघि सोध्नुहोस्” बन्द हुँदा: सुरक्षित नगरिएका परिवर्तन भए पनि नसोधी डिस्कको संस्करण लोड हुन्छ; परिवर्तनहरू प्रतिलिपिका रूपमा राखिन्छन् र एक पटक अनडू गर्दा फर्किन्छन्</value>
   </data>
 </root>

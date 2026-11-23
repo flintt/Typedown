@@ -1111,9 +1111,9 @@
     <value>Un bloc &lt;details&gt;, rezumatul său și Markdown-ul din el sunt afișate ca un singur bloc care se deschide și se închide; fișierul își păstrează textul.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Reîncarcă un fișier modificat pe disc chiar și cu modificări nesalvate</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Cu „Întreabă înainte de reîncărcare” dezactivat: versiunea de pe disc se încarcă fără întrebare chiar și cu modificări nesalvate; acestea se păstrează ca o copie și revin cu o anulare</value>
   </data>
 </root>

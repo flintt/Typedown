@@ -1458,6 +1458,6 @@
     <value>Inklapbaar blok</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Niet gekopieerd: een ander programma houdt het klembord bezet</value>
   </data>
 </root>

@@ -1111,9 +1111,9 @@
     <value>Blok &lt;details&gt; s povzetkom in Markdownom v njem je prikazan kot en blok, ki se odpre in zapre; besedilo datoteke ostane nespremenjeno.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Znova naloži datoteko, spremenjeno na disku, tudi z neshranjenimi spremembami</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Ko je »Vprašaj pred ponovnim nalaganjem« izklopljeno: različica z diska se naloži brez vprašanja tudi z neshranjenimi spremembami; te se ohranijo kot kopija in vrnejo z eno razveljavitvijo</value>
   </data>
 </root>

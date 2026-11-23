@@ -1458,6 +1458,6 @@
     <value>Жиналатын блок</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Көшіру орындалмады: алмасу буферін басқа бағдарлама ұстап тұр</value>
   </data>
 </root>

@@ -1458,6 +1458,6 @@
     <value>Сворачиваемый блок</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Не скопировано: буфер обмена занят другой программой</value>
   </data>
 </root>

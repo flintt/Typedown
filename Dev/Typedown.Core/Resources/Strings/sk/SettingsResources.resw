@@ -1111,9 +1111,9 @@
     <value>Blok &lt;details&gt; so súhrnom a Markdownom vnútri sa zobrazí ako jeden blok, ktorý sa dá rozbaliť a zbaliť; text súboru zostáva bez zmeny.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Znova načítať súbor zmenený na disku aj s neuloženými zmenami</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Keď je „Spýtať sa pred znovunačítaním“ vypnuté: verzia z disku sa načíta bez otázky aj s neuloženými zmenami; tie sa uložia ako kópia a vrátia sa jedným krokom späť</value>
   </data>
 </root>

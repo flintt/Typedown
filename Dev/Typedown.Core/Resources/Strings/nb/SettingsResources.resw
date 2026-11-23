@@ -1111,9 +1111,9 @@
     <value>En &lt;details&gt;-blokk, sammendraget og Markdown i den vises som én blokk som kan åpnes og lukkes; filen beholder teksten sin.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Last inn en fil som er endret på disken på nytt, selv med ulagrede endringer</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Med «Spør før ny innlasting» slått av: versjonen på disken lastes inn uten spørsmål, selv med ulagrede endringer; de tas vare på som en kopi og hentes med én angring</value>
   </data>
 </root>

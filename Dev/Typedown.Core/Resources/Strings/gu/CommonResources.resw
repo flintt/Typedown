@@ -1458,6 +1458,6 @@
     <value>સંકેલી શકાય તેવો બ્લોક</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>નકલ થઈ નહીં: બીજો પ્રોગ્રામ ક્લિપબોર્ડ રોકી રાખે છે</value>
   </data>
 </root>

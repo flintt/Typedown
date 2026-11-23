@@ -1458,6 +1458,6 @@
     <value>Ծալվող բլոկ</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Պատճենումը չկատարվեց. սեղմատախտակը զբաղեցրել է մեկ այլ ծրագիր</value>
   </data>
 </root>

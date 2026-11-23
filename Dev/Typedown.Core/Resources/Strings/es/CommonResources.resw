@@ -1458,6 +1458,6 @@
     <value>Bloque plegable</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>No se copió: otro programa está usando el portapapeles</value>
   </data>
 </root>

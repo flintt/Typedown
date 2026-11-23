@@ -1458,6 +1458,6 @@
     <value>تہ ہونے والا بلاک</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>نقل نہیں ہوئی: کلپ بورڈ کسی اور پروگرام کے قبضے میں ہے</value>
   </data>
 </root>

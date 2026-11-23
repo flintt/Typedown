@@ -1111,9 +1111,9 @@
     <value>Un bloque &lt;details&gt;, o seu resumo e o Markdown que contén amósanse como un só bloque que se abre e se pecha; o ficheiro conserva o seu texto.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Volver cargar un ficheiro cambiado no disco aínda con cambios sen gardar</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Con «Preguntar antes de recargar» desactivado: a versión do disco cárgase sen preguntar aínda con cambios sen gardar, que se gardan como copia e se recuperan cun desfacer</value>
   </data>
 </root>

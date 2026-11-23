@@ -1458,6 +1458,6 @@
     <value>Blocco comprimibile</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Copia non riuscita: un altro programma sta usando gli appunti</value>
   </data>
 </root>

@@ -103,7 +103,7 @@
         </controls:NormalSettingItem>
         <controls:NormalSettingItem
             x:Name="ReloadUnsavedWithoutAskingItem"
-            x:Load="{x:Bind Settings.AutoReload, Mode=OneWay}"
+            x:Load="{x:Bind local:GeneralSetting.IsReloadUnsavedItemLoad(Settings.AutoReload, Settings.AskBeforeReload), Mode=OneWay}"
             Title="{u:LocaleString Key=General.ReloadUnsavedWithoutAsking.Title}"
             Description="{u:LocaleString Key=General.ReloadUnsavedWithoutAsking.Description}">
             <controls:NormalSettingItem.Icon>

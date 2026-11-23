@@ -1458,6 +1458,6 @@
     <value>Bloc infhillte</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Níor rinneadh an chóip: tá an ghearrthaisce i seilbh cláir eile</value>
   </data>
 </root>

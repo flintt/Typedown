@@ -1111,9 +1111,9 @@
     <value>Blok &lt;details&gt; se shrnutím a Markdownem uvnitř se zobrazí jako jeden blok, který lze rozbalit a sbalit; text souboru zůstává beze změny.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Znovu načíst soubor změněný na disku i s neuloženými změnami</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Když je „Zeptat se před znovunačtením“ vypnuto: verze z disku se načte bez dotazu i s neuloženými změnami; ty se uloží jako kopie a vrátí se jedním krokem zpět</value>
   </data>
 </root>

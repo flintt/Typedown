@@ -1111,9 +1111,9 @@
     <value>Блокот &lt;details&gt; со резимето и Markdown внатре се прикажува како еден блок што се отвора и затвора; текстот на датотеката останува ист.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Повторно вчитај датотека сменета на дискот дури и со незачувани промени</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Кога „Прашај пред повторно вчитување“ е исклучено: верзијата од дискот се вчитува без прашање дури и со незачувани промени; тие се чуваат како копија и се враќаат со едно поништување</value>
   </data>
 </root>

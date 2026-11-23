@@ -1111,9 +1111,9 @@
     <value>ប្លុក &lt;details&gt; រួមជាមួយសេចក្តីសង្ខេប និង Markdown នៅខាងក្នុង ត្រូវបានបង្ហាញជាប្លុកតែមួយដែលអាចបើក និងបិទបាន; អត្ថបទក្នុងឯកសារនៅដដែល។</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>ផ្ទុកឯកសារដែលបានប្ដូរនៅលើថាសឡើងវិញ ទោះមានការកែប្រែមិនទាន់រក្សាទុកក៏ដោយ</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>ពេល “សួរមុនពេលផ្ទុកឡើងវិញ” បិទ៖ កំណែនៅលើថាសត្រូវបានផ្ទុកដោយមិនសួរ ទោះមានការកែប្រែមិនទាន់រក្សាទុកក៏ដោយ ការកែប្រែទាំងនោះត្រូវរក្សាជាច្បាប់ចម្លង ហើយអាចយកមកវិញដោយមិនធ្វើវិញម្ដង</value>
   </data>
 </root>

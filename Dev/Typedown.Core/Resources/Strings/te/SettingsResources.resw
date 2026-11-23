@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; బ్లాక్ దాని సారాంశం మరియు లోపలి Markdown తో తెరిచి మూసివేయగల ఒకే బ్లాక్‌గా చూపబడుతుంది; ఫైల్ వచనం మారదు.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>సేవ్ చేయని మార్పులు ఉన్నా డిస్క్‌లో మారిన ఫైల్‌ను మళ్లీ లోడ్ చేయి</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“మళ్లీ లోడ్ చేసే ముందు అడుగు” ఆఫ్‌లో ఉన్నప్పుడు: సేవ్ చేయని మార్పులు ఉన్నా అడగకుండా డిస్క్‌లోని సంస్కరణ లోడ్ అవుతుంది; మార్పులు కాపీగా ఉంచబడతాయి, ఒక అన్‌డూతో తిరిగి వస్తాయి</value>
   </data>
 </root>

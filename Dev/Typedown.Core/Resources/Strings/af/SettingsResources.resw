@@ -1111,9 +1111,9 @@
     <value>’n &lt;details&gt;-blok, sy opsomming en die Markdown daarin word as een blok gewys wat oop en toe gaan; die lêer behou sy teks.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Herlaai ’n lêer wat op skyf verander het, selfs met ongestoorde veranderinge</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Met “Vra voor herlaai” af: die weergawe op skyf word sonder ’n vraag gelaai, selfs as daar ongestoorde veranderinge is; dié word as ’n kopie bewaar en is een ontdoen-stap terug</value>
   </data>
 </root>

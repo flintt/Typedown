@@ -1111,9 +1111,9 @@
     <value>بلاک &lt;details&gt; همراه خلاصه و Markdown درون آن به‌شکل یک بلاک باز و بسته‌شونده نمایش داده می‌شود؛ متن فایل تغییر نمی‌کند.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>بارگذاری دوبارهٔ دوسیه‌ای که روی دیسک تغییر کرده، حتی با تغییرات ذخیره‌نشده</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>وقتی «پیش از بارگیری دوباره پرسیده شود» خاموش است: نسخهٔ روی دیسک بدون پرسش بارگذاری می‌شود، حتی با تغییرات ذخیره‌نشده؛ تغییرات به‌صورت کاپی نگه داشته می‌شوند و با یک واگرد برمی‌گردند</value>
   </data>
 </root>

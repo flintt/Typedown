@@ -1111,9 +1111,9 @@
     <value>Mae bloc &lt;details&gt;, ei grynodeb a’r Markdown ynddo’n cael eu dangos fel un bloc sy’n agor ac yn cau; mae’r ffeil yn cadw ei thestun.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Ail-lwytho ffeil a newidiwyd ar y ddisg hyd yn oed gyda newidiadau heb eu cadw</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Gyda “Gofyn cyn ail-lwytho” i ffwrdd: caiff fersiwn y ddisg ei llwytho heb gwestiwn hyd yn oed gyda newidiadau heb eu cadw; cedwir y rheini fel copi ac un cam dadwneud yn ôl</value>
   </data>
 </root>

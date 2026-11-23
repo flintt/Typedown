@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; ବ୍ଲକ ଏହାର ସାରାଂଶ ଓ ଭିତରର Markdown ସହ ଖୋଲି ଓ ବନ୍ଦ କରିହେବା ଏକ ବ୍ଲକ ଭାବେ ଦେଖାଯାଏ; ଫାଇଲର ଲେଖା ବଦଳେ ନାହିଁ।</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>ସେଭ୍ ହୋଇନଥିବା ପରିବର୍ତ୍ତନ ଥିଲେ ମଧ୍ୟ ଡିସ୍କରେ ବଦଳିଥିବା ଫାଇଲକୁ ପୁଣି ଲୋଡ୍ କରନ୍ତୁ</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“ପୁନଃ ଲୋଡ୍ ପୂର୍ବରୁ ପଚାରନ୍ତୁ” ବନ୍ଦ ଥିଲେ: ସେଭ୍ ହୋଇନଥିବା ପରିବର୍ତ୍ତନ ଥିଲେ ମଧ୍ୟ ନ ପଚାରି ଡିସ୍କର ସଂସ୍କରଣ ଲୋଡ୍ ହୁଏ; ପରିବର୍ତ୍ତନଗୁଡ଼ିକ କପି ଭାବେ ରହେ ଏବଂ ଥରେ ପୂର୍ବବତ୍ କଲେ ଫେରିଆସେ</value>
   </data>
 </root>

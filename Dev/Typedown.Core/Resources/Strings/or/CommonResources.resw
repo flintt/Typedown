@@ -1458,6 +1458,6 @@
     <value>ଫୋଲ୍ଡ କରିହେବା ବ୍ଲକ</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>କପି ହେଲା ନାହିଁ: ଅନ୍ୟ ଏକ ପ୍ରୋଗ୍ରାମ କ୍ଲିପବୋର୍ଡ ଧରିଛି</value>
   </data>
 </root>

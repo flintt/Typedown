@@ -1458,6 +1458,6 @@
     <value>மடிக்கக்கூடிய தொகுதி</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>நகலெடுக்கவில்லை: வேறொரு நிரல் கிளிப்போர்டைப் பிடித்துள்ளது</value>
   </data>
 </root>

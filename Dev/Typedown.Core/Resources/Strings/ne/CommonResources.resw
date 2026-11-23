@@ -1458,6 +1458,6 @@
     <value>पट्याउन मिल्ने ब्लक</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>प्रतिलिपि भएन: अर्को प्रोग्रामले क्लिपबोर्ड समातेको छ</value>
   </data>
 </root>

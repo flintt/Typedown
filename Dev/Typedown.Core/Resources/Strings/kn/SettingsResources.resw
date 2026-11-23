@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; ಬ್ಲಾಕ್ ಅದರ ಸಾರಾಂಶ ಮತ್ತು ಒಳಗಿನ Markdown ಜೊತೆಗೆ ತೆರೆಯಬಹುದಾದ ಮತ್ತು ಮುಚ್ಚಬಹುದಾದ ಒಂದೇ ಬ್ಲಾಕ್ ಆಗಿ ತೋರಿಸಲಾಗುತ್ತದೆ; ಫೈಲ್ ಪಠ್ಯ ಬದಲಾಗುವುದಿಲ್ಲ.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>ಉಳಿಸದ ಬದಲಾವಣೆಗಳಿದ್ದರೂ ಡಿಸ್ಕ್‌ನಲ್ಲಿ ಬದಲಾದ ಫೈಲ್ ಅನ್ನು ಮರುಲೋಡ್ ಮಾಡಿ</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“ಮರುಲೋಡ್ ಮಾಡುವ ಮೊದಲು ಕೇಳಿ” ಆಫ್ ಆಗಿರುವಾಗ: ಉಳಿಸದ ಬದಲಾವಣೆಗಳಿದ್ದರೂ ಕೇಳದೆ ಡಿಸ್ಕ್‌ನ ಆವೃತ್ತಿ ಲೋಡ್ ಆಗುತ್ತದೆ; ಬದಲಾವಣೆಗಳನ್ನು ಪ್ರತಿಯಾಗಿ ಇಡಲಾಗುತ್ತದೆ ಮತ್ತು ಒಂದು ರದ್ದುಗೊಳಿಸುವಿಕೆಯಿಂದ ಹಿಂತಿರುಗುತ್ತವೆ</value>
   </data>
 </root>

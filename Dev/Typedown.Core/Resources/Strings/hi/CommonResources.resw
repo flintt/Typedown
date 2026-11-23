@@ -1458,6 +1458,6 @@
     <value>मोड़ने योग्य ब्लॉक</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>कॉपी नहीं हुई: क्लिपबोर्ड किसी दूसरे प्रोग्राम के पास है</value>
   </data>
 </root>

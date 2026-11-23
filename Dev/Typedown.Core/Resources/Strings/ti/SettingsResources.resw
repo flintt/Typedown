@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; ብሎክ ምስ ጽማቑን ኣብ ውሽጡ ዘሎ Markdown ከም ሓደ ዝኽፈትን ዝዕጾን ብሎክ ይርአ፤ ጽሑፍ ፋይል ኣይቀየርን።</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>ዘይተዓቀቡ ለውጥታት እኳ እንተሃለዉ ኣብ ዲስክ ዝተቐየረ ፋይል ደጊምካ ጽዓን</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>“ቅድሚ እንደገና ምጽዓን ሕተት” ምስ ዝጠፍእ፦ ዘይተዓቀቡ ለውጥታት እኳ እንተሃለዉ ከይሓተተ ኣብ ዲስክ ዘሎ ስሪት ይጽዓን፤ እቶም ለውጥታት ከም ቅዳሕ ይዕቀቡ፣ ብሓደ ምምላስ ይምለሱ</value>
   </data>
 </root>

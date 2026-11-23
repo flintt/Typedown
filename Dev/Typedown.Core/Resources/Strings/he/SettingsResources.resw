@@ -1111,9 +1111,9 @@
     <value>בלוק &lt;details&gt; עם התקציר וה-Markdown שבתוכו מוצג כבלוק אחד שנפתח ונסגר; הטקסט בקובץ נשאר כפי שנכתב.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>טעינה מחדש של קובץ שהשתנה בדיסק גם כשיש שינויים שלא נשמרו</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>כאשר „שאל לפני טעינה מחדש” כבוי: הגרסה שבדיסק נטענת בלי שאלה גם כשיש שינויים שלא נשמרו; השינויים נשמרים כעותק וחוזרים בביטול אחד</value>
   </data>
 </root>

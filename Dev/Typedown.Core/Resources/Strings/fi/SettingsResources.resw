@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt;-lohko, sen yhteenveto ja sen sisällä oleva Markdown näytetään yhtenä avattavana ja suljettavana lohkona; tiedoston teksti säilyy.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Lataa levyllä muuttunut tiedosto uudelleen myös tallentamattomien muutosten kanssa</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Kun ”Kysy ennen uudelleenlatausta” on pois: levyllä oleva versio ladataan kysymättä myös tallentamattomien muutosten kanssa; muutokset säilytetään kopiona ja saa takaisin yhdellä kumouksella</value>
   </data>
 </root>

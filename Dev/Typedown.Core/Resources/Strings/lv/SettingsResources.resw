@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; bloks ar tā kopsavilkumu un tajā esošo Markdown tiek rādīts kā viens bloks, ko var atvērt un aizvērt; faila teksts paliek nemainīgs.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>Atkārtoti ielādēt diskā mainītu failu arī ar nesaglabātām izmaiņām</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>Ja “Jautāt pirms pārlādes” ir izslēgts: diska versija tiek ielādēta bez jautājuma arī ar nesaglabātām izmaiņām; tās tiek saglabātas kā kopija un atgūstamas ar vienu atsaukšanu</value>
   </data>
 </root>

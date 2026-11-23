@@ -1111,9 +1111,9 @@
     <value>ບລັອກ &lt;details&gt; ພ້ອມສະຫຼຸບ ແລະ Markdown ພາຍໃນ ຖືກສະແດງເປັນບລັອກດຽວທີ່ເປີດ ແລະ ປິດໄດ້; ຂໍ້ຄວາມໃນໄຟລ໌ຍັງຄືເດີມ.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>ໂຫຼດໄຟລ໌ທີ່ປ່ຽນໃນດິສກ໌ຄືນ ເຖິງວ່າຈະມີການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກ</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>ເມື່ອປິດ “ຖາມກ່ອນໂຫຼດຄືນ”: ສະບັບໃນດິສກ໌ຈະຖືກໂຫຼດໂດຍບໍ່ຖາມ ເຖິງວ່າຈະມີການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກ; ການປ່ຽນແປງຈະຖືກເກັບເປັນສຳເນົາ ແລະ ກັບຄືນມາໄດ້ດ້ວຍການຍົກເລີກໜຶ່ງຄັ້ງ</value>
   </data>
 </root>

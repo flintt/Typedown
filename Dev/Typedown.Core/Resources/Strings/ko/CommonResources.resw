@@ -1458,6 +1458,6 @@
     <value>접기 블록</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>복사하지 못했습니다: 다른 프로그램이 클립보드를 사용 중입니다</value>
   </data>
 </root>

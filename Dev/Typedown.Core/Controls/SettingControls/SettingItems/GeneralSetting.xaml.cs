@@ -19,6 +19,12 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             InitializeComponent();
         }
 
+        /// <summary>
+        /// "Reload even with unsaved changes": there only with Auto reload on and "Ask before reload" off - with the asking
+        /// on it does nothing, and shown it said it might (Typedown PR #5's review).
+        /// </summary>
+        public static bool IsReloadUnsavedItemLoad(bool autoReload, bool askBeforeReload) => autoReload && !askBeforeReload;
+
         public static bool IsStartupOpenFolderItemLoad(FolderStartupAction action)
         {
             return action == FolderStartupAction.OpenFolder;

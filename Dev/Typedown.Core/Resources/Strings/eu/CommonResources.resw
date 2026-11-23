@@ -1458,6 +1458,6 @@
     <value>Bloke tolesgarria</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>Ez da kopiatu: beste programa batek arbela hartuta du</value>
   </data>
 </root>

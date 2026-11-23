@@ -1111,9 +1111,9 @@
     <value>&lt;details&gt; ბლოკი თავისი შეჯამებითა და შიგნით არსებული Markdown-ით ნაჩვენებია ერთ ბლოკად, რომელიც იხსნება და იკეცება; ფაილის ტექსტი არ იცვლება.</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
-    <value>Reload a file changed on disk even with unsaved changes</value>
+    <value>დისკზე შეცვლილი ფაილის ხელახლა ჩატვირთვა შეუნახავი ცვლილებების დროსაც</value>
   </data>
   <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
-    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <value>როცა „იკითხე ხელახლა ჩატვირთვამდე“ გამორთულია: დისკზე არსებული ვერსია ჩაიტვირთება შეკითხვის გარეშე შეუნახავი ცვლილებების დროსაც; ისინი ინახება ასლად და ერთი გაუქმებით ბრუნდება</value>
   </data>
 </root>

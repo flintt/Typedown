@@ -1458,6 +1458,6 @@
     <value>بلاک قات‌شونده</value>
   </data>
   <data name="Clipboard.WriteFailed" xml:space="preserve">
-    <value>The copy was not made: another program is holding the clipboard</value>
+    <value>کاپی نشد: برنامهٔ دیگری کلیپ‌بورد را در اختیار دارد</value>
   </data>
 </root>
