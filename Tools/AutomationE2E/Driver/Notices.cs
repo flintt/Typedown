@@ -19,31 +19,39 @@ internal static partial class Program
     {
         using var c = await Session("e2e NF01");
         var run = Guid.NewGuid().ToString("N").Substring(0, 8);
-        var id = await Open(c, Fixture($"nf01-{run}.md", "# NF01\n\nExported.\n"));
-        var windowId = await WindowIdOf(c, id);
-        var window = await WindowOf(windowId, c);
-        string? other = null;
-        async Task<JObject> State() => (JObject)await c.Call("test.notices.state", new { windowId });
-        async Task<JToken?> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"];
-        var afterExport = (int)(await Setting("AfterExport"))!;
-        var warn = (bool?)await Setting("WarnFirstEditRewrite") ?? true;
-        var hidden = (string?)await Setting("StatusBarHiddenItems") ?? "";
+        // The first edit's notice turned off before the document is opened, the document the case's first (as F03 has
+        // it): one opened second, in a window of many documents, was never drawn and told nothing (w10 jobs 716, 719).
+        var first = await FirstWindowId(c);
+        async Task<JToken?> SettingOf(string w, string name) => (await c.Call("test.settings.get", new { windowId = w, name }))["value"];
+        var warn = (bool?)await SettingOf(first, "WarnFirstEditRewrite") ?? true;
+        var afterExport = (int)(await SettingOf(first, "AfterExport"))!;
+        var hidden = (string?)await SettingOf(first, "StatusBarHiddenItems") ?? "";
+        await c.Call("test.settings.set", new { windowId = first, name = "WarnFirstEditRewrite", value = false });
+        await c.Call("test.settings.set", new { windowId = first, name = "StatusBarHiddenItems", value = "" });
+        await c.Call("test.notices.clear", new { windowId = first });
+        string? id = null;
         try
         {
-            await c.Call("window.setView", new { windowId, mode = "visual", bounds = new { x = 40, y = 40, width = 1300, height = 850 } });
-            await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = "" });
-            await c.Call("test.notices.clear", new { windowId });
-            await Task.Delay(500);
-            var s = await State();
-            Check(((JArray)s["entries"]!).Count == 0 && (int)s["unread"]! == 0, "no notices to start with: " + s.ToString(Newtonsoft.Json.Formatting.None));
+            id = await Open(c, Fixture($"nf01-{run}.md", "# NF01\n\n8. eight\n10. ten\n"));
+            var windowId = await WindowIdOf(c, id);
+            var window = await WindowOf(windowId, c);
+            async Task<JObject> State() => (JObject)await c.Call("test.notices.state", new { windowId });
             // The dot is a shape, which UI Automation does not see (hp job 717): the bell's name says how many are unread.
-            var bell = FindIn(window, "StatusBarNotices");
-            Check(bell != null, "the status bar has its bell");
-            await Task.Delay(300);
-            var readName = FindIn(window, "StatusBarNotices")!.Current.Name;
-            notes.Add("the bell, nothing unread: " + readName);
+            string BellName() => FindIn(window, "StatusBarNotices")?.Current.Name ?? "";
+            await c.Call("window.setView", new { windowId, mode = "visual", bounds = new { x = 40, y = 40, width = 1300, height = 850 } });
+            Check(FindIn(window, "StatusBarNotices") != null, "the status bar has its bell");
 
-            // An export's card, as it was: its text, Open, Open file location, close.
+            // The first edit's notice turned off: no card, its line all the same (only there now).
+            await Eventually(async () => ((JArray)(await State())["entries"]!).Any(e => (string?)e["key"] == "firstEdit"), 15000, 200);
+            var s = await State();
+            var quiet = ((JArray)s["entries"]!).FirstOrDefault(e => (string?)e["key"] == "firstEdit");
+            Check(quiet != null && (bool?)quiet["quiet"] == true && ((string?)quiet["where"])?.Contains($"nf01-{run}") == true, "turned off: its line, quiet, about the document: " + s.ToString(Newtonsoft.Json.Formatting.None));
+            Check(!((JArray)s["cards"]!).Any(k => (string?)k == "firstEdit") && FindIn(window, "FirstEditNotice") == null, "and no card");
+            Check((int)s["unread"]! == 1, "one unread");
+            await Eventually(async () => { await Task.CompletedTask; return BellName().Contains('1'); }, 3000, 200);
+            Check(BellName().Contains('1'), "the bell says one is unread: " + BellName());
+
+            // An export's card, as it was: its text, Open, Open file location, close; its line kept once it is closed.
             await c.Call("test.settings.set", new { windowId, name = "AfterExport", value = 1 });
             var path = Path.Combine(testRoot, $"nf01-{run}.html");
             await c.Call("test.export.run", new { windowId, type = "html", path });
@@ -53,44 +61,32 @@ internal static partial class Program
             var text = FindIn(window, "ExportNoticeText");
             Check(text != null && text.Current.Name.Contains(Path.GetFileName(path)), "its text names the file: " + text?.Current.Name);
             Check(FindIn(window, "ExportNoticeOpen") != null && FindIn(window, "ExportNoticeFolder") != null && FindIn(window, "ExportNoticeClose") != null, "with Open, Open file location and its close button");
-            var first = (JObject)((JArray)s["entries"]!)[0];
-            Check((string?)first["key"] == "export" && (bool?)first["quiet"] == false && ((JArray)first["actions"]!).Select(a => (string?)a).SequenceEqual(new[] { "ExportNoticeOpen", "ExportNoticeFolder" }),
-                "its line in the list, with its two buttons: " + first.ToString(Newtonsoft.Json.Formatting.None));
-            Check((int)s["unread"]! == 1, "one unread");
-            string BellName() => FindIn(window, "StatusBarNotices")?.Current.Name ?? "";
-            await Eventually(async () => { await Task.CompletedTask; return BellName() != readName; }, 3000, 200);
-            Check(BellName() != readName && BellName().Contains('1'), "the bell says one is unread: " + BellName());
+            var newest = (JObject)((JArray)s["entries"]!)[0];
+            Check((string?)newest["key"] == "export" && (bool?)newest["quiet"] == false && ((JArray)newest["actions"]!).Select(a => (string?)a).SequenceEqual(new[] { "ExportNoticeOpen", "ExportNoticeFolder" }),
+                "its line in the list, newest, with its two buttons: " + newest.ToString(Newtonsoft.Json.Formatting.None));
+            Check((int)s["unread"]! == 2, "two unread");
+            await Eventually(async () => { await Task.CompletedTask; return BellName().Contains('2'); }, 3000, 200);
+            var unreadName = BellName();
+            Check(unreadName.Contains('2'), "the bell says two are unread: " + unreadName);
             notes.Add("shot, the export's card and the bell's dot: " + Screenshot("NF01-1-card"));
             Invoke(FindIn(window, "ExportNoticeClose")!);
             await Eventually(async () => !((JArray)(await State())["cards"]!).Any(k => (string?)k == "export"), 3000, 200);
             s = await State();
-            Check(!((JArray)s["cards"]!).Any(k => (string?)k == "export") && ((JArray)s["entries"]!).Count == 1, "closed: the card goes, its line stays");
-
-            // The first edit's notice turned off: no card, its line all the same (only there now).
-            await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = false });
-            other = await Open(c, Fixture($"nf01-list-{run}.md", "# NF01 list\n\n8. eight\n10. ten\n"));
-            // Shown: opened in a tab behind, its page never loaded it nor told the first edit's notice (w10 job 716).
-            await c.Call("document.focus", new { documentId = other });
-            await Eventually(async () => ((JArray)(await State())["entries"]!).Any(e => (string?)e["key"] == "firstEdit"), 15000, 200);
-            s = await State();
-            var quiet = ((JArray)s["entries"]!).FirstOrDefault(e => (string?)e["key"] == "firstEdit");
-            Check(quiet != null && (bool?)quiet["quiet"] == true && ((string?)quiet["where"])?.Contains("nf01-list") == true, "turned off: its line, quiet, about the document: " + quiet?.ToString(Newtonsoft.Json.Formatting.None));
-            Check(!((JArray)s["cards"]!).Any(k => (string?)k == "firstEdit") && FindIn(window, "FirstEditNotice") == null, "and no card");
-            Check((int)s["unread"]! == 2, "two unread");
+            Check(!((JArray)s["cards"]!).Any(k => (string?)k == "export") && ((JArray)s["entries"]!).Count == 2, "closed: the card goes, its line stays");
 
             // The bell: the list, newest first, with an entry's buttons; opened, nothing unread.
             Invoke(FindIn(window, "StatusBarNotices")!);
-            AutomationElement? newest = null;
-            await Eventually(async () => { await Task.CompletedTask; return (newest = FindAnywhereInHost(window, "NoticeEntry0Text")) != null; }, 4000, 200);
-            Check(newest != null && newest.Current.Name == (string?)quiet!["text"], "the list's first line is the newest (the first edit's): " + newest?.Current.Name);
-            var second = FindAnywhereInHost(window, "NoticeEntry1Text");
-            Check(second != null && second.Current.Name.Contains(Path.GetFileName(path)), "then the export's: " + second?.Current.Name);
-            Check(FindAnywhereInHost(window, "NoticeEntry1-ExportNoticeFolder") != null, "with its Open file location");
+            AutomationElement? line0 = null;
+            await Eventually(async () => { await Task.CompletedTask; return (line0 = FindAnywhereInHost(window, "NoticeEntry0Text")) != null; }, 4000, 200);
+            Check(line0 != null && line0.Current.Name.Contains(Path.GetFileName(path)), "the list's first line is the newest (the export's): " + line0?.Current.Name);
+            Check(FindAnywhereInHost(window, "NoticeEntry0-ExportNoticeFolder") != null, "with its Open file location");
+            var line1 = FindAnywhereInHost(window, "NoticeEntry1Text");
+            Check(line1 != null && line1.Current.Name == (string?)quiet!["text"], "then the first edit's: " + line1?.Current.Name);
             notes.Add("shot, the list: " + Screenshot("NF01-2-list"));
             await Eventually(async () => (int)(await State())["unread"]! == 0, 3000, 200);
             Check((int)(await State())["unread"]! == 0, "opened: nothing unread");
-            await Eventually(async () => { await Task.CompletedTask; return BellName() == readName; }, 3000, 200);
-            Check(BellName() == readName, "and the bell no longer says any are: " + BellName());
+            await Eventually(async () => { await Task.CompletedTask; return BellName() != unreadName; }, 3000, 200);
+            Check(BellName() != unreadName && !BellName().Contains('2'), "and the bell no longer says any are: " + BellName());
 
             // Clear all.
             Invoke(FindAnywhereInHost(window, "NoticesClear")!);
@@ -102,11 +98,10 @@ internal static partial class Program
         finally
         {
             try { Chord("Esc"); } catch { }
-            try { await c.Call("test.settings.set", new { windowId, name = "AfterExport", value = afterExport }); } catch { }
-            try { await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = warn }); } catch { }
-            try { await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = hidden }); } catch { }
-            if (other != null) try { await c.Call("document.close", new { documentId = other }); } catch { }
-            try { await c.Call("document.close", new { documentId = id }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId = first, name = "AfterExport", value = afterExport }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId = first, name = "WarnFirstEditRewrite", value = warn }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId = first, name = "StatusBarHiddenItems", value = hidden }); } catch { }
+            if (id != null) try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
 }
