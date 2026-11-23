@@ -208,6 +208,19 @@ namespace Typedown.Windows
 
         private void ShowNow()
         {
+            // On the screen already (Put in Scratchpad with it shown): only brought to the front, the end of its text
+            // shown. Gone through again, it was cloaked and brought back - it flickered at every Put in (the user's hp88,
+            // 1.4.3.13: put in twice with it shown, "on the screen after its content drawn" each time).
+            if (shown)
+            {
+                if (cloakedNow) return;
+                Activate();
+                PInvoke.SetForegroundWindow(Handle);
+                box.Focus(FocusState.Programmatic);
+                box.Select(box.Text.Length, 0);
+                Log.Debug($"scratchpad: to the front ({box.Text.Length} characters)");
+                return;
+            }
             var settings = Settings();
             shownWith.Clear();
             if (settings != null)
@@ -257,8 +270,12 @@ namespace Typedown.Windows
 
         private bool cloakedNow;
 
+        // Times cloaked, for the test host: a showing with it on the screen already takes it off nowhere.
+        private int cloakings;
+
         private void SetCloaked(bool cloaked)
         {
+            if (cloaked) cloakings++;
             cloakedNow = cloaked;
             uint value = cloaked ? 1u : 0u;
             var result = PInvoke.DwmSetWindowAttribute(Handle, PInvoke.DwmWindowAttribute.DWMWA_CLOAK, ref value, sizeof(uint));
@@ -508,6 +525,7 @@ namespace Typedown.Windows
             inSwitchers = instance?.AppWindow.IsShownInSwitchers ?? true,
             visible = instance != null && PInvoke.IsWindowVisible(instance.Handle),
             cloaked = instance?.cloakedNow == true,
+            cloakings = instance?.cloakings ?? 0,
             bounds = instance == null ? null : $"{instance.AppWindow.Position.X},{instance.AppWindow.Position.Y} {instance.AppWindow.Size.Width}x{instance.AppWindow.Size.Height}",
             background = instance == null ? null : Hex(instance.paper.Color),
             foreground = instance == null ? null : Hex(instance.ink.Color),
