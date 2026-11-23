@@ -69,6 +69,8 @@ internal static partial class Program
             // The first edit's notice turned off: no card, its line all the same (only there now).
             await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = false });
             other = await Open(c, Fixture($"nf01-list-{run}.md", "# NF01 list\n\n8. eight\n10. ten\n"));
+            // Shown: opened in a tab behind, its page never loaded it nor told the first edit's notice (w10 job 716).
+            await c.Call("document.focus", new { documentId = other });
             await Eventually(async () => ((JArray)(await State())["entries"]!).Any(e => (string?)e["key"] == "firstEdit"), 15000, 200);
             s = await State();
             var quiet = ((JArray)s["entries"]!).FirstOrDefault(e => (string?)e["key"] == "firstEdit");
