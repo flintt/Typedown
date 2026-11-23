@@ -260,6 +260,16 @@ const { openEditor } = require('./harness');
             const where = reading ? 'reading mode' : 'visual editor';
             check(alone.selected === 'A paragraph with none around it.', `${where}: triple-click on a paragraph with no fold around it selects it`, alone);
             check(between.selected === 'The paragraph between the folds.' && between.folds === 2, `${where}: triple-click on a paragraph between two folds selects it, the folds stay folded`, between);
+            if (!reading) {
+                // Selected so, then marked (bold, as its key does): the whole line marked - only its first word was (the
+                // user, 2026-11-23: the selection's ends were the line itself, not its text, and the editor read the end
+                // as within the first word).
+                await triple('between the folds');
+                await page.evaluate(() => window.__deliver('Format', 'strong'));
+                await pause(400);
+                const marked = await page.evaluate(() => { const e = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(x => x.textContent.includes('between the folds')); const s = e?.querySelector('strong'); return { strong: s ? s.textContent : null, line: e?.textContent }; });
+                check(marked.strong === 'The paragraph between the folds.', 'triple-clicked, then bold: the whole line is bold, not its first word', marked);
+            }
         }
 
         // Ctrl+A on an item, then struck through (the user, trial 1.4.3.11 on x280: it jumped - the item, redrawn by the

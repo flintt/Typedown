@@ -283,8 +283,16 @@ export function setHideDone(value: boolean, text?: string) {
             const tripled = !first && e.detail >= 3 ? target.closest('.ag-paragraph-content') : null
             if (tripled) {
                 e.preventDefault()
+                // Its ends in its text, not the line itself: the editor reads a selection's ends as places in text, and
+                // one at the line's own end it read as 1 - a format then took the first letter (the user, 2026-11-23).
                 const range = document.createRange()
-                range.selectNodeContents(tripled)
+                const walker = document.createTreeWalker(tripled, NodeFilter.SHOW_TEXT)
+                const texts: Text[] = []
+                for (let n = walker.nextNode(); n; n = walker.nextNode()) texts.push(n as Text)
+                if (texts.length) {
+                    range.setStart(texts[0], 0)
+                    range.setEnd(texts[texts.length - 1], texts[texts.length - 1].length)
+                } else range.selectNodeContents(tripled)
                 const selection = window.getSelection()
                 selection?.removeAllRanges()
                 selection?.addRange(range)
