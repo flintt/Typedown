@@ -113,9 +113,10 @@ namespace Typedown.Core.Services
 
         private static void ShowCard(AppViewModel app, UpdateInfo info)
         {
+            var said = string.Format(Locale.GetString("UpdateCard.Available"), info.Latest.ToString(3), info.Current.ToString(3));
             var text = new Microsoft.UI.Xaml.Controls.TextBlock
             {
-                Text = string.Format(Locale.GetString("UpdateCard.Available"), info.Latest.ToString(3), info.Current.ToString(3)),
+                Text = said,
                 TextWrapping = Microsoft.UI.Xaml.TextWrapping.Wrap,
                 MaxWidth = 280,
             };
@@ -131,7 +132,14 @@ namespace Typedown.Core.Services
             var content = new Microsoft.UI.Xaml.Controls.StackPanel { Spacing = 10 };
             content.Children.Add(text);
             content.Children.Add(buttons);
-            EditionHooks.ShowCard(app, new EditorBar { Id = CardId, Content = content });
+            // Kept in the notices list too, with its download button: "Later" lets it go from the window, not from there.
+            EditionHooks.ShowCard(app, new EditorBar
+            {
+                Id = CardId,
+                Content = content,
+                HistoryText = said,
+                HistoryActions = new[] { new NoticeAction { Text = Locale.GetString("UpdateCard.Download"), AutomationId = "NoticeUpdateDownload", Run = () => Common.OpenUrl(info.PageUrl) } },
+            });
         }
     }
 }

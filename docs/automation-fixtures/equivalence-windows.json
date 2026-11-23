@@ -158,6 +158,16 @@
      "schema": "test.editor.style/1"
     },
     {
+     "name": "test.notices.clear",
+     "scope": null,
+     "schema": "test.notices.clear/1"
+    },
+    {
+     "name": "test.notices.state",
+     "scope": null,
+     "schema": "test.notices.state/1"
+    },
+    {
      "name": "test.scratchpad.set",
      "scope": null,
      "schema": "test.scratchpad.set/1"

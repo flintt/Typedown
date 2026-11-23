@@ -1460,4 +1460,20 @@
   <data name="Clipboard.WriteFailed" xml:space="preserve">
     <value>복사하지 못했습니다: 다른 프로그램이 클립보드를 사용 중입니다</value>
   </data>
+  <data name="NoticesTitle" xml:space="preserve">
+    <value>알림</value>
+    <comment>状态栏通知列表的标题、通知按钮的提示</comment>
+  </data>
+  <data name="NoticesClear" xml:space="preserve">
+    <value>모두 지우기</value>
+    <comment>通知列表：全部清除</comment>
+  </data>
+  <data name="NoticesNone" xml:space="preserve">
+    <value>아직 알림이 없습니다</value>
+    <comment>通知列表空着时</comment>
+  </data>
+  <data name="NoticesUnread" xml:space="preserve">
+    <value>읽지 않음 {0}개</value>
+    <comment>通知按钮的名称后面：未读条数</comment>
+  </data>
 </root>

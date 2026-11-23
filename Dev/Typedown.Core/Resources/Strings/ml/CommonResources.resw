@@ -1460,4 +1460,20 @@
   <data name="Clipboard.WriteFailed" xml:space="preserve">
     <value>പകർത്തിയില്ല: മറ്റൊരു പ്രോഗ്രാം ക്ലിപ്പ്ബോർഡ് പിടിച്ചിരിക്കുന്നു</value>
   </data>
+  <data name="NoticesTitle" xml:space="preserve">
+    <value>അറിയിപ്പുകൾ</value>
+    <comment>状态栏通知列表的标题、通知按钮的提示</comment>
+  </data>
+  <data name="NoticesClear" xml:space="preserve">
+    <value>എല്ലാം മായ്ക്കുക</value>
+    <comment>通知列表：全部清除</comment>
+  </data>
+  <data name="NoticesNone" xml:space="preserve">
+    <value>ഇതുവരെ അറിയിപ്പുകളില്ല</value>
+    <comment>通知列表空着时</comment>
+  </data>
+  <data name="NoticesUnread" xml:space="preserve">
+    <value>{0} വായിക്കാത്തവ</value>
+    <comment>通知按钮的名称后面：未读条数</comment>
+  </data>
 </root>

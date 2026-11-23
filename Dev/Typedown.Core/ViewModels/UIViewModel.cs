@@ -45,86 +45,142 @@ namespace Typedown.Core.ViewModels
 
         public bool IsPrintPreviewOpen { get; private set; }
 
-        /// <summary>The file an export just wrote, while its notice shows (null: no notice).</summary>
+        /// <summary>
+        /// The cards at the window's bottom right, oldest first (MainPage draws them): an export written, the first edit's
+        /// rewrite, a copy the clipboard never took, an edition's card (an update, the Store rating). One frame, one stack
+        /// and one way of showing them (Services/Notices.cs) - each had its own copy of all of it (the user, 2026-11-23).
+        /// </summary>
+        public System.Collections.ObjectModel.ObservableCollection<Notice> Notices { get; } = new();
+
+        private readonly Dictionary<Notice, DispatcherTimer> noticeTimers = new();
+
+        /// <summary>
+        /// A card shown (one with the same key goes), and its line kept in the notices list when it is worth having there.
+        /// <paramref name="popUp"/> false: only the line - a notice the reader turned off goes on being kept there.
+        /// </summary>
+        public void ShowNotice(Notice notice, bool popUp = true)
+        {
+            if (notice == null) return;
+            if (notice.InHistory)
+            {
+                NoticeHistory.Add(new NoticeEntry
+                {
+                    Time = DateTime.Now,
+                    Key = notice.Key,
+                    Text = notice.HistoryText ?? notice.Text,
+                    Where = FileViewModel?.FileName,
+                    Actions = notice.HistoryActions ?? notice.Actions.Where(a => !a.CardOnly && !a.Link).ToList(),
+                    Quiet = !popUp,
+                });
+            }
+            if (!popUp) return;
+            HideNotice(notice.Key);
+            Notices.Add(notice);
+            if (notice.Timeout is { } after)
+            {
+                var timer = new DispatcherTimer { Interval = after };
+                timer.Tick += (_, _) => HideNotice(notice);
+                noticeTimers[notice] = timer;
+                timer.Start();
+            }
+        }
+
+        /// <summary>The card with this key taken away, if one shows.</summary>
+        public void HideNotice(string key)
+        {
+            var shown = Notices.FirstOrDefault(n => n.Key == key);
+            if (shown != null) HideNotice(shown);
+        }
+
+        public void HideNotice(Notice notice)
+        {
+            if (notice == null || !Notices.Remove(notice)) return;
+            if (noticeTimers.Remove(notice, out var timer)) timer.Stop();
+            try { notice.Closed?.Invoke(); }
+            catch (Exception ex) { Log.Debug($"notice {notice.Key}: closed: {ex.Message}"); }
+        }
+
+        public bool IsNoticeShown(string key) => Notices.Any(n => n.Key == key);
+
+        /// <summary>The file an export just wrote, while its card shows (null: none).</summary>
         public string ExportedPath { get; private set; }
 
-        public bool ExportedNoticeOpen => ExportedPath != null;
-
-        public string ExportedNotice => ExportedPath == null ? null : string.Format(Locale.GetString("ExportedTo"), ExportedPath);
-
-        private DispatcherTimer exportedTimer;
-
-        /// <summary>A notice that the export is written, with its place and buttons to open it; it goes by itself.</summary>
+        /// <summary>A card that the export is written, with its place and buttons to open it; it goes by itself.</summary>
         public void ShowExported(string path)
         {
+            ShowNotice(new Notice
+            {
+                Key = "export",
+                AutomationId = "ExportNotice",
+                Text = string.Format(Locale.GetString("ExportedTo"), path),
+                Actions = new[]
+                {
+                    new NoticeAction { Text = Locale.GetString("Open"), AutomationId = "ExportNoticeOpen", Run = () => OpenExported(path, Common.OpenFile) },
+                    new NoticeAction { Text = Locale.GetString("OpenFileLocation"), AutomationId = "ExportNoticeFolder", Run = () => OpenExported(path, Common.OpenFileLocation) },
+                },
+                Timeout = TimeSpan.FromSeconds(10),
+                InHistory = true,
+                Closed = () => { if (ExportedPath == path) ExportedPath = null; },
+            });
             ExportedPath = path;
-            exportedTimer ??= new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
-            exportedTimer.Tick -= OnExportedTimerTick;
-            exportedTimer.Tick += OnExportedTimerTick;
-            exportedTimer.Stop();
-            exportedTimer.Start();
         }
 
-        public void HideExported()
+        public void HideExported() => HideNotice("export");
+
+        private async void OpenExported(string path, Action<string> open)
         {
-            exportedTimer?.Stop();
-            ExportedPath = null;
+            try { open(path); }
+            catch (Exception ex)
+            {
+                Log.Debug($"export notice: could not open {path}: {ex.Message}");
+                try { await Controls.AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel?.XamlRoot); } catch { }
+            }
         }
-
-        private void OnExportedTimerTick(object sender, object e) => HideExported();
-
-        /// <summary>The copy that could not be made, while its notice shows (null: none).</summary>
-        public string ClipboardNotice { get; private set; }
-
-        public bool ClipboardNoticeOpen { get; private set; }
-
-        private DispatcherTimer clipboardTimer;
 
         /// <summary>
         /// A copy (or cut) that never reached the clipboard - another program held it for the whole retry
-        /// (Clipboard.WriteFailed): said in a card over the window, as the export's, not in a dialog over the document.
-        /// It goes by itself.
+        /// (Clipboard.WriteFailed): a card, not a dialog over the document. It goes by itself after ten seconds, as an
+        /// export's (five were too few to be seen by one looking elsewhere).
         /// </summary>
-        public void ShowClipboardNotice()
+        public void ShowClipboardNotice() => ShowNotice(new Notice
         {
-            ClipboardNotice = Locale.GetString("Clipboard.WriteFailed");
-            ClipboardNoticeOpen = true;
-            clipboardTimer ??= new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
-            clipboardTimer.Tick -= OnClipboardTimerTick;
-            clipboardTimer.Tick += OnClipboardTimerTick;
-            clipboardTimer.Stop();
-            clipboardTimer.Start();
-        }
+            Key = "clipboard",
+            AutomationId = "ClipboardNotice",
+            Text = Locale.GetString("Clipboard.WriteFailed"),
+            Timeout = TimeSpan.FromSeconds(10),
+            InHistory = true,
+        });
 
-        public void HideClipboardNotice()
-        {
-            clipboardTimer?.Stop();
-            ClipboardNotice = null;
-            ClipboardNoticeOpen = false;
-        }
-
-        private void OnClipboardTimerTick(object sender, object e) => HideClipboardNotice();
+        public void HideClipboardNotice() => HideNotice("clipboard");
 
         /// <summary>
-        /// The notice that the first visual edit may rewrite part of the document shown (the page works out whether, and
-        /// says so with FirstEditNotice): shown as a card over the window like the export's, for that load only - taken
-        /// away when another document is shown or this one closed. Null: no notice. The page takes it away after 10 s.
+        /// The card that the first visual edit may rewrite part of the document shown (the page works out whether, and
+        /// says so with FirstEditNotice): for that load only - taken away when another document is shown or this one
+        /// closed. Its text while it shows, else null.
         /// </summary>
         public string FirstEditNotice { get; private set; }
-
-        public bool FirstEditNoticeOpen => FirstEditNotice != null;
 
         /// <summary>The load the notice is for (EditorViewModel.LoadId).</summary>
         public int FirstEditNoticeLoad { get; private set; }
 
         public void ShowFirstEditNotice(int loadId, IReadOnlyList<string> reasons = null)
         {
-            // Not shown when turned off for every document (Settings > Editor) or for this one (the card's "Don't show
-            // again for this document", Services/FirstEditMutes.cs).
-            if (SettingsViewModel != null && !SettingsViewModel.WarnFirstEditRewrite) return;
-            if (FirstEditMutes.Shared.IsMuted(AppViewModel?.FileViewModel?.FilePath, AppViewModel?.TabsViewModel?.ActiveTab?.DocumentId)) return;
+            var text = FirstEditNoticeText(reasons);
+            // Turned off for every document (Settings > Editor) or for this one (the card's "Don't show again for this
+            // document", Services/FirstEditMutes.cs): no card - only its line in the notices list (the user, 2026-11-23).
+            var quiet = (SettingsViewModel != null && !SettingsViewModel.WarnFirstEditRewrite)
+                || FirstEditMutes.Shared.IsMuted(AppViewModel?.FileViewModel?.FilePath, AppViewModel?.TabsViewModel?.ActiveTab?.DocumentId);
             FirstEditNoticeLoad = loadId;
-            FirstEditNotice = FirstEditNoticeText(reasons);
+            ShowNotice(new Notice
+            {
+                Key = "firstEdit",
+                AutomationId = "FirstEditNotice",
+                Text = text,
+                Actions = new[] { new NoticeAction { Text = Locale.GetString("FirstEditNeverShow"), AutomationId = "FirstEditNoticeNever", Link = true, Run = MuteFirstEditNotice } },
+                InHistory = true,
+                Closed = () => { if (FirstEditNotice == text) FirstEditNotice = null; },
+            }, popUp: !quiet);
+            if (!quiet) FirstEditNotice = text;
         }
 
         // What the first visual edit may rewrite, by the page's reasons (services/normalization.ts), in the interface's
@@ -148,7 +204,7 @@ namespace Typedown.Core.ViewModels
         /// <summary>
         /// The card's "Don't show again for this document": that document only, by its path (an untitled one for as long
         /// as the app runs). The reader asked whether it was for this document (2026-11-07); Settings > Editor turns the
-        /// notice off for every document.
+        /// notice off for every document. Its line still goes into the notices list.
         /// </summary>
         public void MuteFirstEditNotice()
         {
@@ -156,7 +212,33 @@ namespace Typedown.Core.ViewModels
             HideFirstEditNotice();
         }
 
-        public void HideFirstEditNotice() => FirstEditNotice = null;
+        public void HideFirstEditNotice() => HideNotice("firstEdit");
+
+        // An edition's cards (EditionHooks.ShowCard: an update, the Store rating) as this window's notices: one each,
+        // stacked with the others - the edition's one card at a time took the place of the one there.
+        private void SyncEditionCards()
+        {
+            var cards = EditionHooks.CardsOf(AppViewModel);
+            foreach (var shown in Notices.Where(n => n.Key.StartsWith("card:") && !cards.Any(c => "card:" + c.Id == n.Key && ReferenceEquals(c.Content, n.Content))).ToList())
+                HideNotice(shown);
+            foreach (var card in cards)
+            {
+                if (Notices.Any(n => n.Key == "card:" + card.Id && ReferenceEquals(n.Content, card.Content))) continue;
+                var id = card.Id;
+                ShowNotice(new Notice
+                {
+                    Key = "card:" + id,
+                    AutomationId = "EditionCard",
+                    Content = card.Content,
+                    Closable = false,
+                    InHistory = card.HistoryText != null,
+                    HistoryText = card.HistoryText,
+                    HistoryActions = card.HistoryActions ?? Array.Empty<NoticeAction>(),
+                    // Taken off the window some other way: the edition's card closed too (it is told).
+                    Closed = () => EditionHooks.CloseCard(AppViewModel, id),
+                });
+            }
+        }
 
 
         /// <summary>Folder-wide search pane in the side bar (Edit → Find → Search in folder, Ctrl+Shift+F).</summary>
@@ -321,6 +403,14 @@ namespace Typedown.Core.ViewModels
                 FolderSearchOpen = true;
             });
             disposables.Add(RemoteInvoke.Handle<JToken, object>("GetStringResources", GetStringResources));
+            void OnCardChanged(AppViewModel app)
+            {
+                if (app != AppViewModel) return;
+                if (dispatcher.HasThreadAccess) SyncEditionCards();
+                else dispatcher.TryEnqueueSafe(SyncEditionCards);
+            }
+            EditionHooks.CardChanged += OnCardChanged;
+            disposables.Add(Disposable.Create(() => EditionHooks.CardChanged -= OnCardChanged));
             _ = dispatcher.RunIdleAsync(() => InitializeBinding());
         }
 

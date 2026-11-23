@@ -250,39 +250,58 @@ namespace Typedown.Core.Utilities
         /// <summary>The id of the bar shown in the window, or null.</summary>
         public static string BarShown(AppViewModel app) => app != null && bars.TryGetValue(app, out var shown) ? shown.Id : null;
 
-        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<AppViewModel, EditorBar> cards = new();
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<AppViewModel, List<EditorBar>> cards = new();
 
         /// <summary>
-        /// A card of the edition's at the window's bottom right, with the app's own notices there (the first edit's, an
-        /// export's), one at a time: for what is short and can wait, not worth a bar across the document (the user,
-        /// 2026-11-06). Its frame is the notices' own; <see cref="EditorBar.Content"/> is what goes in it. It stays while
-        /// the window does until <see cref="CloseCard"/> is called.
+        /// A card of the edition's at the window's bottom right, with the app's own notices (UIViewModel.Notices, in their
+        /// frame; <see cref="EditorBar.Content"/> is what goes in it): for what is short and can wait, not worth a bar
+        /// across the document (the user, 2026-11-06). One per id - shown again, it takes its own place - and stacked with
+        /// the others: one at a time, an update's card took the rating's place and the other way round (2026-11-23). It
+        /// stays while the window does until <see cref="CloseCard"/> is called. With <see cref="EditorBar.HistoryText"/>
+        /// it is kept in the notices list too.
         /// </summary>
         public static void ShowCard(AppViewModel app, EditorBar card)
         {
             if (app == null || card == null) return;
-            if (cards.TryGetValue(app, out var shown) && shown != card)
+            EditorBar before;
+            lock (cards)
             {
-                cards.Remove(app);
-                try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionCard", ex.ToString()); }
+                var list = cards.GetOrCreateValue(app);
+                before = list.FirstOrDefault(c => c.Id == card.Id);
+                if (before == card) return;
+                if (before != null) list.Remove(before);
+                list.Add(card);
             }
-            cards.AddOrUpdate(app, card);
+            if (before != null)
+                try { before.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionCard", ex.ToString()); }
             CardChanged?.Invoke(app);
         }
 
-        /// <summary>The window's card taken away, if it is the one with this id (null: whichever); its <see cref="EditorBar.Closed"/> is called.</summary>
+        /// <summary>The window's card with this id taken away (null: the last shown); its <see cref="EditorBar.Closed"/> is called.</summary>
         public static void CloseCard(AppViewModel app, string id = null)
         {
-            if (app == null || !cards.TryGetValue(app, out var shown) || (id != null && shown.Id != id)) return;
-            cards.Remove(app);
+            if (app == null) return;
+            EditorBar shown;
+            lock (cards)
+            {
+                if (!cards.TryGetValue(app, out var list)) return;
+                shown = id == null ? list.LastOrDefault() : list.FirstOrDefault(c => c.Id == id);
+                if (shown == null) return;
+                list.Remove(shown);
+            }
             CardChanged?.Invoke(app);
             try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionCard", ex.ToString()); }
         }
 
-        /// <summary>The id of the card shown in the window, or null.</summary>
-        public static string CardShown(AppViewModel app) => app != null && cards.TryGetValue(app, out var shown) ? shown.Id : null;
+        /// <summary>The id of the card the window shows last, or null.</summary>
+        public static string CardShown(AppViewModel app) => CardsOf(app).LastOrDefault()?.Id;
 
-        internal static EditorBar CardOf(AppViewModel app) => app != null && cards.TryGetValue(app, out var shown) ? shown : null;
+        /// <summary>The window's cards, in the order shown.</summary>
+        public static IReadOnlyList<EditorBar> CardsOf(AppViewModel app)
+        {
+            if (app == null) return Array.Empty<EditorBar>();
+            lock (cards) return cards.TryGetValue(app, out var list) ? list.ToList() : new List<EditorBar>();
+        }
 
         internal static event Action<AppViewModel> CardChanged;
 
@@ -693,6 +712,12 @@ namespace Typedown.Core.Utilities
         public Microsoft.UI.Xaml.UIElement Content { get; init; }
         /// <summary>Called when it is closed or another takes its place.</summary>
         public Action Closed { get; init; }
+
+        /// <summary>A card's line in the notices list (the status bar's bell), or null: not kept there (the Store rating).</summary>
+        public string HistoryText { get; init; }
+
+        /// <summary>A card's buttons in the notices list (open the release page, say).</summary>
+        public IReadOnlyList<Services.NoticeAction> HistoryActions { get; init; }
     }
 
     /// <summary>An edition's panel beside the document (<see cref="EditionHooks.ShowSidePanel"/>).</summary>

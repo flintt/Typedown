@@ -238,6 +238,39 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
+            <!-- The notices of this run (Services/NoticeHistory: an export written, a copy not made, the first edit's rewrite,
+                 a newer release), a dot while some are unread; a click lists them, newest first, with their buttons
+                 (the user, 2026-11-23). -->
+            <Button
+                x:Name="NoticesButton"
+                Padding="8,2,8,2"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                AutomationProperties.AutomationId="StatusBarNotices"
+                controls:ToolTip.TextResource="NoticesTitle">
+                <Grid>
+                    <FontIcon Glyph="&#xEA8F;" FontSize="12"/>
+                    <Ellipse x:Name="NoticesDot" Width="6" Height="6" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-2,-3,0"
+                             Fill="{ThemeResource AccentFillColorDefaultBrush}" Visibility="Collapsed"
+                             AutomationProperties.AutomationId="StatusBarNoticesUnread"/>
+                </Grid>
+                <Button.Flyout>
+                    <Flyout x:Name="NoticesFlyout" Placement="TopEdgeAlignedRight" Opening="OnNoticesOpening">
+                        <StackPanel Width="360" Spacing="8">
+                            <Grid>
+                                <TextBlock Text="{u:LocaleString Key=NoticesTitle}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <HyperlinkButton x:Name="NoticesClear" HorizontalAlignment="Right" Padding="4,0" Content="{u:LocaleString Key=NoticesClear}"
+                                                 AutomationProperties.AutomationId="NoticesClear" Click="OnNoticesClearClick"/>
+                            </Grid>
+                            <TextBlock x:Name="NoticesEmpty" Text="{u:LocaleString Key=NoticesNone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                       AutomationProperties.AutomationId="NoticesEmpty"/>
+                            <ScrollViewer MaxHeight="360" VerticalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="NoticesList" Spacing="10" AutomationProperties.AutomationId="NoticesList"/>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

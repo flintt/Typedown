@@ -1460,4 +1460,20 @@
   <data name="Clipboard.WriteFailed" xml:space="preserve">
     <value>Ez da kopiatu: beste programa batek arbela hartuta du</value>
   </data>
+  <data name="NoticesTitle" xml:space="preserve">
+    <value>Jakinarazpenak</value>
+    <comment>状态栏通知列表的标题、通知按钮的提示</comment>
+  </data>
+  <data name="NoticesClear" xml:space="preserve">
+    <value>Garbitu guztiak</value>
+    <comment>通知列表：全部清除</comment>
+  </data>
+  <data name="NoticesNone" xml:space="preserve">
+    <value>Oraindik ez dago jakinarazpenik</value>
+    <comment>通知列表空着时</comment>
+  </data>
+  <data name="NoticesUnread" xml:space="preserve">
+    <value>{0} irakurri gabe</value>
+    <comment>通知按钮的名称后面：未读条数</comment>
+  </data>
 </root>

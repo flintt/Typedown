@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -66,28 +67,26 @@ namespace Typedown.Core.Pages
             }
         }
 
-        private void OnExportNoticeOpenClick(object sender, RoutedEventArgs e) => OpenExported(Common.OpenFile);
+        // The window's notices as cards (UIViewModel.Notices), each made once and taken away with its notice; a page made
+        // again (the settings left) draws the ones there.
+        private readonly Dictionary<Services.Notice, Border> noticeCards = new();
 
-        private void OnExportNoticeFolderClick(object sender, RoutedEventArgs e) => OpenExported(Common.OpenFileLocation);
-
-        private void OnExportNoticeCloseClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.HideExported();
-
-        private void OnFirstEditNoticeCloseClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.HideFirstEditNotice();
-
-        private void OnFirstEditNoticeNeverClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.MuteFirstEditNotice();
-
-        private void OnClipboardNoticeCloseClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.HideClipboardNotice();
-
-        private async void OpenExported(Action<string> open)
+        private void OnNoticesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            var path = AppViewModel.UIViewModel.ExportedPath;
-            AppViewModel.UIViewModel.HideExported();
-            if (path == null) return;
-            try { open(path); }
-            catch (Exception ex)
+            var notices = AppViewModel?.UIViewModel?.Notices;
+            if (notices == null || NoticeStack == null) return;
+            foreach (var gone in noticeCards.Keys.Where(n => !notices.Contains(n)).ToList())
             {
-                Log.Debug($"export notice: could not open {path}: {ex.Message}");
-                try { await Controls.AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(XamlRoot); } catch { }
+                NoticeStack.Children.Remove(noticeCards[gone]);
+                noticeCards.Remove(gone);
+            }
+            var style = (Style)Resources["NoticeCardStyle"];
+            foreach (var notice in notices)
+            {
+                if (noticeCards.ContainsKey(notice)) continue;
+                var card = Controls.NoticeCard.Make(notice, style, n => AppViewModel?.UIViewModel?.HideNotice(n));
+                noticeCards[notice] = card;
+                NoticeStack.Children.Add(card);
             }
         }
 
@@ -102,9 +101,9 @@ namespace Typedown.Core.Pages
             // in an English window. It is built again, as switching it off and on does, once the language is applied.
             disposables.Add(settings.WhenPropertyChanged(nameof(settings.Language)).Subscribe(_ =>
                 _ = DispatcherQueue.RunIdleAsync(_ => RebuildStatusBar())));
-            EditionHooks.CardChanged += OnEditionCardChanged;
-            disposables.Add(System.Reactive.Disposables.Disposable.Create(() => EditionHooks.CardChanged -= OnEditionCardChanged));
-            ShowEditionCard();
+            uiViewModel.Notices.CollectionChanged += OnNoticesChanged;
+            disposables.Add(System.Reactive.Disposables.Disposable.Create(() => uiViewModel.Notices.CollectionChanged -= OnNoticesChanged));
+            OnNoticesChanged(null, null);
             // A copy the clipboard never took (another program held it for the whole retry): said in this window's card.
             var clipboard = this.GetService<Interfaces.IClipboard>();
             if (clipboard != null)
@@ -113,22 +112,6 @@ namespace Typedown.Core.Pages
                 clipboard.WriteFailed += OnClipboardWriteFailed;
                 disposables.Add(System.Reactive.Disposables.Disposable.Create(() => clipboard.WriteFailed -= OnClipboardWriteFailed));
             }
-        }
-
-        private void OnEditionCardChanged(AppViewModel app)
-        {
-            if (app != AppViewModel) return;
-            if (DispatcherQueue.HasThreadAccess) ShowEditionCard();
-            else DispatcherQueue.TryEnqueueSafe(ShowEditionCard);
-        }
-
-        // The edition's card for this window, or none. A page made anew (the settings left) takes it from the one before.
-        private void ShowEditionCard()
-        {
-            var card = EditionHooks.CardOf(AppViewModel);
-            if (card?.Content is FrameworkElement content && content.Parent is ContentPresenter before && before != EditionCardHost) before.Content = null;
-            EditionCardHost.Content = card?.Content;
-            EditionCard.Visibility = card?.Content == null ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void RebuildStatusBar()

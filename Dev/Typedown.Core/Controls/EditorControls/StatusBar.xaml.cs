@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Typedown.Core.Services;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Microsoft.UI.Xaml;
@@ -35,7 +36,7 @@ namespace Typedown.Core.Controls
             this.InitializeComponent();
             // Switching the status bar off and on again builds a new control, which knows nothing of the
             // theme that was applied to the old one — so it asks for the colours itself when it loads.
-            Loaded += (_, _) => { ApplyCurrentTheme(); UpdateReadingTip(); UpdateZoomTips(); FollowHeadings(Editor); AddEditionItems(); WatchForLayout(); UpdateLastSaved(); };
+            Loaded += (_, _) => { ApplyCurrentTheme(); UpdateReadingTip(); UpdateZoomTips(); FollowHeadings(Editor); AddEditionItems(); WatchForLayout(); UpdateLastSaved(); WatchNotices(true); };
         }
 
         private void ApplyCurrentTheme()
@@ -334,10 +335,10 @@ namespace Typedown.Core.Controls
 
         // ---- which items show: the reader's choice (right-click), then what the width leaves room for ----
 
-        private static readonly string[] ItemNames = { "modes", "heading", "format", "save", "zoom", "count" };
+        private static readonly string[] ItemNames = { "modes", "heading", "format", "save", "zoom", "count", "notices" };
 
         // The first to go when the bar is too narrow; the count stays. An edition's items go before all of these.
-        private static readonly string[] SqueezeOrder = { "heading", "zoom", "format", "save", "modes" };
+        private static readonly string[] SqueezeOrder = { "heading", "zoom", "notices", "format", "save", "modes" };
 
         // An edition's items (EditionHooks.AddStatusBarItems), each in a slot of the bar's own left of the count: the
         // bar shows and hides the slot, the element's own Visibility stays the edition's.
@@ -380,6 +381,7 @@ namespace Typedown.Core.Controls
             "save" => new FrameworkElement[] { SaveStateButton },
             "zoom" => new FrameworkElement[] { ZoomItems },
             "count" => new FrameworkElement[] { WordCountButton },
+            "notices" => new FrameworkElement[] { NoticesButton },
             _ => editionItems?.Where(x => x.Item.Id == item).Select(x => (FrameworkElement)x.Slot).ToArray() ?? new FrameworkElement[0],
         };
 
@@ -523,6 +525,11 @@ namespace Typedown.Core.Controls
             }
             if (squeezed.Contains("heading"))
                 OverflowMenu.Items.Add(Entry("OverflowHeading", HeadingText.Text, () => OnHeadingClick(this, null)));
+            if (squeezed.Contains("notices"))
+            {
+                var unread = NoticeHistory.Unread;
+                OverflowMenu.Items.Add(Entry("OverflowNotices", Locale.GetString("NoticesTitle") + (unread > 0 ? $" ({unread})" : ""), () => NoticesFlyout.ShowAt(OverflowButton)));
+            }
             foreach (var (item, _) in EditionList)
             {
                 if (!squeezed.Contains(item.Id) || item.Invoke == null) continue;
@@ -548,6 +555,7 @@ namespace Typedown.Core.Controls
             foreach (var (edition, _) in EditionList)
                 if (edition.Name != null && Present(edition)) entries.Add((edition.Id, edition.Name));
             entries.Add(("count", Locale.GetString("WordCount")));
+            entries.Add(("notices", Locale.GetString("NoticesTitle")));
             foreach (var (item, text) in entries)
             {
                 var toggle = new ToggleMenuFlyoutItem { Text = text, IsChecked = Chosen(item) };
@@ -570,8 +578,83 @@ namespace Typedown.Core.Controls
             ViewModel?.UIViewModel?.ShowSidePane(1);
         }
 
+        // ---- the notices (Services/NoticeHistory) ----
+
+        private bool watchingNotices;
+
+        private void WatchNotices(bool on)
+        {
+            if (on == watchingNotices) return;
+            watchingNotices = on;
+            if (on) NoticeHistory.Changed += OnNoticesChanged;
+            else NoticeHistory.Changed -= OnNoticesChanged;
+            if (on) ShowUnread();
+        }
+
+        // Raised on the thread that changed them: another window's, maybe.
+        private void OnNoticesChanged() => DispatcherQueue?.TryEnqueueSafe(() =>
+        {
+            ShowUnread();
+            if (NoticesFlyout.IsOpen) FillNotices();
+        });
+
+        private void ShowUnread()
+        {
+            var unread = NoticeHistory.Unread;
+            NoticesDot.Visibility = unread > 0 ? Visibility.Visible : Visibility.Collapsed;
+            var name = Locale.GetString("NoticesTitle") + (unread > 0 ? " - " + string.Format(Locale.GetString("NoticesUnread"), unread) : "");
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(NoticesButton, name);
+        }
+
+        private void OnNoticesOpening(object sender, object e)
+        {
+            FillNotices();
+            NoticeHistory.MarkRead();
+        }
+
+        // Newest first: when, which document, the text, and its buttons (an export's Open, a release's Download).
+        private void FillNotices()
+        {
+            NoticesList.Children.Clear();
+            var entries = NoticeHistory.Entries;
+            NoticesEmpty.Visibility = entries.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            NoticesClear.Visibility = entries.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+            var secondary = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
+            for (var i = 0; i < entries.Count; i++)
+            {
+                var entry = entries[i];
+                var line = new StackPanel { Spacing = 2 };
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(line, $"NoticeEntry{i}");
+                var when = entry.Time.ToString("t", Locale.Culture) + (string.IsNullOrEmpty(entry.Where) ? "" : " · " + entry.Where);
+                line.Children.Add(new TextBlock { Text = when, FontSize = 11, Foreground = secondary });
+                var text = new TextBlock { Text = entry.Text, TextWrapping = TextWrapping.Wrap, FontSize = 13, IsTextSelectionEnabled = true };
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(text, $"NoticeEntry{i}Text");
+                line.Children.Add(text);
+                if (entry.Actions.Count > 0)
+                {
+                    var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12 };
+                    foreach (var action in entry.Actions)
+                    {
+                        var link = new HyperlinkButton { Content = action.Text, Padding = new Thickness(0), FontSize = 12 };
+                        Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(link, $"NoticeEntry{i}-{action.AutomationId}");
+                        link.Click += (_, _) => { NoticesFlyout.Hide(); NoticeCard.Run(action); };
+                        buttons.Children.Add(link);
+                    }
+                    line.Children.Add(buttons);
+                }
+                NoticesList.Children.Add(line);
+            }
+        }
+
+        private void OnNoticesClearClick(object sender, RoutedEventArgs e)
+        {
+            NoticeHistory.Clear();
+            FillNotices();
+        }
+
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            WatchNotices(false);
             FollowHeadings(null);
             foreach (var source in new[] { watchedSettings, watchedEditor, watchedFile })
                 if (source != null) source.PropertyChanged -= OnLayoutSourceChanged;

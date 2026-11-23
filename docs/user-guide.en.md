@@ -94,6 +94,7 @@ While editing, the right-click menu also has **Copy as Markdown** (Ctrl+Shift+C)
 - **Encoding and line endings**: for example "UTF-8 · LF". A click lets you change the line endings (LF / CRLF), convert the file to UTF-8, or reopen a file without a BOM in another encoding such as GB18030 or Big5 (not while there are unsaved changes). Hidden by default: right-click the status bar to show it
 - **Save status**: Saved / Not saved / Auto-save paused. Hover over it to see why auto-save paused (for example, a file that could not be read without loss); a click saves
 - **Word count**: counted on the text you see on the page (no Markdown markup or link addresses; each Han character or kana counts as a word); with a selection it shows the selected part. A click shows the details: characters with and without spaces, CJK characters, paragraphs, headings, images, links and an estimated reading time, and lets you choose whether the status bar shows characters or words
+- **Notices** (the bell): the notices that showed at the bottom right during this run - an export written, a copy not made, the first edit's rewrite, a newer release - newest first, with their buttons (Open file location, say); a dot on the bell while some are unread. A notice you turned off ("Don't show again for this document") no longer shows, but is still listed here. Kept until the app is closed.
 
 Right-click the status bar to choose which items it shows; in a window too narrow for all of them, the ones that do not fit go into the "..." menu at the right.
 

@@ -1476,4 +1476,20 @@
   <data name="Clipboard.WriteFailed" xml:space="preserve">
     <value>复制没有成功：剪贴板被其他程序占用</value>
   </data>
+  <data name="NoticesTitle" xml:space="preserve">
+    <value>通知</value>
+    <comment>状态栏通知列表的标题、通知按钮的提示</comment>
+  </data>
+  <data name="NoticesClear" xml:space="preserve">
+    <value>全部清除</value>
+    <comment>通知列表：全部清除</comment>
+  </data>
+  <data name="NoticesNone" xml:space="preserve">
+    <value>还没有通知</value>
+    <comment>通知列表空着时</comment>
+  </data>
+  <data name="NoticesUnread" xml:space="preserve">
+    <value>{0} 条未读</value>
+    <comment>通知按钮的名称后面：未读条数</comment>
+  </data>
 </root>

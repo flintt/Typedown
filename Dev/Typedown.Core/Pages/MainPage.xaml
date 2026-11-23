@@ -10,6 +10,17 @@
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
+    <Page.Resources>
+        <!-- Every notice's frame (NoticeCard): one, where each card had its own copy. -->
+        <Style x:Key="NoticeCardStyle" TargetType="Border">
+            <Setter Property="MaxWidth" Value="560"/>
+            <Setter Property="Padding" Value="16,10,8,10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="{ThemeResource SolidBackgroundFillColorTertiary}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefault}"/>
+        </Style>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -17,81 +28,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <controls:MainContent Grid.Row="1"/>
-        <!-- Cards over the window, bottom right, one above the other when both show: the notice that the first visual
-             edit may rewrite part of this document (the page says when, UIViewModel.FirstEditNotice), and an export
-             written. -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="16" Spacing="8">
-            <!-- An edition's card (EditionHooks.ShowCard): in the notices' own frame, its content the edition's. -->
-            <Border x:Name="EditionCard" MaxWidth="560" Visibility="Collapsed"
-                    Padding="16,10,8,12" CornerRadius="8" BorderThickness="1"
-                    Background="{ThemeResource SolidBackgroundFillColorTertiary}" BorderBrush="{ThemeResource CardStrokeColorDefault}">
-                <ContentPresenter x:Name="EditionCardHost"/>
-            </Border>
-            <Border x:Name="FirstEditNotice" MaxWidth="560"
-                    Padding="16,10,8,10" CornerRadius="8" BorderThickness="1"
-                    Background="{ThemeResource SolidBackgroundFillColorTertiary}" BorderBrush="{ThemeResource CardStrokeColorDefault}"
-                    AutomationProperties.AutomationId="FirstEditNotice"
-                    x:Load="{x:Bind AppViewModel.UIViewModel.FirstEditNoticeOpen, Mode=OneWay}">
-                <Grid ColumnSpacing="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel VerticalAlignment="Center" Spacing="4">
-                        <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True"
-                                   AutomationProperties.AutomationId="FirstEditNoticeText" Text="{x:Bind AppViewModel.UIViewModel.FirstEditNotice, Mode=OneWay}"/>
-                        <!-- This document only (by its path); Settings > Editor turns the notice off for every document. -->
-                        <HyperlinkButton Padding="0" AutomationProperties.AutomationId="FirstEditNoticeNever" Content="{u:LocaleString Key=FirstEditNeverShow}" Click="OnFirstEditNoticeNeverClick"/>
-                    </StackPanel>
-                    <Button Grid.Column="1" AutomationProperties.AutomationId="FirstEditNoticeClose" Background="Transparent" BorderThickness="0" Click="OnFirstEditNoticeCloseClick">
-                        <FontIcon Glyph="&#xE711;" FontSize="12"/>
-                    </Button>
-                </Grid>
-            </Border>
-            <!-- An export written: where it is, and buttons to open it (Settings > Export > After export). Goes by itself. -->
-            <Border x:Name="ExportNotice" MaxWidth="560"
-                    Padding="16,10,8,10" CornerRadius="8" BorderThickness="1"
-                    Background="{ThemeResource SolidBackgroundFillColorTertiary}" BorderBrush="{ThemeResource CardStrokeColorDefault}"
-                    AutomationProperties.AutomationId="ExportNotice"
-                    x:Load="{x:Bind AppViewModel.UIViewModel.ExportedNoticeOpen, Mode=OneWay}">
-                <Grid ColumnSpacing="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" IsTextSelectionEnabled="True"
-                               AutomationProperties.AutomationId="ExportNoticeText" Text="{x:Bind AppViewModel.UIViewModel.ExportedNotice, Mode=OneWay}"/>
-                    <Button Grid.Column="1" AutomationProperties.AutomationId="ExportNoticeOpen" Content="{u:LocaleString Key=Open}" Click="OnExportNoticeOpenClick"/>
-                    <Button Grid.Column="2" AutomationProperties.AutomationId="ExportNoticeFolder" Content="{u:LocaleString Key=OpenFileLocation}" Click="OnExportNoticeFolderClick"/>
-                    <Button Grid.Column="3" AutomationProperties.AutomationId="ExportNoticeClose" Background="Transparent" BorderThickness="0" Click="OnExportNoticeCloseClick">
-                        <FontIcon Glyph="&#xE711;" FontSize="12"/>
-                    </Button>
-                </Grid>
-            </Border>
-            <!-- A copy or cut that never reached the clipboard (another program held it): said here, not in a dialog over
-                 the document. Goes by itself. -->
-            <Border x:Name="ClipboardNotice" MaxWidth="560"
-                    Padding="16,10,8,10" CornerRadius="8" BorderThickness="1"
-                    Background="{ThemeResource SolidBackgroundFillColorTertiary}" BorderBrush="{ThemeResource CardStrokeColorDefault}"
-                    AutomationProperties.AutomationId="ClipboardNotice"
-                    x:Load="{x:Bind AppViewModel.UIViewModel.ClipboardNoticeOpen, Mode=OneWay}">
-                <Grid ColumnSpacing="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel VerticalAlignment="Center" Spacing="4">
-                        <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True"
-                                   AutomationProperties.AutomationId="ClipboardNoticeText" Text="{x:Bind AppViewModel.UIViewModel.ClipboardNotice, Mode=OneWay}"/>
-                    </StackPanel>
-                    <Button Grid.Column="1" AutomationProperties.AutomationId="ClipboardNoticeClose" Background="Transparent" BorderThickness="0" Click="OnClipboardNoticeCloseClick">
-                        <FontIcon Glyph="&#xE711;" FontSize="12"/>
-                    </Button>
-                </Grid>
-            </Border>
-        </StackPanel>
+        <!-- Cards over the window, bottom right, one above the other (UIViewModel.Notices, drawn by NoticeCard): an
+             export written, the first edit's rewrite, a copy the clipboard never took, an edition's card. -->
+        <StackPanel x:Name="NoticeStack" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="16" Spacing="8"/>
         <controls:StatusBar x:Name="StatusBar" Grid.Row="2" x:Load="{x:Bind AppViewModel.SettingsViewModel.StatusBarOpen, Mode=OneWay}"/>
         <!-- Kept loaded (not x:Load) in full screen so its menu shortcuts (F11 included) stay registered; only collapsed. -->
         <controls:MenuBar x:Name="MenuBarHost" PointerEntered="OnMenuBarPointerEntered" PointerExited="OnMenuBarPointerExited"/>

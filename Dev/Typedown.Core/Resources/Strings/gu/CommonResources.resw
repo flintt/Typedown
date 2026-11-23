@@ -1460,4 +1460,20 @@
   <data name="Clipboard.WriteFailed" xml:space="preserve">
     <value>નકલ થઈ નહીં: બીજો પ્રોગ્રામ ક્લિપબોર્ડ રોકી રાખે છે</value>
   </data>
+  <data name="NoticesTitle" xml:space="preserve">
+    <value>સૂચનાઓ</value>
+    <comment>状态栏通知列表的标题、通知按钮的提示</comment>
+  </data>
+  <data name="NoticesClear" xml:space="preserve">
+    <value>બધું સાફ કરો</value>
+    <comment>通知列表：全部清除</comment>
+  </data>
+  <data name="NoticesNone" xml:space="preserve">
+    <value>હજી કોઈ સૂચના નથી</value>
+    <comment>通知列表空着时</comment>
+  </data>
+  <data name="NoticesUnread" xml:space="preserve">
+    <value>{0} વાંચ્યા વગરની</value>
+    <comment>通知按钮的名称后面：未读条数</comment>
+  </data>
 </root>

@@ -898,7 +898,27 @@ namespace Typedown.Services.Automation
             // The notice an export leaves (Settings > Export > After export): the file it names, or null when none shows.
             methods.Add(new MethodDescriptor("test.export.notice", null, "test.export.notice/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
-                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["path"] = app.UIViewModel.ExportedPath, ["text"] = app.UIViewModel.ExportedNotice })));
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["path"] = app.UIViewModel.ExportedPath, ["text"] = app.UIViewModel.Notices.FirstOrDefault(n => n.Key == "export")?.Text })));
+            // The notices (Services/Notices.cs): the window's cards by key, and the list the status bar's bell opens - newest
+            // first, each line's text, document and whether it came without a card - with how many are unread.
+            methods.Add(new MethodDescriptor("test.notices.state", null, "test.notices.state/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var cards = new Newtonsoft.Json.Linq.JArray(app.UIViewModel.Notices.Select(n => n.Key).ToArray());
+                    var entries = new Newtonsoft.Json.Linq.JArray(Core.Services.NoticeHistory.Entries.Select(e => new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["key"] = e.Key, ["text"] = e.Text, ["where"] = e.Where, ["quiet"] = e.Quiet,
+                        ["actions"] = new Newtonsoft.Json.Linq.JArray(e.Actions.Select(a => a.AutomationId).ToArray()),
+                    }).ToArray());
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["cards"] = cards, ["entries"] = entries, ["unread"] = Core.Services.NoticeHistory.Unread };
+                })));
+            // The notices list emptied (a case starting from nothing).
+            methods.Add(new MethodDescriptor("test.notices.clear", null, "test.notices.clear/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    Core.Services.NoticeHistory.Clear();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["cleared"] = true };
+                })));
             // The card that the first visual edit may rewrite part of the document shown (FirstEditNotice): its text and the
             // load it is for, or null text when none shows.
             methods.Add(new MethodDescriptor("test.editor.firstEditNotice", null, "test.editor.firstEditNotice/1", (c, ct) =>

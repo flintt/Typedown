@@ -1460,4 +1460,20 @@
   <data name="Clipboard.WriteFailed" xml:space="preserve">
     <value>មិនបានចម្លងទេ៖ កម្មវិធីផ្សេងកំពុងកាន់ក្ដារតម្បៀតខ្ទាស់</value>
   </data>
+  <data name="NoticesTitle" xml:space="preserve">
+    <value>ការជូនដំណឹង</value>
+    <comment>状态栏通知列表的标题、通知按钮的提示</comment>
+  </data>
+  <data name="NoticesClear" xml:space="preserve">
+    <value>សម្អាតទាំងអស់</value>
+    <comment>通知列表：全部清除</comment>
+  </data>
+  <data name="NoticesNone" xml:space="preserve">
+    <value>មិនទាន់មានការជូនដំណឹងទេ</value>
+    <comment>通知列表空着时</comment>
+  </data>
+  <data name="NoticesUnread" xml:space="preserve">
+    <value>មិនទាន់អាន {0}</value>
+    <comment>通知按钮的名称后面：未读条数</comment>
+  </data>
 </root>
