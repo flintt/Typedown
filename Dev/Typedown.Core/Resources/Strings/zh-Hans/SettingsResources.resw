@@ -1139,4 +1139,10 @@
   <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
     <value>&lt;details&gt; 连同标题和里面的 Markdown 显示为一个可以展开、收起的块；文件里的写法不变。</value>
   </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
+    <value>有未保存修改时也直接重新加载</value>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
+    <value>「重新加载前询问」关闭时生效：即使有未保存的修改也不询问，直接载入磁盘上的版本；修改会存为副本，按 Ctrl+Z 可找回</value>
+  </data>
 </root>

@@ -1534,4 +1534,7 @@
   <data name="DetailsBlock" xml:space="preserve">
     <value>Details block</value>
   </data>
+  <data name="Clipboard.WriteFailed" xml:space="preserve">
+    <value>The copy was not made: another program is holding the clipboard</value>
+  </data>
 </root>

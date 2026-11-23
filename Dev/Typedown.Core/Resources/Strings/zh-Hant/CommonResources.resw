@@ -1439,4 +1439,7 @@
   <data name="DetailsBlock" xml:space="preserve">
     <value>摺疊區塊</value>
   </data>
+  <data name="Clipboard.WriteFailed" xml:space="preserve">
+    <value>複製沒有成功：剪貼簿被其他程式佔用</value>
+  </data>
 </root>

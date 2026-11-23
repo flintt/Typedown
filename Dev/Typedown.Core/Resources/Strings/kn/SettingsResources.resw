@@ -1102,4 +1102,10 @@
   <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
     <value>&lt;details&gt; ಬ್ಲಾಕ್ ಅದರ ಸಾರಾಂಶ ಮತ್ತು ಒಳಗಿನ Markdown ಜೊತೆಗೆ ತೆರೆಯಬಹುದಾದ ಮತ್ತು ಮುಚ್ಚಬಹುದಾದ ಒಂದೇ ಬ್ಲಾಕ್ ಆಗಿ ತೋರಿಸಲಾಗುತ್ತದೆ; ಫೈಲ್ ಪಠ್ಯ ಬದಲಾಗುವುದಿಲ್ಲ.</value>
   </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
+    <value>Reload a file changed on disk even with unsaved changes</value>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
+    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+  </data>
 </root>

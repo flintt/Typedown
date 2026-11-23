@@ -313,8 +313,25 @@ namespace Typedown.Core.ViewModels
         /// still unsaved, the next time - with the last session's tabs.
         /// </summary>
         public bool KeepUnsavedOnClose { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>The open file is watched and reloaded when another program changes it (Settings > General).</summary>
         public bool AutoReload { get => GetSettingValue(true); set => SetSettingValue(value); }
+
+        /// <summary>
+        /// Settings > General, under Auto reload: a file changed on disk is confirmed before it replaces the document - a
+        /// document with nothing unsaved only (the question offers Keep or Reload); a document with changes of the reader's
+        /// own is asked about whatever this says (their text would go). Off: a document with nothing unsaved is reloaded
+        /// with nothing asked; one with changes is still asked unless ReloadUnsavedWithoutAsking is on. On unless turned
+        /// off; settings files, the automation tests and settings-map.json keep its name.
+        /// </summary>
         public bool AskBeforeReload { get => GetSettingValue(true); set => SetSettingValue(value); }
+
+        /// <summary>
+        /// Settings > General, under Auto reload: with AskBeforeReload off, a file changed on disk is loaded with no question
+        /// even over changes of the reader's own - kept as a copy (Backup\Kept) and one undo step back, the document saved
+        /// (the user, 2026-11-22). Off by default: turning AskBeforeReload off still asks about unsaved changes, as it
+        /// always has, and no existing settings file changes what its reader chose.
+        /// </summary>
+        public bool ReloadUnsavedWithoutAsking { get => GetSettingValue(false); set => SetSettingValue(value); }
         public AppTheme AppTheme { get => GetSettingValue(AppTheme.Default); set => SetSettingValue(value); }
         public string Language { get => GetSettingValue("default"); set => SetSettingValue(value); }
         public int WordCountMethod { get => GetSettingValue(0); set => SetSettingValue(value); }

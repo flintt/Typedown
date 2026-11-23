@@ -73,6 +73,38 @@ namespace Typedown.Core.ViewModels
 
         private void OnExportedTimerTick(object sender, object e) => HideExported();
 
+        /// <summary>The copy that could not be made, while its notice shows (null: none).</summary>
+        public string ClipboardNotice { get; private set; }
+
+        public bool ClipboardNoticeOpen { get; private set; }
+
+        private DispatcherTimer clipboardTimer;
+
+        /// <summary>
+        /// A copy (or cut) that never reached the clipboard - another program held it for the whole retry
+        /// (Clipboard.WriteFailed): said in a card over the window, as the export's, not in a dialog over the document.
+        /// It goes by itself.
+        /// </summary>
+        public void ShowClipboardNotice()
+        {
+            ClipboardNotice = Locale.GetString("Clipboard.WriteFailed");
+            ClipboardNoticeOpen = true;
+            clipboardTimer ??= new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+            clipboardTimer.Tick -= OnClipboardTimerTick;
+            clipboardTimer.Tick += OnClipboardTimerTick;
+            clipboardTimer.Stop();
+            clipboardTimer.Start();
+        }
+
+        public void HideClipboardNotice()
+        {
+            clipboardTimer?.Stop();
+            ClipboardNotice = null;
+            ClipboardNoticeOpen = false;
+        }
+
+        private void OnClipboardTimerTick(object sender, object e) => HideClipboardNotice();
+
         /// <summary>
         /// The notice that the first visual edit may rewrite part of the document shown (the page works out whether, and
         /// says so with FirstEditNotice): shown as a card over the window like the export's, for that load only - taken

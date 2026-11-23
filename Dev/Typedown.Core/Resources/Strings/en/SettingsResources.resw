@@ -1171,4 +1171,12 @@
   <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
     <value>A &lt;details&gt; block, its summary and the Markdown in it are shown as one block that opens and closes; the file keeps its text as written.</value>
   </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
+    <value>Reload a file changed on disk even with unsaved changes</value>
+    <comment>通用/外部修改时询问</comment>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
+    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+    <comment>通用/外部修改时询问</comment>
+  </data>
 </root>

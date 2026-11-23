@@ -70,6 +70,27 @@
                     </Button>
                 </Grid>
             </Border>
+            <!-- A copy or cut that never reached the clipboard (another program held it): said here, not in a dialog over
+                 the document. Goes by itself. -->
+            <Border x:Name="ClipboardNotice" MaxWidth="560"
+                    Padding="16,10,8,10" CornerRadius="8" BorderThickness="1"
+                    Background="{ThemeResource SolidBackgroundFillColorTertiary}" BorderBrush="{ThemeResource CardStrokeColorDefault}"
+                    AutomationProperties.AutomationId="ClipboardNotice"
+                    x:Load="{x:Bind AppViewModel.UIViewModel.ClipboardNoticeOpen, Mode=OneWay}">
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Spacing="4">
+                        <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True"
+                                   AutomationProperties.AutomationId="ClipboardNoticeText" Text="{x:Bind AppViewModel.UIViewModel.ClipboardNotice, Mode=OneWay}"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" AutomationProperties.AutomationId="ClipboardNoticeClose" Background="Transparent" BorderThickness="0" Click="OnClipboardNoticeCloseClick">
+                        <FontIcon Glyph="&#xE711;" FontSize="12"/>
+                    </Button>
+                </Grid>
+            </Border>
         </StackPanel>
         <controls:StatusBar x:Name="StatusBar" Grid.Row="2" x:Load="{x:Bind AppViewModel.SettingsViewModel.StatusBarOpen, Mode=OneWay}"/>
         <!-- Kept loaded (not x:Load) in full screen so its menu shortcuts (F11 included) stay registered; only collapsed. -->

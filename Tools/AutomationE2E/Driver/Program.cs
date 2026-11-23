@@ -260,6 +260,8 @@ internal static partial class Program
             await Case("DG03 a diagram's copy button, with the real mouse in the dark theme: shown on hover; a click puts a picture (mostly white, light theme) and the fenced Markdown on the clipboard, and leaves the document as it was", DG03);
             await Case("CB01 a display formula's copy button, with the real mouse in the dark theme: shown on hover, none on an inline formula; a click puts a picture (black on white), RTF with it and the formula's $$ Markdown and its MathML as Word writes it on the clipboard, no HTML; the document as it was; Word pastes an equation it can edit; pasted back it is the formula", CB01);
             await Case("CB02 a table's copy button and the menu's Copy table, with the real mouse: the button above the table's top right corner; the clipboard holds the table as HTML (header row, alignment, formatting) and its Markdown as written; the document as it was; Word pastes one 3x3 table; pasted back it is the table's Markdown", CB02);
+            await Case("CB03 Ctrl+C while another program holds the clipboard open (OpenClipboard fails, 0x800401D0): held longer than a moment, no error dialog is shown; let go, the copy lands in the background and nothing is asked", CB03);
+            await Case("CB04 the clipboard held past the whole retry of five seconds: the copy is given up on and said in the window's card, no dialog; let go afterwards, nothing lands and the document is as it was", CB04);
             await Case("IM01 the showcase's checkerboard, after View > Source mode and back, is drawn and not failed when clicked", IM01);
             await Case("MS01 a caret clicked into the middle of a long document, after View > Source mode and back, is on the same line and at the same height in the window", MS01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
@@ -328,7 +330,7 @@ internal static partial class Program
             await Case("TX01 Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn", TX01);
             await Case("PP01 the print preview under a dark custom theme (Dracula): the page and its margins white, the theme's colour back after", PP01);
             await Case("CV01 a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing", CV01);
-            await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", XF01);
+            await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; with changes here and the asking off, still asked (the asking's old meaning), and with \"reload even with unsaved changes\" on, reloaded at once and kept as a copy, one undo back; a tab in the background asks when shown; deleted, the document turns unsaved", XF01);
             await Case("XF02 a file changed outside while changed here: neither version is lost - a real Enter keeps the reader's (nothing typed into the document), the disk's kept as a copy; Reload keeps the reader's as a copy and one undo away; a change inside the second after a save is offered once it is over; one not seen at all is not written over by the API's save (changed_on_disk; the reader asked even with reloading off) or by hand (asked, Cancel the default); auto-save writes nothing while asked", XF02);
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
@@ -4628,11 +4630,13 @@ internal static partial class Program
         async Task<string> TextWhen(string id, Func<string, bool> ok) { var t = await TextOf(id); for (var i = 0; i < 25 && !ok(t); i++) { await Task.Delay(200); t = await TextOf(id); } return t; }
         var autoReload = await Setting("AutoReload");
         var askBefore = await Setting("AskBeforeReload");
+        var reloadUnsaved = await Setting("ReloadUnsavedWithoutAsking");
         string? b = null, other = null;
         try
         {
             await Set("AutoReload", true);
             await Set("AskBeforeReload", true);
+            await Set("ReloadUnsavedWithoutAsking", false);
             await Task.Delay(500);
 
             // Unchanged here: asked, reloaded. Once (W10, 2026-11-04, right after R04 started the host again) the write
@@ -4674,6 +4678,50 @@ internal static partial class Program
             string? asked = null;
             try { asked = (string?)(await c.Call("test.dialog.press", new { windowId, button = "close" }))["title"]; } catch (JsonRpcRemoteException) { }
             Check(quiet.Contains("four") && asked == null, $"without asking, reloaded at once and nothing asked ({asked})");
+
+            // Without asking, with changes here, the new switch still off: what turning the asking off always meant -
+            // a document with changes of the reader's own is still asked about.
+            await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# XF01 A\n\nmine asked\n" });
+            await Task.Delay(500);
+            File.WriteAllText(aPath, "# XF01 A\n\nfive asked\n");
+            (title, content) = await PressDialogButton(c, windowId, DialogButton.Close, 6000);
+            notes.Add($"changes here, asking off, the new switch off: '{title}' / '{content}'");
+            Check((await TextOf(a)).Contains("mine asked") && !await SavedOf(a), "with the new switch off, a change made here is still asked about (the asking's old meaning)");
+            // Saved over the file, so the next change finds nothing unsaved.
+            await c.Call("document.save", new { documentId = a, baseRevision = await Revision(c, a) });
+            await Task.Delay(1000);
+
+            // ... and with the new switch on: one more switch, not only for a document with nothing unsaved. No dialog,
+            // the disk's text loaded at once, the reader's kept as a copy and one undo step back (the user, 2026-11-22).
+            await Set("ReloadUnsavedWithoutAsking", true);
+            var keptFolder = Path.Combine(testRoot, "data", "Backup", "Kept");
+            var keptBefore = Directory.Exists(keptFolder) ? Directory.GetFiles(keptFolder).ToHashSet() : new HashSet<string>();
+            string? KeptMine()
+            {
+                if (!Directory.Exists(keptFolder)) return null;
+                return Directory.GetFiles(keptFolder).Where(f => !keptBefore.Contains(f) && Path.GetFileName(f).StartsWith("xf01") && File.ReadAllText(f).Contains("mine five")).FirstOrDefault();
+            }
+            await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# XF01 A\n\nmine five\n" });
+            await Task.Delay(500);
+            File.WriteAllText(aPath, "# XF01 A\n\nfive\n");
+            var silently = await TextWhen(a, t => t.Contains("five") && !t.Contains("mine five"));
+            JToken? silentAsked = null;
+            try { silentAsked = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
+            notes.Add($"changed here, asking off: the text {JsonConvert.SerializeObject(silently)}, {(silentAsked == null ? "nothing asked" : $"asked '{silentAsked["title"]}'")}");
+            Check(silently.Contains("five") && !silently.Contains("mine five") && silentAsked == null && await SavedOf(a),
+                "with changes here and asking off, the file changed outside is loaded at once with no dialog, saved");
+            var mineKept = KeptMine();
+            for (var i = 0; i < 20 && mineKept == null; i++) { await Task.Delay(200); mineKept = KeptMine(); }
+            notes.Add("the reader's version kept as: " + (mineKept == null ? "(none)" : Path.GetFileName(mineKept)));
+            Check(mineKept != null, "the reader's changes are kept as a copy before the disk's text replaces them");
+            await c.Call("document.undo", new { documentId = a, baseRevision = await Revision(c, a), reveal = "document" });
+            var undoneQuietly = await TextWhen(a, t => t.Contains("mine five"));
+            Check(undoneQuietly.Contains("mine five") && !await SavedOf(a), "one undo brings the reader's changes back, unsaved");
+            // Saved, then the file written back to "four" (silently loaded too), as the rest of the case expects.
+            await c.Call("document.save", new { documentId = a, baseRevision = await Revision(c, a) });
+            await Task.Delay(1000);
+            File.WriteAllText(aPath, "# XF01 A\n\nfour\n");
+            await TextWhen(a, t => t.Contains("four") && !t.Contains("mine five"));
             await Set("AskBeforeReload", true);
 
             // A tab in the background: asked when it is shown again.
@@ -4705,6 +4753,7 @@ internal static partial class Program
             try { await c.Call("test.dialogs.dismiss"); } catch { }
             await Set("AutoReload", autoReload);
             await Set("AskBeforeReload", askBefore);
+            await Set("ReloadUnsavedWithoutAsking", reloadUnsaved);
             foreach (var id in new[] { other, b, a })
                 if (id != null) try { await c.Call("document.close", new { documentId = id }); } catch { }
         }

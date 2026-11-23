@@ -1909,8 +1909,10 @@ namespace Typedown.Core.ViewModels
             }
             catch (Exception ex)
             {
-                Log.Debug($"copy block: the clipboard could not be written: {ex}");
-                _ = AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                // The clipboard held by another program (OpenClipboard fails, 0x800401D0): Clipboard itself tries the write
+                // again for a few seconds and says so in the log; a copy that cannot be made is no error dialog over the
+                // document the reader is writing (the user, 2026-11-22). Anything else is a fault of the copy, logged too.
+                Log.Debug($"copy block: the clipboard could not be written: {ex.GetType().Name} {ex.Message}");
                 return false;
             }
         }
@@ -1929,9 +1931,9 @@ namespace Typedown.Core.ViewModels
             }
             catch (Exception ex)
             {
-                // The clipboard held by another program however often it was tried: said, not a copy that did nothing.
-                Log.Debug($"copy: the clipboard could not be written: {ex}");
-                _ = AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                // Held by another program: Clipboard keeps trying the write in the background and logs what happened; the
+                // reader gets no "OpenClipboard 失败 (0x800401D0)" dialog over the document (the user, 2026-11-22).
+                Log.Debug($"copy: the clipboard could not be written: {ex.GetType().Name} {ex.Message}");
             }
         }
 
