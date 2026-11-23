@@ -199,6 +199,23 @@ internal static partial class Program
             await Eventually(async () => (bool?)(await State())["cloaked"] == false, 3000, 100);
             Check((bool?)(await State())["cloaked"] == false, "on the screen (uncloaked) once drawn");
 
+            // Put in again with it shown: it stays on the screen - not taken off and brought back (the user, 2026-11-23:
+            // it flickered as something was put in), the text box at the end.
+            var cloakingsBefore = (int?)(await State())["cloakings"] ?? -1;
+            await ClickEditorText(c, windowId, window, "another line");
+            Chord("Home");
+            Chord("Shift+End");
+            await Task.Delay(400);
+            menu = await ContextMenuAt(c, windowId, window, "#ag-editor-id p:last-of-type", "PutInScratchpadItem");
+            menu.TryGetValue("PutInScratchpadItem", out put);
+            if (put != null) Invoke(put);
+            await Eventually(async () => ((string?)(await State())["text"])?.Contains("another line") == true, 5000, 100);
+            s = await State();
+            Check((string?)s["text"] == "first note\n\nkeep this line\n\nanother line", "put in again: at the end: " + s["text"]);
+            Check((int?)s["cloakings"] == cloakingsBefore, $"put in with it shown: it stays on the screen (cloaked {cloakingsBefore} times before, {s["cloakings"]} after)");
+            // Back as the rest of the case has it.
+            await c.Call("test.scratchpad.set", new { windowId, text = "first note\n\nkeep this line" });
+
             // Its pin let go: behind the other windows from then on, kept as a setting.
             var pin = FindIn(pad, "ScratchpadTopmost");
             Check(pin != null, "its pin");
