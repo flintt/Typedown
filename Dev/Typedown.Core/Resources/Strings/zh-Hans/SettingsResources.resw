@@ -382,11 +382,11 @@
     <comment>通用/外部修改时自动刷新</comment>
   </data>
   <data name="General.AskBeforeReload.Description" xml:space="preserve">
-    <value>打开时先询问是否重新加载；关闭后不弹窗，直接与磁盘上的文件同步，未保存的更改会存为副本，按 Ctrl+Z 可找回</value>
+    <value>关闭后仅在有未保存更改时询问，否则直接重新加载</value>
     <comment>通用/外部修改时询问</comment>
   </data>
   <data name="General.AskBeforeReload.Title" xml:space="preserve">
-    <value>磁盘文件变更时弹出确认窗口</value>
+    <value>重新加载前询问</value>
     <comment>通用/外部修改时询问</comment>
   </data>
   <data name="General.Custom" xml:space="preserve">
@@ -1138,5 +1138,11 @@
   </data>
   <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
     <value>&lt;details&gt; 连同标题和里面的 Markdown 显示为一个可以展开、收起的块；文件里的写法不变。</value>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
+    <value>有未保存修改时也直接重新加载</value>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
+    <value>「重新加载前询问」关闭时生效：即使有未保存的修改也不询问，直接载入磁盘上的版本；修改会存为副本，按 Ctrl+Z 可找回</value>
   </data>
 </root>

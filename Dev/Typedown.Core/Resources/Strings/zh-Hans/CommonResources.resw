@@ -1441,4 +1441,7 @@
   <data name="DetailsBlock" xml:space="preserve">
     <value>折叠块</value>
   </data>
+  <data name="Clipboard.WriteFailed" xml:space="preserve">
+    <value>复制没有成功：剪贴板被其他程序占用</value>
+  </data>
 </root>

@@ -227,9 +227,10 @@ internal static partial class Program
     /// <summary>
     /// CB03: Ctrl+C while another program holds the clipboard open (a clipboard manager, a remote desktop client reading it):
     /// Windows refuses the write with CLIPBRD_E_CANT_OPEN (0x800401D0, "OpenClipboard 失败"), and the app used to give up
-    /// after about half a second and put that error in a dialog over the document (the user, 2026-11-22). It now tries
-    /// at once a few times, then in the background for a few seconds, and says nothing. Held longer than the old attempts
-    /// were over: no dialog is shown, and the selection's copy lands as soon as the clipboard is let go.
+    /// after about half a second and put that error in a dialog over the document (the user, 2026-11-22). It now writes
+    /// once, then in the background for five seconds, and says nothing while the copy can still land. Held past the old
+    /// attempts: no dialog is shown, and the selection's copy lands as soon as the clipboard is let go. CB04: held past
+    /// the whole retry, the window says the copy was not made - in its card, not a dialog - and nothing lands later.
     /// </summary>
     private static async Task CB03(List<string> notes)
     {
@@ -261,12 +262,13 @@ internal static partial class Program
             try
             {
                 Keys(("ctrl", (ushort)0x43));
-                // Held longer than the app's attempts at once (three, about 60 ms): the old write gave up here and asked.
+                // Held longer than a moment (the write once, its first look 20 ms later): a copy can still land, and
+                // nothing is said.
                 await Task.Delay(1500);
                 JToken? asked = null;
                 try { asked = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
                 notes.Add($"held: {(asked == null ? "nothing asked" : $"asked '{asked["title"]}' / '{asked["content"]}'")}");
-                Check(asked == null, "the clipboard held longer than the attempts at once, no \"OpenClipboard 失败 (0x800401D0)\" dialog is shown");
+                Check(asked == null, "the clipboard held longer than a moment, no \"OpenClipboard 失败 (0x800401D0)\" dialog is shown");
             }
             finally { CloseClipboard(); }
 
@@ -278,6 +280,72 @@ internal static partial class Program
             JToken? after = null;
             try { after = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
             Check(after == null, "and nothing is asked for it either");
+            Check((string)(await Get(c, id))["text"]! == text, "the document is as it was");
+        }
+        finally
+        {
+            Send(Key(0x1B, false), Key(0x1B, true));
+            try { await c.Call("test.dialogs.dismiss"); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    /// <summary>
+    /// CB04: Ctrl+C while another program holds the clipboard past the whole retry (five seconds): the copy is given up
+    /// on, and the window says so in its card, with no dialog over the document; let go afterwards, nothing lands (the
+    /// reader is not left believing the text is on the clipboard).
+    /// </summary>
+    private static async Task CB04(List<string> notes)
+    {
+        using var c = await Session("e2e CB04");
+        const string words = "copy given up on";
+        var path = Fixture("cb04.md", "# CB04\n\n" + words + "\n");
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var text = (string)(await Get(c, id))["text"]!;
+        string? Eval(JToken r) => (string?)r["result"];
+        string? Notice()
+        {
+            var element = FindAnywhereInHost(window, "ClipboardNoticeText");
+            return element == null ? null : element.Current.Name;
+        }
+        try
+        {
+            // Something else on the clipboard before, so a copy that lands late shows.
+            SetClipboardText("before the copy");
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(300);
+            for (var press = 0; press < 4; press++) { Keys(("ctrl", (ushort)0x41)); await Task.Delay(250); }
+            var selected = Eval(await c.Call("test.editor.eval", new { windowId, script = "String(window.getSelection()?.toString() ?? '')" }));
+            Check(selected?.Contains(words) == true, "the document is selected");
+
+            var holding = false;
+            for (var i = 0; i < 10 && !holding; i++) { holding = OpenClipboard(IntPtr.Zero); if (!holding) Thread.Sleep(50); }
+            Check(holding, "the test holds the clipboard open");
+            try
+            {
+                Keys(("ctrl", (ushort)0x43));
+                // Past the whole retry (five seconds): the write is given up on, and the window's card says so.
+                string? notice = null;
+                for (var i = 0; i < 45 && notice == null; i++) { await Task.Delay(200); notice = Notice(); }
+                notes.Add("the card after the retry: " + (notice == null ? "(none)" : JsonConvert.SerializeObject(notice)));
+                Check(notice != null, "the clipboard held past the retry, the window says the copy was not made");
+                JToken? asked = null;
+                try { asked = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
+                notes.Add("past the retry: " + (asked == null ? "nothing asked" : $"asked '{asked["title"]}'"));
+                Check(asked == null, "the copy given up on asks nothing: the card says it, not a dialog");
+                var gone = false;
+                for (var i = 0; i < 40 && !gone; i++) { await Task.Delay(200); gone = Notice() == null; }
+                Check(gone, "the card goes by itself");
+            }
+            finally { CloseClipboard(); }
+
+            await Task.Delay(1500);
+            var copy = ClipboardText();
+            notes.Add($"after the clipboard is let go: {JsonConvert.SerializeObject(copy)}");
+            Check(copy == "before the copy", "nothing lands afterwards: the copy was given up on, not written late");
             Check((string)(await Get(c, id))["text"]! == text, "the document is as it was");
         }
         finally

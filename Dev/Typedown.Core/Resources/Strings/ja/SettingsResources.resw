@@ -1102,4 +1102,10 @@
   <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
     <value>&lt;details&gt; を要約と中の Markdown ごと、開閉できる 1 つのブロックとして表示します。ファイルの書き方は変わりません。</value>
   </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
+    <value>Reload a file changed on disk even with unsaved changes</value>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
+    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+  </data>
 </root>

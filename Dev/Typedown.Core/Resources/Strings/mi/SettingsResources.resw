@@ -1102,4 +1102,10 @@
   <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
     <value>Ka whakaaturia te poraka &lt;details&gt;, tōna whakarāpopototanga me te Markdown kei roto hei poraka kotahi ka tuwhera, ka kati; ka noho tonu te kuputuhi o te kōnae.</value>
   </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
+    <value>Reload a file changed on disk even with unsaved changes</value>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
+    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+  </data>
 </root>

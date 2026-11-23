@@ -1102,4 +1102,10 @@
   <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
     <value>Blok &lt;details&gt; se shrnutím a Markdownem uvnitř se zobrazí jako jeden blok, který lze rozbalit a sbalit; text souboru zůstává beze změny.</value>
   </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
+    <value>Reload a file changed on disk even with unsaved changes</value>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
+    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+  </data>
 </root>

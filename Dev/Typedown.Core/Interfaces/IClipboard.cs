@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 
 namespace Typedown.Core.Interfaces
@@ -43,6 +44,12 @@ namespace Typedown.Core.Interfaces
         Task SetFileDropListAsync(StringCollection fileDropList);
 
         Task<IClipboardImage> GetImageAsync();
+
+        /// <summary>
+        /// A copy given up on: the clipboard stayed open in another program for the whole retry, so nothing was written.
+        /// Raised on the window's thread; the window says so without a dialog over the document.
+        /// </summary>
+        event EventHandler WriteFailed;
     }
 
     public interface IClipboardImage

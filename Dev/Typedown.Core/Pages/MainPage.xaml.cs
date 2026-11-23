@@ -76,6 +76,8 @@ namespace Typedown.Core.Pages
 
         private void OnFirstEditNoticeNeverClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.MuteFirstEditNotice();
 
+        private void OnClipboardNoticeCloseClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.HideClipboardNotice();
+
         private async void OpenExported(Action<string> open)
         {
             var path = AppViewModel.UIViewModel.ExportedPath;
@@ -103,6 +105,14 @@ namespace Typedown.Core.Pages
             EditionHooks.CardChanged += OnEditionCardChanged;
             disposables.Add(System.Reactive.Disposables.Disposable.Create(() => EditionHooks.CardChanged -= OnEditionCardChanged));
             ShowEditionCard();
+            // A copy the clipboard never took (another program held it for the whole retry): said in this window's card.
+            var clipboard = this.GetService<Interfaces.IClipboard>();
+            if (clipboard != null)
+            {
+                void OnClipboardWriteFailed(object sender, EventArgs e) => AppViewModel?.UIViewModel?.ShowClipboardNotice();
+                clipboard.WriteFailed += OnClipboardWriteFailed;
+                disposables.Add(System.Reactive.Disposables.Disposable.Create(() => clipboard.WriteFailed -= OnClipboardWriteFailed));
+            }
         }
 
         private void OnEditionCardChanged(AppViewModel app)

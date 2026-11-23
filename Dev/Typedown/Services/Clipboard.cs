@@ -113,44 +113,40 @@ namespace Typedown.Services
         }
 
         /// <summary>
-        /// The clipboard written, tried again while another program holds it (CLIPBRD_E_CANT_OPEN - 0x800401D0 "OpenClipboard
-        /// 失败": a clipboard manager, a remote desktop session reading it): Copy and Cut did nothing then, and the last
-        /// attempt ended in an error dialog over the document (the user, 2026-11-22). Tried at once a few times, then in the
-        /// background for a few seconds: a copy lands as soon as the other program lets the clipboard go, and one that never
-        /// lands is written in the log, with nothing shown.
+        /// The clipboard written once. Another program holding it (CLIPBRD_E_CANT_OPEN - 0x800401D0 "OpenClipboard 失败": a
+        /// clipboard manager, a remote desktop session reading it) used to end Copy and Cut in an error dialog over the
+        /// document (the user, 2026-11-22). The window's thread is not held while it is tried: the first write refused, the
+        /// copy is kept and looked at again by the window's timer - 20 ms later, then every 120 ms for five seconds - and a
+        /// copy that never lands is said in the window's notice, not in a dialog.
         /// </summary>
         private void SetContent(DataPackage dataPackage)
         {
-            Exception held = null;
-            for (var attempt = 1; attempt <= ImmediateWrites; attempt++)
+            try
             {
-                try
+                global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+                ClearPending();
+            }
+            catch (Exception ex)
+            {
+                if (!HeldByAnotherProgram(ex))
                 {
-                    global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
-                    ClearPending();
+                    // Not the clipboard's being held (the data itself refused, say): said in the log, as before.
+                    Core.Utilities.Log.Debug($"clipboard: not written ({ex.HResult:x8}): {ex.Message}");
                     return;
                 }
-                catch (Exception ex)
-                {
-                    if (!HeldByAnotherProgram(ex))
-                    {
-                        // Not the clipboard's being held (the data itself refused, say): said in the log, as before.
-                        Core.Utilities.Log.Debug($"clipboard: not written ({ex.HResult:x8}): {ex.Message}");
-                        return;
-                    }
-                    held = ex;
-                    if (attempt < ImmediateWrites) System.Threading.Thread.Sleep(20 * attempt);
-                }
+                KeepForASecondTry(dataPackage, ex);
             }
-            KeepForASecondTry(dataPackage, held);
         }
 
-        /// <summary>Writes tried at once, with a short wait between them: the holds that are over in a moment (a copy made by another program just now).</summary>
-        private const int ImmediateWrites = 3;
-
-        /// <summary>How long a write held by another program is tried again in the background, and how often.</summary>
+        /// <summary>How long a write held by another program is tried again in the background.</summary>
         private static readonly TimeSpan RetryFor = TimeSpan.FromSeconds(5);
+
+        /// <summary>The first look, a moment after the write was refused (a hold that is over in a moment), then every 120 ms.</summary>
+        private static readonly TimeSpan FirstLook = TimeSpan.FromMilliseconds(20);
         private static readonly TimeSpan RetryEvery = TimeSpan.FromMilliseconds(120);
+
+        /// <summary>No beat for this long: the timer's window is gone, and the next copy takes the retry over.</summary>
+        private static readonly TimeSpan StaleAfter = TimeSpan.FromMilliseconds(400);
 
         /// <summary>HRESULT of CLIPBRD_E_CANT_OPEN ("OpenClipboard 失败"): the clipboard is open in another program.</summary>
         private const int ClipbrdCannotOpen = unchecked((int)0x800401D0);
@@ -163,38 +159,54 @@ namespace Typedown.Services
         }
 
         // The write not made: the last one only (a later copy that lands takes its place, from any window - the clipboard is
-        // one), with the moment it stops being tried.
+        // one), the moment it stops being tried, and the window whose copy it was. The timer belongs to the window that
+        // started it; one closed before the five seconds are over takes its timer with it, and the next copy finds no beat
+        // and takes the retry over.
         private static readonly object retryGate = new();
         private static DataPackage pendingContent;
         private static DateTime pendingUntil;
+        private static DateTime lastBeat;
         private static bool retrying;
+        private static Clipboard pendingOwner;
         private DispatcherQueue dispatcher;
         private DispatcherQueueTimer retryTimer;
+        private bool firstLook;
+
+        /// <summary>
+        /// A copy given up on: the clipboard stayed open in another program for the whole retry, so nothing was written
+        /// (Copy or Cut has done nothing, and the reader is told without a dialog over the document).
+        /// </summary>
+        public event EventHandler WriteFailed;
 
         private void KeepForASecondTry(DataPackage dataPackage, Exception error)
         {
+            var now = DateTime.UtcNow;
             lock (retryGate)
             {
                 pendingContent = dataPackage;
-                pendingUntil = DateTime.UtcNow.Add(RetryFor);
-                if (retrying) return;
+                pendingOwner = this;
+                pendingUntil = now.Add(RetryFor);
+                // Another window's timer beat a moment ago: it writes this copy, the one kept now.
+                if (retrying && now - lastBeat < StaleAfter) return;
                 retrying = true;
+                lastBeat = now;
             }
             Core.Utilities.Log.Debug($"clipboard: held by another program ({error.HResult:x8}); tried again in the background for {RetryFor.TotalSeconds:0} s");
             var queue = dispatcher ??= DispatcherQueue.GetForCurrentThread();
             if (queue == null)
             {
                 // No window thread to go back to (a call from nowhere the window could be): the copy is not made.
-                lock (retryGate) { pendingContent = null; retrying = false; }
+                DropPending(dataPackage, failed: false);
                 return;
             }
             if (retryTimer == null)
             {
                 retryTimer = queue.CreateTimer();
                 retryTimer.IsRepeating = true;
-                retryTimer.Interval = RetryEvery;
                 retryTimer.TickSafe((_, _) => RetryWrite());
             }
+            firstLook = true;
+            retryTimer.Interval = FirstLook;
             retryTimer.Start();
         }
 
@@ -204,15 +216,48 @@ namespace Typedown.Services
             lock (retryGate)
             {
                 pendingContent = null;
+                pendingOwner = null;
                 retrying = false;
             }
             retryTimer?.Stop();
         }
 
+        // The copy of one package no longer pending (written, or given up on); the window that made it, to tell if it failed.
+        private static Clipboard DropPending(DataPackage only, bool failed)
+        {
+            Clipboard owner = null;
+            lock (retryGate)
+            {
+                if (pendingContent != only) return null;
+                owner = failed ? pendingOwner : null;
+                pendingContent = null;
+                pendingOwner = null;
+                retrying = false;
+            }
+            return owner;
+        }
+
+        private static void TellWriteFailed(Clipboard owner)
+        {
+            if (owner == null) return;
+            try
+            {
+                owner.WriteFailed?.Invoke(owner, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                Core.Utilities.Log.Debug($"clipboard: the notice for a copy not made failed: {ex.Message}");
+            }
+        }
+
         private void RetryWrite()
         {
             DataPackage dataPackage;
-            lock (retryGate) dataPackage = pendingContent;
+            lock (retryGate)
+            {
+                lastBeat = DateTime.UtcNow;
+                dataPackage = pendingContent;
+            }
             if (dataPackage == null)
             {
                 retryTimer?.Stop();
@@ -220,37 +265,27 @@ namespace Typedown.Services
             }
             if (DateTime.UtcNow > pendingUntil)
             {
-                lock (retryGate)
-                {
-                    if (pendingContent == dataPackage) pendingContent = null;
-                    retrying = false;
-                }
+                var owner = DropPending(dataPackage, failed: true);
                 retryTimer?.Stop();
                 Core.Utilities.Log.Debug("clipboard: still held by another program; the copy was not made");
+                TellWriteFailed(owner);
                 return;
             }
             try
             {
                 global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
-                lock (retryGate)
-                {
-                    if (pendingContent == dataPackage) pendingContent = null;
-                    retrying = false;
-                }
+                DropPending(dataPackage, failed: false);
                 retryTimer?.Stop();
                 Core.Utilities.Log.Debug("clipboard: the copy written once the other program let the clipboard go");
             }
             catch (Exception ex) when (HeldByAnotherProgram(ex))
             {
-                // Still held: looked at again on the next tick.
+                // Still held: looked at again on the next tick; the first tick's short wait gives way to the usual one.
+                if (firstLook) { firstLook = false; retryTimer.Interval = RetryEvery; }
             }
             catch (Exception ex)
             {
-                lock (retryGate)
-                {
-                    if (pendingContent == dataPackage) pendingContent = null;
-                    retrying = false;
-                }
+                DropPending(dataPackage, failed: false);
                 retryTimer?.Stop();
                 Core.Utilities.Log.Debug($"clipboard: the copy could not be written ({ex.HResult:x8}): {ex.Message}");
             }

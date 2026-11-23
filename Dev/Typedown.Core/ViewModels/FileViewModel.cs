@@ -2068,15 +2068,22 @@ namespace Typedown.Core.ViewModels
                 return;
             }
 
-            // Settings > General > "Ask before a file changed on disk is reloaded" (Settings.AskBeforeReload), off: the disk's
-            // version goes in with no question, as the reader chose - over changes of their own too, which are kept as a
-            // copy and one undo step back (the user, 2026-11-22). A save that found the change (asked) still asks: an
+            // Settings > General > "Ask before reload" (Settings.AskBeforeReload), off: a document with nothing unsaved is
+            // reloaded with no question, as it always has; one with changes of the reader's own is still asked about.
+            if (EditorViewModel.Saved && !SettingsViewModel.AskBeforeReload)
+            {
+                ApplyDiskText(text);
+                return;
+            }
+
+            // Settings > General > "Reload a file changed on disk even with unsaved changes" (off by default; read only with
+            // the asking off): the disk's version goes in with no question over the reader's changes too, which are kept as
+            // a copy and one undo step back (the user, 2026-11-22). A save that found the change (asked) still asks: an
             // automatic save held back for good with nobody asked would be worse than a question.
-            if (!SettingsViewModel.AskBeforeReload && !asked)
+            if (!SettingsViewModel.AskBeforeReload && SettingsViewModel.ReloadUnsavedWithoutAsking && !asked)
             {
                 var mine = EditorViewModel.Markdown;
-                var unsaved = !EditorViewModel.Saved;
-                if (unsaved && mine != null)
+                if (mine != null)
                 {
                     Log.Debug($"external change: '{Path.GetFileName(path)}' reloaded without a question; the reader's changes kept as a copy and one undo step back");
                     await KeepVersion(path, mine, KeptUnsaved);
@@ -2084,7 +2091,7 @@ namespace Typedown.Core.ViewModels
                         return;
                 }
                 EditionHooks.ReportDocumentOnDisk(path, text, written: false);
-                ApplyDiskText(text, keepHistory: unsaved);
+                ApplyDiskText(text, keepHistory: true);
                 return;
             }
 

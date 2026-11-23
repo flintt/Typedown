@@ -925,6 +925,7 @@
         "AutoSave",
         "AutoReload",
         "AskBeforeReload",
+        "ReloadUnsavedWithoutAsking",
         "FileStartupAction",
         "FolderStartupAction",
         "ShowHomePage",

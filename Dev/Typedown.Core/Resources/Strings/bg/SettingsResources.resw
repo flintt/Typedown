@@ -1102,4 +1102,10 @@
   <data name="Editor.DetailsBlocks.Description" xml:space="preserve">
     <value>Блок &lt;details&gt; с обобщението и Markdown в него се показва като един блок, който се отваря и затваря; текстът на файла остава същият.</value>
   </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Title" xml:space="preserve">
+    <value>Reload a file changed on disk even with unsaved changes</value>
+  </data>
+  <data name="General.ReloadUnsavedWithoutAsking.Description" xml:space="preserve">
+    <value>With "Ask before reload" off: the disk's version is loaded with no question even when there are unsaved changes, which are kept as a copy and one undo step back</value>
+  </data>
 </root>
