@@ -82,6 +82,8 @@ internal static partial class Program
             Check(FindAnywhereInHost(window, "NoticeEntry0-ExportNoticeFolder") != null, "with its Open file location");
             var line1 = FindAnywhereInHost(window, "NoticeEntry1Text");
             Check(line1 != null && line1.Current.Name == (string?)quiet!["text"], "then the first edit's: " + line1?.Current.Name);
+            // A moment for the popup to be drawn: found at once by UI Automation, the shot had only the bell (job 723).
+            await Task.Delay(700);
             notes.Add("shot, the list: " + Screenshot("NF01-2-list"));
             await Eventually(async () => (int)(await State())["unread"]! == 0, 3000, 200);
             Check((int)(await State())["unread"]! == 0, "opened: nothing unread");
