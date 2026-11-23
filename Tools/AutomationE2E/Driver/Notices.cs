@@ -32,7 +32,7 @@ internal static partial class Program
         string? id = null;
         try
         {
-            id = await Open(c, Fixture($"nf01-{run}.md", "# NF01\n\n8. eight\n10. ten\n"));
+            id = await Open(c, Fixture($"nf01-{run}.md", UnsafeSample));
             var windowId = await WindowIdOf(c, id);
             var window = await WindowOf(windowId, c);
             async Task<JObject> State() => (JObject)await c.Call("test.notices.state", new { windowId });
