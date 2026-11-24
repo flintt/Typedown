@@ -954,7 +954,7 @@
     <comment>阅读模式</comment>
   </data>
   <data name="HideDone" xml:space="preserve">
-    <value>隐藏已完成和已删除的内容</value>
+    <value>隐藏已完成项</value>
     <comment>视图/隐藏整项删除线和已勾选的任务（阅读和可视编辑都管）</comment>
   </data>
   <data name="Scratchpad" xml:space="preserve">
