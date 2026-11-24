@@ -1025,6 +1025,10 @@
     <value>Neperkelta: antraštė viršytų 6 lygį.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Neperkelta: „{0}“ yra {1} lygio antraštė ir taptų {2} lygio, bet Markdown turi tik šešis lygius. Pirma pakelkite jos lygį, tada vilkite dar kartą.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Neperkelta: skyriaus negalima perkelti į jį patį.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

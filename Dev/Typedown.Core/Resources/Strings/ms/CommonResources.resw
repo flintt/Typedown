@@ -1025,6 +1025,10 @@
     <value>Tidak dialihkan: tajuk akan melepasi tahap 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Tidak dialihkan: “{0}” ialah tajuk aras {1} dan akan menjadi aras {2}, tetapi Markdown hanya ada enam aras. Naikkan arasnya dahulu, kemudian seret semula.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Tidak dialihkan: bahagian tidak boleh dialihkan ke dalam dirinya sendiri.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

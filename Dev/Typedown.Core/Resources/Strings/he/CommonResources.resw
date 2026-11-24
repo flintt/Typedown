@@ -1025,6 +1025,10 @@
     <value>לא הועבר: כותרת הייתה עוברת את רמה 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>לא הועבר: „{0}” היא כותרת ברמה {1} ותהפוך לרמה {2}, אבל ב-Markdown יש רק שש רמות. העלה קודם את הרמה שלה, ואז גרור שוב.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>לא הועבר: אי אפשר להעביר מקטע לתוך עצמו.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

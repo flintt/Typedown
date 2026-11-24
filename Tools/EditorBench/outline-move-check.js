@@ -68,6 +68,8 @@ const { openEditor } = require('./harness');
         const deep = await flush();
         r = await move('E', 'F', 'inside');
         check(r.reply?.ok === false && r.reply?.reason === 'tooDeep' && r.text === deep && r.changes === 0, 'past level 6: refused, nothing changed', r);
+        // Which heading and what it would be, for the host to say (the user, 2026-11-24: refused, and not told why).
+        check(r.reply?.heading === 'E' && r.reply?.level === 5 && r.reply?.to === 7, 'refused: the reply names the heading, its level and the level it would be', r.reply);
         await visual(doc);
         r = await move('A', 'A1', 'inside');
         check(r.reply?.ok === false && r.reply?.reason === 'ownSection' && r.text === doc && r.changes === 0, 'into its own section: refused, nothing changed', r);

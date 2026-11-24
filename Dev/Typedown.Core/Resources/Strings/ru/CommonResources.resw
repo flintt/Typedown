@@ -1004,6 +1004,10 @@
     <value>Не перемещено: заголовок вышел бы за уровень 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Не перемещено: «{0}» — заголовок {1}-го уровня и стал бы {2}-го, а в Markdown только шесть уровней. Сначала повысьте его уровень, затем перетащите снова.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Не перемещено: раздел нельзя поместить внутрь самого себя.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

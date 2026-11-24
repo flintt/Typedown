@@ -1025,6 +1025,10 @@
     <value>सारिएन: एउटा शीर्षक तह ६ भन्दा पर जान्छ।</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>सारिएन: “{0}” तह {1} को शीर्षक हो र तह {2} बन्थ्यो, तर Markdown मा छवटा तह मात्र छन्। पहिले यसको तह बढाउनुहोस्, अनि फेरि तान्नुहोस्।</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>सारिएन: खण्डलाई आफैँभित्र सार्न सकिँदैन।</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

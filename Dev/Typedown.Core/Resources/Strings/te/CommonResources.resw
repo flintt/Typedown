@@ -1025,6 +1025,10 @@
     <value>తరలించబడలేదు: ఒక శీర్షిక స్థాయి 6ను దాటుతుంది.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>తరలించలేదు: “{0}” స్థాయి {1} శీర్షిక, అది స్థాయి {2} అవుతుంది, కానీ Markdownలో ఆరు స్థాయిలే ఉన్నాయి. ముందు దాని స్థాయిని పెంచి, మళ్లీ లాగండి.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>తరలించబడలేదు: ఒక విభాగాన్ని దాని లోపలికే తరలించలేరు.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

@@ -1025,6 +1025,10 @@
     <value>Niet verplaatst: een kop zou voorbij niveau 6 gaan.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Niet verplaatst: "{0}" is een kop van niveau {1} en zou niveau {2} worden, maar Markdown kent maar zes niveaus. Verhoog eerst het niveau en sleep opnieuw.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Niet verplaatst: een sectie kan niet in zichzelf worden geplaatst.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

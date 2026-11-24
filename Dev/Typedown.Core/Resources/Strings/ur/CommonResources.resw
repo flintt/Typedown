@@ -1025,6 +1025,10 @@
     <value>منتقل نہیں ہوا: ایک سرخی سطح 6 سے آگے چلی جائے گی۔</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>منتقل نہیں ہوا: “{0}” سطح {1} کی سرخی ہے اور سطح {2} بن جاتی، مگر Markdown میں صرف چھ سطحیں ہیں۔ پہلے اس کی سطح بڑھائیں، پھر دوبارہ گھسیٹیں۔</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>منتقل نہیں ہوا: کسی حصے کو اس کے اپنے اندر نہیں لے جایا جا سکتا۔</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

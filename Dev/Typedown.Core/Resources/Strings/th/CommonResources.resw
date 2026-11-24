@@ -1025,6 +1025,10 @@
     <value>ไม่ได้ย้าย: หัวเรื่องจะเกินระดับ 6</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>ไม่ได้ย้าย: “{0}” เป็นหัวเรื่องระดับ {1} และจะกลายเป็นระดับ {2} แต่ Markdown มีเพียงหกระดับ ให้เลื่อนระดับขึ้นก่อน แล้วลากใหม่</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>ไม่ได้ย้าย: ย้ายส่วนเข้าไปในตัวเองไม่ได้</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

@@ -1004,6 +1004,10 @@
     <value>Non déplacé : un titre dépasserait le niveau 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Non déplacé : « {0} » est un titre de niveau {1} et deviendrait de niveau {2}, or Markdown n’a que six niveaux. Remontez d’abord son niveau, puis faites-le glisser à nouveau.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Non déplacé : une section ne peut pas aller dans elle-même.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

@@ -192,7 +192,7 @@ namespace Typedown.Core.ViewModels
                 ContextMenuOnGhost = review?["ghost"]?.Value<bool>() ?? false;
                 Log.Debug($"context menu: right-click {(ContextMenuInTable ? "in" : "not in")} a table{(ContextMenuLink != null ? ", on a link" : "")}{(ContextMenuInCode ? ", in code" : "")}{(ContextMenuBlock != null ? ", on a " + ContextMenuBlock : "")}");
             });
-            EventCenter.GetObservable<EditorEventArgs>("SectionMoved").Subscribe(x => SectionMoved?.Invoke(x.Args?["ok"]?.Value<bool>() ?? false, x.Args?["reason"]?.ToString()));
+            EventCenter.GetObservable<EditorEventArgs>("SectionMoved").Subscribe(x => SectionMoved?.Invoke(x.Args?["ok"]?.Value<bool>() ?? false, x.Args?["reason"]?.ToString(), x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ReadingSelectionChange").Subscribe(x => OnReadingSelectionChange(x.Args));
             // A paste the page caught from the browser (its own would put the clipboard's HTML into the document as is).
@@ -917,7 +917,7 @@ namespace Typedown.Core.ViewModels
         public event Action OutlineUpdated;
 
         /// <summary>The page's answer to <see cref="MoveSection"/>: moved, or not and why ("tooDeep", "ownSection", ...).</summary>
-        public event Action<bool, string> SectionMoved;
+        public event Action<bool, string, JToken> SectionMoved;
 
         /// <summary>
         /// A heading dragged in the outline: its section (with its sub-sections) put "before" or "after" the heading

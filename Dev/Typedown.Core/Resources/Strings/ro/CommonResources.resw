@@ -1025,6 +1025,10 @@
     <value>Nu a fost mutat: un titlu ar depăși nivelul 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Nu s-a mutat: „{0}” este un titlu de nivelul {1} și ar deveni de nivelul {2}, dar Markdown are doar șase niveluri. Ridicați-i mai întâi nivelul, apoi trageți din nou.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Nu a fost mutat: o secțiune nu poate fi mutată în ea însăși.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

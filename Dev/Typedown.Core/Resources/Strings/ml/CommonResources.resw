@@ -1025,6 +1025,10 @@
     <value>നീക്കിയില്ല: ഒരു തലക്കെട്ട് ലെവൽ 6 കടക്കും.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>നീക്കിയില്ല: “{0}” തലം {1} തലക്കെട്ടാണ്, തലം {2} ആകുമായിരുന്നു, പക്ഷേ Markdown-ൽ ആറ് തലങ്ങളേ ഉള്ളൂ. ആദ്യം അതിന്റെ തലം ഉയർത്തി വീണ്ടും വലിച്ചിടുക.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>നീക്കിയില്ല: ഒരു വിഭാഗം അതിനുള്ളിലേക്കുതന്നെ നീക്കാനാവില്ല.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

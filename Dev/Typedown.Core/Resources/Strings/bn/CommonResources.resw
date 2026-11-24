@@ -1025,6 +1025,10 @@
     <value>সরানো হয়নি: একটি শিরোনাম স্তর ৬ ছাড়িয়ে যাবে।</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>সরানো হয়নি: “{0}” স্তর {1}-এর শিরোনাম এবং স্তর {2} হয়ে যেত, কিন্তু Markdown-এ মাত্র ছয়টি স্তর। আগে এর স্তর বাড়ান, তারপর আবার টেনে আনুন।</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>সরানো হয়নি: একটি অংশ নিজের ভিতরে যেতে পারে না।</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

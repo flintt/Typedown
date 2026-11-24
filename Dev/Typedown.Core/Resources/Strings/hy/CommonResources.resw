@@ -1025,6 +1025,10 @@
     <value>Չտեղափոխվեց. վերնագիրը կանցնի 6-րդ մակարդակից։</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Չտեղափոխվեց. «{0}»-ն {1}-րդ մակարդակի վերնագիր է և կդառնար {2}-րդ, բայց Markdown-ում միայն վեց մակարդակ կա։ Նախ բարձրացրեք դրա մակարդակը, ապա նորից քաշեք։</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Չտեղափոխվեց. բաժինը չի կարող տեղափոխվել իր մեջ։</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

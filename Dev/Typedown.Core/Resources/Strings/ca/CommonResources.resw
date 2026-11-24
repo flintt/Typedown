@@ -1025,6 +1025,10 @@
     <value>No s'ha mogut: un títol passaria del nivell 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>No s’ha mogut: «{0}» és un títol de nivell {1} i passaria a nivell {2}, però Markdown només té sis nivells. Puja-li primer el nivell i torna-ho a arrossegar.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>No s'ha mogut: una secció no pot anar dins d'ella mateixa.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

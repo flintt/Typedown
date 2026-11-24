@@ -1012,6 +1012,10 @@
     <value>未移动：标题会超过 6 级。</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>没有移动：「{0}」是 {1} 级标题，放进去会变成 {2} 级，而 Markdown 最多只有 6 级。先把它的级别提高，再拖。</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>未移动：章节不能放进它自己里面。</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

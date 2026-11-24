@@ -1025,6 +1025,10 @@
     <value>ଘୁଞ୍ଚାଯାଇନାହିଁ: ଏକ ଶୀର୍ଷକ ସ୍ତର 6 ଅତିକ୍ରମ କରିବ।</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>ଘୁଞ୍ଚାଯାଇନି: “{0}” ସ୍ତର {1}ର ଶୀର୍ଷକ ଏବଂ ସ୍ତର {2} ହୋଇଯାଆନ୍ତା, କିନ୍ତୁ Markdownରେ କେବଳ ଛଅଟି ସ୍ତର ଅଛି। ପ୍ରଥମେ ଏହାର ସ୍ତର ବଢ଼ାନ୍ତୁ, ତା’ପରେ ପୁଣି ଟାଣନ୍ତୁ।</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>ଘୁଞ୍ଚାଯାଇନାହିଁ: ଏକ ବିଭାଗ ନିଜ ଭିତରକୁ ଯାଇପାରିବ ନାହିଁ।</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

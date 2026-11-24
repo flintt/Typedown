@@ -1025,6 +1025,10 @@
     <value>Nuk u zhvendos: një titull do të kalonte nivelin 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Nuk u zhvendos: “{0}” është titull i nivelit {1} dhe do të bëhej i nivelit {2}, por Markdown ka vetëm gjashtë nivele. Ngrijani më parë nivelin, pastaj tërhiqeni sërish.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Nuk u zhvendos: një seksion nuk mund të shkojë brenda vetes.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

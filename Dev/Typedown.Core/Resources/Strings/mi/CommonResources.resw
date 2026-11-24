@@ -1025,6 +1025,10 @@
     <value>Kāore i nekehia: ka hipa tētahi upoko i te taumata 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Kāore i nekehia: he upoko taumata {1} a “{0}”, ā, ka noho hei taumata {2}, engari e ono anake ngā taumata o Markdown. Hikina tōna taumata i te tuatahi, kātahi ka tō anō.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Kāore i nekehia: e kore e taea te neke i tētahi wāhanga ki roto i a ia anō.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

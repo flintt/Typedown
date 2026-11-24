@@ -946,6 +946,10 @@
     <value>Não movido: um título passaria do nível 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Não foi movido: «{0}» é um título de nível {1} e passaria a nível {2}, mas o Markdown só tem seis níveis. Suba primeiro o nível e volte a arrastar.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Não movido: uma seção não pode ir para dentro de si mesma.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

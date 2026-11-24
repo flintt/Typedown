@@ -431,31 +431,35 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not put the rows back: {ex.Message}"); }
         }
 
-        private Microsoft.UI.Dispatching.DispatcherQueueTimer noticeTimer;
-
-        private void OnSectionMoved(bool moved, string reason)
+        // Why a heading dropped did not move its section, in a card at the window's bottom right (the notices): a line under
+        // the outline for five seconds was not seen - the user dropped a level 4 heading into another twice, refused, and
+        // asked why (2026-11-24: a level 6 heading in it would have gone past 6). The heading named, and how to go on.
+        private void OnSectionMoved(bool moved, string reason, Newtonsoft.Json.Linq.JToken reply)
         {
             if (moved) return;
             PutBack();
+            var heading = reply?["heading"]?.ToString();
+            var level = reply?["level"]?.ToObject<int?>();
+            var to = reply?["to"]?.ToObject<int?>();
             var text = reason switch
             {
+                "tooDeep" when !string.IsNullOrEmpty(heading) && level is { } from && to is > 6 =>
+                    string.Format(Utilities.Locale.GetString("TocPane.MoveTooDeepNamed"), heading, from, to),
                 "tooDeep" => Utilities.Locale.GetString("TocPane.MoveTooDeep"),
                 "ownSection" => Utilities.Locale.GetString("TocPane.MoveIntoItself"),
                 _ => null,
             };
-            Utilities.Log.Debug($"outline: section not moved ({reason})");
+            Utilities.Log.Debug($"outline: section not moved ({reason}{(heading != null ? $": \"{heading}\" {level} -> {to}" : "")})");
             if (string.IsNullOrEmpty(text)) return;
-            MoveNotice.Text = text;
-            MoveNotice.Visibility = Visibility.Visible;
-            noticeTimer ??= DispatcherQueue.CreateTimer();
-            noticeTimer.Interval = System.TimeSpan.FromSeconds(5);
-            noticeTimer.IsRepeating = false;
-            noticeTimer.Tick -= OnNoticeTimer;
-            noticeTimer.Tick += OnNoticeTimer;
-            noticeTimer.Start();
+            ViewModel?.UIViewModel?.ShowNotice(new Services.Notice
+            {
+                Key = "outlineMove",
+                AutomationId = "OutlineMoveNotice",
+                Text = text,
+                Timeout = System.TimeSpan.FromSeconds(10),
+                InHistory = true,
+            });
         }
-
-        private void OnNoticeTimer(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object e) => MoveNotice.Visibility = Visibility.Collapsed;
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {

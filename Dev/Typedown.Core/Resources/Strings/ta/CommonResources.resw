@@ -1025,6 +1025,10 @@
     <value>நகர்த்தப்படவில்லை: ஒரு தலைப்பு நிலை 6-ஐத் தாண்டும்.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>நகர்த்தப்படவில்லை: “{0}” நிலை {1} தலைப்பு; நிலை {2} ஆகிவிடும், ஆனால் Markdown-இல் ஆறு நிலைகள் மட்டுமே. முதலில் அதன் நிலையை உயர்த்தி, பிறகு மீண்டும் இழுக்கவும்.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>நகர்த்தப்படவில்லை: ஒரு பகுதியை அதனுள்ளேயே நகர்த்த முடியாது.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

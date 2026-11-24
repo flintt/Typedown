@@ -1004,6 +1004,10 @@
     <value>이동하지 않음: 제목이 6단계를 넘게 됩니다.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>이동하지 않았습니다: "{0}"은(는) {1}단계 제목이라 {2}단계가 되는데, Markdown 제목은 6단계까지입니다. 먼저 단계를 올린 뒤 다시 끌어 놓으세요.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>이동하지 않음: 섹션을 자기 자신 안으로 옮길 수 없습니다.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

@@ -1025,6 +1025,10 @@
     <value>স্থানান্তৰ কৰা নহ'ল: এটা শিৰোনাম স্তৰ ৬ পাৰ হ'ব।</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>স্থানান্তৰ কৰা নহ’ল: “{0}” স্তৰ {1}ৰ শিৰোনাম আৰু স্তৰ {2} হ’লহেঁতেন, কিন্তু Markdownত মাত্ৰ ছটা স্তৰ আছে। প্ৰথমে ইয়াৰ স্তৰ বঢ়াওক, তাৰ পিছত পুনৰ টানক।</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>স্থানান্তৰ কৰা নহ'ল: এটা খণ্ড নিজৰ ভিতৰলৈ যাব নোৱাৰে।</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

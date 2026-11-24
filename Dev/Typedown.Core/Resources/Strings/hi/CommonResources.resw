@@ -1025,6 +1025,10 @@
     <value>नहीं ले जाया गया: एक शीर्षक स्तर 6 से आगे चला जाएगा।</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>नहीं हिलाया गया: “{0}” स्तर {1} का शीर्षक है और स्तर {2} बन जाता, पर Markdown में केवल छह स्तर हैं। पहले इसका स्तर बढ़ाएँ, फिर दोबारा खींचें।</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>नहीं ले जाया गया: कोई अनुभाग अपने ही भीतर नहीं जा सकता।</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

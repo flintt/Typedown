@@ -1044,6 +1044,10 @@
     <value>Not moved: a heading would go past level 6.</value>
     <comment>大纲/拖动标题：移过去会超过 6 级，未移动</comment>
   </data>
+  <data name="TocPane.MoveTooDeepNamed" xml:space="preserve">
+    <value>Not moved: “{0}” is a level {1} heading and would become level {2}, but Markdown has only six levels. Raise its level first, then drag again.</value>
+    <comment>大纲拖动被拒：{0} 是哪个标题，{1} 现在几级，{2} 放进去会变成几级</comment>
+  </data>
   <data name="TocPane.MoveIntoItself" xml:space="preserve">
     <value>Not moved: a section can't go into itself.</value>
     <comment>大纲/拖动标题：拖进了它自己的章节，未移动</comment>

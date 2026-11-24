@@ -63,7 +63,14 @@ const sectionMoveCtrl = ContentState => {
     const level = where === 'inside' ? levelOf(to) + 1 : levelOf(to)
     const steps = level - levelOf(from)
     const headings = headingsIn(section)
-    if (headings.some(h => levelOf(h) + steps < 1 || levelOf(h) + steps > 6)) return { ok: false, reason: 'tooDeep' }
+    // Which heading, its level and what it would be: the host says so (the user, 2026-11-24: refused, and not told why
+    // - a level 6 heading inside the section dropped into another).
+    const past = headings.find(h => levelOf(h) + steps < 1 || levelOf(h) + steps > 6)
+    if (past) {
+      // Its line (an underlined heading's first): the block's text is its first child's.
+      const title = String(past.children?.[0]?.text ?? '').split('\n')[0].replace(/^ {0,3}#{1,6}[ \t]*/, '').replace(/[ \t]+#+[ \t]*$/, '').trim()
+      return { ok: false, reason: 'tooDeep', heading: title.length > 40 ? title.slice(0, 40) + '…' : title, level: levelOf(past), to: levelOf(past) + steps }
+    }
 
     // The blank lines read with the document (utils/blankLines.js) are for where the blocks were: the ones moved, and their
     // old and new neighbours, written with one blank line between (the first heading moved away, the one after it was
