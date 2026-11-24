@@ -88,6 +88,10 @@ internal static partial class Program
             SetProcessDpiAwarenessContext(new IntPtr(-4));
             var from = Row("A");
             var to = Row("B");
+            // A press on the outline's empty space first: with the keyboard in the page, the drag's press began nothing
+            // (job 731: no "drag begun" in the host's log; a real click on a row in job 728 invoked nothing either).
+            await Click(window, (int)(to.Left + 40), (int)(to.Bottom + 90));
+            await Task.Delay(400);
             await Drag(window, ((int)(from.Left + 40), (int)(from.Top + from.Height / 2)), ((int)(to.Left + 40), (int)(to.Top + to.Height * 0.5)), steps: 20);
             AutomationElement? said = null;
             await Eventually(async () => { await Task.CompletedTask; return (said = FindIn(window, "OutlineMoveNoticeText")) != null; }, 4000, 200);
