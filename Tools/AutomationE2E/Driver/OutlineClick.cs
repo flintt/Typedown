@@ -93,23 +93,25 @@ internal static partial class Program
             Chord("Esc");
 
             // Refused past level 6: the card says which heading and why.
-            var deepText = "# Deep\n\n#### A\n\na\n\n###### A deep one\n\nd\n\n#### B\n\nb\n";
+            // B, with a level 6 heading in it, dropped up onto A (down, the row dragged left the tree and those below it moved
+            // up a row under the pointer: job 733 dropped after the last).
+            var deepText = "# Deep\n\n#### A\n\na\n\n#### B\n\nb\n\n###### B deep one\n\nd\n";
             await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = deepText, reveal = "document" });
             await Task.Delay(1500);
             SetProcessDpiAwarenessContext(new IntPtr(-4));
-            var from = Row("A");
-            var to = Row("B");
+            var from = Row("B");
+            var to = Row("A");
             // A press on the outline's empty space first: with the keyboard in the page, the drag's press began nothing
             // (job 731: no "drag begun" in the host's log; a real click on a row in job 728 invoked nothing either).
             await Click(window, (int)(to.Left + 40), (int)(to.Bottom + 90));
             await Task.Delay(400);
-            var words = Words("A");
-            notes.Add($"rows: A {from} (its words {words}), B {to}");
+            var words = Words("B");
+            notes.Add($"rows: B {from} (its words {words}), A {to}");
             await Drag(window, ((int)(words.Left + words.Width / 2), (int)(from.Top + from.Height / 2)), ((int)(words.Left + words.Width / 2), (int)(to.Top + to.Height * 0.5)), steps: 20);
             AutomationElement? said = null;
             await Eventually(async () => { await Task.CompletedTask; return (said = FindIn(window, "OutlineMoveNoticeText")) != null; }, 4000, 200);
             notes.Add("refused, the card: " + said?.Current.Name + " " + Screenshot("OL09-refused"));
-            Check(said != null && said.Current.Name.Contains("A deep one") && said.Current.Name.Contains("6") && said.Current.Name.Contains("7"), "refused past level 6: the card names the heading, its level and the one it would be: " + said?.Current.Name);
+            Check(said != null && said.Current.Name.Contains("B deep one") && said.Current.Name.Contains("6") && said.Current.Name.Contains("7"), "refused past level 6: the card names the heading, its level and the one it would be: " + said?.Current.Name);
             Check((string)(await Get(c, id))["text"]! == deepText, "and the document is as it was");
         }
         finally
