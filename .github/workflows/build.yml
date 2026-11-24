@@ -194,6 +194,7 @@ jobs:
           node outline-move-check.js
           node outline-click-jump-check.js
           node hide-done-check.js
+          node hide-done-typing-perf-check.js
           node hide-done-edit-check.js
           node triple-click-marks-check.js
           node heading-click-check.js

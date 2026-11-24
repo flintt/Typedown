@@ -182,12 +182,28 @@ function lineToKeep(editor: HTMLElement): Element | null {
     return null
 }
 
+// Only the blocks whose marks change are touched: taking every mark off and putting them back styled and laid out the
+// whole document at each key - 111 ms a key against 40 with Hide Done Items off on the user's document (hp88, trial
+// 1.4.3.19: "lag to much, a least 1~2 sec"; hide-done-typing-perf-check.js).
 function mark(editor: HTMLElement) {
+    const want = new Map<Element, string | null>()
+    if (on) wanted(editor, want)
     editor.querySelectorAll(`.${DONE}`).forEach(el => {
+        if (want.has(el)) return
         el.classList.remove(DONE, FIRST)
         delete (el as HTMLElement).dataset.hiddenRun
     })
-    if (!on) return
+    want.forEach((run, el) => {
+        if (!el.classList.contains(DONE)) el.classList.add(DONE)
+        if (el.classList.contains(FIRST) !== (run !== null)) el.classList.toggle(FIRST, run !== null)
+        const data = (el as HTMLElement).dataset
+        if (run === null) { if (data.hiddenRun !== undefined) delete data.hiddenRun }
+        else if (data.hiddenRun !== run) data.hiddenRun = run
+    })
+}
+
+// The blocks to fold, each with its run's label if it is a run's first (else null).
+function wanted(editor: HTMLElement, want: Map<Element, string | null>) {
     // The visual editor too (one switch for both, the user's call): the run with the caret in it is shown - an item just
     // ticked or struck stays under the caret until it goes elsewhere. Only a caret: a selection (Ctrl+A step by step,
     // a drag) leaves the folds as they were - its start going into a run opened it and the document jumped (the user,
@@ -235,9 +251,7 @@ function mark(editor: HTMLElement) {
         // A search's match in it: shown while the search is on (in reading mode nothing else would show it - the match is
         // still in the struck text).
         if (run.some(el => el.querySelector('.ag-highlight, .ag-selection'))) continue
-        run.forEach(el => el.classList.add(DONE))
-        run[0].classList.add(FIRST)
-        ;(run[0] as HTMLElement).dataset.hiddenRun = label.replace('{0}', String(run.length))
+        run.forEach((el, i) => want.set(el, i === 0 ? label.replace('{0}', String(run.length)) : null))
     }
 }
 
