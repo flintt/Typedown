@@ -330,6 +330,12 @@ const OUTLINE_TOP = 16
 /** Anything that means the reader is moving the page themselves; the scroll hold stops at the first of them. */
 const GIVE_WAY = ['wheel', 'keydown', 'pointerdown', 'touchstart']
 
+// When the mouse last went down on the page: a caret put by a click is where the reader looked, kept clear of the
+// window's edges only when moved by the keys (the user, 2026-11-24: a heading the outline put near the top, clicked, and
+// the page went 84 px up to keep the caret 100 px from it - a jump).
+let lastPointerDown = 0
+document.addEventListener('mousedown', () => { lastPointerDown = performance.now() }, true)
+
 const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const { onMarkdownChange, onCursorChange, onStateChange, onOutlineCurrent } = props
     const [editor, setEditor] = useState<Muya>();
@@ -900,6 +906,22 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             if (heading) contentState.openDetailsAround(heading)
         } catch (err) {
             console.log(err)
+        }
+        // The caret to the heading too (after its marks), the keyboard left where it is: only scrolled, the caret stayed
+        // where it was, and the editor taking the keyboard again (a click in it, Ctrl+A) went back to it - the page jumped
+        // from the heading to where the reader had been (the user, 2026-11-24: 4509, then 8177, in hp88's log).
+        if (!props.options?.readOnly) {
+            try {
+                const contentState = (editor as any)?.contentState
+                const line = contentState?.getBlock(slug)?.children?.[0]
+                if (line?.key) {
+                    const offset = (/^ {0,3}#{1,6}[ \t]*/.exec(line.text || '')?.[0].length) ?? 0
+                    contentState.cursor = { start: { key: line.key, offset }, end: { key: line.key, offset } }
+                    contentState.setCursor()
+                }
+            } catch (err) {
+                console.log(err)
+            }
         }
         scrollToElement(`#${slug}`, OUTLINE_TOP)
         // A long document's blocks around the heading only guessed so far (drawn off screen: parser/render
@@ -1534,6 +1556,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // Typewriter mode centres the caret line.
         if (props.options?.typewriter) {
             relativeScroll(y - window.innerHeight / 2 + 136);
+        } else if (performance.now() - lastPointerDown < 500) {
+            // Put by a click: where it is.
         } else if (window.innerHeight - y < 100) {
             relativeScroll(y - window.innerHeight + 100);
         } else if (y < 100 && window.scrollY > 0) {

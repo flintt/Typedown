@@ -192,6 +192,7 @@ jobs:
           node review-reading-check.js
           node review-typing-perf-check.js
           node outline-move-check.js
+          node outline-click-jump-check.js
           node hide-done-check.js
           node hide-done-edit-check.js
           node triple-click-marks-check.js
