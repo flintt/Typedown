@@ -50,6 +50,25 @@ function struck(el: Element): boolean {
     return any
 }
 
+// What done() said of each block, until something in it changes (the observer's records, forgotten below): each key
+// looked at every block of the document again - the user's orbit document (75k characters) spent 6 to 10 ms a key in it.
+let doneOf = new WeakMap<Element, boolean>()
+let doneReading = false
+
+// The blocks a change was in (and those they are in) looked at again.
+function forget(records: MutationRecord[]) {
+    for (const r of records) {
+        const node: Element | null = r.target.nodeType === 1 ? r.target as Element : r.target.parentElement
+        for (let block = node?.closest('li, p') ?? null; block; block = block.parentElement?.closest('li, p') ?? null) doneOf.delete(block)
+    }
+}
+
+function doneNow(el: Element): boolean {
+    let is = doneOf.get(el)
+    if (is === undefined) doneOf.set(el, is = done(el))
+    return is
+}
+
 function done(el: Element): boolean {
     if (el.tagName === 'LI') {
         const box = [...el.children].find(c => c.tagName === 'INPUT')
@@ -63,7 +82,8 @@ function done(el: Element): boolean {
 // the document jumped (a click now and then flashed, the user, 2026-11-21). Our own marking's records are taken off after
 // it, so it does not wake itself. Watched on the editor there is now: going to source mode and back makes it anew, and the
 // one watched before was gone.
-const observer = new MutationObserver(() => {
+const observer = new MutationObserver(records => {
+    forget(records)
     if (!on) return
     applyHideDone()
     observer.takeRecords()
@@ -78,7 +98,11 @@ export function applyHideDone() {
         observer.disconnect()
         observer.observe(editor, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class'] })
         watched = editor
+        doneOf = new WeakMap()
     }
+    // Changes not yet told (this called before the observer's turn), and reading mode in or out (its marks drawn else).
+    forget(observer.takeRecords())
+    if (reading() !== doneReading) { doneReading = reading(); doneOf = new WeakMap() }
     // The caret's line (reading mode: the first line on the screen) kept where it is on the screen when the folds change
     // above it (turning the switch on took the caret's line up, the user, 2026-11-21) - and only then. Its place is the
     // one the last marking left (in the document, which a scroll does not change): measured here, after the editor had
@@ -218,7 +242,7 @@ function wanted(editor: HTMLElement, want: Map<Element, string | null>) {
         if (el.tagName === 'P' && el.closest('li')) continue
         let inside = false
         for (let a = el.parentElement?.closest('li'); a; a = a.parentElement?.closest('li')) if (taken.has(a)) { inside = true; break }
-        if (inside || !done(el)) continue
+        if (inside || !doneNow(el)) continue
         taken.add(el)
         hidden.push(el)
     }
