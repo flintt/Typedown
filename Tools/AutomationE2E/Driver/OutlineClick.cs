@@ -30,11 +30,13 @@ internal static partial class Program
             }
             throw new CaseFailed($"no outline row '{heading}' {Screenshot("OL09-no-row")}");
         }
+        // The outline's row chosen as its click does it (TocPage.OnItemInvoked): the jump, then the keyboard to the editor.
+        // A real click on the row invoked nothing here (w10 job 728: the row only highlighted, the host logged no jump).
         async Task ClickRow(string heading)
         {
-            SetProcessDpiAwarenessContext(new IntPtr(-4));
-            var r = Row(heading);
-            await Click(window, (int)(r.Left + 40), (int)(r.Top + r.Height / 2));
+            var slug = (string)(await c.Call("test.editor.eval", new { windowId, script = $"[...document.querySelectorAll('#ag-editor-id h1, #ag-editor-id h2')].find(h => h.textContent.includes({Newtonsoft.Json.JsonConvert.ToString(heading)})).id" }))["result"]!;
+            await c.Call("test.outline.jump", new { windowId, slug });
+            await c.Call("test.editor.focus", new { windowId });
             await Task.Delay(900);
         }
         async Task<int> ScrollY() => (int)(await c.Call("test.editor.eval", new { windowId, script = "Math.round(window.scrollY)" }))["result"]!;

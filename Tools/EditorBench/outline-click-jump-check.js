@@ -52,6 +52,26 @@ const { openEditor } = require('./harness');
         await pause(600);
         const all = await stop();
         check(all.every(y => Math.abs(y - again) <= 2), 'Ctrl+A after the outline went there: the page stays', { again, all });
+        // The editor keeping the keyboard (the outline's row clicked in the app takes it, but not always at once): the
+        // jump lands on the heading and stays there (w10 job 728: the page stayed where the caret had been).
+        await page.evaluate(() => {
+            const el = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(e => e.textContent === 'The caret is here.');
+            el.scrollIntoView({ block: 'center' });
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            el.closest('[contenteditable]')?.focus();
+        });
+        await pause(400);
+        await watch();
+        await page.evaluate(slug => window.__deliver('ScrollTo', { slug }), slug);
+        await pause(800);
+        const focused = await stop();
+        const headingTop = await page.evaluate(() => Math.round([...document.querySelectorAll('#ag-editor-id h2')].find(h => h.textContent.includes('Checklist')).getBoundingClientRect().top));
+        check(headingTop >= 0 && headingTop < 200, 'the editor focused: the outline\'s jump lands on the heading and stays', { headingTop, focused });
         check(errors.length === 0, 'no page errors', errors);
     } catch (e) {
         check(false, 'ran to the end', String(e && e.stack || e));
