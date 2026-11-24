@@ -831,21 +831,24 @@ class Muya {
     for (const [key, value] of after) if (JSON.stringify(value) !== JSON.stringify(before.get(key))) changed.add(key)
     for (const key of before.keys()) if (!after.has(key)) changed.add(key)
     if (!changed.size) return
-    let caretTop = null
+    // Only the lines whose marks changed are drawn again, not the top-level blocks they are in: a key typed in an item of a
+    // long list drew the whole list again, and put the caret back in it - the page laid out whole at each key (the user,
+    // 2026-11-24, hp88: typing lagged with the marks shown; 75 ms a key against 34 with them off on their document).
+    let caretLine = null
     try {
       const { start } = contentState.cursor || {}
-      caretTop = start ? contentState.findOutMostBlock(contentState.getBlock(start.key)) : null
+      caretLine = start ? contentState.getBlock(start.key) : null
     } catch (err) {
-      caretTop = null
+      caretLine = null
     }
-    const tops = new Set()
+    const lines = new Set()
     for (const key of changed) {
       const block = contentState.getBlock(key)
-      if (block) tops.add(contentState.findOutMostBlock(block))
+      if (block) lines.add(block)
     }
-    if (!tops.size) return
-    stateRender.redrawBlocks([...tops], caretTop && tops.has(caretTop) ? [caretTop] : [])
-    if (caretTop && tops.has(caretTop) && !this.options.readOnly && this.container.contains(document.activeElement)) contentState.setCursor()
+    if (!lines.size) return
+    stateRender.redrawBlocks([...lines], caretLine && lines.has(caretLine) ? [caretLine] : [])
+    if (caretLine && lines.has(caretLine) && !this.options.readOnly && this.container.contains(document.activeElement)) contentState.setCursor()
   }
 
   /**

@@ -146,6 +146,29 @@ test('compared about a change: a deletion at the end or the start is kept in the
     }
 })
 
+// A long list with no blank line, each item revised: only the lines about the change compared, and as the whole.
+test('a long tight list, each item revised: a letter typed, Enter, a deletion - what comparing the whole gives', () => {
+    const list = (word: (i: number) => string) => '# L\n\n' + Array.from({ length: 150 }, (_, i) => `${i + 1}. Item ${i} has a ${word(i)} word and more`).join('\n') + '\n\nAfter.\n'
+    const baseline = list(() => 'plain')
+    let text = list(i => `changed${i}`)
+    forgetLastDiff()
+    diffTextsAround(baseline, text)
+    const at = text.indexOf('Item 75 ') + 'Item 75 has a changed75 word and more'.length
+    const edits = [
+        (t: string) => t.slice(0, at) + 'x' + t.slice(at),
+        (t: string) => t.slice(0, at) + 'y' + t.slice(at),
+        (t: string) => t.slice(0, at) + '\n77. new' + t.slice(at),
+        (t: string) => t.slice(0, at - 4) + t.slice(at),
+    ]
+    for (const edit of edits) {
+        const next = edit(text)
+        const local = diffTextsAround(baseline, next)
+        expect(local).toEqual(diffTexts(baseline, next))
+        expect(rejectAll(next, trackRevisions(baseline, next, [], { source: YOU, time: 1 }))).toBe(baseline)
+        text = next
+    }
+})
+
 test('many revisions: a letter typed at a paragraph\'s end is what comparing the whole gives', () => {
     const baseline = manyDoc(() => 'plain')
     let text = manyDoc(i => `changed${i}`)

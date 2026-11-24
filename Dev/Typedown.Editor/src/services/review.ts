@@ -216,6 +216,9 @@ export function diffTexts(baseline: string, current: string): Hunk[] {
  */
 export const LOCAL_DIFF_MIN_HUNKS = 1
 
+/** A stretch between blank lines longer than this is narrowed to the lines about the change. */
+const LOCAL_STRETCH = 2000
+
 let lastDiff: { baseline: string, current: string, hunks: Hunk[] } | null = null
 
 /** For the tests: how many times diffTextsAround compared only about the change, and the whole. */
@@ -240,15 +243,27 @@ function diffAround(before: { baseline: string, current: string, hunks: Hunk[] }
     const fenced = fencedRanges(old)
     // A place between paragraphs the comparison may start or end at: in no hunk (nor at its edge), in no fenced code.
     const free = (p: number) => !before.hunks.some(h => h.curStart <= p && p <= h.curEnd) && !fenced.some(([a, b]) => p > a && p < b)
-    let from = 0
-    // (From before the change: lastIndexOf took a negative start as 0, and a change at 1 was compared from 2 - its start
-    // left out, rejecting all did not give the baseline back.)
-    for (let p = region.from >= 2 ? old.lastIndexOf('\n\n', region.from - 2) : -1; p >= 0; p = p > 0 ? old.lastIndexOf('\n\n', p - 1) : -1) {
-        if (free(p + 2) && free(p)) { from = p + 2; break }
+    // The stretch about the change between two separators (blank lines, or line breaks) at free places.
+    const around = (sep: string): [number, number] => {
+        const n = sep.length
+        let from = 0
+        // (From before the change: lastIndexOf took a negative start as 0, and a change at 1 was compared from 2 - its
+        // start left out, rejecting all did not give the baseline back.)
+        for (let p = region.from >= n ? old.lastIndexOf(sep, region.from - n) : -1; p >= 0; p = p > 0 ? old.lastIndexOf(sep, p - 1) : -1) {
+            if (free(p + n) && free(p)) { from = p + n; break }
+        }
+        let to = old.length
+        for (let p = old.indexOf(sep, region.oldTo); p >= 0; p = old.indexOf(sep, p + 1)) {
+            if (free(p) && free(p + n)) { to = p; break }
+        }
+        return [from, to]
     }
-    let to = old.length
-    for (let p = old.indexOf('\n\n', region.oldTo); p >= 0; p = old.indexOf('\n\n', p + 1)) {
-        if (free(p) && free(p + 2)) { to = p; break }
+    let [from, to] = around('\n\n')
+    // A long stretch with no blank line free (a list of many items, each revised): between line breaks - its 150 lines
+    // were paired with each other at each key, 33 ms against 7.5 with review off (review-typing-perf-check.js).
+    if (to - from > LOCAL_STRETCH) {
+        const [lineFrom, lineTo] = around('\n')
+        if (lineTo - lineFrom < to - from) [from, to] = [lineFrom, lineTo]
     }
     if (from === 0 && to === old.length) return null
     // The baseline's place for a place in no hunk: the hunks before it moved it by their lengths' difference.
@@ -468,10 +483,11 @@ export function commonEnds(a: string, b: string): [number, number] {
     return [pre, suf]
 }
 
+// A line's words (not spaces), for similarity.
+const wordsOf = (s: string) => tokenize(s).filter(t => /\S/.test(t))
+
 // How alike two lines are, 0 to 1: the share of their words (not spaces) they have in common. Two blank lines are alike.
-function similarity(a: string, b: string): number {
-    const words = (s: string) => tokenize(s).filter(t => /\S/.test(t))
-    const x = words(a), y = words(b)
+function similarity(x: string[], y: string[]): number {
     if (!x.length && !y.length) return 1
     if (!x.length || !y.length) return 0
     const counts = new Map<string, number>()
@@ -492,7 +508,10 @@ function pairLines(a: string[], b: string[]): ('pair' | 'del' | 'ins')[] {
     const n = a.length, m = b.length
     const cost = new Float64Array((n + 1) * (m + 1))
     const at = (i: number, j: number) => i * (m + 1) + j
-    const alike = (i: number, j: number) => similarity(a[i], b[j])
+    // Each line's words once, not for every pair: a key typed in a long list, each item revised, had its 150 lines paired
+    // with 150 and each pair's two lines cut into words - 127 ms a key (review-typing-perf-check.js, 2026-11-24).
+    const aWords = a.map(wordsOf), bWords = b.map(wordsOf)
+    const alike = (i: number, j: number) => similarity(aWords[i], bWords[j])
     const sims = new Float64Array(n * m)
     for (let i = 0; i < n; i++) for (let j = 0; j < m; j++) sims[i * m + j] = alike(i, j)
     for (let i = n; i >= 0; i--) for (let j = m; j >= 0; j--) {

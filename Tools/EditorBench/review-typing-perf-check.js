@@ -78,6 +78,44 @@ const { openEditor } = require('./harness');
         // Before: 39.9 against 23.3 here (1.7 times; P14 measured 344 against 75 on the reviewer's machine); now about the
         // same. As a ratio, so a slower machine (the CI's) is held to the same.
         check(on <= off * 1.3 + 5, 'a key with review on keeps the page busy hardly longer than with it off', { off, on });
+
+        // In an item of a long numbered list (the user, 2026-11-24, hp88: still lagging with the marks shown, typing in
+        // item 41 of a list): the line's marks changed at each key and the whole list was drawn again, the caret put back.
+        const list = word => '# Review typing in a list\n\n' + lines(150).map(i => `${i + 1}. Item ${i} has a ${word(i)} word and more text after it`).join('\n') + '\n';
+        const listLoad = async (review) => {
+            await page.evaluate(({ text, baseline, review }) => {
+                delete window.__last.FileLoaded;
+                window.__deliver('LoadFile', { text, loadId: review ? 63 : 62, basePath: '/tmp', review: review ? { on: true, baseline, revisions: [], labels: { accept: 'Accept', reject: 'Reject' } } : undefined });
+            }, { text: list(i => `changed${i}`), baseline: list(() => 'plain'), review });
+            await page.waitForFunction(id => window.__last.FileLoaded?.loadId === id, { timeout: 60000 }, review ? 63 : 62);
+            await pause(1500);
+        };
+        const caretInItem = async () => {
+            await page.evaluate(() => {
+                const el = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(e => e.textContent.startsWith('Item 75 '));
+                el.scrollIntoView({ block: 'center' });
+                const range = document.createRange();
+                range.selectNodeContents(el);
+                range.collapse(false);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+                el.closest('[contenteditable]')?.focus();
+            });
+            await pause(300);
+        };
+        await listLoad(false);
+        await caretInItem();
+        const listOff = await typeTimed('list, review off');
+        await listLoad(true);
+        await caretInItem();
+        const listOn = await typeTimed('list, review on');
+        const typed = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(e => e.textContent.startsWith('Item 75 '))?.textContent);
+        check(/after itabcdefghijklmnopqrst$/.test(typed || ''), 'the letters went into item 75, in order', typed);
+        const marked = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(e => e.textContent.startsWith('Item 75 '))?.querySelectorAll('.ag-review-ins, .ag-review-mark').length);
+        check(marked > 0, 'item 75 shows its marks', { marked });
+        console.log(`busy a key in a list's item: review off ${listOff} ms, on ${listOn} ms`);
+        check(listOn <= listOff * 1.3 + 5, 'in a long list\'s item too, review on keeps the page busy hardly longer', { off: listOff, on: listOn });
         check(errors.length === 0, 'no page errors', errors);
     } catch (e) {
         check(false, 'ran to the end', String(e && e.stack || e));

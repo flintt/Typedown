@@ -1227,8 +1227,11 @@ class StateRender {
       }
     }
     const draw = []
+    // A block in another (a line of review's marks) is near as the top-level block it is in.
+    const contentState = this.muya.contentState
+    const topKey = block => block.parent && contentState ? contentState.findOutMostBlock(block).key : block.key
     for (const block of blocks) {
-      if (urgent.has(block) || near.has(block.key)) {
+      if (urgent.has(block) || near.has(topKey(block))) {
         draw.push(block)
         queue.delete(block)
       } else queue.add(block)
@@ -1246,8 +1249,9 @@ class StateRender {
     let drawn = 0
     for (const block of blocks) {
       const element = root.querySelector(`#${block.key}`)
-      if (!element || element.parentElement !== root) continue
-      patch(toVNode(element), this.renderBlock(null, block, activeBlocks, matches, true))
+      // A top-level block where it is, or one in another (a line, review's marks) where its parent is drawn.
+      if (!element || (block.parent ? !root.contains(element) : element.parentElement !== root)) continue
+      patch(toVNode(element), this.renderBlock(block.parent ? contentState.getParent(block) : null, block, activeBlocks, matches, true))
       drawn++
     }
     if (!drawn) return
