@@ -30,6 +30,17 @@ internal static partial class Program
             }
             throw new CaseFailed($"no outline row '{heading}' {Screenshot("OL09-no-row")}");
         }
+        // A row's words, where a press takes the row (not its chevron: the row's left plus 40 was the chevron of a row
+        // a level in, and the drag began nothing - job 732).
+        System.Windows.Rect Words(string heading)
+        {
+            foreach (AutomationElement item in Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TreeItem)))
+            {
+                var text = Deep.First(item, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Text));
+                if (text?.Current.Name == heading) return text.Current.BoundingRectangle;
+            }
+            throw new CaseFailed($"no outline row '{heading}' {Screenshot("OL09-no-row")}");
+        }
         // The outline's row chosen as its click does it (TocPage.OnItemInvoked): the jump, then the keyboard to the editor.
         // A real click on the row invoked nothing here (w10 job 728: the row only highlighted, the host logged no jump).
         async Task ClickRow(string heading)
@@ -92,7 +103,9 @@ internal static partial class Program
             // (job 731: no "drag begun" in the host's log; a real click on a row in job 728 invoked nothing either).
             await Click(window, (int)(to.Left + 40), (int)(to.Bottom + 90));
             await Task.Delay(400);
-            await Drag(window, ((int)(from.Left + 40), (int)(from.Top + from.Height / 2)), ((int)(to.Left + 40), (int)(to.Top + to.Height * 0.5)), steps: 20);
+            var words = Words("A");
+            notes.Add($"rows: A {from} (its words {words}), B {to}");
+            await Drag(window, ((int)(words.Left + words.Width / 2), (int)(from.Top + from.Height / 2)), ((int)(words.Left + words.Width / 2), (int)(to.Top + to.Height * 0.5)), steps: 20);
             AutomationElement? said = null;
             await Eventually(async () => { await Task.CompletedTask; return (said = FindIn(window, "OutlineMoveNoticeText")) != null; }, 4000, 200);
             notes.Add("refused, the card: " + said?.Current.Name + " " + Screenshot("OL09-refused"));
