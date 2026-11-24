@@ -146,6 +146,33 @@ test('compared about a change: a deletion at the end or the start is kept in the
     }
 })
 
+// A long passage written in (the user's orbit document, 2026-11-24: 75k characters, half of it new, a passage of 20,032
+// added whole): a key typed or deleted inside it is the same addition made longer or shorter - it was compared again
+// with the baseline at each key, 70 to 270 ms.
+test('a key typed or deleted inside a long passage added: the addition grows or shrinks, as the whole gives', () => {
+    const para = (i: number) => `Paragraph ${i} of the plan, with a few words about it.`
+    const baseline = '# Plan\n\n' + Array.from({ length: 80 }, (_, i) => para(i)).join('\n\n') + '\n'
+    const added = Array.from({ length: 120 }, (_, i) => `Written later ${i}: a new paragraph about the release, its store page and its ads.`).join('\n\n')
+    let text = baseline.replace(para(40) + '\n', para(40) + '\n\n' + added + '\n')
+    forgetLastDiff()
+    diffTextsAround(baseline, text)
+    const before = { ...diffAroundCounts }
+    const at = text.indexOf('Written later 60:') + 'Written later 60: a new'.length
+    const edits = [
+        (t: string) => t.slice(0, at) + 'x' + t.slice(at),
+        (t: string) => t.slice(0, at + 1) + 'y' + t.slice(at + 1),
+        (t: string) => t.slice(0, at) + t.slice(at + 2),
+        (t: string) => t.slice(0, at) + '\n\nA new line.' + t.slice(at),
+    ]
+    for (const edit of edits) {
+        const next = edit(text)
+        expect(diffTextsAround(baseline, next)).toEqual(diffTexts(baseline, next))
+        text = next
+    }
+    expect(diffAroundCounts.within - before.within).toBe(edits.length)
+    expect(diffAroundCounts.whole - before.whole).toBe(0)
+})
+
 // A long list with no blank line, each item revised: only the lines about the change compared, and as the whole.
 test('a long tight list, each item revised: a letter typed, Enter, a deletion - what comparing the whole gives', () => {
     const list = (word: (i: number) => string) => '# L\n\n' + Array.from({ length: 150 }, (_, i) => `${i + 1}. Item ${i} has a ${word(i)} word and more`).join('\n') + '\n\nAfter.\n'

@@ -221,8 +221,8 @@ const LOCAL_STRETCH = 2000
 
 let lastDiff: { baseline: string, current: string, hunks: Hunk[] } | null = null
 
-/** For the tests: how many times diffTextsAround compared only about the change, and the whole. */
-export const diffAroundCounts = { around: 0, whole: 0 }
+/** For the tests: how many times diffTextsAround compared only about the change, the whole, and kept an addition grown or shrunk. */
+export const diffAroundCounts = { around: 0, whole: 0, within: 0 }
 
 export function diffTextsAround(baseline: string, current: string): Hunk[] {
     const before = lastDiff
@@ -240,6 +240,17 @@ function diffAround(before: { baseline: string, current: string, hunks: Hunk[] }
     const old = before.current
     const region = changedRegion(old, current)
     if (!region) return before.hunks
+    // Inside a passage added (not at its first or last character): the same addition, longer or shorter, those after it
+    // moved. A key in a passage of 20,032 added compared it again with the baseline, 70 to 270 ms (the user's orbit
+    // document, 2026-11-24).
+    const delta = current.length - old.length
+    const within = before.hunks.findIndex(h => h.baseStart === h.baseEnd && h.curStart < region.from && region.oldTo < h.curEnd)
+    if (within >= 0) {
+        diffAroundCounts.within++
+        return before.hunks.map((h, i) => i < within ? h
+            : i === within ? { ...h, curEnd: h.curEnd + delta }
+            : { ...h, curStart: h.curStart + delta, curEnd: h.curEnd + delta })
+    }
     const fenced = fencedRanges(old)
     // A place between paragraphs the comparison may start or end at: in no hunk (nor at its edge), in no fenced code.
     const free = (p: number) => !before.hunks.some(h => h.curStart <= p && p <= h.curEnd) && !fenced.some(([a, b]) => p > a && p < b)
@@ -271,7 +282,6 @@ function diffAround(before: { baseline: string, current: string, hunks: Hunk[] }
     // The document's ends are the baseline's: a deletion at the very end (or start) is at no place in no hunk, and toBase
     // left it out - the last paragraph deleted, then an edit reaching the end, showed the paragraph added (B15, B16).
     const baseFrom = from === 0 ? 0 : toBase(from), baseTo = to === old.length ? before.baseline.length : toBase(to)
-    const delta = current.length - old.length
     const inside = diffTexts(before.baseline.slice(baseFrom, baseTo), current.slice(from, to + delta))
         .map(h => ({ baseStart: h.baseStart + baseFrom, baseEnd: h.baseEnd + baseFrom, curStart: h.curStart + from, curEnd: h.curEnd + from }))
         // Slid in the whole texts, as the whole's are: in the stretch alone a deletion could not slide past its end ("\n\n2. 二"
