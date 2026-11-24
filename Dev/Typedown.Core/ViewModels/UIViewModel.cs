@@ -353,6 +353,18 @@ namespace Typedown.Core.ViewModels
             SettingsViewModel.SidePaneOpen = true;
         }
 
+        /// <summary>
+        /// The keys of the side pane's files (0) and outline (1), as the side pane's key: that block shown and opened out
+        /// - or, shown already, the pane closed (the user, 2026-11-24: no key for either).
+        /// </summary>
+        public void ToggleSidePane(int page)
+        {
+            var settings = SettingsViewModel;
+            var collapsed = page == 1 ? settings.SidePaneOutlineCollapsed : settings.SidePaneFilesCollapsed;
+            if (settings.SidePaneOpen && settings.SidePaneIndex == page && !collapsed) settings.SidePaneOpen = false;
+            else ShowSidePane(page);
+        }
+
         /// <summary>The block asked for, once: the pane opens it out and it is forgotten.</summary>
         public int? TakeSidePaneBlockRequest()
         {

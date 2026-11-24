@@ -142,6 +142,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             UpdateModeAvailability();
             Subscribe(Settings);
             RegisterWindowShortcut(Settings.ShortcutSidePane, SidePaneItem);
+            RegisterWindowShortcut(Settings.ShortcutSidePaneFiles, () => ViewModel?.UIViewModel?.ToggleSidePane(0));
+            RegisterWindowShortcut(Settings.ShortcutSidePaneOutline, () => ViewModel?.UIViewModel?.ToggleSidePane(1));
             RegisterWindowShortcut(Settings.ShortcutScratchpad, ScratchpadItem, once: true);
             RegisterWindowShortcut(Settings.ShortcutSourceCodeMode, SourceCodeModeItem);
             RegisterWindowShortcut(Settings.ShortcutFocusMode, FocusModeItem);

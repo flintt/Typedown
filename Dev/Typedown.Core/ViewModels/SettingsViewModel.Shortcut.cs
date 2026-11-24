@@ -239,6 +239,14 @@ namespace Typedown.Core.ViewModels
         [Locale("View", "SidePane")]
         public ShortcutKey ShortcutSidePane { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.L)); set => SetSettingValue(value); }
 
+        // The side pane's files and its outline, each shown (or, shown, the pane closed) - the user, 2026-11-24. As a code
+        // editor has them: Ctrl+Shift+E its files, Ctrl+Shift+O what is in the document; free in the app.
+        [Locale("View", "SidePane", "Files")]
+        public ShortcutKey ShortcutSidePaneFiles { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.E)); set => SetSettingValue(value); }
+
+        [Locale("View", "SidePane", "Outline")]
+        public ShortcutKey ShortcutSidePaneOutline { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.O)); set => SetSettingValue(value); }
+
         // Free in the app (Ctrl+Shift+J); it works only with the scratchpad on (Settings > General).
         [Locale("View", "Scratchpad")]
         public ShortcutKey ShortcutScratchpad { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.J)); set => SetSettingValue(value); }

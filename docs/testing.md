@@ -400,6 +400,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | KU01 | Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question |
 | KU02 | Keep unsaved changes when closing: the web view's browser process ended first (as an update of the app does), the window still closes without a question and the untitled document in a tab not shown comes back with its text |
 | PS01 | the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again |
+| PS03 | the side pane's keys: in the document Ctrl+Shift+E opens it at its files, Ctrl+Shift+O goes to its outline, again closes it, a block folded away opened out by its key |
 | XM04 | the outline's and a link's menus by real right-clicks: Copy link to heading copies [Beta](#beta), Collapse all and Expand all fold and open the outline, Edit link chooses the address and typing replaces it |
 | XM09 | context menus by real right-clicks where XM01 and TM01 do not reach: a heading, a list item, a picture, a plain text file, a folder in the tree, a recent folder on the home page, and the menu key and Shift+F10 in a paragraph |
 | XM07 | the editor's context menu in German, French, Russian and Portuguese against English: its width, its longest entry and a screenshot each; no wider than half the screen |
