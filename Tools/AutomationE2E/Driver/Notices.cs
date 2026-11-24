@@ -69,7 +69,35 @@ internal static partial class Program
             var unreadName = BellName();
             Check(unreadName.Contains('2'), "the bell says two are unread: " + unreadName);
             notes.Add("shot, the export's card and the bell's dot: " + Screenshot("NF01-1-card"));
-            Invoke(FindIn(window, "ExportNoticeClose")!);
+
+            // Under a custom theme the card is in its colours (the user, 2026-11-24: the notices went by light and dark
+            // only): Dracula's panels, #343746, in the card's padding.
+            var themeBefore = (string?)(await c.Call("test.settings.get", new { windowId, name = "CustomTheme" }))["value"] ?? "";
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "dracula" });
+            await Task.Delay(1200);
+            SetProcessDpiAwarenessContext(new IntPtr(-4));
+            var card = FindIn(window, "ExportNotice")!.Current.BoundingRectangle;
+            System.Drawing.Color Pixel(int x, int y)
+            {
+                using var shot = new System.Drawing.Bitmap(1, 1);
+                using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(1, 1));
+                return shot.GetPixel(0, 0);
+            }
+            var inPadding = Pixel((int)card.Left + 6, (int)(card.Top + card.Height / 2));
+            notes.Add($"under Dracula the card's padding is #{inPadding.R:X2}{inPadding.G:X2}{inPadding.B:X2} {Screenshot("NF01-1b-dracula")}");
+            Check(Math.Abs(inPadding.R - 0x34) <= 8 && Math.Abs(inPadding.G - 0x37) <= 8 && Math.Abs(inPadding.B - 0x46) <= 8, $"under Dracula the card is in its panels' colour (#343746): #{inPadding.R:X2}{inPadding.G:X2}{inPadding.B:X2}");
+            Invoke(FindIn(window, "StatusBarNotices")!);
+            await Task.Delay(900);
+            notes.Add("shot, the list under Dracula: " + Screenshot("NF01-1c-dracula-list"));
+            Chord("Esc");
+            await Task.Delay(300);
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = themeBefore });
+            await Task.Delay(800);
+            // (The list was opened: read; the rest of the case counts from here.)
+            await Eventually(async () => (int)(await State())["unread"]! == 0, 3000, 200);
+            // (Ten seconds after it came, it went by itself: the theme's part above takes a few.)
+            if (FindIn(window, "ExportNoticeClose") is { } closeButton) Invoke(closeButton);
+            else notes.Add("the export's card had gone by itself before its close button was pressed");
             await Eventually(async () => !((JArray)(await State())["cards"]!).Any(k => (string?)k == "export"), 3000, 200);
             s = await State();
             Check(!((JArray)s["cards"]!).Any(k => (string?)k == "export") && ((JArray)s["entries"]!).Count == 2, "closed: the card goes, its line stays");
