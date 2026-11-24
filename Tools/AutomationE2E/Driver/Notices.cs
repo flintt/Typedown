@@ -76,14 +76,15 @@ internal static partial class Program
             await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "dracula" });
             await Task.Delay(1200);
             SetProcessDpiAwarenessContext(new IntPtr(-4));
-            var card = FindIn(window, "ExportNotice")!.Current.BoundingRectangle;
+            // (The card, a Border, is not in UI Automation's tree - job 736: its text is, 16 in from its left.)
+            var card = FindIn(window, "ExportNoticeText")!.Current.BoundingRectangle;
             System.Drawing.Color Pixel(int x, int y)
             {
                 using var shot = new System.Drawing.Bitmap(1, 1);
                 using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(1, 1));
                 return shot.GetPixel(0, 0);
             }
-            var inPadding = Pixel((int)card.Left + 6, (int)(card.Top + card.Height / 2));
+            var inPadding = Pixel((int)card.Left - 8, (int)(card.Top + card.Height / 2));
             notes.Add($"under Dracula the card's padding is #{inPadding.R:X2}{inPadding.G:X2}{inPadding.B:X2} {Screenshot("NF01-1b-dracula")}");
             Check(Math.Abs(inPadding.R - 0x34) <= 8 && Math.Abs(inPadding.G - 0x37) <= 8 && Math.Abs(inPadding.B - 0x46) <= 8, $"under Dracula the card is in its panels' colour (#343746): #{inPadding.R:X2}{inPadding.G:X2}{inPadding.B:X2}");
             Invoke(FindIn(window, "StatusBarNotices")!);
