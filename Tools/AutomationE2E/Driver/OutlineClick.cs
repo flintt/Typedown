@@ -66,7 +66,11 @@ internal static partial class Program
             Check(clicked.All(y => Math.Abs(y - there) <= 2), $"the heading clicked after the outline went there: the page stays ({there}: {string.Join(",", clicked)})");
 
             // The outline again, then Ctrl+A: the page stays.
-            await ClickEditorText(c, windowId, window, "Top paragraph 0");
+            // The caret far below again (by a click, the page there), then the outline.
+            await c.Call("test.editor.eval", new { windowId, script = "(() => { [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content')].find(e => e.textContent === 'The caret is here.').scrollIntoView({ block: 'center' }); return true })()" });
+            await Task.Delay(400);
+            await ClickEditorText(c, windowId, window, "The caret is here.");
+            await Task.Delay(400);
             await ClickRow("Checklist");
             var again = await ScrollY();
             await Watch();
