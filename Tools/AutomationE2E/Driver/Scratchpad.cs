@@ -228,6 +228,21 @@ internal static partial class Program
             s = await State();
             Check((string?)s["text"] == "first note\n\nkeep this line\n\nanother line", "put in again: at the end: " + s["text"]);
             Check((int?)s["cloakings"] == cloakingsBefore, $"put in with it shown: it stays on the screen (cloaked {cloakingsBefore} times before, {s["cloakings"]} after)");
+            // Its key (the user, 2026-11-24: Put in had none): Ctrl+Alt+J with a line selected, as the menu's entry does;
+            // the entry says the key.
+            var said = put?.Current.AcceleratorKey ?? "";
+            notes.Add("the editor's menu entry's key: " + said);
+            Check(said.Contains("J") && said.Contains("Alt"), "the editor's menu entry says its key, Ctrl+Alt+J: " + said);
+            await c.Call("test.scratchpad.set", new { windowId, text = "first note" });
+            await ClickEditorText(c, windowId, window, "another line");
+            Chord("Home");
+            Chord("Shift+End");
+            await Task.Delay(400);
+            Chord("Ctrl+Alt+J");
+            await Eventually(async () => ((string?)(await State())["text"])?.Contains("another line") == true, 5000, 100);
+            s = await State();
+            Check((string?)s["text"] == "first note\n\nanother line", "Ctrl+Alt+J puts the selection at the end: " + s["text"]);
+            Check((bool?)s["shown"] == true, "and the scratchpad is shown");
             // Back as the rest of the case has it.
             await c.Call("test.scratchpad.set", new { windowId, text = "first note\n\nkeep this line" });
 
