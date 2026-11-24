@@ -258,7 +258,7 @@
                     <Flyout x:Name="NoticesFlyout" Placement="TopEdgeAlignedRight" Opening="OnNoticesOpening">
                         <StackPanel Width="360" Spacing="8">
                             <Grid>
-                                <TextBlock Text="{u:LocaleString Key=NoticesTitle}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="NoticesTitle" Text="{u:LocaleString Key=NoticesTitle}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 <HyperlinkButton x:Name="NoticesClear" HorizontalAlignment="Right" Padding="4,0" Content="{u:LocaleString Key=NoticesClear}"
                                                  AutomationProperties.AutomationId="NoticesClear" Click="OnNoticesClearClick"/>
                             </Grid>

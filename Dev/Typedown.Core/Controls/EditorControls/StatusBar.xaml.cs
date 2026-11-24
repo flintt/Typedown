@@ -5,6 +5,7 @@ using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 namespace Typedown.Core.Controls
 {
@@ -23,6 +24,25 @@ namespace Typedown.Core.Controls
             }
             if (foreground != null) Foreground = foreground;
             else ClearValue(ForegroundProperty);
+        }
+
+        // A custom theme's colours for the notices list (null: light or dark).
+        private Microsoft.UI.Xaml.Media.Brush noticesSurface, noticesForeground, noticesBorder;
+
+        /// <summary>The notices list in a custom theme's colours, as the cards (MainPage); null each: light or dark.</summary>
+        public void ApplyNoticeBrushes(Microsoft.UI.Xaml.Media.Brush surface, Microsoft.UI.Xaml.Media.Brush foreground, Microsoft.UI.Xaml.Media.Brush border)
+        {
+            noticesSurface = surface;
+            noticesForeground = foreground;
+            noticesBorder = border;
+            if (surface == null && border == null) NoticesFlyout.ClearValue(FlyoutBase.FlyoutPresenterStyleProperty);
+            else
+            {
+                var style = new Style(typeof(FlyoutPresenter));
+                if (surface != null) style.Setters.Add(new Setter(Control.BackgroundProperty, surface));
+                if (border != null) style.Setters.Add(new Setter(Control.BorderBrushProperty, border));
+                NoticesFlyout.FlyoutPresenterStyle = style;
+            }
         }
 
         public AppViewModel ViewModel => DataContext as AppViewModel;
@@ -616,18 +636,24 @@ namespace Typedown.Core.Controls
         private void FillNotices()
         {
             NoticesList.Children.Clear();
+            // The list's words in the theme's text colour (its title and "none" too).
+            foreach (var t in new[] { NoticesTitle, NoticesEmpty })
+                if (noticesForeground != null) t.Foreground = noticesForeground; else t.ClearValue(TextBlock.ForegroundProperty);
             var entries = NoticeHistory.Entries;
             NoticesEmpty.Visibility = entries.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             NoticesClear.Visibility = entries.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
-            var secondary = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
             for (var i = 0; i < entries.Count; i++)
             {
                 var entry = entries[i];
                 var line = new StackPanel { Spacing = 2 };
                 Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(line, $"NoticeEntry{i}");
                 var when = entry.Time.ToString("t", Locale.Culture) + (string.IsNullOrEmpty(entry.Where) ? "" : " · " + entry.Where);
-                line.Children.Add(new TextBlock { Text = when, FontSize = 11, Foreground = secondary });
+                // The text's own colour, fainter: the app's secondary brush (Application.Current.Resources) was the light
+                // theme's, dark grey on a dark list - the file name could not be read (the user, 2026-11-24).
+                line.Children.Add(new TextBlock { Text = when, FontSize = 11, Opacity = 0.65 });
+                if (noticesForeground != null) ((TextBlock)line.Children[^1]).Foreground = noticesForeground;
                 var text = new TextBlock { Text = entry.Text, TextWrapping = TextWrapping.Wrap, FontSize = 13, IsTextSelectionEnabled = true };
+                if (noticesForeground != null) text.Foreground = noticesForeground;
                 Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(text, $"NoticeEntry{i}Text");
                 line.Children.Add(text);
                 if (entry.Actions.Count > 0)

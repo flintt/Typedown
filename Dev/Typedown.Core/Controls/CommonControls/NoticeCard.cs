@@ -2,6 +2,7 @@ using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Typedown.Core.Services;
 using Typedown.Core.Utilities;
 
@@ -66,6 +67,38 @@ namespace Typedown.Core.Controls
             }
             card.Child = grid;
             return card;
+        }
+
+        /// <summary>
+        /// A custom theme's colours on a card, as the dialogs take them (its panels', its text, its separators); null each:
+        /// the card's own (light or dark). The cards went by light and dark only, under Sepia or Dracula too (the user,
+        /// 2026-11-24). Its words take the text colour; buttons keep theirs, as in the dialogs.
+        /// </summary>
+        public static void ApplyColours(Border card, Microsoft.UI.Xaml.Media.Brush surface, Microsoft.UI.Xaml.Media.Brush foreground, Microsoft.UI.Xaml.Media.Brush border)
+        {
+            if (surface != null) card.Background = surface; else card.ClearValue(Border.BackgroundProperty);
+            if (border != null) card.BorderBrush = border; else card.ClearValue(Border.BorderBrushProperty);
+            foreach (var text in Words(card))
+            {
+                if (foreground != null) text.SetValue(text is TextBlock ? TextBlock.ForegroundProperty : IconElement.ForegroundProperty, foreground);
+                else text.ClearValue(text is TextBlock ? TextBlock.ForegroundProperty : IconElement.ForegroundProperty);
+            }
+        }
+
+        // The card's words and icons, not inside its buttons (they keep their own colours) - the close button's cross too.
+        private static System.Collections.Generic.IEnumerable<FrameworkElement> Words(DependencyObject root)
+        {
+            var count = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(root);
+            if (count == 0 && root is Border b && b.Child != null) { foreach (var x in Words(b.Child)) yield return x; yield break; }
+            if (root is Panel panel && count == 0) { foreach (var child in panel.Children) foreach (var x in Words(child)) yield return x; yield break; }
+            if (root is ContentPresenter presenter && count == 0 && presenter.Content is DependencyObject content) { foreach (var x in Words(content)) yield return x; yield break; }
+            for (var i = 0; i < count; i++)
+            {
+                var child = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(root, i);
+                if (child is TextBlock or IconElement) yield return (FrameworkElement)child;
+                else if (child is ButtonBase button && button.Content is IconElement icon && button.Background is Microsoft.UI.Xaml.Media.SolidColorBrush { Color.A: 0 }) yield return icon;
+                else if (child is not ButtonBase) foreach (var x in Words(child)) yield return x;
+            }
         }
 
         public static void Run(NoticeAction action)

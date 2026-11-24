@@ -86,6 +86,8 @@ namespace Typedown.Core.Pages
                 if (noticeCards.ContainsKey(notice)) continue;
                 var card = Controls.NoticeCard.Make(notice, style, n => AppViewModel?.UIViewModel?.HideNotice(n));
                 noticeCards[notice] = card;
+                // In the theme's colours once it is drawn (its words found then).
+                card.Loaded += (_, _) => Controls.NoticeCard.ApplyColours(card, noticeSurface, noticeForeground, noticeBorder);
                 NoticeStack.Children.Add(card);
             }
         }
@@ -127,6 +129,9 @@ namespace Typedown.Core.Pages
         /// the theme does not name keeps the colours of the built-in theme it builds on, and a panel painted
         /// without a text colour gets one that can be read on it.
         /// </summary>
+        // A custom theme's colours for the notices (null: light or dark), kept for the cards made later.
+        private Microsoft.UI.Xaml.Media.Brush noticeSurface, noticeForeground, noticeBorder;
+
         private void UpdateThemeColours()
         {
             try
@@ -134,6 +139,11 @@ namespace Typedown.Core.Pages
                 var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
                 var surface = ThemeFiles.Brush(theme?.Surface) ?? ThemeFiles.Brush(theme?.Background);
                 var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
+                noticeSurface = surface;
+                noticeForeground = foreground;
+                noticeBorder = ThemeFiles.Brush(theme?.Border);
+                foreach (var card in noticeCards.Values) Controls.NoticeCard.ApplyColours(card, noticeSurface, noticeForeground, noticeBorder);
+                StatusBar?.ApplyNoticeBrushes(noticeSurface, noticeForeground, noticeBorder);
                 MenuBarHost?.ApplyThemeBrushes(surface, foreground);
                 // A menu row in its own colour needs no line under it (see MenuBar.SetDivider).
                 var panel = ThemeFiles.Brush(theme?.Surface) as Microsoft.UI.Xaml.Media.SolidColorBrush;
