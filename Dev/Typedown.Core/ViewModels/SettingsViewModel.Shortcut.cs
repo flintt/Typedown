@@ -243,6 +243,11 @@ namespace Typedown.Core.ViewModels
         [Locale("View", "Scratchpad")]
         public ShortcutKey ShortcutScratchpad { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.J)); set => SetSettingValue(value); }
 
+        // The selection put at the scratchpad's end, as the editor's menu does (the user, 2026-11-24: it had no key). Beside
+        // the scratchpad's own (Ctrl+Shift+J), and no other shortcut of the app has Ctrl+Alt.
+        [Locale("Edit", "PutInScratchpad")]
+        public ShortcutKey ShortcutPutInScratchpad { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Menu, Key.J)); set => SetSettingValue(value); }
+
         [Locale("View", "SourceCodeMode")]
         public ShortcutKey ShortcutSourceCodeMode { get => GetSettingValue<ShortcutKey>(new(Mod.Control, (Key)191)); set => SetSettingValue(value); }
 

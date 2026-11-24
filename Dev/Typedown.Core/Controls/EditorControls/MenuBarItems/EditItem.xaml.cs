@@ -85,6 +85,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutReplaceOne, ReplaceOneItem);
             RegisterWindowShortcut(Settings.ShortcutReplaceAll, ReplaceAllItem);
             RegisterWindowShortcut(Settings.ShortcutSearchInFolder, SearchInFolderItem);
+            // No entry in the menu bar (it is the editor's menu's); with the scratchpad off it does nothing (PutInScratchpad checks).
+            RegisterWindowShortcut(Settings.ShortcutPutInScratchpad, () => Editor?.PutInScratchpadCommand.Execute(default));
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
