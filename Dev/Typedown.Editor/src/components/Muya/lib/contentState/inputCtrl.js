@@ -118,7 +118,7 @@ const inputCtrl = ContentState => {
   ContentState.prototype.inputHandler = function (event, notEqual = false) {
     const { start, end } = selection.getCursorRange()
     if (!start || !end) {
-      return
+      return this.lineTakenAway()
     }
 
     const { start: oldStart, end: oldEnd } = this.cursor
@@ -432,6 +432,38 @@ const inputCtrl = ContentState => {
     if (checkMarkedUpdate || inlineUpdatedBlock || needRender) {
       return needRenderAll ? this.render() : this.partialRender()
     }
+  }
+
+  /**
+   * An edit the browser made with the line's own element taken away: a line that is only an address the editor links by
+   * itself (a URL, an e-mail), its text selected whole and deleted - the browser took the link out with the line's text
+   * element and left the caret in the paragraph, no line was found to read the change from, and the model kept the old
+   * text: the address came back at the next click, and a save and a version had it (the user's report 41, 2026-11-24).
+   * The line the caret was in, gone from the page while its block is still drawn: its text is what that block shows now,
+   * the caret at its end, drawn again.
+   */
+  ContentState.prototype.lineTakenAway = function () {
+    const { start: oldStart, end: oldEnd } = this.cursor || {}
+    if (!oldStart || !oldEnd || oldStart.key !== oldEnd.key) return
+    if (document.getElementById(oldStart.key)) return
+    const block = this.getBlock(oldStart.key)
+    const parent = block && this.getParent(block)
+    const holder = parent && document.getElementById(parent.key)
+    if (!holder || !this.muya.container.contains(holder)) return
+    // Its own words only: not those of what is drawn beside them and not edited (the paragraph's "P" icon was taken in, and
+    // the line became "P" - autolink-delete-check.js).
+    let text = ''
+    const walker = document.createTreeWalker(holder, NodeFilter.SHOW_TEXT)
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const off = node.parentElement && node.parentElement.closest('[contenteditable="false"]')
+      if (off && holder.contains(off)) continue
+      text += node.textContent
+    }
+    text = text.replace(/​/g, '')
+    block.text = text
+    const offset = Math.min(oldStart.offset, text.length)
+    this.cursor = { start: { key: block.key, offset }, end: { key: block.key, offset } }
+    return this.partialRender()
   }
 }
 
