@@ -35,7 +35,7 @@ namespace Typedown.Core.Controls
             noticesSurface = surface;
             noticesForeground = foreground;
             noticesBorder = border;
-            if (surface == null && border == null) NoticesFlyout.ClearValue(FlyoutBase.FlyoutPresenterStyleProperty);
+            if (surface == null && border == null) NoticesFlyout.ClearValue(Flyout.FlyoutPresenterStyleProperty);
             else
             {
                 var style = new Style(typeof(FlyoutPresenter));
