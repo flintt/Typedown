@@ -190,6 +190,7 @@ jobs:
           node review-check.js
           node review-layout-check.js
           node review-reading-check.js
+          node review-typing-perf-check.js
           node outline-move-check.js
           node hide-done-check.js
           node hide-done-edit-check.js

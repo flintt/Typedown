@@ -1,7 +1,7 @@
 // Review mode's diff on random documents (fixed seeds, so a failure comes back the same): one small edit somewhere is
 // revisions no bigger than the edit, rejecting them all gives the baseline back, accepting them all makes the baseline the
 // text. "修订了一个小地方，出现大量删除和新加的内容" (the user, 2026-11-06) is what these keep from coming back.
-import { acceptAll, changedRegion, rejectAll, trackRevisions, YOU } from './review'
+import { acceptAll, changedRegion, diffTexts, diffTextsAround, forgetLastDiff, LOCAL_DIFF_MIN_HUNKS, rejectAll, trackRevisions, YOU } from './review'
 
 const rng = (seed: number) => () => {
     seed |= 0; seed = seed + 0x6D2B79F5 | 0
@@ -75,5 +75,48 @@ test('edits made one after another: each step bounded, the whole always reversib
             if (rejectAll(text, revs) !== baseline) throw new Error('reject all; ' + label)
             if (acceptAll(baseline, revs) !== text) throw new Error('accept all; ' + label)
         }
+    }
+})
+
+// Many revisions: only the paragraphs about a change compared again (diffTextsAround; the user, 2026-11-24: typing lagged
+// with 300 revisions shown). What it gives is always reversible and marks no more than the edits made, and a letter
+// typed at a paragraph's end is what comparing the whole gives.
+const manyDoc = (word: (i: number) => string) => '# Many\n\n' + Array.from({ length: 120 }, (_, i) => `${i % 30 === 15 ? '```js\nlet x = 1\n\nlet y = 2\n```\n\n' : ''}Line ${i} has a ${word(i)} word, then more.`).join('\n\n') + '\n'
+
+test('many revisions: edits one after another, compared only about them, always reversible', () => {
+    for (let seed = 2000; seed < 2010; seed++) {
+        forgetLastDiff()
+        const r = rng(seed)
+        const baseline = manyDoc(() => 'plain')
+        let text = manyDoc(i => `changed${i}`)
+        let revs = trackRevisions(baseline, text, [], { source: YOU, time: 0 })
+        if (revs.length < LOCAL_DIFF_MIN_HUNKS) throw new Error(`only ${revs.length} revisions to start with`)
+        const start = marked(revs)
+        let total = 0
+        for (let step = 0; step < 30; step++) {
+            const edit = randomEdit(r, text)
+            if (edit.text === text) continue
+            total += edit.size
+            revs = trackRevisions(baseline, edit.text, revs, { ...changedRegion(text, edit.text)!, source: YOU, time: step + 1 })
+            text = edit.text
+            const label = `seed ${seed} step ${step}`
+            if (rejectAll(text, revs) !== baseline) throw new Error('reject all; ' + label)
+            if (acceptAll(baseline, revs) !== text) throw new Error('accept all; ' + label)
+            if (marked(revs) > start + total + Math.ceil(total / 2) + 2) throw new Error(`${marked(revs)} marked, ${start} to start with and edits of ${total}; ${label}`)
+        }
+    }
+})
+
+test('many revisions: a letter typed at a paragraph\'s end is what comparing the whole gives', () => {
+    const baseline = manyDoc(() => 'plain')
+    let text = manyDoc(i => `changed${i}`)
+    forgetLastDiff()
+    diffTextsAround(baseline, text)
+    const at = text.indexOf('Line 60 ') + text.slice(text.indexOf('Line 60 ')).indexOf('\n')
+    for (const ch of 'abc') {
+        const next = text.slice(0, at) + ch + text.slice(at)
+        const local = diffTextsAround(baseline, next)
+        expect(local).toEqual(diffTexts(baseline, next))
+        text = next
     }
 })

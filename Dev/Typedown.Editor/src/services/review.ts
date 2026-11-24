@@ -204,6 +204,58 @@ export function diffTexts(baseline: string, current: string): Hunk[] {
     return out
 }
 
+/**
+ * diffTexts, compared again only around what changed when there are many hunks: a key typed with 300 revisions compared
+ * the whole document's words each time - 344 ms a key on the reviewer's machine, 17 ms more than with review off here (the
+ * performance review's P14; the user, 2026-11-24: typing lagged with the revision marks shown). The last texts and their
+ * hunks kept; the same baseline and at least LOCAL_DIFF_MIN_HUNKS hunks, the change is widened to the paragraphs about it
+ * (at blank lines in no hunk and no fenced code), that stretch compared, the hunks before it kept and those after it
+ * moved. Fewer hunks, or no such place: the whole, as before.
+ */
+export const LOCAL_DIFF_MIN_HUNKS = 40
+
+let lastDiff: { baseline: string, current: string, hunks: Hunk[] } | null = null
+
+export function diffTextsAround(baseline: string, current: string): Hunk[] {
+    const before = lastDiff
+    let hunks = before && before.baseline === baseline && before.hunks.length >= LOCAL_DIFF_MIN_HUNKS ? diffAround(before, current) : null
+    hunks ??= diffTexts(baseline, current)
+    lastDiff = { baseline, current, hunks }
+    return hunks
+}
+
+/** For the tests: the last texts forgotten. */
+export function forgetLastDiff() { lastDiff = null }
+
+function diffAround(before: { baseline: string, current: string, hunks: Hunk[] }, current: string): Hunk[] | null {
+    const old = before.current
+    const region = changedRegion(old, current)
+    if (!region) return before.hunks
+    const fenced = fencedRanges(old)
+    // A place between paragraphs the comparison may start or end at: in no hunk (nor at its edge), in no fenced code.
+    const free = (p: number) => !before.hunks.some(h => h.curStart <= p && p <= h.curEnd) && !fenced.some(([a, b]) => p > a && p < b)
+    let from = 0
+    for (let p = old.lastIndexOf('\n\n', region.from - 2); p >= 0; p = old.lastIndexOf('\n\n', p - 1)) {
+        if (free(p + 2) && free(p)) { from = p + 2; break }
+    }
+    let to = old.length
+    for (let p = old.indexOf('\n\n', region.oldTo); p >= 0; p = old.indexOf('\n\n', p + 1)) {
+        if (free(p) && free(p + 2)) { to = p; break }
+    }
+    if (from === 0 && to === old.length) return null
+    // The baseline's place for a place in no hunk: the hunks before it moved it by their lengths' difference.
+    const toBase = (p: number) => p - before.hunks.filter(h => h.curEnd < p).reduce((d, h) => d + (h.curEnd - h.curStart) - (h.baseEnd - h.baseStart), 0)
+    const baseFrom = toBase(from), baseTo = toBase(to)
+    const delta = current.length - old.length
+    const inside = diffTexts(before.baseline.slice(baseFrom, baseTo), current.slice(from, to + delta))
+        .map(h => ({ baseStart: h.baseStart + baseFrom, baseEnd: h.baseEnd + baseFrom, curStart: h.curStart + from, curEnd: h.curEnd + from }))
+    return [
+        ...before.hunks.filter(h => h.curEnd < from),
+        ...inside,
+        ...before.hunks.filter(h => h.curStart > to).map(h => ({ ...h, curStart: h.curStart + delta, curEnd: h.curEnd + delta })),
+    ]
+}
+
 function diffWords(baseline: string, current: string): Hunk[] {
     if (baseline === current) return []
     // The words of everything between what the two have in common at their ends, the fewest words changed: fast while
@@ -531,8 +583,21 @@ export interface ChangeInfo {
 export let REVISION_PAUSE_MS = 3 * 60 * 1000
 export function setRevisionPause(ms: number) { REVISION_PAUSE_MS = ms }
 
+// The last texts' fenced ranges: asked for each hunk (blockStarts), they were worked out anew each time - 300 revisions
+// read the whole text 300 times a key (the performance review's P14; the user, 2026-11-24: typing lagged with review on).
+const fencedCache: { text: string, ranges: [number, number][] }[] = []
+
 // The ranges of a text inside fenced code (and a formula's $$): a revision is split at its line breaks, except there.
 function fencedRanges(text: string): [number, number][] {
+    const hit = fencedCache.find(c => c.text === text)
+    if (hit) return hit.ranges
+    const ranges = findFencedRanges(text)
+    fencedCache.unshift({ text, ranges })
+    if (fencedCache.length > 2) fencedCache.pop()
+    return ranges
+}
+
+function findFencedRanges(text: string): [number, number][] {
     const ranges: [number, number][] = []
     let open: { at: number, mark: string } | null = null
     let at = 0
@@ -587,7 +652,7 @@ function placesOf(p: Known, current: string, region: { from: number, to: number,
  * the same place in the baseline, or the change's if the change touched it.
  */
 export function trackRevisions(baseline: string, current: string, previous: Known[], change: ChangeInfo): Revision[] {
-    const hunks = diffTexts(baseline, current)
+    const hunks = diffTextsAround(baseline, current)
     const used = new Set<string>()
     const region = change.from !== undefined && change.to !== undefined ? { from: change.from, to: change.to, oldTo: change.oldTo ?? change.to } : null
     const places = previous.map(p => ({ p, at: placesOf(p, current, region) }))
