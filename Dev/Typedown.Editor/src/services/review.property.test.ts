@@ -1,7 +1,7 @@
 // Review mode's diff on random documents (fixed seeds, so a failure comes back the same): one small edit somewhere is
 // revisions no bigger than the edit, rejecting them all gives the baseline back, accepting them all makes the baseline the
 // text. "修订了一个小地方，出现大量删除和新加的内容" (the user, 2026-11-06) is what these keep from coming back.
-import { acceptAll, changedRegion, diffTexts, diffTextsAround, forgetLastDiff, LOCAL_DIFF_MIN_HUNKS, rejectAll, trackRevisions, YOU } from './review'
+import { acceptAll, changedRegion, diffAroundCounts, diffTexts, diffTextsAround, forgetLastDiff, LOCAL_DIFF_MIN_HUNKS, rejectAll, trackRevisions, YOU } from './review'
 
 const rng = (seed: number) => () => {
     seed |= 0; seed = seed + 0x6D2B79F5 | 0
@@ -104,6 +104,45 @@ test('many revisions: edits one after another, compared only about them, always 
             if (acceptAll(baseline, revs) !== text) throw new Error('accept all; ' + label)
             if (marked(revs) > start + total + Math.ceil(total / 2) + 2) throw new Error(`${marked(revs)} marked, ${start} to start with and edits of ${total}; ${label}`)
         }
+    }
+})
+
+// A long document with a few long passages added (the user's, 2026-11-24: 71 revisions made 25 hunks, under the 40 that
+// compared only about a change, and each key compared the whole: 40 to 70 ms here). Few hunks, but long: only about the
+// change too, and what comparing the whole gives.
+test('a few long passages added: a letter typed is compared only about it', () => {
+    const para = (i: number) => `Paragraph ${i} says something plain about the matter, and then a little more about it.`
+    const baseline = '# Few\n\n' + Array.from({ length: 200 }, (_, i) => para(i)).join('\n\n') + '\n'
+    const added = (n: number) => Array.from({ length: 6 }, (_, k) => `Added ${n}.${k}: a new passage of some length, written in, with words enough to be read.`).join('\n\n')
+    let text = baseline
+    for (const n of [150, 100, 50, 20, 5]) text = text.replace(para(n) + '\n', para(n) + '\n\n' + added(n) + '\n')
+    forgetLastDiff()
+    const hunks = diffTextsAround(baseline, text)
+    expect(hunks.length).toBeLessThan(40)
+    expect(hunks.length).toBeGreaterThan(0)
+    const before = { ...diffAroundCounts }
+    let at = text.indexOf(para(120)) + para(120).length
+    for (const ch of 'abcde') {
+        text = text.slice(0, at) + ch + text.slice(at)
+        at++
+        expect(diffTextsAround(baseline, text)).toEqual(diffTexts(baseline, text))
+    }
+    expect(diffAroundCounts.around - before.around).toBe(5)
+    expect(diffAroundCounts.whole - before.whole).toBe(0)
+})
+
+// The last paragraph deleted, then an edit reaching to the end (review-layout-check's B15 then B16): the deletion at the
+// end was left out of the baseline's stretch, and the paragraph came out added.
+test('compared about a change: a deletion at the end or the start is kept in the baseline', () => {
+    const baseline = '# T\n\n第一段文字。\n\n第二段文字。\n\n## 二\n\n结尾一段。\n'
+    for (const [first, then] of [
+        [baseline.replace('\n\n结尾一段。\n', '\n'), baseline.replace('第一段文字。\n\n第二段文字。\n\n', '')],
+        [baseline.replace('# T\n\n', ''), baseline.replace('第二段文字。', '第二段改了。')],
+    ]) {
+        forgetLastDiff()
+        diffTextsAround(baseline, first)
+        const hunks = diffTextsAround(baseline, then)
+        expect(hunks).toEqual(diffTexts(baseline, then))
     }
 })
 

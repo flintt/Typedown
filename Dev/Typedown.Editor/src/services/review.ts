@@ -210,16 +210,22 @@ export function diffTexts(baseline: string, current: string): Hunk[] {
  * performance review's P14; the user, 2026-11-24: typing lagged with the revision marks shown). The last texts and their
  * hunks kept; the same baseline and at least LOCAL_DIFF_MIN_HUNKS hunks, the change is widened to the paragraphs about it
  * (at blank lines in no hunk and no fenced code), that stretch compared, the hunks before it kept and those after it
- * moved. Fewer hunks, or no such place: the whole, as before.
+ * moved. No hunk, or no such place: the whole, as before.
+ * It was 40 hunks: what the whole costs is the document's length times what differs, not the hunks - the user's 71
+ * revisions, long passages added, made 25 hunks, and each key compared the whole (40 to 70 ms here; 2026-11-24).
  */
-export const LOCAL_DIFF_MIN_HUNKS = 40
+export const LOCAL_DIFF_MIN_HUNKS = 1
 
 let lastDiff: { baseline: string, current: string, hunks: Hunk[] } | null = null
+
+/** For the tests: how many times diffTextsAround compared only about the change, and the whole. */
+export const diffAroundCounts = { around: 0, whole: 0 }
 
 export function diffTextsAround(baseline: string, current: string): Hunk[] {
     const before = lastDiff
     let hunks = before && before.baseline === baseline && before.hunks.length >= LOCAL_DIFF_MIN_HUNKS ? diffAround(before, current) : null
-    hunks ??= diffTexts(baseline, current)
+    if (hunks) diffAroundCounts.around++
+    else { diffAroundCounts.whole++; hunks = diffTexts(baseline, current) }
     lastDiff = { baseline, current, hunks }
     return hunks
 }
@@ -235,7 +241,9 @@ function diffAround(before: { baseline: string, current: string, hunks: Hunk[] }
     // A place between paragraphs the comparison may start or end at: in no hunk (nor at its edge), in no fenced code.
     const free = (p: number) => !before.hunks.some(h => h.curStart <= p && p <= h.curEnd) && !fenced.some(([a, b]) => p > a && p < b)
     let from = 0
-    for (let p = old.lastIndexOf('\n\n', region.from - 2); p >= 0; p = old.lastIndexOf('\n\n', p - 1)) {
+    // (From before the change: lastIndexOf took a negative start as 0, and a change at 1 was compared from 2 - its start
+    // left out, rejecting all did not give the baseline back.)
+    for (let p = region.from >= 2 ? old.lastIndexOf('\n\n', region.from - 2) : -1; p >= 0; p = p > 0 ? old.lastIndexOf('\n\n', p - 1) : -1) {
         if (free(p + 2) && free(p)) { from = p + 2; break }
     }
     let to = old.length
@@ -245,10 +253,15 @@ function diffAround(before: { baseline: string, current: string, hunks: Hunk[] }
     if (from === 0 && to === old.length) return null
     // The baseline's place for a place in no hunk: the hunks before it moved it by their lengths' difference.
     const toBase = (p: number) => p - before.hunks.filter(h => h.curEnd < p).reduce((d, h) => d + (h.curEnd - h.curStart) - (h.baseEnd - h.baseStart), 0)
-    const baseFrom = toBase(from), baseTo = toBase(to)
+    // The document's ends are the baseline's: a deletion at the very end (or start) is at no place in no hunk, and toBase
+    // left it out - the last paragraph deleted, then an edit reaching the end, showed the paragraph added (B15, B16).
+    const baseFrom = from === 0 ? 0 : toBase(from), baseTo = to === old.length ? before.baseline.length : toBase(to)
     const delta = current.length - old.length
     const inside = diffTexts(before.baseline.slice(baseFrom, baseTo), current.slice(from, to + delta))
         .map(h => ({ baseStart: h.baseStart + baseFrom, baseEnd: h.baseEnd + baseFrom, curStart: h.curStart + from, curEnd: h.curEnd + from }))
+        // Slid in the whole texts, as the whole's are: in the stretch alone a deletion could not slide past its end ("\n\n2. 二"
+        // kept at the item before, not "2. 二\n\n" at its own - reviewMap's 3.15).
+        .map(h => slide(before.baseline, current, h))
     return [
         ...before.hunks.filter(h => h.curEnd < from),
         ...inside,
