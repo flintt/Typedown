@@ -239,10 +239,11 @@ namespace Typedown.Core.ViewModels
         [Locale("View", "SidePane")]
         public ShortcutKey ShortcutSidePane { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.L)); set => SetSettingValue(value); }
 
-        // The side pane's files and its outline, each shown (or, shown, the pane closed) - the user, 2026-11-24. As a code
-        // editor has them: Ctrl+Shift+E its files, Ctrl+Shift+O what is in the document; free in the app.
+        // The side pane's files and its outline, each shown (or, shown, the pane closed) - the user, 2026-11-24. Ctrl+Shift+B
+        // the files (B as a code editor's side bar), Ctrl+Shift+O what is in the document. Not Ctrl+Shift+E: an edition's
+        // own key, not in this table, has it - the key once did both at once.
         [Locale("View", "SidePane", "Files")]
-        public ShortcutKey ShortcutSidePaneFiles { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.E)); set => SetSettingValue(value); }
+        public ShortcutKey ShortcutSidePaneFiles { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.B)); set => SetSettingValue(value); }
 
         [Locale("View", "SidePane", "Outline")]
         public ShortcutKey ShortcutSidePaneOutline { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.O)); set => SetSettingValue(value); }
@@ -252,7 +253,7 @@ namespace Typedown.Core.ViewModels
         public ShortcutKey ShortcutScratchpad { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.J)); set => SetSettingValue(value); }
 
         // The selection put at the scratchpad's end, as the editor's menu does (the user, 2026-11-24: it had no key). Beside
-        // the scratchpad's own (Ctrl+Shift+J), and no other shortcut of the app has Ctrl+Alt.
+        // the scratchpad's own (Ctrl+Shift+J); no other shortcut of the app, nor the editor page's, has Ctrl+Alt+J.
         [Locale("Edit", "PutInScratchpad")]
         public ShortcutKey ShortcutPutInScratchpad { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Menu, Key.J)); set => SetSettingValue(value); }
 
