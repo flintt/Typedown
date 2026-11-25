@@ -34,7 +34,11 @@ namespace Typedown.Core.Services
             public DateTime Time { get; set; }
         }
 
-        private static string StorePath => Path.Combine(Config.GetLocalFolderPath(), "session.json");
+        /// <summary>For the tests: where session.json is (null: the app's local folder), and how a file is looked for.</summary>
+        internal static string StoreFolder { get; set; }
+        internal static Func<string, bool> FileExists { get; set; } = File.Exists;
+
+        private static string StorePath => Path.Combine(StoreFolder ?? Config.GetLocalFolderPath(), "session.json");
 
         public static Session Load()
         {
@@ -48,9 +52,10 @@ namespace Typedown.Core.Services
                 // A vanished file's unsaved text (its backup) comes back as an untitled document: dropped with the file, it
                 // stayed on disk with no restore offering it (the audit's A06).
                 var backups = new AutoBackup();
-                foreach (var gone in session.Files.Where(f => !File.Exists(f)))
+                var found = Look(session.Files);
+                foreach (var gone in session.Files.Where(f => found[f] == false))
                     if (backups.AdoptAsUntitled(gone)) Log.Debug($"session: {Path.GetFileName(gone)} is gone; its unsaved text kept as an untitled document");
-                session.Files = session.Files.Where(File.Exists).ToList();
+                session.Files = session.Files.Where(f => found[f] != false).ToList();
                 session.ActiveIndex = Math.Max(0, session.Files.IndexOf(active));
                 // Only untitled documents open: still a session, for the one to show among them.
                 return session.Files.Count > 0 || session.ActiveDocumentId != null ? session : null;
@@ -59,6 +64,25 @@ namespace Typedown.Core.Services
             {
                 return null;
             }
+        }
+
+        /// <summary>How long the start waits for the files to be looked for, all together.</summary>
+        internal static TimeSpan LookBudget { get; set; } = TimeSpan.FromSeconds(1.5);
+
+        // Each file looked for once, all at once, off the start's thread, for LookBudget at most: true there, false gone,
+        // null not answered in time (a network place offline) - kept, its open to tell. Each was looked for twice, one
+        // after the other, and an offline share held the start for about 53 s (the audit of 2026-11-24, P10a).
+        private static Dictionary<string, bool?> Look(IEnumerable<string> files)
+        {
+            var looks = files.Distinct(StringComparer.OrdinalIgnoreCase).ToDictionary(f => f, f => System.Threading.Tasks.Task.Run(() => FileExists(f)), StringComparer.OrdinalIgnoreCase);
+            try { System.Threading.Tasks.Task.WaitAll(looks.Values.ToArray(), LookBudget); } catch (AggregateException) { }
+            var found = new Dictionary<string, bool?>(StringComparer.OrdinalIgnoreCase);
+            foreach (var (file, look) in looks)
+            {
+                found[file] = look.IsCompletedSuccessfully ? look.Result : look.IsCompleted ? false : null;
+                if (found[file] == null) Log.Debug($"session: {Path.GetFileName(file)} did not answer in {LookBudget.TotalSeconds:0.#} s (a network place?); kept, its open will tell");
+            }
+            return found;
         }
 
         /// <summary>The key a tab has in <see cref="Session.Order"/>: its path, or "untitled:" and its document id.</summary>
