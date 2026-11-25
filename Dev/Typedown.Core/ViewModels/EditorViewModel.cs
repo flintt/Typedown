@@ -175,6 +175,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("NotDrawn").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("SelectionMarkdown").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("RenderedXhtml").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (xhtmlWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
+            EventCenter.GetObservable<EditorEventArgs>("PictureConverted").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (pictureWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
@@ -1469,6 +1470,33 @@ namespace Typedown.Core.ViewModels
             finally
             {
                 xhtmlWaiters.Remove(token);
+            }
+        }
+
+        private readonly Dictionary<int, TaskCompletionSource<JToken>> pictureWaiters = new();
+
+        /// <summary>
+        /// A picture of a kind a format does not take (WebP, AVIF for Word) drawn as PNG by the page (ConvertPicture): the
+        /// PNG's bytes, or null when the page could not draw it or did not answer in time.
+        /// </summary>
+        public async Task<byte[]> ConvertPictureAsync(byte[] bytes, string mime, int timeoutMs)
+        {
+            if (MarkdownEditor == null || bytes == null) return null;
+            var token = ++normalizationToken;
+            var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
+            pictureWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("ConvertPicture", new { token, data = $"data:{mime};base64,{Convert.ToBase64String(bytes)}" });
+                if (await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) != waiter.Task) return null;
+                var reply = waiter.Task.Result;
+                if (reply?["error"] != null) Log.Debug($"picture: not drawn as PNG ({mime}): {reply["error"]}");
+                var png = reply?["png"]?.ToString();
+                return string.IsNullOrEmpty(png) ? null : Convert.FromBase64String(png);
+            }
+            finally
+            {
+                pictureWaiters.Remove(token);
             }
         }
 

@@ -229,6 +229,25 @@ const Editor: React.FC = () => {
         }
     }), []);
 
+    // Host -> editor: a picture of a kind the host's format does not take (WebP, AVIF for Word) drawn as a PNG of its
+    // own size, its first frame. Its bytes come as a data: address, not its own: a picture from another site would
+    // taint the canvas. Both kinds were left out of every Word document (the audit of 2026-11-24, F1).
+    useEffect(() => transport.addListener<{ token: number, data: string }>('ConvertPicture', async ({ token, data }) => {
+        try {
+            const picture = new Image()
+            picture.src = data
+            await picture.decode()
+            const canvas = document.createElement('canvas')
+            canvas.width = picture.naturalWidth
+            canvas.height = picture.naturalHeight
+            canvas.getContext('2d')!.drawImage(picture, 0, 0)
+            const png = canvas.toDataURL('image/png')
+            transport.postMessage('PictureConverted', { token, png: png.slice(png.indexOf(',') + 1) })
+        } catch (e) {
+            transport.postMessage('PictureConverted', { token, error: errorText(e) })
+        }
+    }), []);
+
     // Host -> editor: how the editor is drawn right now (the settings it applied), for checking that a setting reached
     // the page and not only the host.
     // The document has one history, the host's. An undo or redo the browser would make itself (a Ctrl+Z the host's
