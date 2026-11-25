@@ -271,8 +271,12 @@ class ExportMarkdown {
     // A quote's lazy lines (lexer markLazyLines) written with no ">" again, as the reader wrote them - in a quote only (a
     // list's indent, or the paragraph taken out of its quote, writes them all), and only a line that still goes on the
     // paragraph with none: one that would start a block of its own, or underline the paragraph, gets its "> ".
-    const lazy = /^(?:> )+$/.test(indent) ? lazyLinesOf(block, lines.length) : null
-    return lines.map((line, i) => lazy && i > 0 && lazy.includes(i) && goesOnLazily(line)
+    const quoted = /^(?:> )+$/.test(indent)
+    const lazy = quoted ? lazyLinesOf(block, lines.length) : null
+    // A line of = in a quote's paragraph (CommonMark 93: "> foo\nbar\n===", read so by the lexer's unlazyUnderlines) is
+    // written with no ">", marked lazy or not: with one it underlines the lines above, a heading in the quote.
+    const underline = /^ {0,3}=+[ \t]*$/
+    return lines.map((line, i) => quoted && i > 0 && ((lazy && lazy.includes(i) && goesOnLazily(line)) || underline.test(line))
       ? line
       : `${indent}${escape ? line.replace(fence, '$1\\$2') : line}`).join('\n') + '\n'
   }
@@ -397,9 +401,13 @@ class ExportMarkdown {
       const longest = (codeContent.text.match(run) || []).reduce((n, m) => Math.max(n, m.trim().length), 0)
       const fence = char.repeat(Math.max(3, longest + 1))
       result.push(`${indent}${fence}${info}\n`)
-      textList.forEach(text => {
-        result.push(`${indent}${text}\n`)
-      })
+      // An empty block is the two fences: its empty text was written as an empty line between them (the audit's C01).
+      // The reader takes a block of one empty line for an empty one too, so that one is written so as well.
+      if (codeContent.text !== '') {
+        textList.forEach(text => {
+          result.push(`${indent}${text}\n`)
+        })
+      }
       result.push(indent + fence + '\n')
     } else {
       textList.forEach(text => {

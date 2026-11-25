@@ -174,6 +174,33 @@ function markLazyLines (raw, tokens, start) {
   }
 }
 
+// A line of = that was a quote's lazy continuation (no ">") underlines nothing: it goes on the quote's paragraph, as
+// CommonMark has it (example 93: "> foo\nbar\n===" is one paragraph in the quote). With the ">" taken off, the quote's
+// text read "foo\nbar\n===" - a heading in the quote, written back "> foo\n> bar\n> ===" (the audit's C01). A line of -
+// there is a thematic break after the quote, as read already.
+function unlazyUnderlines (raw, tokens, start) {
+  const lazy = raw.replace(/\n+$/, '').split('\n').filter(line => !/^ *>/.test(line) && /^ {0,3}=+ *$/.test(line)).map(line => line.trim())
+  let depth = 0
+  for (let i = start + 1; i < tokens.length && lazy.length; i++) {
+    const token = tokens[i]
+    if (/_start$/.test(token.type)) depth++
+    else if (/_end$/.test(token.type)) depth--
+    else if (depth === 0 && token.type === 'heading' && token.headingStyle === 'setext' && token.marker === lazy[0]) {
+      lazy.shift()
+      const paragraph = { type: 'paragraph', text: token.text + '\n' + token.marker }
+      if (token.blankLinesBefore !== undefined) paragraph.blankLinesBefore = token.blankLinesBefore
+      // The lines after it, read as a paragraph of their own, go on the same one.
+      const next = tokens[i + 1]
+      if (next && next.type === 'paragraph' && !next.blankLinesBefore) {
+        paragraph.text += '\n' + next.text
+        for (const key of ['followedByBlankLine']) if (next[key] !== undefined) paragraph[key] = next[key]
+        tokens.splice(i + 1, 1)
+      }
+      tokens[i] = paragraph
+    }
+  }
+}
+
 Lexer.prototype.token = function (src, top, container) {
   const {
     footnote,
@@ -536,6 +563,7 @@ Lexer.prototype.token = function (src, top, container) {
       // "toplevel" state. This is exactly
       // how markdown.pl works.
       this.token(cap, top)
+      unlazyUnderlines(raw, this.tokens, start)
       markLazyLines(raw, this.tokens, start)
 
       this.tokens.push({

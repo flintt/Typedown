@@ -41,7 +41,7 @@ describe("a quote's lazy lines", () => {
   })
 
   test('a line that would start a block, or underline the paragraph, gets its "> "', () => {
-    for (const line of ['# h', '- item', '1. item', '---', '--', '===', '```', '> q', '<div>', 'a | b', '$$', '[x]: /u', '    code', ''])
+    for (const line of ['# h', '- item', '1. item', '---', '--', '```', '> q', '<div>', 'a | b', '$$', '[x]: /u', '    code', ''])
       expect(write([quote(['a\n' + line, [1]])])).toBe('> a\n> ' + line + '\n')
   })
 
@@ -94,5 +94,32 @@ describe("a quote's lazy lines", () => {
       const tokens = lex(source)
       expect(lex(source.replace(/\n$/, '') + '\n').map(t => t.type)).toEqual(tokens.map(t => t.type))
     }
+  })
+
+  // CommonMark 93 (the audit's C01): a lazy line of = is the quote's paragraph's, not an underline - it was a heading in
+  // the quote, written back with "> " before each line.
+  test('a lazy line of = goes on the paragraph', () => {
+    const tokens = lex('> foo\nbar\n===\n')
+    expect(tokens.map(t => t.type)).toEqual(['blockquote_start', 'paragraph', 'blockquote_end'])
+    expect(tokens[1].text).toBe('foo\nbar\n===')
+    expect(tokens[1].lazyLines).toEqual([1, 2])
+    // And the lines after it, as CommonMark has them.
+    const more = lex('> foo\nbar\n===\nbaz\n')
+    expect(more.map(t => t.type)).toEqual(['blockquote_start', 'paragraph', 'blockquote_end'])
+    expect(more[1].text).toBe('foo\nbar\n===\nbaz')
+  })
+
+  test('a heading in a quote with its own ">" stays one; a lazy line of - is a break after the quote', () => {
+    expect(lex('> foo\n> ===\n').map(t => t.type)).toEqual(['blockquote_start', 'heading', 'blockquote_end'])
+    expect(lex('> foo\nbar\n---\n').map(t => t.type)).toEqual(['blockquote_start', 'paragraph', 'blockquote_end', 'hr'])
+    expect(lex('foo\nbar\n===\n').map(t => t.type)).toEqual(['heading'])
+  })
+
+  test('a line of = in a quote\'s paragraph is written with no ">", marked lazy or not', () => {
+    expect(write([quote(['foo\nbar\n===', [1, 2]])])).toBe('> foo\nbar\n===\n')
+    // The marks gone (the paragraph edited): still not an underline.
+    const out = write([quote(['foo\nbar\n==='])])
+    expect(out).toBe('> foo\n> bar\n===\n')
+    expect(lex(out).map(t => t.type)).toEqual(['blockquote_start', 'paragraph', 'blockquote_end'])
   })
 })

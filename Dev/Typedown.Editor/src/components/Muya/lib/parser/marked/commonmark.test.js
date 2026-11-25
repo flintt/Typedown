@@ -29,4 +29,9 @@ describe('CommonMark in the exports', () => {
   test('a link in angle brackets still is one', () => {
     expect(html('[a](<b c>)\n')).toMatch(/<a href="b%20c">a<\/a>/)
   })
+
+  // C01 (example 93, the audit of 2026-11-24): a lazy line of = goes on the quote's paragraph - it was a heading.
+  test('a lazy line of = in a quote', () => {
+    expect(html('> foo\nbar\n===\n')).toBe('<blockquote>\n<p>foo\nbar\n===</p>\n</blockquote>\n')
+  })
 })
