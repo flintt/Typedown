@@ -18,6 +18,7 @@
   <ItemGroup>
     <!-- Compile the production implementations rather than maintaining test copies. -->
     <Compile Include="../../Dev/Typedown.Core/Services/AutoBackup.cs" Link="Production/AutoBackup.cs" />
+    <Compile Include="../../Dev/Typedown.Core/Services/SaveAsRun.cs" Link="Production/SaveAsRun.cs" />
     <Compile Include="../../Dev/Typedown.Core/Services/JsonSettingsStore.cs" Link="Production/JsonSettingsStore.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/SafeFile.cs" Link="Production/SafeFile.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/SnapshotWriter.cs" Link="Production/SnapshotWriter.cs" />

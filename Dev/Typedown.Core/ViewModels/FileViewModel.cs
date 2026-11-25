@@ -721,7 +721,7 @@ namespace Typedown.Core.ViewModels
             {
                 if (disposables.IsDisposed || FilePath != path || !op.Shown)
                     return false;
-                return await SaveCore(alert);
+                return await SaveCore(alert, op);
             }
             finally
             {
@@ -800,12 +800,13 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        private async Task<bool> SaveCore(bool alert)
+        // `op`: the document the save was asked for, taken before the save waited for the lock (Save).
+        private async Task<bool> SaveCore(bool alert, DocumentOperation op)
         {
             LastSaveRefusal = null;
             if (FilePath == null)
             {
-                var result = await SaveAsCore();
+                var result = await SaveAsCore(op, holdsLock: true);
                 return result != null;
             }
             else
@@ -813,7 +814,6 @@ namespace Typedown.Core.ViewModels
                 var path = FilePath;
                 // The document being saved (Services.DocumentOperation): after each wait - the flush, a question, the disk -
                 // it must still be the one shown, at this path; its tab given another document since is noticed too.
-                var op = DocumentOperation.Of(TabsViewModel);
                 bool Gone() => disposables.IsDisposed || FilePath != path || !op.Shown;
                 // What we write must be what is on screen (FlushForSaveAsync, as Save As has it).
                 if (!await FlushForSaveAsync(alert, Gone, path)) return false;
@@ -886,57 +886,70 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        private async Task<string> SaveAs()
-        {
-            var path = FilePath;
-            await saveLock.WaitAsync();
-            try
-            {
-                if (disposables.IsDisposed || FilePath != path)
-                    return null;
-                return await SaveAsCore();
-            }
-            finally
-            {
-                saveLock.Release();
-            }
-        }
+        // The document is taken as the command comes in, before its first wait: an untitled one saved as while another
+        // untitled one came into the same tab (the lock or the picker waited for) had that one's text written to its file,
+        // and that one given the path (the audit of 2026-11-24, R01).
+        private Task<string> SaveAs() => SaveAsCore(DocumentOperation.Of(TabsViewModel), holdsLock: false);
 
-        private async Task<string> SaveAsCore()
+        private Task<string> SaveAsCore(DocumentOperation op, bool holdsLock) => RunSaveAs(op, holdsLock, target: null);
+
+        /// <summary>Save as, with the file already chosen (the test host skips the dialog).</summary>
+        public Task<string> SaveAsTo(string path) => RunSaveAs(DocumentOperation.Of(TabsViewModel), holdsLock: false, target: path);
+
+        // Save as for the document `op` (Services.SaveAsRun: each wait, then the document asked again): `target` null asks
+        // with the picker; `holdsLock` when the caller has the save lock already (Save of an untitled document).
+        private async Task<string> RunSaveAs(DocumentOperation op, bool holdsLock, string target)
         {
+            var originalPath = FilePath;
+            bool Still() => !disposables.IsDisposed && FilePath == originalPath && op.Shown;
             try
             {
-                var originalPath = FilePath;
-                var originalTab = TabsViewModel?.ActiveTab;
-                var filePicker = new FileSavePicker();
-                filePicker.SetOwnerWindow(AppViewModel.MainWindow);
-                filePicker.FileTypeChoices.Add("Markdown Files", FileTypeHelper.Markdown.ToList());
-                filePicker.SuggestedFileName = FileName ?? "untitled";
-                var file = await FilePickersExtensions.ShowAsync(() => filePicker.PickSaveFileAsync());
-                if (file == null) return null;
-                return await SaveAsToCore(file.Path, originalPath, originalTab);
+                return await new SaveAsRun
+                {
+                    Still = Still,
+                    Lock = holdsLock ? null : saveLock,
+                    Target = target,
+                    Pick = async () =>
+                    {
+                        var filePicker = new FileSavePicker();
+                        filePicker.SetOwnerWindow(AppViewModel.MainWindow);
+                        filePicker.FileTypeChoices.Add("Markdown Files", FileTypeHelper.Markdown.ToList());
+                        filePicker.SuggestedFileName = FileName ?? "untitled";
+                        var file = await FilePickersExtensions.ShowAsync(() => filePicker.PickSaveFileAsync());
+                        return file?.Path;
+                    },
+                    // A file open in another tab or window is not written over: two documents would then have one path,
+                    // write over each other and share one crash backup (named by the path) - opening it twice is stopped,
+                    // saving as it was not (the audit's 12).
+                    Refused = async targetPath =>
+                    {
+                        var other = TabsViewModel?.FindByPath(targetPath);
+                        if ((other == null || other == op.Tab) && !(TryGetOpenedWindow(targetPath, out var window) && window != AppViewModel.MainWindow)) return false;
+                        Log.Debug($"save as: {Path.GetFileName(targetPath)} is open elsewhere; not written");
+                        await AppContentDialog.Create(Locale.GetString("Error"), Locale.GetDialogString("SaveAsTargetOpen"), Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                        return true;
+                    },
+                    // As a save by hand (FlushForSaveAsync): nothing written if the page did not hand over its text - the
+                    // host's copy may be older than the screen, and was written and marked saved (the audit's A09).
+                    Flush = (gone, targetPath) => FlushForSaveAsync(true, gone, targetPath),
+                    Text = () => EditorViewModel.Markdown,
+                    Write = (targetPath, markdown) => WriteAllText(targetPath, markdown),
+                    Commit = (targetPath, markdown) =>
+                    {
+                        CopyPicturesAlong(markdown, ImageBasePath, Path.GetDirectoryName(targetPath));
+                        FilePath = targetPath;
+                        CommitWritten(targetPath, Common.SimpleHash(markdown), originalPath, op.DocumentId);
+                        if (!string.Equals(originalPath, targetPath, StringComparison.OrdinalIgnoreCase))
+                            EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, originalPath);
+                        return EditorViewModel.Saved ? targetPath : null;
+                    },
+                    Say = message => Log.Debug($"{message} ({op})"),
+                }.RunAsync();
             }
             catch (Exception ex)
             {
                 await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                 return null;
-            }
-        }
-
-        /// <summary>Save as, with the file already chosen (the test host skips the dialog).</summary>
-        public async Task<string> SaveAsTo(string path)
-        {
-            var originalPath = FilePath;
-            await saveLock.WaitAsync();
-            try
-            {
-                if (disposables.IsDisposed || FilePath != originalPath)
-                    return null;
-                return await SaveAsToCore(path, originalPath, TabsViewModel?.ActiveTab);
-            }
-            finally
-            {
-                saveLock.Release();
             }
         }
 
@@ -978,55 +991,6 @@ namespace Typedown.Core.ViewModels
                 if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
             }
             _ = AccessHistory.RecordFileHistory(path);
-        }
-
-        private async Task<string> SaveAsToCore(string targetPath, string originalPath, Models.DocumentTab originalTab)
-        {
-            try
-            {
-                // A file open in another tab or window is not written over: two documents would then have one path, write
-                // over each other and share one crash backup (named by the path) - opening it twice is stopped, saving as
-                // it was not (the audit's 12).
-                var other = TabsViewModel?.FindByPath(targetPath);
-                if ((other != null && other != originalTab) || (TryGetOpenedWindow(targetPath, out var window) && window != AppViewModel.MainWindow))
-                {
-                    Log.Debug($"save as: {Path.GetFileName(targetPath)} is open elsewhere; not written");
-                    await AppContentDialog.Create(Locale.GetString("Error"), Locale.GetDialogString("SaveAsTargetOpen"), Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
-                    return null;
-                }
-                // The document saved (Services.DocumentOperation), from the start: two untitled documents both have no path,
-                // and a switch from one to the other during the write gave the other this file's path and hash (the audit's
-                // A07); a tab made a new document meanwhile (the last tab closed to the home page) is not this file (the
-                // 2026-11-11 recheck) - its identity was taken only after the flush.
-                var op = DocumentOperation.Of(TabsViewModel, originalTab);
-                bool Gone() => disposables.IsDisposed || FilePath != originalPath || !op.Shown;
-                if (!Gone())
-                {
-                    // As a save by hand (FlushForSaveAsync): nothing written if the page did not hand over its text - the
-                    // host's copy may be older than the screen, and was written and marked saved (the audit's A09).
-                    if (!await FlushForSaveAsync(true, Gone, targetPath)) return null;
-                    var markdown = EditorViewModel.Markdown;
-                    var hash = Common.SimpleHash(markdown);
-                    var imagesBefore = ImageBasePath;
-                    var documentId = op.DocumentId;
-                    var result = await WriteAllText(targetPath, markdown);
-                    if (result && !Gone())
-                    {
-                        CopyPicturesAlong(markdown, imagesBefore, Path.GetDirectoryName(targetPath));
-                        FilePath = targetPath;
-                        CommitWritten(targetPath, hash, originalPath, documentId);
-                        if (!string.Equals(originalPath, targetPath, StringComparison.OrdinalIgnoreCase))
-                            EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, originalPath);
-                        return EditorViewModel.Saved ? targetPath : null;
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
-                return null;
-            }
         }
 
         // Pictures by relative paths (./images/x.png) were beside the old place - for an untitled document, the default
