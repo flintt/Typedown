@@ -148,34 +148,48 @@ export const trySearch = (value: string, options: any, texts: () => string[], do
     if (regexVerdicts.has(key)) return
     if (regexVerdicts.size >= 200) regexVerdicts.delete(regexVerdicts.keys().next().value as string)
     regexVerdicts.set(key, 'pending')
+    regexQueue.push({ key, pattern, source: re.source, flags: re.flags, texts: over, done })
+    if (!regexRunning) tryNext()
+}
+
+// One expression in the worker at a time, its SLOW_REGEX_MS counted from when it is sent: all were sent at once, each
+// timed from then, and a quick one queued behind a slow one was given up on with it (the audit of 2026-11-24, R03).
+type RegexJob = { key: string, pattern: string, source: string, flags: string, texts: string[], done: () => void }
+const regexQueue: RegexJob[] = []
+let regexRunning = false
+
+const tryNext = () => {
+    const job = regexQueue.shift()
+    if (!job) { regexRunning = false; return }
+    regexRunning = true
+    let worker: Worker
     try {
-        regexWorker ||= new Worker(URL.createObjectURL(new Blob([regexWorkerSource], { type: 'text/javascript' })))
+        worker = regexWorker ||= new Worker(URL.createObjectURL(new Blob([regexWorkerSource], { type: 'text/javascript' })))
     } catch (err) {
         // No worker to try it in: run as before.
-        regexVerdicts.set(key, 'ok')
-        done()
+        regexVerdicts.set(job.key, 'ok')
+        job.done()
+        tryNext()
         return
     }
-    const worker = regexWorker
     const id = Math.random()
     const finish = (verdict: RegexVerdict) => {
         window.clearTimeout(timer)
         worker.removeEventListener('message', onMessage)
-        regexVerdicts.set(key, verdict)
-        if (verdict === 'ok') {
-            done()
-            return
+        regexVerdicts.set(job.key, verdict)
+        if (verdict === 'slow') {
+            console.log(`search: the regular expression ${job.pattern} took over ${SLOW_REGEX_MS} ms on these texts; it finds nothing`)
+            worker.terminate()
+            if (regexWorker === worker) regexWorker = null
         }
-        console.log(`search: the regular expression ${pattern} took over ${SLOW_REGEX_MS} ms on these texts; it finds nothing`)
-        worker.terminate()
-        if (regexWorker === worker) regexWorker = null
-        // Searched again (finding nothing), for the bar to be told it was given up on.
-        done()
+        // Searched again: with its matches, or finding nothing, for the bar to be told it was given up on.
+        job.done()
+        tryNext()
     }
     const onMessage = (e: MessageEvent) => { if (e.data === id) finish('ok') }
     const timer = window.setTimeout(() => finish('slow'), SLOW_REGEX_MS)
     worker.addEventListener('message', onMessage)
-    worker.postMessage({ id, source: re.source, flags: re.flags, texts: over })
+    worker.postMessage({ id, source: job.source, flags: job.flags, texts: job.texts })
 }
 
 export const matchString = (text: string, value: string, options: any) => {
