@@ -197,6 +197,7 @@ jobs:
           node hide-done-typing-perf-check.js
           node autolink-delete-check.js
           node picture-convert-check.js
+          node height-predictor-release-check.js
           node hide-done-edit-check.js
           node triple-click-marks-check.js
           node heading-click-check.js

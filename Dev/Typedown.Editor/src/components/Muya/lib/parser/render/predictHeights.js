@@ -198,21 +198,24 @@ export default class HeightPredictor {
       // drawing (w10: 160-208 element kinds, 40-75 ms, 300k drawn from the top in 1.6 times the old estimate's time).
       const ours = node => node.nodeType === 1 && node.hasAttribute && node.hasAttribute('data-td-heights')
       const changed = r => r.type !== 'attributes' || r.oldValue !== r.target.getAttribute(r.attributeName)
-      new MutationObserver(records => {
+      const head = new MutationObserver(records => {
         if (records.some(r => changed(r) && !(r.type === 'childList' && [...r.addedNodes, ...r.removedNodes].every(ours)))) this.checkStyles()
-      }).observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true, attributeOldValue: true })
+      })
+      head.observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true, attributeOldValue: true })
       const attrs = new MutationObserver(records => {
         if (records.some(changed)) this.checkStyles()
       })
       for (const el of [document.documentElement, document.body]) {
         if (el) attrs.observe(el, { attributes: true, attributeFilter: ['style', 'class'], attributeOldValue: true })
       }
+      this.watchers = [head, attrs]
       if (document.fonts) {
         // A font the blocks are drawn in arriving: everything measured in its stand-in is measured again.
-        document.fonts.addEventListener('loadingdone', e => {
+        this.onFonts = e => {
           const faces = e.fontfaces || []
           if (faces.some(f => this.families.has(String(f.family).replace(/^["']|["']$/g, '').toLowerCase()))) this.fontsArrived()
-        })
+        }
+        document.fonts.addEventListener('loadingdone', this.onFonts)
       }
     } catch (err) {
       console.log(err)
@@ -1292,6 +1295,24 @@ export default class HeightPredictor {
     for (const sheet of this.sheets) sheet.remove()
     this.sheets = []
     this.ruled.clear()
+  }
+
+  // The editor gone (Muya destroy: a switch to source mode, the editor made again): its watchers, font listener, timers
+  // and size rules go with it. They stayed, one more of each per switch, each holding its editor (the audit of
+  // 2026-11-24, P05: five switches, five font listeners added and none removed).
+  destroy() {
+    for (const watcher of this.watchers || []) watcher.disconnect()
+    this.watchers = []
+    if (this.onFonts && document.fonts) document.fonts.removeEventListener('loadingdone', this.onFonts)
+    this.onFonts = null
+    this.watching = false
+    clearTimeout(this.reruleTimer)
+    if (this.resting) this.resting.stop = true
+    this.resting = null
+    this.lastRuled = null
+    this.clearRules()
+    this.prepared.clear()
+    this.chains.clear()
   }
 }
 

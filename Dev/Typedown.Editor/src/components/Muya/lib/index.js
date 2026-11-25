@@ -1032,6 +1032,8 @@ class Muya {
     // this.quickInsert.destroy()
     // this.tablePicker.destroy()
     this.contentState.clear()
+    // The height predictor's page watchers and font listener (the audit of 2026-11-24, P05).
+    this.contentState.stateRender?.heights?.destroy()
     this.codePicker.destroy()
     this.emojiPicker.destroy()
     this.eventCenter.detachAllDomEvents()
