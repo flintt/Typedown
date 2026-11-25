@@ -75,7 +75,14 @@ namespace Typedown.Core.Services
         private static Dictionary<string, bool?> Look(IEnumerable<string> files)
         {
             var looks = files.Distinct(StringComparer.OrdinalIgnoreCase).ToDictionary(f => f, f => System.Threading.Tasks.Task.Run(() => FileExists(f)), StringComparer.OrdinalIgnoreCase);
-            try { System.Threading.Tasks.Task.WaitAll(looks.Values.ToArray(), LookBudget); } catch (AggregateException) { }
+            // Polled, not waited on: a wait on the window's thread (an STA) pumps its messages, and what the start had
+            // queued ran inside it - the test host ended in Microsoft.UI.Xaml right after "session restore starts" (w10,
+            // E2E jobs 754 and 758). SpinWait ends in Thread.Sleep, which does not pump; the start is held as it was.
+            var all = System.Threading.Tasks.Task.WhenAll(looks.Values);
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            var spin = new System.Threading.SpinWait();
+            while (!all.IsCompleted && clock.Elapsed < LookBudget) spin.SpinOnce();
+            if (all.IsFaulted) _ = all.Exception;
             var found = new Dictionary<string, bool?>(StringComparer.OrdinalIgnoreCase);
             foreach (var (file, look) in looks)
             {
