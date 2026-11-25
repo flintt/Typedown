@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace Typedown.Core.Utilities
@@ -181,18 +182,43 @@ namespace Typedown.Core.Utilities
         {
             try
             {
-                foreach (var line in File.ReadLines(path))
-                {
-                    token.ThrowIfCancellationRequested();
-                    var index = IndexOutsidePictures(line, query);
-                    if (index < 0) continue;
-                    var start = Math.Max(0, index - 40);
-                    return (start > 0 ? "…" : "") + line.Substring(start, Math.Min(line.Length - start, 120)).Trim();
-                }
+                foreach (var text in Readings(File.ReadAllBytes(path)))
+                    foreach (var line in text.Split('\n'))
+                    {
+                        token.ThrowIfCancellationRequested();
+                        var index = IndexOutsidePictures(line, query);
+                        if (index < 0) continue;
+                        var start = Math.Max(0, index - 40);
+                        return (start > 0 ? "…" : "") + line.Substring(start, Math.Min(line.Length - start, 120)).Trim();
+                    }
             }
             catch (OperationCanceledException) { throw; }
             catch (Exception) { }
             return null;
+        }
+
+        private static readonly string[] legacyEncodings = { "gb18030", "big5", "shift_jis", "euc-kr" };
+
+        /// <summary>
+        /// A file's text as the editor would open it (TextFileFormat: its mark, else the encoding it is found to be in),
+        /// then, for one that is not UTF-8, as each legacy encoding of East Asia that reads it without loss. The contents
+        /// were read as UTF-8, and a GBK, Big5 or Shift-JIS file's Chinese or Japanese was never found (the audit of
+        /// 2026-11-24, F5); and a few characters do not tell those three apart, so each reading is looked in.
+        /// </summary>
+        internal static IEnumerable<string> Readings(byte[] bytes)
+        {
+            var (text, format) = TextFileFormat.Read(bytes);
+            yield return text;
+            if (!format.LossyDecode && (format.Encoding is UTF8Encoding || format.Encoding is UnicodeEncoding)) yield break;
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var seen = new HashSet<string> { text };
+            foreach (var name in legacyEncodings)
+            {
+                string other;
+                try { other = TextFileFormat.Normalize(Encoding.GetEncoding(name, EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback).GetString(bytes)); }
+                catch (Exception) { continue; }
+                if (seen.Add(other)) yield return other;
+            }
         }
 
         private static readonly System.Text.RegularExpressions.Regex picturePayload =

@@ -251,5 +251,39 @@ namespace Typedown.Automation.Tests
             Assert.Empty(hits.Where(h => Slashed(h) == "shot.md"));
             Assert.Equal(-1, FolderSearch.IndexOutsidePictures("![s](data:image/png;base64,ABCquery==)", "query"));
         }
+
+        // Files in a legacy encoding, no byte order mark, a few characters each (the audit of 2026-11-24, F5): their ASCII
+        // words were found and their Chinese or Japanese not - the contents were read as UTF-8. Two characters do not
+        // tell GBK from Big5 or Shift-JIS, so each reading a file allows is looked in.
+        [Theory]
+        [InlineData("gb18030", "北京")]
+        [InlineData("big5", "東京")]
+        [InlineData("shift_jis", "東京")]
+        [InlineData("utf-8", "東京")]
+        public void Chinese_and_Japanese_are_found_in_a_file_in_its_legacy_encoding(string encoding, string phrase)
+        {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            var path = Path.Combine(root, encoding + ".md");
+            File.WriteAllBytes(path, System.Text.Encoding.GetEncoding(encoding).GetBytes("keyword " + phrase));
+
+            var (hits, _) = Run(phrase);
+
+            var hit = Assert.Single(hits.Where(h => h.Kind == FolderSearchHitKind.Content));
+            Assert.Equal(encoding + ".md", Slashed(hit));
+            Assert.Contains(phrase, hit.Snippet);
+            Assert.Single(Run("keyword").Hits.Where(h => h.Kind == FolderSearchHitKind.Content));
+        }
+
+        // A longer file in each, the guess sure of it: its own reading finds it, and no other reading gives a false match.
+        [Fact]
+        public void A_paragraph_in_GBK_is_found_and_nothing_else_matches()
+        {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            File.WriteAllBytes(Path.Combine(root, "gbk.md"), System.Text.Encoding.GetEncoding("gb18030").GetBytes("今天的会议记录：讨论了产品发布计划和市场推广方案，下周继续跟进。\n"));
+            File.WriteAllText(Path.Combine(root, "other.md"), "nothing in Chinese here\n");
+
+            Assert.Equal(new[] { "gbk.md" }, Run("产品发布").Hits.Where(h => h.Kind == FolderSearchHitKind.Content).Select(Slashed));
+            Assert.Empty(Run("东京").Hits.Where(h => h.Kind == FolderSearchHitKind.Content));
+        }
     }
 }
