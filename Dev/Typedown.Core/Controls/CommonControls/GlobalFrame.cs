@@ -24,15 +24,19 @@ namespace Typedown.Core.Controls
             var viewModel = this.GetService<AppViewModel>();
             if (viewModel == null) return;
             if (!viewModel.FrameStack.Contains(this)) viewModel.FrameStack = viewModel.FrameStack.Append(this).ToList();
-            inStack.Disposable = Disposable.Create(() => viewModel.FrameStack = viewModel.FrameStack.Where(x => x != this).ToList());
+            inStack.Disposable = Disposable.Create(() =>
+            {
+                viewModel.FrameStack = viewModel.FrameStack.Where(x => x != this).ToList();
+                // Told now, not at the next navigation: the settings' own frame (sections behind it) left with the page,
+                // and the editor page's back button stayed until something navigated again.
+                viewModel.GoBackCommand.IsExecutable = viewModel.FrameStack.Any(x => x.CanGoBack);
+            });
         }
 
-        private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-            // An Unloaded after a Loaded of the frame again (WinUI can send them so): it stays.
-            if (IsLoaded) return;
-            inStack.Disposable = null;
-        }
+        // Always out on Unloaded: IsLoaded is still true while it is sent, and an earlier version that kept a frame
+        // "still loaded" in the stack left the settings' frame there (E2E BK01, w10 job 763: the back button on the
+        // editor page).
+        private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) => inStack.Disposable = null;
 
         private void OnNavigated(object sender, Microsoft.UI.Xaml.Navigation.NavigationEventArgs e)
         {
