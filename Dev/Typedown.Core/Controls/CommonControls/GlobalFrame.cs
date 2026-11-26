@@ -23,14 +23,18 @@ namespace Typedown.Core.Controls
         {
             var viewModel = this.GetService<AppViewModel>();
             if (viewModel == null) return;
-            if (!viewModel.FrameStack.Contains(this)) viewModel.FrameStack = viewModel.FrameStack.Append(this).ToList();
+            // The way out of the last load first (a second Loaded with no Unloaded between: assigning disposes the old
+            // one, which takes the frame out), then the frame in, once.
             inStack.Disposable = Disposable.Create(() =>
             {
                 viewModel.FrameStack = viewModel.FrameStack.Where(x => x != this).ToList();
                 // Told now, not at the next navigation: the settings' own frame (sections behind it) left with the page,
                 // and the editor page's back button stayed until something navigated again.
                 viewModel.GoBackCommand.IsExecutable = viewModel.FrameStack.Any(x => x.CanGoBack);
+                Log.Debug($"frames: {Name} out; {Describe(viewModel)}");
             });
+            if (!viewModel.FrameStack.Contains(this)) viewModel.FrameStack = viewModel.FrameStack.Append(this).ToList();
+            Log.Debug($"frames: {Name} in; {Describe(viewModel)}");
         }
 
         // Always out on Unloaded: IsLoaded is still true while it is sent, and an earlier version that kept a frame
@@ -41,8 +45,12 @@ namespace Typedown.Core.Controls
         private void OnNavigated(object sender, Microsoft.UI.Xaml.Navigation.NavigationEventArgs e)
         {
             var viewModel = this.GetService<AppViewModel>();
-            if (viewModel != null)
-                viewModel.GoBackCommand.IsExecutable = viewModel.FrameStack.Any(x => x.CanGoBack);
+            if (viewModel == null) return;
+            viewModel.GoBackCommand.IsExecutable = viewModel.FrameStack.Any(x => x.CanGoBack);
+            Log.Debug($"frames: {Name} navigated ({e.NavigationMode}, {e.SourcePageType?.Name}); {Describe(viewModel)}");
         }
+
+        private static string Describe(AppViewModel viewModel) =>
+            "stack " + string.Join(", ", viewModel.FrameStack.Select(f => $"{f.Name}{(f.CanGoBack ? "<" : "")}")) + "; back " + viewModel.GoBackCommand.IsExecutable;
     }
 }
