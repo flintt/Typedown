@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" silinsin mi? Bu işlem geri alınamaz.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Dosya eski bir sürüme döndü</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Diskteki “{0}”, {1} saatinde kaydedilen içeriğe döndü; bu, düzenleyicideki metinden daha eski. Eşitlenen klasörler bazen bunu yapar. Dosyaya yeniden kaydetmek için geçerli metni koruyun.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Geçerli metni koru</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Eski sürümü kullan</value>
+  </data>
 </root>

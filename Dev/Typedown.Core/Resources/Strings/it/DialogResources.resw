@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Eliminare «{0}»? L’operazione non può essere annullata.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Il file è tornato a una versione precedente</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” sul disco è tornato al contenuto salvato alle {1}, più vecchio del testo nell'editor. Le cartelle sincronizzate a volte lo fanno. Mantieni il testo attuale per salvarlo di nuovo nel file.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Mantieni il testo attuale</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Usa la versione precedente</value>
+  </data>
 </root>

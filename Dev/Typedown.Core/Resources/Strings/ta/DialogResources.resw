@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" ஐ நீக்கவா? இதைச் செயல்தவிர்க்க முடியாது.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>கோப்பு பழைய பதிப்புக்குத் திரும்பியது</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>வட்டில் உள்ள “{0}” {1} மணிக்குச் சேமித்த உள்ளடக்கத்துக்குத் திரும்பியது; இது திருத்தியில் உள்ள உரையை விடப் பழையது. ஒத்திசைக்கப்படும் கோப்புறைகள் சில நேரம் இப்படிச் செய்யும். கோப்பில் மீண்டும் சேமிக்க தற்போதைய உரையை வைத்திருங்கள்.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>தற்போதைய உரையை வைத்திரு</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>பழைய பதிப்பைப் பயன்படுத்து</value>
+  </data>
 </root>

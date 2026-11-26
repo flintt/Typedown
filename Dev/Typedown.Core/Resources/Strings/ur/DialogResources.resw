@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" حذف کریں؟ اسے کالعدم نہیں کیا جا سکتا۔</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>فائل پرانے ورژن پر واپس چلی گئی</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ڈسک پر “{0}” واپس اس مواد پر آ گئی جو {1} پر محفوظ کیا گیا تھا، جو ایڈیٹر کے متن سے پرانا ہے۔ ہم آہنگ فولڈرز کبھی کبھی ایسا کرتے ہیں۔ فائل میں دوبارہ محفوظ کرنے کے لیے موجودہ متن رکھیں۔</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>موجودہ متن رکھیں</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>پرانا ورژن استعمال کریں</value>
+  </data>
 </root>

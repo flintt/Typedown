@@ -389,4 +389,20 @@
   <data name="Image.Base64.TooLarge" xml:space="preserve">
     <value>This picture is {0} KB, more than the {1} KB set for embedding (Settings &gt; Image), so it was inserted without embedding.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>The file went back to an older version</value>
+    <comment>外部修改对话框/文件被同步盘等换回自己写过的旧版本：标题</comment>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” on disk went back to what was saved at {1}, older than the text in the editor. Sync folders sometimes do this. Keep the current text to save it to the file again.</value>
+    <comment>同上：说明，{0} 文件名，{1} 那次保存的时间</comment>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Keep current text</value>
+    <comment>同上：默认按钮，保留编辑器里的内容并重新保存</comment>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Use the older version</value>
+    <comment>同上：用磁盘上的旧版本</comment>
+  </data>
 </root>

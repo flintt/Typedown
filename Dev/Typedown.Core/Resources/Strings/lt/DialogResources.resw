@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Ištrinti „{0}“? To negalima atšaukti.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Failas grįžo į senesnę versiją</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Diske esantis „{0}“ grįžo į {1} įrašytą turinį, senesnį nei tekstas redaktoriuje. Sinchronizuojami aplankai kartais taip daro. Palikite dabartinį tekstą, kad jis vėl būtų įrašytas į failą.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Palikti dabartinį tekstą</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Naudoti senesnę versiją</value>
+  </data>
 </root>

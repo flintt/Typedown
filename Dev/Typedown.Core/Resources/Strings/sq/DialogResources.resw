@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Të fshihet "{0}"? Kjo nuk mund të zhbëhet.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Skedari u kthye në një version më të vjetër</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” në disk u kthye te përmbajtja e ruajtur në {1}, më e vjetër se teksti në redaktues. Dosjet e sinkronizuara ndonjëherë e bëjnë këtë. Mbani tekstin aktual për ta ruajtur sërish në skedar.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Mbaj tekstin aktual</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Përdor versionin më të vjetër</value>
+  </data>
 </root>

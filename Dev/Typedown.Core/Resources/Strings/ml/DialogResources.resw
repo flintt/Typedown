@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" ഇല്ലാതാക്കണോ? ഇത് പഴയപടിയാക്കാനാകില്ല.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ഫയൽ പഴയ പതിപ്പിലേക്ക് മടങ്ങി</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ഡിസ്കിലെ “{0}” {1}-ന് സംരക്ഷിച്ച ഉള്ളടക്കത്തിലേക്ക് മടങ്ങി, ഇത് എഡിറ്ററിലെ വാചകത്തേക്കാൾ പഴയതാണ്. സമന്വയിപ്പിക്കുന്ന ഫോൾഡറുകൾ ചിലപ്പോൾ ഇങ്ങനെ ചെയ്യും. ഫയലിൽ വീണ്ടും സംരക്ഷിക്കാൻ നിലവിലെ വാചകം നിലനിർത്തുക.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>നിലവിലെ വാചകം നിലനിർത്തുക</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>പഴയ പതിപ്പ് ഉപയോഗിക്കുക</value>
+  </data>
 </root>

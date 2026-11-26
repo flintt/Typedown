@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Skrap "{0}"? Dit kan nie ontdoen word nie.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Die lêer het teruggegaan na 'n ouer weergawe</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” op die skyf het teruggegaan na wat om {1} gestoor is, ouer as die teks in die redigeerder. Gesinkroniseerde vouers doen dit soms. Hou die huidige teks om dit weer in die lêer te stoor.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Hou huidige teks</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Gebruik die ouer weergawe</value>
+  </data>
 </root>

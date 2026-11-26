@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Voleu suprimir «{0}»? No es pot desfer.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>El fitxer ha tornat a una versió anterior</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>«{0}» al disc ha tornat al que es va desar a les {1}, més antic que el text de l'editor. Les carpetes sincronitzades a vegades ho fan. Conserveu el text actual per tornar-lo a desar al fitxer.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Conserva el text actual</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Fes servir la versió anterior</value>
+  </data>
 </root>

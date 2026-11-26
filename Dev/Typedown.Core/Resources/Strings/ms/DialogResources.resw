@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Padam "{0}"? Ini tidak boleh dibuat asal.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Fail kembali kepada versi yang lebih lama</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” pada cakera kembali kepada kandungan yang disimpan pada {1}, lebih lama daripada teks dalam editor. Folder yang disegerakkan kadangkala berbuat begini. Kekalkan teks semasa untuk menyimpannya semula ke fail.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Kekalkan teks semasa</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Guna versi lama</value>
+  </data>
 </root>

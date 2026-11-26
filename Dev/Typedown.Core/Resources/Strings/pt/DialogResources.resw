@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Excluir "{0}"? Isso não pode ser desfeito.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>O arquivo voltou a uma versão anterior</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” no disco voltou ao que foi salvo às {1}, mais antigo que o texto no editor. Pastas sincronizadas às vezes fazem isso. Mantenha o texto atual para salvá-lo novamente no arquivo.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Manter o texto atual</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Usar a versão anterior</value>
+  </data>
 </root>

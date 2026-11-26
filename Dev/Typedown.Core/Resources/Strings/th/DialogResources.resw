@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>ลบ "{0}" หรือไม่ ไม่สามารถเลิกทำได้</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ไฟล์กลับไปเป็นเวอร์ชันเก่ากว่า</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” บนดิสก์กลับไปเป็นเนื้อหาที่บันทึกเมื่อ {1} ซึ่งเก่ากว่าข้อความในตัวแก้ไข โฟลเดอร์ที่ซิงค์บางครั้งเป็นเช่นนี้ เก็บข้อความปัจจุบันไว้เพื่อบันทึกลงไฟล์อีกครั้ง</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>เก็บข้อความปัจจุบัน</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>ใช้เวอร์ชันเก่า</value>
+  </data>
 </root>

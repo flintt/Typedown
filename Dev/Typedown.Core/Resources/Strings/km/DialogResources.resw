@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>លុប "{0}"? មិនអាចមិនធ្វើវិញបានទេ។</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ឯកសារបានត្រឡប់ទៅកំណែចាស់ជាង</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” នៅលើថាសបានត្រឡប់ទៅខ្លឹមសារដែលបានរក្សាទុកនៅម៉ោង {1} ដែលចាស់ជាងអត្ថបទក្នុងកម្មវិធីកែ។ ថតដែលធ្វើសមកាលកម្មជួនកាលធ្វើបែបនេះ។ រក្សាអត្ថបទបច្ចុប្បន្នដើម្បីរក្សាទុកវាក្នុងឯកសារម្តងទៀត។</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>រក្សាអត្ថបទបច្ចុប្បន្ន</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>ប្រើកំណែចាស់</value>
+  </data>
 </root>

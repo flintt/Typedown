@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}"을(를) 삭제할까요? 되돌릴 수 없습니다.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>파일이 이전 버전으로 되돌아갔습니다</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>디스크의 “{0}”이(가) {1}에 저장한 내용으로 돌아가 편집기의 내용보다 오래되었습니다. 동기화 폴더에서 가끔 이런 일이 생깁니다. 현재 내용을 유지하면 파일에 다시 저장합니다.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>현재 내용 유지</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>이전 버전 사용</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" মুছবেন? এটি পূর্বাবস্থায় ফেরানো যাবে না।</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ফাইলটি পুরোনো সংস্করণে ফিরে গেছে</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ডিস্কের “{0}” {1}-এ সংরক্ষিত বিষয়বস্তুতে ফিরে গেছে, যা সম্পাদকের লেখার চেয়ে পুরোনো। সিঙ্ক করা ফোল্ডার কখনো কখনো এমন করে। ফাইলে আবার সংরক্ষণ করতে বর্তমান লেখা রাখুন।</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>বর্তমান লেখা রাখুন</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>পুরোনো সংস্করণ ব্যবহার করুন</value>
+  </data>
 </root>

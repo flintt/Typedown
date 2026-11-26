@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" verwijderen? Dit kan niet ongedaan worden gemaakt.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Het bestand is teruggezet naar een oudere versie</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” op de schijf bevat weer wat om {1} is opgeslagen, ouder dan de tekst in de editor. Gesynchroniseerde mappen doen dit soms. Behoud de huidige tekst om die opnieuw in het bestand op te slaan.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Huidige tekst behouden</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Oudere versie gebruiken</value>
+  </data>
 </root>

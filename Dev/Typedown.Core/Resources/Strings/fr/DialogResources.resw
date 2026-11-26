@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Supprimer « {0} » ? Cette action est irréversible.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Le fichier est revenu à une version plus ancienne</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Sur le disque, « {0} » est revenu au contenu enregistré à {1}, plus ancien que le texte de l'éditeur. Les dossiers synchronisés le font parfois. Gardez le texte actuel pour l'enregistrer à nouveau dans le fichier.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Garder le texte actuel</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Utiliser l'ancienne version</value>
+  </data>
 </root>

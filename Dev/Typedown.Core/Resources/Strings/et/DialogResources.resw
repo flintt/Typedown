@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Kas kustutada „{0}“? Seda ei saa tagasi võtta.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Fail läks tagasi vanemale versioonile</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Kettal olev „{0}“ läks tagasi kell {1} salvestatud sisule, mis on vanem kui redaktoris olev tekst. Sünkroonitud kaustad teevad seda mõnikord. Jätke praegune tekst alles, et see faili uuesti salvestada.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Jäta praegune tekst</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Kasuta vanemat versiooni</value>
+  </data>
 </root>

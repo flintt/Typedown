@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Scrios "{0}"? Ní féidir é seo a chealú.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>D'fhill an comhad ar leagan níos sine</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>D'fhill “{0}” ar an diosca ar an méid a sábháladh ag {1}, rud atá níos sine ná an téacs san eagarthóir. Déanann fillteáin shioncronaithe é seo uaireanta. Coinnigh an téacs reatha chun é a shábháil sa chomhad arís.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Coinnigh an téacs reatha</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Úsáid an leagan níos sine</value>
+  </data>
 </root>

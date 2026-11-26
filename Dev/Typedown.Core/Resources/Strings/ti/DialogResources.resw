@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" ይደምሰስ? እዚ ክምለስ ኣይክእልን።</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>እቲ ፋይል ናብ ዝቐደመ ስሪት ተመሊሱ</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ኣብ ዲስክ ዘሎ “{0}” ናብቲ ብ{1} ዝተዓቀበ ትሕዝቶ ተመሊሱ፣ እዚ ካብቲ ኣብ ኣሰናዳኢ ዘሎ ጽሑፍ ዝቐደመ እዩ። ዝሰማምዑ ማህደራት ሓደ ሓደ ግዜ ከምዚ ይገብሩ። ናብ ፋይል ደጊምካ ንምዕቃብ ነቲ ሕጂ ዘሎ ጽሑፍ ሓዞ።</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>ነቲ ሕጂ ዘሎ ጽሑፍ ሓዝ</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>ነቲ ዝቐደመ ስሪት ተጠቐም</value>
+  </data>
 </root>

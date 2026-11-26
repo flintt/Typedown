@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Izbrisati „{0}“? Ovo ne može da se opozove.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Datoteka se vratila na stariju verziju</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>„{0}“ na disku vratio se na sadržaj sačuvan u {1}, stariji od teksta u uređivaču. Sinhronizovane fascikle to ponekad rade. Zadržite trenutni tekst da ga ponovo sačuvate u datoteku.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Zadrži trenutni tekst</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Koristi stariju verziju</value>
+  </data>
 </root>

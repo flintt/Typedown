@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>„{0}“ löschen? Das kann nicht rückgängig gemacht werden.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Die Datei ist auf eine ältere Version zurückgegangen</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>„{0}“ auf dem Datenträger enthält wieder den um {1} gespeicherten Stand und ist älter als der Text im Editor. Synchronisierte Ordner tun das manchmal. Behalten Sie den aktuellen Text, um ihn erneut in die Datei zu speichern.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Aktuellen Text behalten</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Ältere Version verwenden</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Удалить «{0}»? Это действие нельзя отменить.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Файл вернулся к более старой версии</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>«{0}» на диске вернулся к содержимому, сохранённому в {1}, — оно старше текста в редакторе. Так иногда делают синхронизируемые папки. Оставьте текущий текст, чтобы снова сохранить его в файл.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Оставить текущий текст</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Использовать старую версию</value>
+  </data>
 </root>

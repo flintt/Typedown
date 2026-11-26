@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Odstrániť „{0}“? Túto akciu nie je možné vrátiť.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Súbor sa vrátil k staršej verzii</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>„{0}“ na disku sa vrátil k obsahu uloženému o {1}, ktorý je starší ako text v editore. Synchronizované priečinky to niekedy robia. Ponechajte aktuálny text a znova ho uložte do súboru.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Ponechať aktuálny text</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Použiť staršiu verziu</value>
+  </data>
 </root>

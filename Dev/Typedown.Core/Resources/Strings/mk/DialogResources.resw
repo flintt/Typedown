@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Да се избрише „{0}“? Ова не може да се врати.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Датотеката се врати на постара верзија</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>„{0}“ на дискот се врати на содржината зачувана во {1}, постара од текстот во уредникот. Синхронизираните папки понекогаш го прават ова. Задржете го тековниот текст за повторно да го зачувате во датотеката.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Задржи го тековниот текст</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Користи ја постарата верзија</value>
+  </data>
 </root>

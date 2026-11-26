@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" ezabatu? Ezin da desegin.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Fitxategia bertsio zaharrago batera itzuli da</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Diskoko «{0}» {1}(e)tan gordetako edukira itzuli da, editoreko testua baino zaharragoa. Karpeta sinkronizatuek batzuetan hori egiten dute. Gorde uneko testua fitxategian berriro gordetzeko.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Gorde uneko testua</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Erabili bertsio zaharragoa</value>
+  </data>
 </root>

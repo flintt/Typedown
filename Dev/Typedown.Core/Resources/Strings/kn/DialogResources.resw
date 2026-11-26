@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" ಅಳಿಸುವುದೇ? ಇದನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ಫೈಲ್ ಹಳೆಯ ಆವೃತ್ತಿಗೆ ಮರಳಿದೆ</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ಡಿಸ್ಕ್‌ನಲ್ಲಿರುವ “{0}” {1}ಕ್ಕೆ ಉಳಿಸಿದ ವಿಷಯಕ್ಕೆ ಮರಳಿದೆ, ಇದು ಸಂಪಾದಕದಲ್ಲಿರುವ ಪಠ್ಯಕ್ಕಿಂತ ಹಳೆಯದು. ಸಿಂಕ್ ಆಗುವ ಫೋಲ್ಡರ್‌ಗಳು ಕೆಲವೊಮ್ಮೆ ಹೀಗೆ ಮಾಡುತ್ತವೆ. ಫೈಲ್‌ಗೆ ಮತ್ತೆ ಉಳಿಸಲು ಪ್ರಸ್ತುತ ಪಠ್ಯವನ್ನು ಇರಿಸಿ.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>ಪ್ರಸ್ತುತ ಪಠ್ಯ ಇರಿಸಿ</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>ಹಳೆಯ ಆವೃತ್ತಿ ಬಳಸಿ</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" ይሰረዝ? ይህ ሊቀለበስ አይችልም።</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ፋይሉ ወደ ቀድሞ ስሪት ተመልሷል</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>በዲስኩ ላይ ያለው “{0}” በ{1} ወደ ተቀመጠው ይዘት ተመልሷል፤ ይህ በአርታዒው ካለው ጽሑፍ የቆየ ነው። የሚመሳሰሉ አቃፊዎች አንዳንድ ጊዜ እንዲህ ያደርጋሉ። ወደ ፋይሉ እንደገና ለማስቀመጥ የአሁኑን ጽሑፍ ያቆዩ።</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>የአሁኑን ጽሑፍ አቆይ</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>የቀድሞውን ስሪት ተጠቀም</value>
+  </data>
 </root>

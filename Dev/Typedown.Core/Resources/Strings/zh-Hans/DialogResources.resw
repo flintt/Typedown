@@ -380,4 +380,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>删除“{0}”？删除后不能恢复。</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>文件被换回了旧版本</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>磁盘上的“{0}”变回了 {1} 保存的内容，比编辑器里的旧。同步盘有时会这样。保留当前内容，会把它重新保存到文件。</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>保留当前内容</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>用旧版本</value>
+  </data>
 </root>

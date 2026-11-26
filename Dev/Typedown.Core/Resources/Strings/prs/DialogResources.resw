@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>«{0}» حذف شود؟ این کار برگشت‌پذیر نیست.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>فایل به نسخهٔ قدیمی‌تر برگشت</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>«{0}» روی دیسک به محتوایی که ساعت {1} ذخیره شده بود برگشت که از متن ویرایشگر قدیمی‌تر است. پوشه‌های همگام‌سازی گاهی این کار را می‌کنند. متن فعلی را نگه دارید تا دوباره در فایل ذخیره شود.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>نگه داشتن متن فعلی</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>استفاده از نسخهٔ قدیمی‌تر</value>
+  </data>
 </root>

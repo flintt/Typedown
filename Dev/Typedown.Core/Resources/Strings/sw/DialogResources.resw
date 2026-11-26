@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Futa "{0}"? Hili haliwezi kutenduliwa.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Faili limerudi kwenye toleo la zamani</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” kwenye diski imerudi kwenye kilichohifadhiwa saa {1}, cha zamani kuliko maandishi yaliyo kwenye kihariri. Folda zinazosawazishwa wakati mwingine hufanya hivi. Weka maandishi ya sasa ili yahifadhiwe tena kwenye faili.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Weka maandishi ya sasa</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Tumia toleo la zamani</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Tħassar "{0}"? Dan ma jistax jitreġġa’ lura.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Il-fajl reġa' lura għal verżjoni eqdem</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” fuq id-diska reġa' lura għal dak li ġie ssejvjat fil-{1}, eqdem mit-test fl-editur. Il-folders sinkronizzati xi kultant jagħmlu dan. Żomm it-test attwali biex terġa' tissejvjah fil-fajl.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Żomm it-test attwali</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Uża l-verżjoni l-eqdem</value>
+  </data>
 </root>

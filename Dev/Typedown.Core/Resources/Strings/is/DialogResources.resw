@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Eyða „{0}“? Ekki er hægt að afturkalla þetta.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Skráin fór aftur í eldri útgáfu</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>„{0}“ á diskinum fór aftur í það sem var vistað kl. {1}, eldra en textinn í ritlinum. Samstilltar möppur gera þetta stundum. Haltu núverandi texta til að vista hann aftur í skrána.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Halda núverandi texta</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Nota eldri útgáfuna</value>
+  </data>
 </root>

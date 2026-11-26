@@ -316,6 +316,29 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         internal ulong DiskHash { get; set; }
 
+        // What this window wrote to each file lately, oldest first: a file found holding one of these, not the last, was put
+        // back by something else - a sync folder (Synology Drive took a save's rename for a delete and an add, failed to
+        // read the file, and wrote the NAS's older copy over it 17 s later; reloaded, the reader's last words were gone -
+        // the user's hp88, 2026-11-26).
+        private readonly Dictionary<string, List<(ulong Hash, DateTime At)>> written = new(StringComparer.OrdinalIgnoreCase);
+
+        private void NoteWritten(string path, ulong hash)
+        {
+            if (string.IsNullOrEmpty(path)) return;
+            if (!written.TryGetValue(path, out var list)) written[path] = list = new();
+            list.RemoveAll(w => w.Hash == hash);
+            list.Add((hash, DateTime.Now));
+            if (list.Count > 20) list.RemoveAt(0);
+        }
+
+        /// <summary>When this window wrote <paramref name="hash"/> to the file before its last write, or null.</summary>
+        internal DateTime? WrittenBefore(string path, ulong hash)
+        {
+            if (string.IsNullOrEmpty(path) || !written.TryGetValue(path, out var list) || list.Count < 2) return null;
+            var at = list.FindIndex(w => w.Hash == hash);
+            return at >= 0 && at < list.Count - 1 ? list[at].At : null;
+        }
+
         /// <summary>After a tab switch the file was not watched; check the disk copy once.</summary>
         internal async Task CheckExternalChangeAfterSwitch()
         {
@@ -982,6 +1005,7 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         private void CommitWritten(string path, ulong hash, string backupPath, string documentId)
         {
+            NoteWritten(path, hash);
             EditorViewModel.FileHash = hash;
             DiskHash = hash;
             EditorViewModel.Saved = EditorViewModel.CurrentHash == hash;
@@ -2031,10 +2055,15 @@ namespace Typedown.Core.ViewModels
                 EditorViewModel.Saved = true;
                 return;
             }
+            // The file holds what this window wrote before its last write: put back (a sync folder), not edited. Never
+            // reloaded without a question, and the question says so - the reader's newer text is the default.
+            var putBack = WrittenBefore(path, diskHash);
+            if (putBack != null)
+                Log.Debug($"external change: '{Path.GetFileName(path)}' holds what was written here at {putBack:HH:mm:ss}, before the last write - put back by something else (a sync folder?)");
 
             // Settings > General > "Ask before reload" (Settings.AskBeforeReload), off: a document with nothing unsaved is
             // reloaded with no question, as it always has; one with changes of the reader's own is still asked about.
-            if (EditorViewModel.Saved && !SettingsViewModel.AskBeforeReload)
+            if (EditorViewModel.Saved && !SettingsViewModel.AskBeforeReload && putBack == null)
             {
                 ApplyDiskText(text);
                 return;
@@ -2044,7 +2073,7 @@ namespace Typedown.Core.ViewModels
             // the asking off): the disk's version goes in with no question over the reader's changes too, which are kept as
             // a copy and one undo step back (the user, 2026-11-22). A save that found the change (asked) still asks: an
             // automatic save held back for good with nobody asked would be worse than a question.
-            if (!SettingsViewModel.AskBeforeReload && SettingsViewModel.ReloadUnsavedWithoutAsking && !asked)
+            if (!SettingsViewModel.AskBeforeReload && SettingsViewModel.ReloadUnsavedWithoutAsking && !asked && putBack == null)
             {
                 var mine = EditorViewModel.Markdown;
                 if (mine != null)
@@ -2069,12 +2098,18 @@ namespace Typedown.Core.ViewModels
                 // reader's own, Keep mine is the default - Enter reloaded and they were gone, with no undo and no backup -
                 // and the version not kept is saved as a copy; reloaded, theirs is also one Ctrl+Z away.
                 var unsaved = !EditorViewModel.Saved;
-                var dialog = AppContentDialog.Create(
-                    Locale.GetDialogString("ReloadFromDiskTitle") ?? "文件已在外部被修改",
-                    unsaved ? ConflictContent() : Locale.GetDialogString("ReloadFromDiskContentClean") ?? "磁盘上的文件已更改，是否重新加载？",
-                    unsaved ? Locale.GetDialogString("KeepMine") ?? "保留我的" : Locale.GetDialogString("Keep") ?? "保留",
-                    Locale.GetDialogString("Reload") ?? "重新加载");
-                if (unsaved) dialog.DefaultButton = ContentDialogButton.Close;
+                var dialog = putBack != null
+                    ? AppContentDialog.Create(
+                        Locale.GetDialogString("ReloadPutBackTitle") ?? "文件被换回了旧版本",
+                        string.Format(Locale.GetDialogString("ReloadPutBackContent") ?? "磁盘上的“{0}”变回了 {1} 保存的内容，比编辑器里的旧。同步盘有时会这样。保留当前内容，会把它重新保存到文件。", Path.GetFileName(path), putBack.Value.ToString("HH:mm:ss")),
+                        Locale.GetDialogString("KeepCurrentAndSave") ?? "保留当前内容",
+                        Locale.GetDialogString("UseOlderVersion") ?? "用旧版本")
+                    : AppContentDialog.Create(
+                        Locale.GetDialogString("ReloadFromDiskTitle") ?? "文件已在外部被修改",
+                        unsaved ? ConflictContent() : Locale.GetDialogString("ReloadFromDiskContentClean") ?? "磁盘上的文件已更改，是否重新加载？",
+                        unsaved ? Locale.GetDialogString("KeepMine") ?? "保留我的" : Locale.GetDialogString("Keep") ?? "保留",
+                        Locale.GetDialogString("Reload") ?? "重新加载");
+                if (unsaved || putBack != null) dialog.DefaultButton = ContentDialogButton.Close;
                 var mine = EditorViewModel.Markdown;
                 var result = await dialog.ShowAsync(AppViewModel.XamlRoot);
                 if (disposables.IsDisposed || FilePath != path || !op.Shown)
@@ -2085,19 +2120,26 @@ namespace Typedown.Core.ViewModels
                     if (disposables.IsDisposed || FilePath != path || !op.Shown)
                         return;
                     EditionHooks.ReportDocumentOnDisk(path, text, written: false);
-                    ApplyDiskText(text, keepHistory: unsaved);
+                    // Put back: the newer text one Ctrl+Z away too.
+                    ApplyDiskText(text, keepHistory: unsaved || putBack != null);
                 }
                 else
                 {
                     // Kept: the disk's version would be written over by the next save - it is kept as a copy first (and
-                    // in the version history, Pro).
-                    await KeepVersion(path, text, KeptOnDisk);
+                    // in the version history, Pro). Not one put back: it is an older text of this window's own.
+                    if (putBack == null) await KeepVersion(path, text, KeptOnDisk);
                     EditionHooks.ReportDocumentOnDisk(path, text, written: false);
                     if (disposables.IsDisposed || FilePath != path || !op.Shown)
                         return;
                     EditorViewModel.FileHash = diskHash;
                     DiskHash = diskHash;
                     EditorViewModel.Saved = EditorViewModel.CurrentHash == diskHash;
+                    // Put back: the reader's text written to the file again now, automatic saving on or not.
+                    if (putBack != null && !EditorViewModel.Saved)
+                    {
+                        Log.Debug($"external change: '{Path.GetFileName(path)}' put back; the text here kept and saved again");
+                        await SaveCore(false, op);
+                    }
                 }
             }
             finally

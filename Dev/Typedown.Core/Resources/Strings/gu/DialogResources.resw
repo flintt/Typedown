@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" કાઢી નાખવું? આ પૂર્વવત્ કરી શકાતું નથી.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ફાઇલ જૂના સંસ્કરણ પર પાછી ગઈ</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ડિસ્ક પરની “{0}” {1} વાગ્યે સાચવેલી સામગ્રી પર પાછી ગઈ, જે એડિટરના લખાણ કરતાં જૂની છે. સિંક થતાં ફોલ્ડર ક્યારેક આવું કરે છે. ફાઇલમાં ફરી સાચવવા હાલનું લખાણ રાખો.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>હાલનું લખાણ રાખો</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>જૂનું સંસ્કરણ વાપરો</value>
+  </data>
 </root>

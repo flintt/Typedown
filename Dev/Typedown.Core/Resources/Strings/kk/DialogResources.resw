@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>«{0}» жойылсын ба? Мұны болдырмау мүмкін емес.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Файл ескі нұсқаға қайтты</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Дискідегі «{0}» {1} уақытта сақталған мазмұнға қайтты, ол өңдегіштегі мәтіннен ескі. Синхрондалатын қалталар кейде осылай істейді. Файлға қайта сақтау үшін ағымдағы мәтінді қалдырыңыз.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Ағымдағы мәтінді қалдыру</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Ескі нұсқаны пайдалану</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Usunąć „{0}”? Tej operacji nie można cofnąć.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Plik wrócił do starszej wersji</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>„{0}” na dysku wrócił do treści zapisanej o {1}, starszej niż tekst w edytorze. Synchronizowane foldery czasem tak robią. Zachowaj bieżący tekst, aby ponownie zapisać go w pliku.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Zachowaj bieżący tekst</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Użyj starszej wersji</value>
+  </data>
 </root>

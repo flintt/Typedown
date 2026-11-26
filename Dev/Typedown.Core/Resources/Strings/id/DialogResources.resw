@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Hapus "{0}"? Tindakan ini tidak dapat dibatalkan.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>File kembali ke versi yang lebih lama</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” di disk kembali ke isi yang disimpan pukul {1}, lebih lama daripada teks di editor. Folder yang disinkronkan kadang melakukan ini. Pertahankan teks saat ini untuk menyimpannya lagi ke file.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Pertahankan teks saat ini</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Gunakan versi lama</value>
+  </data>
 </root>

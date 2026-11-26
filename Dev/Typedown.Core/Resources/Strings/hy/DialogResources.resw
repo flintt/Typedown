@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Ջնջե՞լ «{0}»-ը։ Սա հնարավոր չէ հետարկել։</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Ֆայլը վերադարձավ ավելի հին տարբերակի</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Սկավառակի «{0}»-ը վերադարձավ {1}-ին պահված բովանդակությանը, որն ավելի հին է, քան խմբագրիչի տեքստը։ Համաժամեցվող թղթապանակները երբեմն այդպես են անում։ Պահեք ընթացիկ տեքստը՝ այն ֆայլում կրկին պահելու համար։</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Պահել ընթացիկ տեքստը</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Օգտագործել հին տարբերակը</value>
+  </data>
 </root>

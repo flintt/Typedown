@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>حذف "{0}"؟ لا يمكن التراجع عن ذلك.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>عاد الملف إلى إصدار أقدم</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>عاد “{0}” على القرص إلى ما حُفظ في {1}، وهو أقدم من النص في المحرر. تفعل المجلدات المتزامنة ذلك أحيانًا. احتفظ بالنص الحالي لحفظه في الملف مرة أخرى.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>الاحتفاظ بالنص الحالي</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>استخدام الإصدار الأقدم</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Ta bort ”{0}”? Det går inte att ångra.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Filen gick tillbaka till en äldre version</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>”{0}” på disken gick tillbaka till det som sparades {1}, äldre än texten i redigeraren. Synkroniserade mappar gör ibland så. Behåll den aktuella texten för att spara den i filen igen.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Behåll aktuell text</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Använd den äldre versionen</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Eliminar «{0}»? Non se pode desfacer.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>O ficheiro volveu a unha versión anterior</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>«{0}» no disco volveu ao que se gardou ás {1}, máis antigo ca o texto do editor. Os cartafoles sincronizados ás veces fan isto. Conserve o texto actual para gardalo de novo no ficheiro.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Conservar o texto actual</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Usar a versión anterior</value>
+  </data>
 </root>

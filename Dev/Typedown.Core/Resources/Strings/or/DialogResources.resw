@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" ଡିଲିଟ୍ କରିବେ? ଏହାକୁ ପୂର୍ବାବସ୍ଥାକୁ ଫେରାଇ ହେବ ନାହିଁ।</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ଫାଇଲଟି ପୁରୁଣା ସଂସ୍କରଣକୁ ଫେରିଗଲା</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ଡିସ୍କରେ ଥିବା “{0}” {1}ରେ ସଞ୍ଚିତ ବିଷୟବସ୍ତୁକୁ ଫେରିଗଲା, ଯାହା ଏଡିଟରର ଲେଖାଠାରୁ ପୁରୁଣା। ସିଙ୍କ ହେଉଥିବା ଫୋଲ୍ଡର କେବେକେବେ ଏପରି କରେ। ଫାଇଲରେ ପୁଣି ସଞ୍ଚୟ କରିବାକୁ ବର୍ତ୍ତମାନର ଲେଖା ରଖନ୍ତୁ।</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>ବର୍ତ୍ତମାନର ଲେଖା ରଖନ୍ତୁ</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>ପୁରୁଣା ସଂସ୍କରଣ ବ୍ୟବହାର କରନ୍ତୁ</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Muku i "{0}"? Kāore e taea te wete.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Kua hoki te kōnae ki tētahi putanga tawhito ake</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Kua hoki a “{0}” i te kōpae ki te mea i tiakina i te {1}, he tawhito ake i te kuputuhi i te ētita. I ētahi wā ka pēnei ngā kōpaki tukutahi. Puritia te kuputuhi o nāianei kia tiakina anōtia ki te kōnae.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Puritia te kuputuhi o nāianei</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Whakamahia te putanga tawhito</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" हटवायचे? हे पूर्ववत करता येणार नाही.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>फाइल जुन्या आवृत्तीवर परत गेली</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>डिस्कवरील “{0}” {1} वाजता जतन केलेल्या मजकुरावर परत गेली, जो संपादकातील मजकुरापेक्षा जुना आहे. समक्रमित फोल्डर कधी कधी असे करतात. फाइलमध्ये पुन्हा जतन करण्यासाठी सध्याचा मजकूर ठेवा.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>सध्याचा मजकूर ठेवा</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>जुनी आवृत्ती वापरा</value>
+  </data>
 </root>

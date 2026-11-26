@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>წაიშალოს „{0}“? ამის გაუქმება შეუძლებელია.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ფაილი ძველ ვერსიას დაუბრუნდა</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>დისკზე „{0}“ დაუბრუნდა {1}-ზე შენახულ შიგთავსს, რომელიც რედაქტორის ტექსტზე ძველია. სინქრონიზებული საქაღალდეები ზოგჯერ ასე იქცევიან. დატოვეთ მიმდინარე ტექსტი, რომ ფაილში ხელახლა შეინახოს.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>მიმდინარე ტექსტის დატოვება</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>ძველი ვერსიის გამოყენება</value>
+  </data>
 </root>

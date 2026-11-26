@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>「{0}」を削除しますか？元に戻せません。</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ファイルが古いバージョンに戻りました</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ディスク上の「{0}」が {1} に保存した内容に戻り、エディターの内容より古くなっています。同期フォルダーでは時々起こります。現在の内容を残すと、ファイルに保存し直します。</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>現在の内容を残す</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>古いバージョンを使う</value>
+  </data>
 </root>

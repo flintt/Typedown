@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Да се изтрие ли „{0}“? Това не може да бъде отменено.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Файлът се върна към по-стара версия</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>„{0}“ на диска се върна към съдържанието, запазено в {1}, по-старо от текста в редактора. Синхронизираните папки понякога правят това. Запазете текущия текст, за да го запишете отново във файла.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Запази текущия текст</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Използвай по-старата версия</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Želite izbrisati »{0}«? Tega ni mogoče razveljaviti.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Datoteka se je vrnila na starejšo različico</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>»{0}« na disku se je vrnila na vsebino, shranjeno ob {1}, ki je starejša od besedila v urejevalniku. Sinhronizirane mape to včasih naredijo. Obdržite trenutno besedilo, da ga znova shranite v datoteko.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Obdrži trenutno besedilo</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Uporabi starejšo različico</value>
+  </data>
 </root>

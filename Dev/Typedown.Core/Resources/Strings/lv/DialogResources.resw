@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Vai dzēst “{0}”? To nevar atsaukt.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Fails atgriezās pie vecākas versijas</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” diskā atgriezās pie satura, kas saglabāts {1}, vecāka par tekstu redaktorā. Sinhronizētās mapes to dažreiz dara. Paturiet pašreizējo tekstu, lai to atkal saglabātu failā.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Paturēt pašreizējo tekstu</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Izmantot vecāko versiju</value>
+  </data>
 </root>

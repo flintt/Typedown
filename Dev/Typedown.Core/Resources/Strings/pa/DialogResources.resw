@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" ਮਿਟਾਉਣਾ ਹੈ? ਇਸਨੂੰ ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ਫ਼ਾਈਲ ਪੁਰਾਣੇ ਸੰਸਕਰਣ 'ਤੇ ਵਾਪਸ ਚਲੀ ਗਈ</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ਡਿਸਕ 'ਤੇ “{0}” {1} ਵਜੇ ਸੰਭਾਲੀ ਸਮੱਗਰੀ 'ਤੇ ਵਾਪਸ ਚਲੀ ਗਈ, ਜੋ ਸੰਪਾਦਕ ਦੇ ਲਿਖਤ ਨਾਲੋਂ ਪੁਰਾਣੀ ਹੈ। ਸਿੰਕ ਕੀਤੇ ਫੋਲਡਰ ਕਦੇ-ਕਦੇ ਇੰਝ ਕਰਦੇ ਹਨ। ਫ਼ਾਈਲ ਵਿੱਚ ਦੁਬਾਰਾ ਸੰਭਾਲਣ ਲਈ ਮੌਜੂਦਾ ਲਿਖਤ ਰੱਖੋ।</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>ਮੌਜੂਦਾ ਲਿਖਤ ਰੱਖੋ</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>ਪੁਰਾਣਾ ਸੰਸਕਰਣ ਵਰਤੋ</value>
+  </data>
 </root>

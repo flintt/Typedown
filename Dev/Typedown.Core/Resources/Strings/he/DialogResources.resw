@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>למחוק את "{0}"? לא ניתן לבטל פעולה זו.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>הקובץ חזר לגרסה ישנה יותר</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” בדיסק חזר לתוכן שנשמר ב-{1}, ישן יותר מהטקסט בעורך. תיקיות מסונכרנות עושות זאת לפעמים. השאירו את הטקסט הנוכחי כדי לשמור אותו שוב בקובץ.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>השארת הטקסט הנוכחי</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>שימוש בגרסה הישנה</value>
+  </data>
 </root>

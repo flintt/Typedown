@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Διαγραφή του «{0}»; Δεν μπορεί να αναιρεθεί.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Το αρχείο επέστρεψε σε παλαιότερη έκδοση</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Το «{0}» στον δίσκο επέστρεψε σε όσα αποθηκεύτηκαν στις {1}, παλαιότερα από το κείμενο στον επεξεργαστή. Οι συγχρονισμένοι φάκελοι το κάνουν μερικές φορές. Κρατήστε το τρέχον κείμενο για να αποθηκευτεί ξανά στο αρχείο.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Διατήρηση τρέχοντος κειμένου</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Χρήση παλαιότερης έκδοσης</value>
+  </data>
 </root>

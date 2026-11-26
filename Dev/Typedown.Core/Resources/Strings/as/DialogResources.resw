@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" মচিবনে? এইটো পূৰ্বাৱস্থালৈ আনিব নোৱাৰি।</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ফাইলটো পুৰণি সংস্কৰণলৈ উভতি গ'ল</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>ডিস্কত থকা “{0}” {1}ত সংৰক্ষণ কৰা সমলবস্তুলৈ উভতি গ'ল, যি সম্পাদকৰ পাঠতকৈ পুৰণি। ছিংক কৰা ফ'ল্ডাৰে কেতিয়াবা এনে কৰে। ফাইলত পুনৰ সংৰক্ষণ কৰিবলৈ বৰ্তমানৰ পাঠ ৰাখক।</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>বৰ্তমানৰ পাঠ ৰাখক</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>পুৰণি সংস্কৰণ ব্যৱহাৰ কৰক</value>
+  </data>
 </root>

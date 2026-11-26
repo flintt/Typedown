@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Xóa "{0}"? Không thể hoàn tác.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Tệp đã trở về phiên bản cũ hơn</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” trên đĩa đã trở về nội dung được lưu lúc {1}, cũ hơn văn bản trong trình soạn thảo. Các thư mục đồng bộ đôi khi làm vậy. Giữ văn bản hiện tại để lưu lại vào tệp.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Giữ văn bản hiện tại</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Dùng phiên bản cũ</value>
+  </data>
 </root>

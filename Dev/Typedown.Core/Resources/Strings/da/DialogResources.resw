@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Slet "{0}"? Det kan ikke fortrydes.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Filen gik tilbage til en ældre version</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>”{0}” på disken gik tilbage til det, der blev gemt kl. {1}, ældre end teksten i editoren. Synkroniserede mapper gør det nogle gange. Behold den aktuelle tekst for at gemme den i filen igen.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Behold aktuel tekst</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Brug den ældre version</value>
+  </data>
 </root>

@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Burahin ang "{0}"? Hindi na ito maibabalik.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Bumalik ang file sa mas lumang bersyon</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Bumalik ang “{0}” sa disk sa nilalamang na-save noong {1}, na mas luma kaysa sa teksto sa editor. Minsan ganito ang ginagawa ng mga naka-sync na folder. Panatilihin ang kasalukuyang teksto para i-save itong muli sa file.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Panatilihin ang kasalukuyang teksto</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Gamitin ang mas lumang bersyon</value>
+  </data>
 </root>

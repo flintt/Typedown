@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>ລຶບ "{0}"? ບໍ່ສາມາດຍົກເລີກໄດ້.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ໄຟລ໌ກັບໄປເປັນເວີຊັນເກົ່າກວ່າ</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>“{0}” ໃນດິສກ໌ກັບໄປເປັນເນື້ອຫາທີ່ບັນທຶກເມື່ອ {1} ເຊິ່ງເກົ່າກວ່າຂໍ້ຄວາມໃນຕົວແກ້ໄຂ. ໂຟລເດີທີ່ຊິງບາງເທື່ອກໍເຮັດແບບນີ້. ເກັບຂໍ້ຄວາມປັດຈຸບັນໄວ້ເພື່ອບັນທຶກລົງໄຟລ໌ອີກຄັ້ງ.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>ເກັບຂໍ້ຄວາມປັດຈຸບັນ</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>ໃຊ້ເວີຊັນເກົ່າ</value>
+  </data>
 </root>

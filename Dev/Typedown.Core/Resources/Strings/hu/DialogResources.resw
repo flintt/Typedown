@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Törli: „{0}”? Ez nem vonható vissza.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>A fájl egy régebbi verzióra állt vissza</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>A lemezen lévő „{0}” a(z) {1}-kor mentett tartalomra állt vissza, amely régebbi a szerkesztőben lévő szövegnél. A szinkronizált mappák néha ezt teszik. Tartsa meg a jelenlegi szöveget, hogy újra a fájlba mentse.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Jelenlegi szöveg megtartása</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Régebbi verzió használata</value>
+  </data>
 </root>

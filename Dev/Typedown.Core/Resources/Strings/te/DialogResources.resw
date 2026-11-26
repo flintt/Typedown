@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}"ని తొలగించాలా? దీన్ని రద్దు చేయలేరు.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>ఫైల్ పాత సంస్కరణకు తిరిగి వెళ్లింది</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>డిస్క్‌లోని “{0}” {1}కి సేవ్ చేసిన కంటెంట్‌కు తిరిగి వెళ్లింది, ఇది ఎడిటర్‌లోని పాఠం కంటే పాతది. సింక్ చేసే ఫోల్డర్‌లు అప్పుడప్పుడు ఇలా చేస్తాయి. ఫైల్‌లో మళ్లీ సేవ్ చేయడానికి ప్రస్తుత పాఠాన్ని ఉంచండి.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>ప్రస్తుత పాఠాన్ని ఉంచు</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>పాత సంస్కరణను ఉపయోగించు</value>
+  </data>
 </root>

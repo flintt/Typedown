@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Ștergeți „{0}”? Acțiunea nu poate fi anulată.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Fișierul a revenit la o versiune mai veche</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>„{0}” de pe disc a revenit la conținutul salvat la {1}, mai vechi decât textul din editor. Folderele sincronizate fac uneori asta. Păstrați textul curent pentru a-l salva din nou în fișier.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Păstrează textul curent</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Folosește versiunea mai veche</value>
+  </data>
 </root>

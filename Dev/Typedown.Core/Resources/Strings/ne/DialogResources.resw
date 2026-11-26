@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>"{0}" मेटाउने? यो पूर्ववत गर्न सकिँदैन।</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>फाइल पुरानो संस्करणमा फर्कियो</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>डिस्कमा रहेको “{0}” {1} मा सुरक्षित गरिएको सामग्रीमा फर्कियो, जुन सम्पादकको पाठभन्दा पुरानो छ। सिंक गरिएका फोल्डरहरूले कहिलेकाहीँ यसो गर्छन्। फाइलमा फेरि सुरक्षित गर्न हालको पाठ राख्नुहोस्।</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>हालको पाठ राख्नुहोस्</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>पुरानो संस्करण प्रयोग गर्नुहोस्</value>
+  </data>
 </root>

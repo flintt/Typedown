@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Poistetaanko ”{0}”? Toimintoa ei voi kumota.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Tiedosto palasi vanhempaan versioon</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Levyllä oleva ”{0}” palasi kello {1} tallennettuun sisältöön, joka on vanhempi kuin editorin teksti. Synkronoidut kansiot tekevät näin joskus. Säilytä nykyinen teksti, niin se tallennetaan tiedostoon uudelleen.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Säilytä nykyinen teksti</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Käytä vanhempaa versiota</value>
+  </data>
 </root>

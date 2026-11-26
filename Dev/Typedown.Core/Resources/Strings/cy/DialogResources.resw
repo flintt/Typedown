@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Dileu "{0}"? Does dim modd dadwneud hyn.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Aeth y ffeil yn ôl i fersiwn hŷn</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>Aeth “{0}” ar y ddisg yn ôl i'r hyn a gadwyd am {1}, sy'n hŷn na'r testun yn y golygydd. Mae ffolderi wedi'u cysoni'n gwneud hyn weithiau. Cadwch y testun presennol i'w gadw yn y ffeil eto.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Cadw'r testun presennol</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Defnyddio'r fersiwn hŷn</value>
+  </data>
 </root>

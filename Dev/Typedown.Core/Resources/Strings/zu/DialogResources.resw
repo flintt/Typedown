@@ -375,4 +375,16 @@
   <data name="DeleteConfigConfirm" xml:space="preserve">
     <value>Susa "{0}"? Lokhu akukwazi ukuhlehliswa.</value>
   </data>
+  <data name="ReloadPutBackTitle" xml:space="preserve">
+    <value>Ifayela libuyele enguqulweni endala</value>
+  </data>
+  <data name="ReloadPutBackContent" xml:space="preserve">
+    <value>U-“{0}” kudiski ubuyele kokulondolozwe ngo-{1}, okudala kunombhalo osesihleli. Amafolda avumelanisiwe kwesinye isikhathi enza lokhu. Gcina umbhalo wamanje ukuze uwulondoloze futhi efayeleni.</value>
+  </data>
+  <data name="KeepCurrentAndSave" xml:space="preserve">
+    <value>Gcina umbhalo wamanje</value>
+  </data>
+  <data name="UseOlderVersion" xml:space="preserve">
+    <value>Sebenzisa inguqulo endala</value>
+  </data>
 </root>
