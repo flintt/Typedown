@@ -266,9 +266,14 @@ namespace Typedown.Core.Pages
             // opening them under a custom theme would otherwise drop back to the built-in colours.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).StartWith(Settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.AppCompactMode)).Subscribe(_ => ApplyCompact()));
-            disposables.Add(ViewModel.GoBackCommand.WhenPropertyChanged(nameof(ViewModel.GoBackCommand.IsExecutable))
-                .StartWith(ViewModel.GoBackCommand.IsExecutable)
-                .Subscribe(_ => NavigationView.IsBackEnabled = ViewModel.GoBackCommand.IsExecutable));
+            // The view model as the page has it now: read again when IsExecutable changes, it was the DataContext of a page
+            // already out of the tree - Back from the settings sets it before this page's Unloaded, and the null threw
+            // inside the command's notice, which then never reached the caption's back button (vm104, 1.4.3.25: the
+            // back button gone, an unhandled NullReferenceException each time).
+            var back = ViewModel.GoBackCommand;
+            disposables.Add(back.WhenPropertyChanged(nameof(back.IsExecutable))
+                .StartWith(back.IsExecutable)
+                .Subscribe(_ => NavigationView.IsBackEnabled = back.IsExecutable));
             ApplyCompact();
         }
 
