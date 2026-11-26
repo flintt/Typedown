@@ -238,5 +238,28 @@ namespace Typedown.Automation.Tests
             Assert.Equal(SettingsCatalog.Load().Settings.Count(x => new FakeSettingsHost().Supports(x.Key)), ((Newtonsoft.Json.Linq.JArray)Newtonsoft.Json.Linq.JObject.Parse(stdout)["settings"]!).Count);
         }
 
+        // The CLI talks only to a pipe the current user's process made (the audit of 2026-11-24, F3): with the app not
+        // running, another account's process could take the name, and documents' text would go to it. The host's pipe
+        // names only the current user (SecurePipeListener); the client checks the other end too.
+        [Fact]
+        public void The_pipe_is_one_the_current_user_made()
+        {
+            Assert.True(Cli.Cli.ClientPipeOptions.HasFlag(PipeOptions.CurrentUserOnly));
+            Assert.True(Cli.Cli.ClientPipeOptions.HasFlag(PipeOptions.Asynchronous));
+        }
+
+        // On Windows, the way that must stay open: a pipe of the current user's, reached with those options. (Another
+        // account's pipe refused needs a second account; .NET makes that check, by the pipe's owner.)
+        [Fact]
+        public async Task A_pipe_of_the_current_users_is_reached()
+        {
+            if (!OperatingSystem.IsWindows()) return;
+            var name = "td-cli-test-" + Guid.NewGuid().ToString("N");
+            using var server = new NamedPipeServerStream(name, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
+            var accepted = server.WaitForConnectionAsync();
+            using var client = await Cli.Cli.ConnectPipeAsync(name, CancellationToken.None);
+            await accepted;
+            Assert.True(server.IsConnected);
+        }
     }
 }

@@ -477,6 +477,13 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         private static extern uint geteuid();
 
         /// <summary>A pipe name, or a socket path (anything with a '/') on Linux and macOS.</summary>
+        /// <summary>
+        /// The pipe is reached only if the current user's process made it (CurrentUserOnly: .NET checks the pipe's owner):
+        /// with the app not running, another account's process could take its name and be sent documents' text (the
+        /// audit of 2026-11-24, F3). The host's own pipe names only the current user (SecurePipeListener).
+        /// </summary>
+        public const PipeOptions ClientPipeOptions = PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly;
+
         public static async Task<Stream> ConnectPipeAsync(string endpoint, CancellationToken ct)
         {
 #if NET7_0_OR_GREATER
@@ -488,7 +495,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                 catch (OperationCanceledException) when (!ct.IsCancellationRequested) { throw new TimeoutException("No answer from " + endpoint); }
             }
 #endif
-            var pipe = new NamedPipeClientStream(".", endpoint, PipeDirection.InOut, PipeOptions.Asynchronous);
+            var pipe = new NamedPipeClientStream(".", endpoint, PipeDirection.InOut, ClientPipeOptions);
             try
             {
                 await pipe.ConnectAsync(3000, ct).ConfigureAwait(false);
