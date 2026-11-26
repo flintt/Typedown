@@ -199,6 +199,7 @@ jobs:
           node picture-convert-check.js
           node height-predictor-release-check.js
           node structure-c01-check.js
+          node inline-math-align-check.js
           node hide-done-edit-check.js
           node triple-click-marks-check.js
           node heading-click-check.js

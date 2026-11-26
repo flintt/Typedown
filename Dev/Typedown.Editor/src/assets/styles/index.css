@@ -594,6 +594,17 @@ span.ag-math>.ag-math-render.ag-math-error {
   user-select: auto;
 }
 
+/* A drawn inline formula sits on the line's baseline, as KaTeX sets it: an inline-block aligned to the line's top (and
+   its KaTeX to the middle) hung a tall one down - "对称轴 $y=x$ 与 $y=\dfrac{4}{3}$" had its two equals signs 7 px apart,
+   an overbrace's 17 (the user, 2026-11-26; inline-math-align-check.js). Only drawn (.ag-hide): with its source shown,
+   the formula keeps its box and the preview floats below it. */
+.ag-hide.ag-math,
+.ag-hide.ag-math>.ag-math-render,
+.ag-hide.ag-math>.ag-math-render .katex {
+  display: inline;
+  vertical-align: baseline;
+}
+
 .ag-ruby:not(.ag-hide)>.ag-ruby-render,
 .ag-math:not(.ag-hide)>.ag-math-render {
   z-index: 100;
