@@ -4,8 +4,7 @@
 // Each line here is "对称轴 $y=x$ 与 $y=<formula>$": its two equals signs (KaTeX's, the same font) at the same height,
 // within 2 px, in the visual editor and reading mode, at zoom 1 and 1.5. Controls: plain formulas stay as they were, a
 // ruby's base is level with the text, a block formula is a block. A formula clicked shows its source with the preview
-// below it; at a narrow width a formula is not broken across lines. The user's sample: /root/Documents/Typeleaf-
-// 行内公式对齐复现.md (the same formulas).
+// below it; at a narrow width a formula is not broken across lines. The formulas are those of the user's sample.
 //
 //   node inline-math-align-check.js
 const { openEditor } = require('./harness');
