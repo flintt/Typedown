@@ -324,6 +324,7 @@ jobs:
         run: |
           $brand = ([xml](Get-Content Branding.props)).Project.PropertyGroup
           "store=$($brand.BrandStoreUpload)" >> $env:GITHUB_OUTPUT
+          "name=$($brand.BrandName)" >> $env:GITHUB_OUTPUT
 
       # One project (Dev/Typedown) is the app and its package: published as an MSIX here, unpackaged for the installer
       # and the portable zip below. Trimmed (TypedownTrim): the WinRT projection and the .NET libraries only.
@@ -358,15 +359,16 @@ jobs:
           -p:AppxSymbolPackageEnabled=false
           -p:AppxPackageDir=${{ github.workspace }}\StoreUpload\
 
-      # MSBuild names it <name>.msixupload whatever the platform: version and platform in the name, so the two
-      # platforms' uploads do not overwrite each other where they are downloaded.
+      # MSBuild names it after the project (<project>_1.4.3.0_x64.msixupload): the edition's name, the version and the
+      # platform instead, as the MSIX beside it - a release had <project>_1.4.3.0_x64_1.4.3_x64.msixupload, the edition's
+      # package under the project's name.
       - name: Name the Store upload
         if: steps.brand.outputs.store == 'true' && steps.build.outcome == 'success'
         shell: pwsh
         run: |
           $upload = Get-ChildItem StoreUpload -Filter *.msixupload | Select-Object -First 1
           if (-not $upload) { throw "no .msixupload in StoreUpload" }
-          Rename-Item $upload.FullName ("{0}_{1}_{2}.msixupload" -f $upload.BaseName, "${{ steps.ver.outputs.version }}", "${{ steps.ver.outputs.arch }}")
+          Rename-Item $upload.FullName ("{0}_{1}_{2}.msixupload" -f "${{ steps.brand.outputs.name }}", "${{ steps.ver.outputs.version }}", "${{ steps.ver.outputs.arch }}")
           Get-ChildItem StoreUpload -Filter *.msixupload | ForEach-Object { "$($_.Name)  $($_.Length) bytes" }
 
       - uses: actions/upload-artifact@v4
