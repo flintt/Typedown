@@ -370,7 +370,7 @@
  },
  "93": {
   "section": "Setext headings",
-  "out": "> foo\n> bar\n> ===\n"
+  "out": "> foo\nbar\n===\n"
  },
  "94": {
   "section": "Setext headings",
@@ -502,7 +502,7 @@
  },
  "126": {
   "section": "Fenced code blocks",
-  "out": "```\n\n```\n"
+  "out": "```\n```\n"
  },
  "127": {
   "section": "Fenced code blocks",
@@ -518,7 +518,7 @@
  },
  "130": {
   "section": "Fenced code blocks",
-  "out": "```\n\n```\n"
+  "out": "```\n```\n"
  },
  "131": {
   "section": "Fenced code blocks",
@@ -574,7 +574,7 @@
  },
  "144": {
   "section": "Fenced code blocks",
-  "out": "```;\n\n```\n"
+  "out": "```;\n```\n"
  },
  "145": {
   "section": "Fenced code blocks",
@@ -946,7 +946,7 @@
  },
  "237": {
   "section": "Block quotes",
-  "out": "> ```\n\nfoo\n\n```\n\n```\n"
+  "out": "> ```\n\nfoo\n\n```\n```\n"
  },
  "238": {
   "section": "Block quotes",
