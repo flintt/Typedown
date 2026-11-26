@@ -831,6 +831,8 @@ namespace Typedown.Core.ViewModels
         public void ReleaseEditorReports(bool apply)
         {
             holdingReports = false;
+            // Rolled back (or the tab left): the held count is of a text that is not the document's.
+            if (!apply) heldCount = null;
             var text = heldReport;
             heldReport = null;
             if (apply && text != null) OnMarkdownChange(text);
@@ -986,7 +988,16 @@ namespace Typedown.Core.ViewModels
             // the writing timeline took a 628,000-character .txt as written into the Markdown file shown after it, the
             // user, 2026-11-15): the edition is not told, whatever the page's fault was.
             var countOfAnother = ContentState.WordCount != null && Markdown != null && ContentState.WordCount.Character > Markdown.Length;
-            if (countOfAnother)
+            // With an automation edit applied in the page and not yet committed here, the page counts the edit's text, not
+            // the host's: held, and reported as the client's once the edit is committed. Dropped, the count stayed at the
+            // text before the edit, and the reader's next keystroke counted the client's text as written (E2E ST01:
+            // 18 letters typed, 34 counted - "written by a client" with them; failing on w10 and hp since dcb3c99d).
+            if (countOfAnother && holdingReports)
+            {
+                heldCount = (LoadId, ContentState.WordCount.Word, ContentState.WordCount.Character);
+                Log.Debug($"word count: {ContentState.WordCount.Character} characters, of an automation edit not yet committed (load {LoadId}); held for the commit");
+            }
+            else if (countOfAnother)
                 Log.Debug($"word count: {ContentState.WordCount.Character} characters counted in a text of {Markdown.Length} (load {LoadId}); not reported");
             if (ContentState.WordCount != null && !countOfAnother)
                 EditionHooks.ReportWordCount(new WordCountReport
@@ -1627,7 +1638,22 @@ namespace Typedown.Core.ViewModels
             History.CommitPending();
             CurrentHash = Common.SimpleHash(text);
             Saved = FileHash == CurrentHash;
+            // The count the page made of this text while it was not committed (OnStateChange): the client's, so the
+            // edition's count moves on to it without it being written.
+            if (heldCount is { } held)
+            {
+                heldCount = null;
+                if (held.LoadId == LoadId && held.Characters <= text.Length)
+                    EditionHooks.ReportWordCount(new WordCountReport
+                    {
+                        Editor = this, LoadId = LoadId, Words = held.Words, Characters = held.Characters,
+                        Path = AppViewModel?.FileViewModel?.FilePath, Automation = true,
+                    });
+            }
         }
+
+        // A count of an automation edit's text that came before the host committed it (OnStateChange).
+        private (int LoadId, int Words, int Characters)? heldCount;
 
         public void Undo()
         {
