@@ -329,6 +329,7 @@ internal static partial class Program
             await Case("PM01 the Paragraph menu's checks follow the caret: Table stays unchecked after its dialog is cancelled, Quote and Table are checked with the caret in a quote and a table", PM01);
             await Case("OL02 two long documents scrolled to their middle, switched between: the outline does not mark another heading of the document being left", OL02);
             await Case("OL03 the outline marks the heading being read as soon as the page is shown again (back from the settings), without a scroll", OL03);
+            await Case("BK01 the settings left by the title bar's back button three times, sections picked in between: the back button is there each time, goes back to the editor page, nothing thrown", BK01);
             await Case("OL01 tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline", OL01);
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
