@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 /// <summary>
 /// BK01: the settings left by the title bar's back button, three times, a section or two picked in between - each time
-/// the back button is there, it goes back to the editor page, and nothing is thrown. On vm104 (1.4.3.25) the settings'
+/// the back button is there, it goes back to the editor page, and nothing is thrown; then in and out by Ctrl+, twice, and
+/// the editor page has no back button after it. On vm104 (1.4.3.25) the settings'
 /// own subscription read the DataContext of a page already out of the tree when Back changed the command: an unhandled
 /// NullReferenceException each time, and the notice never reached the caption's back button, which went.
 /// </summary>
@@ -45,6 +46,18 @@ internal static partial class Program
                 Check(await Eventually(async () => await Page() == "main", 5000), $"round {round}: it goes back to the editor page");
                 await Task.Delay(500);
                 Check(FindIn(window, "BackButton") is not { } left || left.Current.BoundingRectangle.Width == 0, $"round {round}: no back button on the editor page");
+            }
+            // Left by Ctrl+, (a new navigation, not Back), twice: the editor page has no back button after it - it had
+            // one going to the settings again, with one more entry behind it each time (w10 job 766).
+            for (var round = 1; round <= 2; round++)
+            {
+                await CtrlComma();
+                Check(await Eventually(async () => await Page() == "settings", 5000), $"Ctrl+, round {round}: opens the settings");
+                await Task.Delay(600);
+                await CtrlComma();
+                Check(await Eventually(async () => await Page() == "main", 5000), $"Ctrl+, round {round}: again, back to the editor page");
+                await Task.Delay(500);
+                Check(FindIn(window, "BackButton") is not { } stale || stale.Current.BoundingRectangle.Width == 0, $"Ctrl+, round {round}: no back button on the editor page after it");
             }
             await Task.Delay(1500); // the log is written in batches
             var thrown = LogLines("NullReferenceException").Skip(thrownBefore).ToList();

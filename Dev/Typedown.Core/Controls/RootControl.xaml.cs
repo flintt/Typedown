@@ -208,11 +208,22 @@ namespace Typedown.Core.Controls
                 currentRoute = "Main";
                 StartNavigationTimes(typeof(MainPage));
                 Frame.Navigate(typeof(MainPage), null, GetTransition());
+                ForgetWayBack();
                 return;
             }
             currentRoute = args;
             StartNavigationTimes(type);
             Frame.Navigate(type, string.Join('/', path.Skip(1)), GetTransition());
+            if (type == typeof(MainPage)) ForgetWayBack();
+        }
+
+        // The main page is where the window starts: nothing to go back to from it. Left the settings by Ctrl+, (a new
+        // navigation, not Back), the frame kept them behind it, and the editor page had a back button that went to the
+        // settings again - one more entry each time (E2E BK01 after CM01 and OL03, w10 job 766).
+        private void ForgetWayBack()
+        {
+            Frame.BackStack.Clear();
+            if (ViewModel != null) ViewModel.GoBackCommand.IsExecutable = ViewModel.FrameStack.Any(x => x.CanGoBack);
         }
 
         /// <summary>
